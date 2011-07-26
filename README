@@ -1,0 +1,38 @@
+linstaller - a simple yet powerful gnu/linux installer
+------------------------------------------------------
+
+linstaller is a modular and preseedable GNU/Linux distribution
+installer, written in python.
+
+It is Semplice Linux-oriented, but thanks to its configuration
+system, can be adapted to many Live distributions.
+
+The project's name has three different meanings:
+ * LINstaller = LINux installer
+ * L'installer = "The installer" in italian
+ * L-installer = laiv-installer, which was the name of our
+   previous installer.
+
+Make it work
+============
+
+linstaller is in the initial developing phase and is not intended
+to be used in production.
+You need to adjust the configuration path in linstaller/core/config.py:
+
+   configpath = "/home/g7/semplice/emily/INSTALLER_NEW_YAY/config"
+
+should be adjusted to:
+
+   configpath = "/path/to/linstaller/directory/config"
+
+Start
+=====
+
+To start linstaller you should use this command:
+
+   sudo ./linstaller.py -c=semplice start
+
+where 'semplice' is the configuration file of the distribution (currently
+only semplice is available).
+You can symlink 'semplice' to 'default' and not use the -c switch.

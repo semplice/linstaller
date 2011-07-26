@@ -1,0 +1,26 @@
+[linstaller]
+distribution = Semplice
+frontend = cli
+modules = welcome.front timezone.front userhost.front partdisks.front bootloader.front summary.front partdisks.inst unsquash.inst configure.inst bootloader.inst end.front
+min_size = 1
+
+[module:bootloader]
+use = grub
+default_target = root
+
+[module:userhost]
+userfullname = Eugenio Paolantonio
+username = g7
+password = tepiacerebbe
+root = enabled
+rootpassword = lololololo
+hostname = g7box
+
+[module:timezone]
+timezone = Europe/Rome
+
+[module:partdisks]
+root = /dev/sdc1
+root_filesystem = ext2
+swap = /dev/sda5
+swap_noformat = True
