@@ -20,7 +20,7 @@ hostname = g7box
 timezone = Europe/Rome
 
 [module:partdisks]
-root = /dev/sdc1
-root_filesystem = ext2
-swap = /dev/sda5
-swap_noformat = True
+#root = /dev/sdc1
+#root_filesystem = ext2
+#swap = /dev/sda5
+#swap_noformat = True
