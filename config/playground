@@ -1,0 +1,9 @@
+[linstaller:extends]
+source = semplice
+
+[linstaller]
+distribution = LOLinux
+modules = <old> 
+
+[module:bootloader]
+bootloader = mbr
