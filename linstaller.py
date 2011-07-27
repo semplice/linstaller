@@ -26,7 +26,7 @@ def launch_module(module):
 	res = modclass.start()
 
 	# Update modules_settings
-	modules_settings[module] = modclass.return_settings()
+	modules_settings[module.split(".")[0]] = modclass.return_settings()
 
 	if res == "restart":
 		# restart module.
@@ -89,9 +89,14 @@ elif _action == "start":
 	main_settings["distro"] = cfg.printv("distribution")
 	main_settings["modules"] = cfg.printv("modules")
 	
+	verbose("Frontend: %s" % main_settings["frontend"])
+	verbose("Distro: %s" % main_settings["distro"])
+	verbose("Modules: %s" % main_settings["modules"])
+	
 	# Create modules_settings
 	modules_settings = {}
 	
 	# Begin loop modules...
 	for module in main_settings["modules"].split(" "):
-		launch_module(module)
+		if module:
+			launch_module(module)
