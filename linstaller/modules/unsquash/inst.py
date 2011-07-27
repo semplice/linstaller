@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+# linstaller unsquash module install - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# All rights reserved. Work released under the GNU GPL license, version 3 or later.
+#
+# This is a module of linstaller, should not be executed as a standalone application.
+
+import linstaller.core.cli_frontend as cli
+import linstaller.core.module as module
+import linstaller.core.main as m
+import t9n.library
+_ = t9n.library.translation_init("linstaller")
+
+from linstaller.core.main import warn,info,verbose
+import linstaller.core.libmodules.unsquash.library as lib
+
+class CLIFrontend(cli.CLIFrontend):
+	def start(self):
+		""" Start the frontend """
+
+		verbose("Getting the number the file to be copied...")
+		filenum = self.moduleclass.unsquash.get_files()
+		
+		# Get a progressbar
+		progress = self.progressbar(_("Copying system to disk:"), filenum)
+		
+		verbose("Beginning copying system")
+		# Launch unsquashfs
+		unsquashfs = self.moduleclass.unsquash.begin()
+
+		# Start progressbar
+		progress.start()
+		
+		# Update progressbar
+		unsquashfs.process.poll()
+		
+		output = [None]
+		while unsquashfs.process.poll() == None:
+			toappend = unsquashfs.process.stdout.readline()
+			if output[-1] != toappend:
+				output.append(toappend)
+				progress.update(len(output))
+		progress.finish()
+		
+		if unsquashfs.process.returncode != 0:
+			# Write the output into the log file
+			for line in output:
+				verbose(str(line))
+			raise m.CmdError(_("An error occoured while uncompressing system to disk."))
+		
+		verbose("System copied successfully.")
+
+class Module(module.Module):
+	def start(self):
+		""" Start override to unsquash. """
+
+		self.unsquash = lib.Unsquash(self.settings["image"])
+
+		module.Module.start(self)
+		
+	def _associate_(self):
+		""" Associate frontends. """
+		
+		self._frontends = {"cli":CLIFrontend}
+	
+	def seedpre(self):
+		""" Cache preseeds. """
+		
+		self.cache("image")
