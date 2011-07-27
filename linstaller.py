@@ -80,6 +80,10 @@ elif _action == "start":
 	
 	# Ohhh yay :) This action that will actually start the installer and its appropriate frontend.
 	
+	# Create target directory
+	if not os.path.exists("/linstaller/target"):
+		os.makedirs("/linstaller/target")
+	
 	# Load configuration file
 	cfg = config.ConfigRead(_config, "linstaller")
 	

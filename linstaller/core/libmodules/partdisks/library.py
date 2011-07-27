@@ -274,7 +274,7 @@ def is_mounted(obj):
 			return {"path":items[0], "mountpoint":items[2], "type":items[4], "options":items[-1].replace("(","").replace(")","").replace("\n","")}
 
 
-def mount_partition(parted_part=None, path=None, opts=False):
+def mount_partition(parted_part=None, path=None, opts=False, target=False):
 	""" Mounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -293,6 +293,9 @@ def mount_partition(parted_part=None, path=None, opts=False):
 	# Generate a mount point
 	_directory = path.replace("/","") # Strip all /. We should have something like this: devsda1.
 	_mountpoint = os.path.join("/linstaller/mountpoints", _directory)
+	if target:
+		# Supersede _mountpoint with target
+		_mountpoint = target
 	if not os.path.exists(_mountpoint):
 		os.makedirs(_mountpoint) # Create directory
 	else:

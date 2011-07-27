@@ -7,3 +7,23 @@ modules = <old>
 
 [module:bootloader]
 bootloader = mbr
+
+[module:userhost]
+userfullname = Eugenio Paolantonio
+username = g7
+password = tepiacerebbe
+root = enabled
+rootpassword = lololololo
+hostname = g7box
+
+[module:timezone]
+timezone = Europe/Rome
+
+[module:partdisks]
+root = /dev/sdc1
+#root_filesystem = ext2
+swap = /dev/sda5
+swap_noformat = True
+
+[module:unsquash]
+image = /mnt/semp/live/filesystem.squashfs

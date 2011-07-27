@@ -22,6 +22,9 @@ class CLIFrontend(cli.CLIFrontend):
 		print
 		
 		print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})
+		if self.moduleclass.modules_settings["userhost"]["root"] == "enabled":
+			# Root enabled
+			print(_("Root account is enabled."))
 		print(_("The computer's hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})
 		print(_("The machine will use this timezone: %(timezone)s.") % {"timezone":self.moduleclass.modules_settings["timezone"]["timezone"]})
 		print
@@ -34,6 +37,8 @@ class CLIFrontend(cli.CLIFrontend):
 		if not res: self.end()
 		
 		verbose("Beginning installation.")
+		
+		self.header(_("Installing..."))
 
 class Module(module.Module):
 	def _associate_(self):

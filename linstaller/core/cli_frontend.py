@@ -6,6 +6,7 @@
 
 import os, sys
 import getpass
+import progressbar
 
 import linstaller.core.main as m
 from linstaller.core.main import warn,info,verbose
@@ -107,4 +108,10 @@ class CLIFrontend:
 				result = self.question(text, default=default)
 		
 		# Finally return value
-		return result		
+		return result
+	
+	def progressbar(self, text, maxval):
+		""" Creates a progressbar object. """
+
+		widgets = [text, progressbar.Percentage(), ' ', progressbar.Bar(marker='#',left='[',right=']'),' ', progressbar.ETA()]
+		return progressbar.ProgressBar(widgets=widgets, maxval=maxval)
