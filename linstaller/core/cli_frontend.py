@@ -20,8 +20,6 @@ class CLIFrontend:
 		self.moduleclass = moduleclass
 		self.settings = moduleclass.settings
 		self.changed = moduleclass.changed
-		
-		self.start()
 	
 	def end(self):
 		""" close frontend and parents. """

@@ -17,7 +17,7 @@ class CLIFrontend(cli.CLIFrontend):
 	def start(self):
 		""" Start the frontend """
 
-		verbose("Getting the number the file to be copied...")
+		verbose("Getting the number of the files to be copied...")
 		filenum = self.moduleclass.unsquash.get_files()
 		
 		# Get a progressbar
@@ -38,7 +38,12 @@ class CLIFrontend(cli.CLIFrontend):
 			toappend = unsquashfs.process.stdout.readline()
 			if output[-1] != toappend:
 				output.append(toappend)
-				progress.update(len(output))
+				
+				num = len(output)
+				
+				# If num > filenum, the progressbar will crash.
+				if not num > filenum:
+					progress.update(num)
 		progress.finish()
 		
 		if unsquashfs.process.returncode != 0:
@@ -48,6 +53,11 @@ class CLIFrontend(cli.CLIFrontend):
 			raise m.CmdError(_("An error occoured while uncompressing system to disk."))
 		
 		verbose("System copied successfully.")
+		
+		# Mount.
+		verbose("Mounting /proc, /dev and /sys")
+		
+		self.moduleclass.unsquash.mount()
 
 class Module(module.Module):
 	def start(self):
@@ -56,7 +66,17 @@ class Module(module.Module):
 		self.unsquash = lib.Unsquash(self.settings["image"])
 
 		module.Module.start(self)
+	
+	def revert(self):
+		""" Revert mounts """
 		
+		self.unsquash = lib.Unsquash(self.settings["image"])
+		
+		try:
+			self.unsquash.revert()
+		except:
+			pass # Try only, if it does not succeed, it is nothing faulty.
+	
 	def _associate_(self):
 		""" Associate frontends. """
 		

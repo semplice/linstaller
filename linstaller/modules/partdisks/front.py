@@ -47,7 +47,7 @@ class CLIFrontend(cli.CLIFrontend):
 			# Get an appropriate partition object
 			_root_par = _root_dev.getPartitionByPath(self.settings["root"])
 			
-			self.changed[self.settings["root"]] = {"obj":_root_par, "changes":{"useas":"root"}}
+			self.changed[self.settings["root"]] = {"obj":_root_par, "changes":{"useas":"/"}}
 			###################################################################################
 			
 			## SWAP
@@ -130,7 +130,7 @@ class CLIFrontend(cli.CLIFrontend):
 				# Wrong disk
 				return self.partition_selection(warning=_("Wrong partition selected!"))
 			
-			self.changed[choice] = {"obj":_root_par, "changes":{"useas":"root"}}
+			self.changed[choice] = {"obj":_root_par, "changes":{"useas":"/"}}
 			self.settings["root"] = choice
 			
 			if not self.settings["root_filesystem"]:
@@ -180,7 +180,7 @@ class CLIFrontend(cli.CLIFrontend):
 			return self.main()
 
 	
-	def _reload(self, interactive=False):
+	def _reload(self, interactive=False, complete=True):
 		""" Reloads original structure. """
 		
 		if interactive:
@@ -202,8 +202,14 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		# Also remove flags.
 		for name, changes in self.changed.items():
-			# Clear.
-			changes["changes"].clear()
+			if complete:
+				# Clear.
+				changes["changes"].clear()
+			else:
+				# Remove all but useas
+				for key, value in changes["changes"].items():
+					if not key == "useas":
+						del changes["changes"][key]
 
 		if interactive:
 			return self.edit_partitions()
@@ -283,7 +289,7 @@ class CLIFrontend(cli.CLIFrontend):
 		self.settings["changed"] = self.changed
 		
 		# Reload.
-		self._reload()
+		self._reload(complete=False) # Preserve useas.
 		
 		# Return.
 		if interactive: return self.edit_partitions()
@@ -1021,3 +1027,6 @@ class Module(module.Module):
 		self.cache("root_filesystem")
 		self.cache("swap")
 		self.cache("swap_noformat")
+		
+		# Internal
+		self.cache("changed")

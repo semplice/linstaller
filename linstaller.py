@@ -9,12 +9,18 @@ import linstaller.core.config as config
 import linstaller.core.modulehelper as mh
 from linstaller.core.main import warn, info, verbose
 
+import exceptions
+
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 import os, sys
 
-def launch_module(module):
+reboot = False
+
+def launch_module(module, special):
+	global reboot
+	
 	# Adjust cfg.module to read "module:<modulename>"
 	cfg.module = "module:%s" % module.split(".")[0]
 	
@@ -22,15 +28,48 @@ def launch_module(module):
 	mod = mh.Module(module)
 	modclass = mod.load(main_settings, modules_settings, cfg)
 	
+	# It is special? Add to executed_special.
+	if module in special:
+		executed_special.append(module)
+	
 	# Start module
-	res = modclass.start()
-
+	try:
+		res = modclass.start()
+	except exceptions.SystemExit:
+		return "exit"
+	except:
+		# Something nasty happened.
+		# We should revert any 'special' changes (mounts, etc).
+		
+		verbose("Something nasty happened. Reverting special changes.")
+		
+		executed_special.reverse() # Reverse.
+		for modu in executed_special:
+			verbose("Reverting %s" % modu)
+			_revert = mh.Module(modu)
+			_revertc = _revert.load(main_settings, modules_settings, cfg)
+			
+			# Revert
+			_revertc.revert()
+		
+		# Now raise the original exception	
+		print sys.exc_info()[0]
+		raise
+		
 	# Update modules_settings
-	modules_settings[module.split(".")[0]] = modclass.return_settings()
+	if not module.split(".")[-1] == "inst":
+		# Frontend. Add only the module name
+		modules_settings[module.split(".")[0]] = modclass.return_settings()
+	else:
+		# .inst module. Add it anyway, but with ".inst"
+		modules_settings[module] = modclass.return_settings()
 
 	if res == "restart":
 		# restart module.
-		return launch_module(module)
+		return launch_module(module, special)
+	elif res == "kthxbye":
+		# Reboot
+		return "kthxbye"
 
 
 ## Welcome the linstaller :)
@@ -92,6 +131,7 @@ elif _action == "start":
 	main_settings["frontend"] = cfg.printv("frontend")
 	main_settings["distro"] = cfg.printv("distribution")
 	main_settings["modules"] = cfg.printv("modules")
+	main_settings["special"] = cfg.printv("special")
 	
 	verbose("Frontend: %s" % main_settings["frontend"])
 	verbose("Distro: %s" % main_settings["distro"])
@@ -100,7 +140,32 @@ elif _action == "start":
 	# Create modules_settings
 	modules_settings = {}
 	
+	# 'special' modules executed
+	executed_special = []
+	
 	# Begin loop modules...
 	for module in main_settings["modules"].split(" "):
 		if module:
-			launch_module(module)
+			res = launch_module(module, main_settings["special"].split(" "))
+			if res == "exit":
+				break # Exit.
+			elif res == "kthxbye":
+				reboot = True # Reboot
+
+	# Finished installation. Revert changes made to the system.
+	executed_special.reverse() # Reverse.
+	for modu in executed_special:
+		verbose("Reverting %s" % modu)
+		_revert = mh.Module(modu)
+		_revertc = _revert.load(main_settings, modules_settings, cfg)
+		
+		# Revert
+		_revertc.revert()
+	
+	if reboot:
+		# We should reboot?
+		verbose("KTHXBYE")
+		m.sexec("reboot")
+	
+	sys.exit(0)
+

@@ -5,6 +5,24 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import linstaller.core.main as main
+import linstaller.core.libmodules.chroot.library as chlib
+
+class Install:
+	""" Executed during install. """
+	
+	def __init__(self, moduleclass):
+		""" Sets moduleclass to self.moduleclass """
+		
+		self.moduleclass = moduleclass
+		
+		# Enter in chroot
+		self.ch = chlib.Chroot()
+		self.ch.open()
+
+	def close(self):
+		""" Return to normal root. """
+		
+		self.ch.close()	
 
 class Module:
 	def __init__(self, main_settings, modules_settings, cfg):
@@ -26,6 +44,13 @@ class Module:
 		
 		# Initiate the relevant frontend class.
 		frnt = self._frontends[self.main_settings["frontend"]](self)
+		
+		# Start frnt.
+		res = frnt.start()
+		
+		if res == "restart":
+			# Frontend requested to restart
+			return "restart"
 	
 	def seedpre(self):
 		pass

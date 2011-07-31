@@ -21,13 +21,16 @@ class Unsquash:
 	def get_files(self):
 		""" Get the number of files to be copied. """
 		
-		proc = m.execute("sleep 1; cat /tmp/foo", custom_log=m.subprocess.PIPE)
-		#proc = m.execute("unsquashfs -d FROMHERE -l %s" % self.squashimage, custom_log=m.subprocess.PIPE, shell=False)
+		proc = m.execute("unsquashfs -d FROMHERE -l %s" % self.squashimage, custom_log=m.subprocess.PIPE, shell=False)
 		# Start
 		proc.start()
 		
 		# output...
 		output = proc.process.communicate()[0].split("\n")
+		
+		if not proc.process.returncode == 0:
+			# failed
+			raise m.CmdError("Unable to get file list. Most likely the image doesn't exist.")
 		
 		return len(output)
 	
@@ -40,3 +43,19 @@ class Unsquash:
 		
 		# Return object to frontend. It should parse it and launch progressbar.
 		return proc
+
+	def mount(self):
+		""" Mounts proc, dev, sys into target. """
+		
+		# FIXME: maybe this is not the best place to put this?
+		
+		m.sexec("mount -o bind /proc " + os.path.join(self.TARGET, "proc"))
+		m.sexec("mount -o bind /dev " + os.path.join(self.TARGET, "dev"))
+		m.sexec("mount -o bind /sys " + os.path.join(self.TARGET, "sys"))
+	
+	def revert(self):
+		"""  Umounts proc, dev, sys from target """
+		
+		m.sexec("umount " + os.path.join(self.TARGET, "proc"))
+		m.sexec("umount " + os.path.join(self.TARGET, "dev"))
+		m.sexec("umount " + os.path.join(self.TARGET, "sys"))

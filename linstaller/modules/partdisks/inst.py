@@ -31,3 +31,14 @@ class Module(module.Module):
 		
 		# Then mount at TARGET
 		lib.mount_partition(path=root, target="/linstaller/target")
+
+	def revert(self):
+		""" Umounts TARGET. """
+		
+		# Ensure that is mounted
+		if not os.path.ismount("/linstaller/target"):
+			# Umounted. pass.
+			pass
+		
+		# Umount.
+		lib.umount(path="/linstaller/target")

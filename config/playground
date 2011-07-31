@@ -3,27 +3,33 @@ source = semplice
 
 [linstaller]
 distribution = LOLinux
-modules = <old> 
+#modules = <old> <remove:welcome.front> <remove:userhost.inst> <remove:timezone.inst> <remove:language.inst>
+
+[module:language]
+ask = False
 
 [module:bootloader]
-bootloader = mbr
+device = root
 
 [module:userhost]
 userfullname = Eugenio Paolantonio
 username = g7
 password = tepiacerebbe
-root = enabled
+root = disabled
 rootpassword = lololololo
 hostname = g7box
 
 [module:timezone]
-timezone = Europe/Rome
+timezone = Europe/Madrid
 
 [module:partdisks]
-root = /dev/sdc1
-#root_filesystem = ext2
+root = /dev/sda1
+root_filesystem = ext4
 swap = /dev/sda5
 swap_noformat = True
 
 [module:unsquash]
 image = /mnt/semp/live/filesystem.squashfs
+
+[module:debian]
+remove = /mnt/semp/live/filesystem.packages-remove

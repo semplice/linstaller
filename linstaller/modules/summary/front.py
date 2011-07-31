@@ -21,6 +21,10 @@ class CLIFrontend(cli.CLIFrontend):
 		print(_("%(swappartition)s will be used as swap.") % {"swappartition":self.moduleclass.modules_settings["partdisks"]["swap"]})
 		print
 		
+		print(_("The default locale will be %(locale)s.") % {"locale":self.moduleclass.modules_settings["language"]["language"]})
+		print(_("The default keyboard layout will be %(layout)s") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
+		print
+		
 		print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})
 		if self.moduleclass.modules_settings["userhost"]["root"] == "enabled":
 			# Root enabled
@@ -29,7 +33,7 @@ class CLIFrontend(cli.CLIFrontend):
 		print(_("The machine will use this timezone: %(timezone)s.") % {"timezone":self.moduleclass.modules_settings["timezone"]["timezone"]})
 		print
 		
-		print(_("The bootloader will be installed in %(bootloaderpath)s.") % {"bootloaderpath":self.moduleclass.modules_settings["bootloader"]["bootloader"]})
+		print(_("The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s.") % {"bootloader":self.moduleclass.modules_settings["bootloader"]["bootloader"],"bootloaderpath":self.moduleclass.modules_settings["bootloader"]["device"]})
 		print
 				
 		# We should continue?

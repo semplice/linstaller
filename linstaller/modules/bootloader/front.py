@@ -17,25 +17,39 @@ class CLIFrontend(cli.CLIFrontend):
 		""" Start the frontend """
 		
 		self.header(_("Bootloader"))
-		
+
+						
+		print(_("The bootloader is that piece of software that lets you boot your %(distroname)s system.") % {"distroname":self.moduleclass.main_settings["distro"]})
+		print(_("Without the bootloader, you can't boot %(distroname)s.") % {"distroname":self.moduleclass.main_settings["distro"]})
+		print
+		## BOOTLOADER SELECTION
 		if not self.settings["bootloader"]:
-			# Should ask.
-			
-			print(_("The bootloader is that piece of software that lets you boot your %(distroname)s system.") % {"distroname":self.moduleclass.main_settings["distro"]})
-			print(_("Without the bootloader, you can't boot %(distroname)s.") % {"distroname":self.moduleclass.main_settings["distro"]})
+			# Ask for bootloader
+			result = self.entry(_("Which bootloader do you want to install? [press ENTER for 'grub']"),blank=True)
+			if result in ("grub"):
+				self.settings["bootloader"] = result
+			elif not result:
+				# Default (grub)
+				self.settings["bootloader"] = "grub"
+			else:
+				_fake = self.entry(_("Invalid bootloader specified. [press ENTER to continue]"),blank=True)
+				return "restart"
 			print
+		
+		## DEVICE SELECTION
+		if not self.settings["device"]:
 			print(_("You can choose to install the bootloader into the Master Boot Record of your hard disk. This is recommended."))
 			print(_("If you choose 'No', it will be installed on your root partition.") + "\n")
 			
 			result = self.question(_("Do you want to install the bootloader into the MBR?"), default=True)
 			if result:
 				# Yay
-				self.settings["bootloader"] = "mbr"
+				self.settings["device"] = "mbr"
 			else:
 				# Root
-				self.settings["bootloader"] = "root"
+				self.settings["device"] = "root"
 		
-		verbose("Bootloader will be installed in %s" % self.settings["bootloader"])
+		verbose("Bootloader %s will be installed in %s" % (self.settings["bootloader"], self.settings["device"]))
 
 class Module(module.Module):
 	def _associate_(self):
@@ -47,3 +61,4 @@ class Module(module.Module):
 		""" Caches variables used by this module. """
 		
 		self.cache("bootloader")
+		self.cache("device")
