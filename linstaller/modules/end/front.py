@@ -21,18 +21,26 @@ class CLIFrontend(cli.CLIFrontend):
 		print(_("Please reboot and remove the install media to get the installed system."))
 		print
 		
-		# We should continue?
-		res = self.question(_("Do you want to reboot now?"), default=True)
-		if res:
-			# Reboot
-			return "kthxbye"
+		if not self.settings["reboot"] == "True":
+			# We should continue?
+			res = self.question(_("Do you want to reboot now?"), default=True)
+			if res:
+				# Reboot
+				return "kthxbye"
+			else:
+				self.end()
 		else:
-			self.end()
-		
-		verbose("Starting installation prompts.")
+			# Reboot.
+			return "kthxbye"
+			
 
 class Module(module.Module):
 	def _associate_(self):
 		""" Associate frontends. """
 		
 		self._frontends = {"cli":CLIFrontend}
+
+	def seedpre(self):
+		""" Cache configuration used by this module. """
+		
+		self.cache("reboot")
