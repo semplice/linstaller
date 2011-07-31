@@ -35,7 +35,7 @@ class CLIFrontend(cli.CLIFrontend):
 		verbose("Selected password.")
 		
 		# Root
-		if not self.settings["root"] or self.settings["root"] != "disabled":
+		if not self.settings["root"] or self.settings["root"] != "False":
 			if not self.settings["root"] == "enabled":
 				res = self.question(_("Do you want to enable root account?"), default=False)
 			else:

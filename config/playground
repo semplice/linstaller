@@ -1,3 +1,6 @@
+## !!! LINSTALLER TEST CONFIGURATION! IT DROPS /dev/sda1!! DO NOT USE IT!! FOR INTERNAL USE ONLY!! !!!
+## You have been warned.
+
 [linstaller:extends]
 source = semplice
 
@@ -15,7 +18,6 @@ device = root
 userfullname = Eugenio Paolantonio
 username = g7
 password = tepiacerebbe
-root = disabled
 rootpassword = lololololo
 hostname = g7box
 

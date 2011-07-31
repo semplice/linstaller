@@ -12,7 +12,7 @@ try:
 except:
 	import configparser as cparser # Python 3.x
 
-configpath = "/home/g7/semplice/emily/INSTALLER_NEW_YAY/config"
+configpath = "/etc/linstaller"
 
 class Config:
 	def __init__(self, file, initial=False):
