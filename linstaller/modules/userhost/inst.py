@@ -41,7 +41,7 @@ class Install(module.Install):
 		db.set("passwd/username", username)
 		db.set("passwd/user-password", password)
 		# Enable root?
-		if root == "enabled":
+		if root == "True":
 			db.set("passwd/root-login", "true")
 			db.set("passwd/root-password", rootpassword)
 		else:
@@ -98,22 +98,23 @@ class CLIFrontend(cli.CLIFrontend):
 		# Get a progressbar
 		progress = self.progressbar(_("Creating user:"), 3)
 		
-		verbose("Creating user")
-		# USER: set.
-		self.moduleclass.install.user_set()
-		progress.update(1)
-		
-		# USER: commit.
-		self.moduleclass.install.user_commit()
-		progress.update(2)
-		
-		verbose("Setting username")
-		# HOSTNAME: commit
-		self.moduleclass.install.host_commit()
-		progress.update(3)
-		
-		# Exit
-		self.moduleclass.install.close()
+		try:
+			verbose("Creating user")
+			# USER: set.
+			self.moduleclass.install.user_set()
+			progress.update(1)
+			
+			# USER: commit.
+			self.moduleclass.install.user_commit()
+			progress.update(2)
+			
+			verbose("Setting username")
+			# HOSTNAME: commit
+			self.moduleclass.install.host_commit()
+			progress.update(3)
+		finally:
+			# Exit
+			self.moduleclass.install.close()
 		
 		progress.finish()
 

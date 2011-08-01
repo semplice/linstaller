@@ -42,17 +42,18 @@ class CLIFrontend(cli.CLIFrontend):
 		# Start progressbar
 		progress.start()
 
-		num = 0
-		for pkg in self.moduleclass.packages:
-			num += 1
-			verbose("  Removing %s" % pkg)
-			
-			# Remove package
-			self.moduleclass.install.remove(pkg)
-			progress.update(num)
-
-		# Exit
-		self.moduleclass.install.close()
+		try:
+			num = 0
+			for pkg in self.moduleclass.packages:
+				num += 1
+				verbose("  Removing %s" % pkg)
+				
+				# Remove package
+				self.moduleclass.install.remove(pkg)
+				progress.update(num)
+		finally:
+			# Exit
+			self.moduleclass.install.close()
 		
 		progress.finish()
 

@@ -57,16 +57,17 @@ class CLIFrontend(cli.CLIFrontend):
 		# Start progressbar
 		progress.start()
 
-		# PASS 1: INSTALL
-		_install[bootloader]()
-		progress.update(1)
-		
-		# PASS 2: UPDATE
-		_update[bootloader]()
-		progress.update(2)
-
-		# Exit
-		self.moduleclass.install.close()
+		try:
+			# PASS 1: INSTALL
+			_install[bootloader]()
+			progress.update(1)
+			
+			# PASS 2: UPDATE
+			_update[bootloader]()
+			progress.update(2)
+		finally:
+			# Exit
+			self.moduleclass.install.close()
 		
 		progress.finish()
 

@@ -39,18 +39,19 @@ class CLIFrontend(cli.CLIFrontend):
 		# Start progressbar
 		progress.start()
 		
-		# Set language
-		la.set(language)
-		progress.update(1)
-		
-		# Set keyboard and model
-		ke.set(keyboard, model)
-		progress.update(2)
+		try:
+			# Set language
+			la.set(language)
+			progress.update(1)
+			
+			# Set keyboard and model
+			ke.set(keyboard, model)
+			progress.update(2)
+		finally:
+			# Exit from chroot
+			chroot.close()		
 		
 		progress.finish()
-		
-		# Exit from chroot
-		chroot.close()
 		
 		verbose("Done.")
 

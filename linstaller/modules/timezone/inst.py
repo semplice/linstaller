@@ -37,13 +37,14 @@ class CLIFrontend(cli.CLIFrontend):
 		# Start progressbar
 		progress.start()
 		
-		# Set timezone
-		tz.set(timezone)
+		try:
+			# Set timezone
+			tz.set(timezone)
+		finally:
+			# Exit from chroot
+			chroot.close()
 		
 		progress.finish()
-		
-		# Exit from chroot
-		chroot.close()
 		
 		verbose("New timezone is: %s." % timezone)
 

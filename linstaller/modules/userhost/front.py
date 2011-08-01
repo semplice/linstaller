@@ -36,12 +36,13 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		# Root
 		if not self.settings["root"] or self.settings["root"] != "False":
-			if not self.settings["root"] == "enabled":
+			if not self.settings["root"] == "True":
 				res = self.question(_("Do you want to enable root account?"), default=False)
 			else:
 				res = True
 			if res and not self.settings["rootpassword"]:
 				self.settings["rootpassword"] = self.password_prompt(_("root's password"))
+				self.settings["root"] = "True"
 				verbose("Selected root password.")
 			elif not res:
 				verbose("Root disabled.")
@@ -77,7 +78,7 @@ class CLIFrontend(cli.CLIFrontend):
 			warn(_("You can't use these chars in the %s, please re-try: ") % (what) + str(unallowed))
 			return self.check(what, text)
 		else:
-			return False
+			return string
 	
 	def password_prompt(self, text):
 		""" A simple password prompt """

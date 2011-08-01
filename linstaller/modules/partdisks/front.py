@@ -671,7 +671,7 @@ class CLIFrontend(cli.CLIFrontend):
 				del self.changed[part.path]["changes"]["delete"]
 
 		device_changes["deleteall"] = True
-		self.touched[device.path] = True
+		self.touched[device.device.path] = True
 		return self.edit_partitions(information=_("Changes marked succesfully. Now write the changes to memory."))
 
 	

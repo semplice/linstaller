@@ -31,6 +31,11 @@ proc   /proc   proc   defaults   0   0
 			changed = self.moduleclass.modules_settings["partdisks"]["changed"]
 
 			for key, value in changed.items():
+				
+				if not "useas" in value["changes"]:
+					# There isn't "useas" in changes; skipping this item
+					continue
+				
 				# Get UUID
 				UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (key))
 
@@ -68,12 +73,13 @@ class CLIFrontend(cli.CLIFrontend):
 		progress.start()
 
 		verbose("Generating fstab")
-		# USER: set.
-		self.moduleclass.install.generate()
-		progress.update(1)
-
-		# Exit
-		self.moduleclass.install.close()
+		try:
+			# FSTAB: set.
+			self.moduleclass.install.generate()
+			progress.update(1)
+		finally:
+			# Exit
+			self.moduleclass.install.close()
 		
 		progress.finish()
 

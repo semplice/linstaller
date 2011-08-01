@@ -42,12 +42,13 @@ class CLIFrontend(cli.CLIFrontend):
 		progress.start()
 
 		verbose("Generating networking")
-		# NETWORKING: set.
-		self.moduleclass.install.configure()
-		progress.update(1)
-
-		# Exit
-		self.moduleclass.install.close()
+		try:
+			# NETWORKING: set.
+			self.moduleclass.install.configure()
+			progress.update(1)
+		finally:
+			# Exit
+			self.moduleclass.install.close()
 		
 		progress.finish()
 
