@@ -11,6 +11,8 @@ import commands
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
+import os
+
 from linstaller.core.main import warn,info,verbose
 import linstaller.core.libmodules.chroot.library as lib
 
