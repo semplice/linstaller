@@ -3,7 +3,7 @@
 [linstaller]
 distribution = Semplice
 frontend = cli
-modules = welcome.front language.front timezone.front userhost.front partdisks.front bootloader.front summary.front partdisks.inst unsquash.inst language.inst timezone.inst userhost.inst fstab.inst debian.inst bootloader.inst end.front
+modules = welcome.front language.front timezone.front userhost.front partdisks.front bootloader.front summary.front partdisks.inst unsquash.inst language.inst timezone.inst userhost.inst fstab.inst debian.inst semplice.inst bootloader.inst end.front
 special = partdisks.inst unsquash.inst
 
 [module:unsquash]
