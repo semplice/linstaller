@@ -1,0 +1,6 @@
+/usr/lib/linstaller/linstaller.py
+/usr/lib/linstaller/linstaller/core/*.py
+/usr/lib/linstaller/linstaller/core/*.pyc
+/usr/lib/linstaller/linstaller/core/libmodules/__init__.*
+/usr/lib/linstaller/linstaller/__init__.*
+/usr/lib/linstaller/linstaller/modules/__init__.*

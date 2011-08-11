@@ -1,0 +1,16 @@
+## NOLIVE LINSTALLER CONFIGURATION FILE FOR SEMPLICE
+
+[linstaller:extends]
+source = semplice
+
+[module:partdisks]
+# Do not format swap
+swap_noformat = True
+
+[module:unsquash]
+# This only works if using the mount_nolive.sh script
+image = /linstaller/source/live/filesystem.squashfs
+
+[module:debian]
+# This only works if using the mount_nolive.sh script
+remove = /linstaller/source/live/filesystem.packages-remove

@@ -5,7 +5,7 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 ####
-VERSION = "0.0.1"
+VERSION = "1.50.0"
 ####
 
 import os, sys
@@ -17,11 +17,7 @@ pid = os.getpid()
 
 # Check if we are imported from somewhere...
 if __name__ == "__main__":
-	raise LaivError("This file should be imported and not executed!")
-	
-# Check if we are root...
-#if os.getuid() is not 0:
-#	raise LaivError("You must be root to use this module.")
+	raise CodeError("This file should be imported and not executed!")
 
 # Open a temp file on which store logs and so on...
 # LOG HANDLING:
@@ -152,3 +148,9 @@ def bold(txt):
 	res = "\033[0;0m"
 	
 	return bold + txt + res
+
+def root_check():
+	""" Checks if the user is root. """
+	
+	if os.getuid() is not 0:
+		raise UserError("You must be root to use this module.")

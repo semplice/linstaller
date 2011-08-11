@@ -1,0 +1,17 @@
+/usr/lib/linstaller/linstaller/modules/bootloader
+/usr/lib/linstaller/linstaller/modules/debian
+/usr/lib/linstaller/linstaller/modules/semplice
+/usr/lib/linstaller/linstaller/modules/end
+/usr/lib/linstaller/linstaller/modules/fstab
+/usr/lib/linstaller/linstaller/modules/language
+/usr/lib/linstaller/linstaller/modules/network
+/usr/lib/linstaller/linstaller/modules/partdisks
+/usr/lib/linstaller/linstaller/modules/summary
+/usr/lib/linstaller/linstaller/modules/timezone
+/usr/lib/linstaller/linstaller/modules/unsquash
+/usr/lib/linstaller/linstaller/modules/userhost
+/usr/lib/linstaller/linstaller/modules/welcome
+
+/usr/lib/linstaller/linstaller/core/libmodules/chroot
+/usr/lib/linstaller/linstaller/core/libmodules/partdisks
+/usr/lib/linstaller/linstaller/core/libmodules/unsquash

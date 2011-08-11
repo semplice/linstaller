@@ -1,0 +1,49 @@
+Source: linstaller
+Maintainer: Eugenio (g7) <morarossa@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: python (>= 2.6.6-3), debhelper (>= 7.4.3)
+Standards-Version: 3.9.2
+X-Python-Version: >= 2.7
+Homepage: http://launchpad.net/linstaller
+
+Package: linstaller
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-progressbar, linstaller-modules-base
+Description: Modular GNU/Linux distribution installer
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the main executable and the core libraries.
+
+Package: linstaller-modules-base
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted,
+ squashfs-tools,
+ user-setup,
+ dosfstools, hfsprogs, reiser4progs, e2fsprogs,
+ grub-pc
+Description: Modular GNU/Linux distribution installer -- base modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the base modules needed to install a Semplice
+ System.
+
+Package: linstaller-config-semplice
+Architecture: all
+Description: Modular GNU/Linux distribution installer -- semplice configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install Semplice Linux.
