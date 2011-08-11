@@ -1,4 +1,10 @@
-linstaller (1.50.0) emily; urgency=low
+linstaller (1.50.0-2) emily; urgency=low
+
+  * Build-Depend too on python2.7
+
+ -- Eugenio (g7) <morarossa@gmail.com>  Thu, 11 Aug 2011 18:00:29 +0200
+
+linstaller (1.50.0-1) emily; urgency=low
 
   * Initial release.
 
