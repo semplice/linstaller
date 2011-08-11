@@ -16,14 +16,14 @@ from linstaller.core.main import warn,info,verbose
 
 import os, sys
 
-import debconf
-
 # NOTE: This is a Debian-specific module. 'user-setup' is available only on Debian(-based) distributions!
 
 class Install(module.Install):
 	def user_set(self):
 		""" Sets into the debconf database user-setup relevant settings. """
-	
+
+		import debconf # Import debconf now, this will improve hopefully 'nolive'-capable distributions list
+
 		db = debconf.DebconfCommunicator("linstaller")
 						
 		# Get relevant settings...
