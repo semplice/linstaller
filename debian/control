@@ -60,3 +60,12 @@ Description: Modular GNU/Linux distribution installer -- alan extension
  .
  This package contains the linstaller module for alan, Semplice's
  openbox menu framework.
+
+Package: live-config-linstaller
+Architecture: all
+Depends: ${misc:Depends}, live-config
+Description: Additional Configuration Scripts for Debian Live (linstaller)
+ live-config contains the scripts needed to perform late-userspace actions
+ on Debian Live systems.
+ .
+ This package contains the additional linstaller scripts.

@@ -4,8 +4,10 @@ linstaller (1.51.0-1) UNRELEASED; urgency=low
   * New wrapper for linstaller that displays "Press ENTER to close" if
     linstaller has failed (prevents the immediate destroy of the
     terminal window)
+  * Added copyright (python-stdeb didn't have created one :/)
+  * Added new live-config-linstaller package.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 11:34:08 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 12:22:17 +0200
 
 linstaller (1.50.0-1) emily; urgency=low
 

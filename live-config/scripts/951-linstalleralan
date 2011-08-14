@@ -1,0 +1,74 @@
+#!/bin/sh
+
+## linstalleralan - Configure alan to add linstaller extension to user.
+## Copyright (C) 2011 Eugenio "g7" Paolantonio <morarossa@gmail.com>
+##
+## live-config-semplice comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+linstalleralan ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/alan-ext-linstaller.list ] || \
+	   [ -e /var/lib/live/config/linstalleralan ]
+	then
+		return
+	fi
+
+	echo -n " linstalleralan"
+
+	# Get username
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.username=*|username=*)
+				LIVE_USERNAME="${_PARAMETER#*username=}"
+				;;
+			live-config.linstalleralan=*|linstalleralan=*)
+				LIVE_ENABLE="${_PARAMETER#*linstalleralan=}"
+				;;
+		esac
+	done
+	
+
+	if [ "$LIVE_USERNAME" ]; then
+		Configure_linstalleralan
+	fi
+}
+
+Configure_linstalleralan ()
+{
+	
+	if [ "$LIVE_ENABLE" != "disabled" ]; then
+		# Begin.
+		
+		# We should first copy tree.conf from /etc/alan to /home/$LIVE_USERNAME/.config/alan.
+		mkdir -p /home/$LIVE_USERNAME/.config/alan # create directories
+		cp /usr/share/alan/tree.conf /home/$LIVE_USERNAME/.config/alan/tree.conf # copy file
+		chown -R $LIVE_USERNAME:$LIVE_USERNAME /home/$LIVE_USERNAME/.config/alan # change owner of alan directory in .config
+		
+		# Now we can simply add a new category, say installer and specify the extension linstaller_alan.
+		cat >> /home/$LIVE_USERNAME/.config/alan/tree.conf <<EOF
+### ADDED BY linstalleralan LIVE-CONFIG SCRIPT FROM LIVE-CONFIG-LINSTALLER PACKAGE ###
+[cat:installer]
+name = STOCK_NULL
+extensions = linstalleralan
+
+[ext:linstalleralan]
+ext = linstaller_alan
+name = STOCK_INSTALL_SEMPLICE
+### END ADDED ###
+EOF
+
+		# We should enable new category by add it to the categories list in [Alan].
+		categories="`grep \"categories =\"  /home/$LIVE_USERNAME/.config/alan/tree.conf`"
+		sed -i "s/$categories/$categories - @installer/g"  /home/$LIVE_USERNAME/.config/alan/tree.conf
+	fi
+
+	# Creating state file
+	touch /var/lib/live/config/linstalleralan
+}
+
+linstalleralan

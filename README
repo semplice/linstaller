@@ -13,25 +13,21 @@ The project's name has three different meanings:
  * L-installer = laiv-installer, which was the name of our
    previous installer.
 
-Make it work
-============
+Install
+=======
 
-linstaller is in the initial developing phase and is not intended
-to be used in production.
-You need to adjust the configuration path in linstaller/core/config.py:
+Use the distutils-based setup.py to install linstaller:
 
-   configpath = "/home/g7/semplice/emily/INSTALLER_NEW_YAY/config"
+   sudo python2.7 setup.py install
 
-should be adjusted to:
-
-   configpath = "/path/to/linstaller/directory/config"
+You can symlink /usr/lib/linstaller/linstaller.py to /usr/bin/linstaller.
 
 Start
 =====
 
 To start linstaller you should use this command:
 
-   sudo ./linstaller.py -c=semplice start
+   sudo linstaller -c=semplice start
 
 where 'semplice' is the configuration file of the distribution (currently
 only semplice is available).
