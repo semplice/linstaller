@@ -8,8 +8,12 @@ linstaller (1.51.0-1) UNRELEASED; urgency=low
   * Added new live-config-linstaller package.
   * partdisks: do not fail if no swap is available/selected
   * partdisks: mount empty partitions that have "useas" correctly defined
+  * linstaller.py: read frontend from command-line args, do not use the
+    frontend variable on configuration anymore.
+    If -f|--frontend is not specified, default to 'cli'
+  * config/semplice-base: removed 'frontend' variable
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 17:05:47 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 17:10:48 +0200
 
 linstaller (1.50.0-1) emily; urgency=low
 

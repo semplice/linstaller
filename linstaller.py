@@ -82,6 +82,7 @@ verbose("linstaller started - version %s" % m.VERSION)
 
 _action = False
 _config = "default"
+_frontend = "cli"
 
 # Parse arguments
 for arg in sys.argv:
@@ -91,6 +92,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--config requires an argument!")
 		_config = arg[1]
+	elif arg[0] in ("--frontend","-f"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--frontend requires an argument!")
+		_frontend = arg[1]
 	elif arg[0] == "help":
 		_action = "help"
 	elif arg[0] == "start":
@@ -105,6 +110,7 @@ if _action == "help":
 	print
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
+	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print
 	print _("Recognized actions:")
 	print _(" help			- Displays this help message, then exits.")
@@ -128,7 +134,7 @@ elif _action == "start":
 	
 	# Populate main_settings
 	main_settings = {}
-	main_settings["frontend"] = cfg.printv("frontend")
+	main_settings["frontend"] = _frontend
 	main_settings["distro"] = cfg.printv("distribution")
 	main_settings["modules"] = cfg.printv("modules")
 	main_settings["special"] = cfg.printv("special")
