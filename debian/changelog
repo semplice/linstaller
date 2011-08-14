@@ -7,8 +7,9 @@ linstaller (1.51.0-1) UNRELEASED; urgency=low
   * Added copyright (python-stdeb didn't have created one :/)
   * Added new live-config-linstaller package.
   * partdisks: do not fail if no swap is available/selected
+  * partdisks: mount empty partitions that have "useas" correctly defined
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 13:50:58 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 17:05:47 +0200
 
 linstaller (1.50.0-1) emily; urgency=low
 

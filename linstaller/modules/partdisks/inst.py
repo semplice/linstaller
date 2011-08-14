@@ -31,6 +31,58 @@ class Module(module.Module):
 		
 		# Then mount at TARGET
 		lib.mount_partition(path=root, target="/linstaller/target")
+		
+		# Mount every partition which has "useas" on it
+		# Get changed.
+		changed = self.moduleclass.modules_settings["partdisks"]["changed"]
+
+		used = []
+
+		for key, value in changed.items():
+			if not "useas" in value["changes"]:
+				# There isn't "useas" in changes; skipping this item
+				continue
+			
+			# Get useas
+			useas = value["changes"]["useas"]
+			
+			if useas in ("/","swap"):
+				# Root or swap, do not use it
+				continue
+			
+			# Create mountpoint
+			mountpoint = "/linstaller/target" + useas # useas begins with a /, so os.path.join doesn't work
+			os.makedirs(mountpoint)
+			
+			# Mount key to mountpoint
+			if lib.is_mounted(key):
+				# Umount
+				lib.umount(path=key)
+			lib.mount_partition(path=key, target=mountpoint)
+			
+			# Ok, it is mounted. Now let's see if it is empty
+			count = len(os.listdir(mountpoint)
+			drop = False
+			if count == 1:
+				# The only one file may be lost+found
+				if not os.listdir(mountpoint)[0] == "lost+found":
+					# It isn't.
+					drop = True # We cannot use it
+			elif count > 1:
+				# More than one file detected. We cannot use the partition at this stage.
+				drop = True
+			
+			if drop:
+				# Umount partition, remove mountpoint
+				lib.umount(path=key)
+				os.rmdir(mountpoint)
+			else:
+				# Partition will be used during unsquash, we should remember when linstaller will execute revert
+				used.append(key)
+		
+		# Store used
+		self.settings["used"] = used
+			
 
 	def revert(self):
 		""" Umounts TARGET. """
@@ -40,5 +92,17 @@ class Module(module.Module):
 			# Umounted. pass.
 			pass
 		
-		# Umount.
+		# See if "used" was... used :)
+		_used = self.modules_settings["partdisks.inst"]["used"]
+		if _used:
+			for part in _used:
+				if lib.is_mounted(part):
+					lib.umount(path=part)
+		
+		# Umount target, finally.
 		lib.umount(path="/linstaller/target")
+	
+	def seedpre(self):
+		""" Cache settings """
+		
+		self.cache("used")
