@@ -1,5 +1,5 @@
 Source: linstaller
-Maintainer: Eugenio (g7) <morarossa@gmail.com>
+Maintainer: Eugenio Paolantonio (g7) <me@medesimo.eu>
 Section: python
 Priority: optional
 Build-Depends: python (>= 2.6.6-3), python2.7, debhelper (>= 7.4.3)
@@ -25,7 +25,7 @@ Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-
  squashfs-tools,
  user-setup,
  dosfstools, hfsprogs, reiser4progs, e2fsprogs,
- grub-pc
+ grub-pc 
 Description: Modular GNU/Linux distribution installer -- base modules
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
@@ -47,3 +47,16 @@ Description: Modular GNU/Linux distribution installer -- semplice configuration
  .
  This package contains the linstaller configuration files to
  install Semplice Linux.
+
+Package: alan-ext-linstaller
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, alan
+Description: Modular GNU/Linux distribution installer -- alan extension
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller module for alan, Semplice's
+ openbox menu framework.

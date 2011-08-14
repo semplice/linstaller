@@ -1,3 +1,12 @@
+linstaller (1.51.0-1) UNRELEASED; urgency=low
+
+  * Added alan extension and its relevant alan-ext-linstaller package
+  * New wrapper for linstaller that displays "Press ENTER to close" if
+    linstaller has failed (prevents the immediate destroy of the
+    terminal window)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 11:34:08 +0200
+
 linstaller (1.50.0-1) emily; urgency=low
 
   * Build-Depend too on python2.7

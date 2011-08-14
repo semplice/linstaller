@@ -1,3 +1,4 @@
+/usr/bin/linstaller_wrapper.sh
 /usr/lib/linstaller/linstaller.py
 /usr/lib/linstaller/linstaller/core/*.py
 /usr/lib/linstaller/linstaller/core/*.pyc
