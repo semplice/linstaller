@@ -54,11 +54,15 @@ class CLIFrontend(cli.CLIFrontend):
 			
 			# Get an appropriate device object
 			_swap_dev = self.disks[lib.return_device(self.settings["swap"]).replace("/dev/","")]
-			# Get an appropriate partition object
-			_swap_par = _swap_dev.getPartitionByPath(self.settings["swap"])
-			
-			self.changed[self.settings["swap"]] = {"obj":_swap_par, "changes":{"useas":"swap"}}
-			###################################################################################
+			if _swap_dev == "False":
+				# Swap disabled
+				self.settings["swap_noformat"] = True # Do not format swap, as it doesn't exist ;)
+			else:
+				# Get an appropriate partition object
+				_swap_par = _swap_dev.getPartitionByPath(self.settings["swap"])
+				
+				self.changed[self.settings["swap"]] = {"obj":_swap_par, "changes":{"useas":"swap"}}
+			#######################################################################################
 						
 			# If root_filesystem is populated, we should format root with that filesystem.
 			if self.settings["root_filesystem"]:
@@ -82,7 +86,10 @@ class CLIFrontend(cli.CLIFrontend):
 			self.commit()
 
 			verbose("Selected %s as root partition" % self.settings["root"])
-			verbose("Selected %s as swap partition" % self.settings["root"])
+			if self.settings["swap"] != "False":
+				verbose("Selected %s as swap partition" % self.settings["swap"])
+			else:
+				verbose("Swap disabled.")
 
 			# Skip to next module
 			return
@@ -100,7 +107,10 @@ class CLIFrontend(cli.CLIFrontend):
 			self.partition_selection()
 			
 		verbose("Selected %s as root partition" % self.settings["root"])
-		verbose("Selected %s as swap partition" % self.settings["root"])
+		if self.settings["swap"] != "False":
+			verbose("Selected %s as swap partition" % self.settings["swap"])
+		else:
+			verbose("Swap disabled.")
 		
 		verbose("Other changes: %s" % str(self.changed))
 	
@@ -144,28 +154,42 @@ class CLIFrontend(cli.CLIFrontend):
 				self.touched[lib.return_device(choice)] = True
 
 		if not self.settings["swap"]:
-			# No swap specified. Prompt for one.
-			choice = self.entry(_("Select your swap partition"))
-			# Check if choice is into disk's partition
-			_swap_par = False
-			for part in lib.swap_available(deep=True):
-				if choice == part.path:
-					_swap_par = part
 			
-			if not _swap_par:
-				# No swap :/
-				return self.partition_selection(warning=_("Wrong partition selected!"))
-			
-			self.changed[choice] = {"obj":_swap_par, "changes":{"useas":"swap"}}
-			self.settings["swap"] = choice
-			
-			if not self.settings["swap_noformat"]:
-				# Prompt for format.
-				
-				# Set format.
-				self.changed[choice]["changes"]["format"] = "linux-swap(v1)"
-				self.changed[choice]["changes"]["format_real"] = "linux-swap(v1)"
-				self.touched[lib.return_device(self.settings["swap"])] = True
+			swaps = lib.swap_available(deep=True)
+			if swaps == []:
+				# No swap available
+				warn("No swap partition available. Continuing without.")
+				self.settings["swap"] = False
+			else:
+				# No swap specified. Prompt for one.
+				choice = self.entry(_("Select your swap partition (press ENTER to not use swap)"), blank=True)
+				if not choice:
+					# Should not use swap. ok...
+					self.settings["swap"] = False
+					warn("No swap selected.")
+				else:
+					# Check if choice is into disk's partition
+					_swap_par = False
+					for part in swaps:
+						if choice == part.path:
+							_swap_par = part
+					
+					if not _swap_par:
+						# No swap :/
+						return self.partition_selection(warning=_("Wrong partition selected!"))
+					
+					self.changed[choice] = {"obj":_swap_par, "changes":{"useas":"swap"}}
+					self.settings["swap"] = choice
+					
+					if not self.settings["swap_noformat"]:
+						# Prompt for format.
+						
+						# Set format.
+						self.changed[choice]["changes"]["format"] = "linux-swap(v1)"
+						self.changed[choice]["changes"]["format_real"] = "linux-swap(v1)"
+						self.touched[lib.return_device(self.settings["swap"])] = True
+		elif self.settings["swap"] == "False":
+			self.settings["swap"] = False # Disable swap
 		
 		res = self.question("\n" + _("Are you really sure to continue? This will destroy selected partitions."), default=False)
 		if res:	
