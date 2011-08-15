@@ -61,7 +61,7 @@ class Module(module.Module):
 			lib.mount_partition(path=key, target=mountpoint)
 			
 			# Ok, it is mounted. Now let's see if it is empty
-			count = len(os.listdir(mountpoint)
+			count = len(os.listdir(mountpoint))
 			drop = False
 			if count == 1:
 				# The only one file may be lost+found

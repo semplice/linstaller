@@ -1,3 +1,11 @@
+linstaller (1.51.0~pre2-1) emily; urgency=low
+
+  * linstaller_wrapper.sh: launch linstaller with sudo
+  * partdisks: added a missing )
+  * linstaller_alan.py: fixed command
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 15 Aug 2011 11:11:18 +0200
+
 linstaller (1.51.0~pre1-1) emily; urgency=low
 
   * Added alan extension and its relevant alan-ext-linstaller package

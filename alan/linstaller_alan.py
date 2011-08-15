@@ -27,7 +27,7 @@ i = menu.insert
 
 ### Begin!
 
-install = core.item(_("Go Classic!"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=default start'"))
+install = core.item(_("Go Classic!"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=default start"))
 
 i(install)
 
