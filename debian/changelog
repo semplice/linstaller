@@ -3,8 +3,12 @@ linstaller (1.51.0~pre2-1) emily; urgency=low
   * linstaller_wrapper.sh: launch linstaller with sudo
   * partdisks: added a missing )
   * linstaller_alan.py: fixed command
+  * partdisks: do not process freespace (/dev/sdx-1) partitions
+  * partdisks: do not ask for filesystem when adding a partition; the user
+    should add one later.
+  * partdisks: library: support for partitions with None filesystem.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 15 Aug 2011 11:11:18 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 18 Aug 2011 17:21:38 +0200
 
 linstaller (1.51.0~pre1-1) emily; urgency=low
 

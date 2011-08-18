@@ -282,11 +282,24 @@ class CLIFrontend(cli.CLIFrontend):
 				obj = changes["obj"]
 				cng = changes["changes"]
 				
-				# Commit on the disk.
-				lib.commit(obj, self.touched)
-				
 				verbose("Committing changes in %s" % key)
 				
+				# If working in a Virtual freespace partition, pyparted will segfault.
+				# The following is a workaround, but should be fixed shortly.
+				#                FIXME
+				#           FIXME     FIXME
+				#      FIXME    ______     FIXME
+				# FIXME        |      |         FIXME
+				# FIXME        |      |               FIXME
+				# FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+				# ------------------------------------------
+				# Figure 1: A FIXME big like an house.
+				if "-1" in key:
+					continue				
+				
+				# Commit on the disk.
+				lib.commit(obj, self.touched)
+								
 				# Should format?
 				if "format_real" in cng:
 					# Yes.
@@ -308,7 +321,7 @@ class CLIFrontend(cli.CLIFrontend):
 					elif cng["useas"] == "swap":
 						# Preseed
 						self.settings["swap"] = key
-		
+				
 		# Preseed *all* changes
 		self.settings["changed"] = self.changed
 		
@@ -661,25 +674,26 @@ class CLIFrontend(cli.CLIFrontend):
 			# No!
 			return self.edit_partitions(warning=_("Not enough space!"))
 
-		_supported = lib.get_supported_filesystems()
+		#_supported = lib.get_supported_filesystems()
 		
-		print(_("Available Filesystems:") + "\n")
-		for fs in _supported.keys():
-			print("  %s" % fs)
-		print
+		#print(_("Available Filesystems:") + "\n")
+		#for fs in _supported.keys():
+		#	print("  %s" % fs)
+		#print
 		
-		_request = _("Insert the filesystem you want to use here")
-		
-		_fs = self.entry(_request)
-		if not _fs in _supported:
-			return self.edit_partitions(warning=_("%s is not a supported filesystem!") % _fs)
+		#_request = _("Insert the filesystem you want to use here")
+		#
+		#_fs = self.entry(_request)
+		#if not _fs in _supported:
+		#	return self.edit_partitions(warning=_("%s is not a supported filesystem!") % _fs)
 		
 		# Write directly in memory...
-		lib.add_partition(device.disk, start=device.geometry.start, size=res, type=lib.p.PARTITION_NORMAL, filesystem=_fs)
-		device_changes["format_real"] = _fs
+		lib.add_partition(device.disk, start=device.geometry.start, size=res, type=lib.p.PARTITION_NORMAL, filesystem=None)
+		#device_changes["format"] = _fs
+		#device_changes["format_real"] = _fs
 		self.touched[device.path] = True
 		
-		return self.edit_partitions(information=_("Done."))
+		return self.edit_partitions(information=_("Done. Now add a filesystem to the partition."))
 	
 	def edit_partitions_deleteall(self, device, device_changes):
 		""" Marks all partitions on the device to be deleted. """
@@ -690,9 +704,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		# Unmark all partitions in this disk...
 		for part in device.partitions:
-			if "delete" in self.changed[part.path]["changes"]:
-				# Unmark.
-				del self.changed[part.path]["changes"]["delete"]
+			self.changed[part.path]["changes"].clear()
 
 		device_changes["deleteall"] = True
 		self.touched[device.device.path] = True

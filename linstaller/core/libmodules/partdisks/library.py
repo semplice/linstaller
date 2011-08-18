@@ -129,7 +129,10 @@ def add_partition(obj, start, size, type, filesystem):
 	cons = p.Constraint(device=obj.device)
 	geom = p.Geometry(device=obj.device, start=start, length=size)
 	
-	filesystem = p.FileSystem(type=filesystem, geometry=geom)
+	if filesystem:
+		filesystem = p.FileSystem(type=filesystem, geometry=geom)
+	else:
+		filesystem = None
 	
 	# New partition object
 	part = p.Partition(disk=obj, fs=filesystem, type=type, geometry=geom)
@@ -168,7 +171,7 @@ def get_supported_filesystems():
 
 def commit(obj, touched):
 	""" Commits the changes at obj. """
-		
+	
 	if type(obj) == p.partition.Partition:
 		if not obj.path in touched:
 			# Nothing to commit
@@ -245,6 +248,7 @@ def delete_all(obj):
 #		disk = disks[obj.path.replace("/d]
 	
 	# Remove all
+	umount_bulk(obj.device.path) # Before, umount all mounted partitions
 	return obj.deleteAllPartitions()
 
 def is_mounted(obj):
@@ -360,6 +364,23 @@ def umount(parted_part=None, path=None):
 	
 	# Unmount.
 	m.sexec("umount %s" % path)
+
+def umount_bulk(basepath):
+	""" Umounts all partitions that begins with basepath.
+	
+	Example: umount_bulk("/dev/sda")
+	umounts /dev/sda1, /dev/sda2, /dev/sda3 etc...
+	"""
+	
+	# Obtain only the file name
+	basepath = os.path.basename(basepath)
+	
+	for _file in os.listdir("/dev"):
+		if basepath in _file:
+			# Check if it is mounted
+			if is_mounted(os.path.join("/dev",_file)):
+				# Yes, so umount
+				umount(path=os.path.join("/dev",_file))
 
 def write_memory(changed):
 	""" Writes, in memory, the changes made. """
