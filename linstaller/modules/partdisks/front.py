@@ -278,10 +278,11 @@ class CLIFrontend(cli.CLIFrontend):
 
 		if result:
 			# Ok, continue.
-			for key, changes in self.changed.items():
-				obj = changes["obj"]
-				cng = changes["changes"]
-				
+			lst, dct = lib.device_sort(self.changed)
+			for key in lst:
+				obj = dct[key]["obj"]
+				cng = dct[key]["changes"]
+								
 				verbose("Committing changes in %s" % key)
 				
 				# If working in a Virtual freespace partition, pyparted will segfault.
@@ -533,6 +534,10 @@ class CLIFrontend(cli.CLIFrontend):
 						# We can use GB.
 						_swap_unit = "GB"
 						_swap_size = round(swap.getLength("GB"))
+				
+				# Set-up touched...
+				self.touched[part.path] = True
+				if swap: self.touched[swap.path] = True
 				
 				print("   / - %s (%s - %s GB)" % (part.path, part.fileSystem.type, round(part.getLength("GB"), 2)))
 				if swap: print("   swap - %s (%s %s)" % (swap.path, _swap_size, _swap_unit))

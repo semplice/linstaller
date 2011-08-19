@@ -1,3 +1,14 @@
+linstaller (1.51.0~pre3-1) UNRELEASED; urgency=low
+
+  * partdisks: library: added is_disk() and device_sort() functions
+  * partdisks: library: return_device() correctly works on freespace
+    partitions.
+  * partdisks: use device_sort() to return a sorted list of what we
+    should commit.
+  * partdisks: set touched in automatic partitioning.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 00:00:23 +0200
+
 linstaller (1.51.0~pre2-1) emily; urgency=low
 
   * linstaller_wrapper.sh: launch linstaller with sudo

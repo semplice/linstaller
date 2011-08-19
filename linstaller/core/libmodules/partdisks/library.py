@@ -39,6 +39,18 @@ supported = {
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
 	}
 
+def is_disk(dsk):
+	""" Checks if dsk is a disk. Returns True if so.
+	
+	It does perform checks only on the string passed, so it may not
+	be accurate. """
+	
+	if not dsk[-1] in ("-","1","2","3","4","5","6","7","8","9","0"):
+		# Is a disk
+		return True
+	else:
+		return False
+
 def MbToSector(mbs):
     """ Convert Megabytes in sectors"""
 
@@ -80,7 +92,7 @@ def return_memory():
 def return_device(dev):
 	""" Returns a device from a partition (str) """
 	
-	while dev[-1] in ("1","2","3","4","5","6","7","8","9","0"):
+	while dev[-1] in ("-","-1","1","2","3","4","5","6","7","8","9","0"):
 		dev = dev[:-1]
 	
 	return dev
@@ -106,13 +118,32 @@ def return_devices():
 				# This is the first/second line of /proc/partitions, skipping...
 				continue
 									
-			if not device[-1] in ("1","2","3","4","5","6","7","8","9","0"):
+			if is_disk(device):
 				# This is not a partition, but an entire device. We can continue.
 
 				devices[device] = p.device.Device(path="/dev/%s" % device)
 				disks[device] = p.disk.Disk(device=devices[device])
 			
 	return devices, disks
+
+def device_sort(dct):
+	""" Transforms dct in a list where devices are listed before partitions.
+	
+	Returns the newly created list and the original dictionary. """
+	
+	lst = []
+	
+	for key, value in dct.items():
+		if not key in lst:
+			if is_disk(key):
+				# Add straigtly to list
+				lst.append(key)
+			else:
+				if not return_device(key) in lst:
+					lst.append(return_device(key)) # Append the disk if it is not already listed
+				lst.append(key)
+	
+	return lst, dct
 
 def restore_devices():
 	""" Restores *real* structure. """
