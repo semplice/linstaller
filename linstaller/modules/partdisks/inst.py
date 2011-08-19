@@ -34,7 +34,7 @@ class Module(module.Module):
 		
 		# Mount every partition which has "useas" on it
 		# Get changed.
-		changed = self.moduleclass.modules_settings["partdisks"]["changed"]
+		changed = self.modules_settings["partdisks"]["changed"]
 
 		used = []
 
@@ -93,11 +93,12 @@ class Module(module.Module):
 			pass
 		
 		# See if "used" was... used :)
-		_used = self.modules_settings["partdisks.inst"]["used"]
-		if _used:
-			for part in _used:
-				if lib.is_mounted(part):
-					lib.umount(path=part)
+		if "partdisks.inst" in self.modules_settings and "used" in self.modules_settings["partdisks.inst"]:
+			_used = self.modules_settings["partdisks.inst"]["used"]
+			if _used:
+				for part in _used:
+					if lib.is_mounted(part):
+						lib.umount(path=part)
 		
 		# Umount target, finally.
 		lib.umount(path="/linstaller/target")

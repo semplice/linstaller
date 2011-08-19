@@ -6,10 +6,14 @@ linstaller (1.51.0~pre3-1) UNRELEASED; urgency=low
   * partdisks: use device_sort() to return a sorted list of what we
     should commit.
   * partdisks: set touched in automatic partitioning.
-  * partdisks: do not format if in interactive editor, swap is selected
+  * partdisks: do not format if, in interactive editor, swap is selected
     but swap_noformat preseed is true.
+  * partdisks: inst: in revert, check for key "partdisks.inst" AND if any,
+    revert used.
+  * partdisks: inst: fixed get of "changed".
+  * partdisks: "Go back" is now fixed.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 00:11:49 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 00:48:58 +0200
 
 linstaller (1.51.0~pre2-1) emily; urgency=low
 

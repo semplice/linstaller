@@ -113,7 +113,7 @@ class CLIFrontend(cli.CLIFrontend):
 			verbose("Swap disabled.")
 		
 		verbose("Other changes: %s" % str(self.changed))
-	
+			
 	def partition_selection(self, warning=None, information=None):
 		""" If root and swap aren't preseeded, prompts the user for a partition. """
 		
@@ -252,7 +252,7 @@ class CLIFrontend(cli.CLIFrontend):
 			if not res:
 				return self.edit_partitions()
 		
-		return self.main()
+		return
 	
 	def commit(self, interactive=False):
 		""" Commits all the changes to the disks. """
