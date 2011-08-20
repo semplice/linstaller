@@ -1,4 +1,4 @@
-linstaller (1.51.0~pre3-1) UNRELEASED; urgency=low
+linstaller (1.51.0~pre3-1) emily; urgency=low
 
   * partdisks: library: added is_disk() and device_sort() functions
   * partdisks: library: return_device() correctly works on freespace
@@ -12,8 +12,10 @@ linstaller (1.51.0~pre3-1) UNRELEASED; urgency=low
     revert used.
   * partdisks: inst: fixed get of "changed".
   * partdisks: "Go back" is now fixed.
+  * partdisks: do not clear touched and changes when returning to self.main()
+  * partdisks: in main() reload structure, but not remove "useas".
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 00:48:58 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 11:31:04 +0200
 
 linstaller (1.51.0~pre2-1) emily; urgency=low
 

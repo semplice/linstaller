@@ -24,16 +24,16 @@ class CLIFrontend(cli.CLIFrontend):
 
 		#self.devices, self.disks = lib.return_devices() # Obtain devices
 		self.devices, self.disks = lib.devices, lib.disks
-		
+
+		self.touched = {}
+		self.changed = {}
+
 		self.main()
 	
 	def main(self):
 		""" Main prompt. """
 
-		self.touched = {}
-		self.changed = {}
-
-		self._reload()
+		self._reload(complete=False)
 		self.header(_("Disk partitioning"))
 
 		# Check if root and swap are preseeded.
