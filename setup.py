@@ -6,7 +6,7 @@
 from distutils.core import setup
 
 setup(name='linstaller',
-      version='1.51.0~pre3',
+      version='1.51.0~pre4',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -32,8 +32,8 @@ setup(name='linstaller',
       "linstaller.modules.welcome",
       ],
       data_files=[("/usr/bin", ["linstaller_wrapper.sh"]),
-      ("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/playground"]),
-      ("/usr/lib/alan/alan/ext", ["alan/linstaller_alan.py"]),
+      ("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive"]),
+      ("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
       ],
       requires=['ConfigParser', 'commands', 'copy', 'getpass', 'os', 'progressbar', 'subprocess', 'threading', 'traceback', 'debconf', 'exceptions', 'liblaiv_setup', 'operator', 'parted', 'sys', 't9n.library', 'time'],
      )

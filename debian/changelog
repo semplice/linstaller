@@ -1,8 +1,20 @@
-linstaller (1.51.0~pre3-2) emily; urgency=low
+linstaller (1.51.0~pre4-1) UNRELEASED; urgency=low
 
+  [ tuxpenguin ]
   * Translated some spaghetti-English periods into English.
 
- -- tuxpenguin <sidtux@gmail.com>  Wed, 31 Aug 2011 18:46:22 +0200
+  [ Eugenio Paolantonio (g7) ]
+  * debian/, setup.cfg:
+    - Ship to /usr/share/linstaller.
+  * debian/alan-ext-linstaller.install, setup.py:
+    - Install alan extension in /usr/share/alan.
+  * setup.py:
+    - Do not ship playground configuration anymore. 
+    - Ship semplice-nolive configuration.
+  * debian/linstaller-config-semplice.install:
+    - Ship semplice-nolive.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 31 Aug 2011 19:21:10 +0200
 
 linstaller (1.51.0~pre3-1) emily; urgency=low
 
