@@ -86,13 +86,13 @@ class CLIFrontend(cli.CLIFrontend):
 		passw1 = self.entry(text, password=True)
 		if len(passw1) < 6:
 			# Pasword lenght is lesser than six
-			warn(_("The password should be composed from at least six charchters."))
+			warn(_("The password should be composed of at least six charchters."))
 			return self.password_prompt(text)
 		passw2 = self.entry(text + _(" (again)"), password=True)
 		
 		if not passw1 == passw2:
 			# Wrong!
-			warn(_("The password aren't the same! Please re-try."))
+			warn(_("The passwords don't match! Please retry."))
 			return self.password_prompt(text)
 		else:
 			return passw1

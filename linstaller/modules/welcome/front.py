@@ -22,7 +22,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		print(_("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"])
 		print
-		print(_("This wizard will help you with the installation of the distribution into an Hard Disk or an other removable media."))
+		print(_("This wizard will help you with the installation of the distribution into your Hard Disk or another removable media."))
 		print(_("Keep in mind that this installer it's still in testing phase."))
 		print(_("Please reports any problem at http://bugs.launchpad.net/linstaller."))
 		print

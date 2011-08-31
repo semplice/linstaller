@@ -96,7 +96,7 @@ class CLIFrontend(cli.CLIFrontend):
 
 		self.print_devices_partitions()
 		
-		res = self.question(_("Do you want to change the partition structure?"), default=False)
+		res = self.question(_("Do you want to change the partition table?"), default=False)
 		if res:
 			# We should change partition structure.
 			res = self.edit_partitions()
@@ -208,9 +208,9 @@ class CLIFrontend(cli.CLIFrontend):
 		""" Reloads original structure. """
 		
 		if interactive:
-			self.header(_("Reload original structure"))
+			self.header(_("Reload original table"))
 			
-			print(_("This will reload the original structure of the disks."))
+			print(_("This will reload the original partition table."))
 			print(_("All changes you've done will be lost.") + "\n")
 			
 			res = self.question(_("Do you want to continue?"), default=False)
@@ -244,7 +244,7 @@ class CLIFrontend(cli.CLIFrontend):
 		if not self.touched == {}:
 			self.header(_("Go back"))
 			
-			print(_("It appears that you have uncommited changes to the drives' structure."))
+			print(_("It appears that you have uncommited changes to the partitioning scheme."))
 			print(_("If you want to commit them, you need first to write to memory the changes and then to commit."))
 			print(_("To do so, you should go to the 'edit partitions' page and select the relative options.") + "\n")
 			
@@ -261,14 +261,14 @@ class CLIFrontend(cli.CLIFrontend):
 		
 			self.header(_("Commit changes"))
 			
-			print(_("This structure will be confirmed:"))
+			print(_("This table is going to be applied:"))
 			print
 			
 			self.print_devices_partitions()
 			
 			print
 			
-			print(_("%(warning)s: This will COMMIT ALL CHANGES YOU'VE DONE on the physical disks.") % {"warning":bold(_("WARNING"))})
+			print(_("%(warning)s: This will COMMIT ALL THE CHANGES YOU'VE DONE on the physical disks.") % {"warning":bold(_("WARNING"))})
 			print(_("This is the last time that you can check your new partition table."))
 			print(_("If you continue, you CAN'T RESTORE THE OLD TABLE!") + "\n")
 			
@@ -490,7 +490,7 @@ class CLIFrontend(cli.CLIFrontend):
 			self.header(_("Automatic partitioner") + " - %s" % obj.device.path)
 			
 			actions = {}
-			actions[0] = (_("Partition by freespace"), "freespace")
+			actions[0] = (_("Use the free space"), "freespace")
 			actions[1] = (_("Delete another system"), "delete")
 			actions[2] = (_("Delete all partitions"), "deleteall")
 			actions[3] = (_("Back"), "back")
@@ -504,9 +504,9 @@ class CLIFrontend(cli.CLIFrontend):
 			try:
 				result = int(result)
 			except:
-				return self.edit_partitions(warning=_("You didn't entered a valid action."))
+				return self.edit_partitions(warning=_("You haven't entered a valid action."))
 			if not result in actions:
-				return self.edit_partitions(warning=_("You didn't entered a valid action."))
+				return self.edit_partitions(warning=_("You haven't entered a valid action."))
 	
 			by = actions[result][1]
 
@@ -784,7 +784,7 @@ class CLIFrontend(cli.CLIFrontend):
 		if device.number == -1 or device.type == 2:
 			return self.edit_partitions(warning=_("You can't execute this action on freespace or on an extended partition!"))
 		
-		print(_("You can insert here the mount point of this partition."))
+		print(_("Here you can insert the mount point of this partition."))
 		print(_("For example, if you want to mount as /home, insert '/home'.") + "\n")
 		
 		_request = _("Insert the mountpoint here")
@@ -813,7 +813,7 @@ class CLIFrontend(cli.CLIFrontend):
 			return self.edit_partitions(warning=_("You can't resize freespace or an extended partition!"))
 		
 		print(_("Current partition size: %s") % round(device.getLength("MiB"), 3))
-		print(_("You can insert the percentage of the resize (e.g: 50%) or the full size fo the resized partition, in MB."))
+		print(_("You can insert the percentage of the resize (e.g: 50%) or the full size for the resized partition, in MB."))
 		print(_("In order to make change to the free space that the resize operation will make, you will need to write in memory the changes.") + "\n")
 		res = self.entry(_("Insert the value here [press ENTER to go back]"), blank=True)
 		if not res:
@@ -917,7 +917,7 @@ class CLIFrontend(cli.CLIFrontend):
 		self.header(_("Write to memory"))
 		
 		print(_("Do you want to write to memory your changes?"))
-		print(_("This will let you continue managing the disks structure.") + "\n")
+		print(_("This will let you continue to manage the partitioning scheme.") + "\n")
 		print(_("%(note)s: This will %(not)s write the changes to the disk! It only simulates it. You should write to memory every time you delete and resize partitions. This will let you add new partitions on the freed space.") % {"note":bold(_("NOTE")), "not":bold(_("not"))})
 		print(_("You can always restore original structure via the appropriate option into the main menu."))
 		print
@@ -1052,7 +1052,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		if interactive:
 			# Prompt
-			res = self.entry("Enter the number of the partition/device that you want to edit here")
+			res = self.entry("Enter the number of the partition(s)/device(s) you want to edit here")
 			
 			return res, choices
 

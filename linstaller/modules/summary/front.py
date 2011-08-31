@@ -29,7 +29,7 @@ class CLIFrontend(cli.CLIFrontend):
 		if self.moduleclass.modules_settings["userhost"]["root"] == "enabled":
 			# Root enabled
 			print(_("Root account is enabled."))
-		print(_("The computer's hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})
+		print(_("The computer hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})
 		print(_("The machine will use this timezone: %(timezone)s.") % {"timezone":self.moduleclass.modules_settings["timezone"]["timezone"]})
 		print
 		

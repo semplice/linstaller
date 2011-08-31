@@ -41,7 +41,7 @@ class CLIFrontend(cli.CLIFrontend):
 		# Start progressbar
 		progress.start()
 
-		verbose("Generating networking")
+		verbose("Configuring networking")
 		try:
 			# NETWORKING: set.
 			self.moduleclass.install.configure()

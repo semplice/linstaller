@@ -78,7 +78,7 @@ def launch_module(module, special):
 ## where <configuration> should be a configuration file in /etc/linstaller (without path).
 ## if --config is omitted, will be used "default" by default.
 
-verbose("linstaller started - version %s" % m.VERSION)
+verbose("started linstaller - version %s" % m.VERSION)
 
 _action = False
 _config = "default"
@@ -102,7 +102,7 @@ for arg in sys.argv:
 		_action = "start"
 
 if not _action:
-	print _("You need to pass at least an action!")
+	print _("You have to pass at least an action!")
 	_action = "help"
 
 if _action == "help":

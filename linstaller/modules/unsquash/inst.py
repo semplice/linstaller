@@ -17,7 +17,7 @@ class CLIFrontend(cli.CLIFrontend):
 	def start(self):
 		""" Start the frontend """
 
-		verbose("Getting the number of the files to be copied...")
+		verbose("Calculating the number of the files to copy...")
 		filenum = self.moduleclass.unsquash.get_files()
 		
 		# Get a progressbar
