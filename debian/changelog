@@ -13,8 +13,10 @@ linstaller (1.51.0~pre4-1) UNRELEASED; urgency=low
     - Ship semplice-nolive configuration.
   * debian/linstaller-config-semplice.install:
     - Ship semplice-nolive.
+  * debian/rules:
+    - Install MOs
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 31 Aug 2011 19:21:10 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Sep 2011 13:16:18 +0200
 
 linstaller (1.51.0~pre3-1) emily; urgency=low
 
