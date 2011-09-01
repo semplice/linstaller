@@ -158,7 +158,7 @@ class CLIFrontend(cli.CLIFrontend):
 			swaps = lib.swap_available(deep=True)
 			if swaps == []:
 				# No swap available
-				warn("No swap partition available. Continuing without.")
+				warn(_("No swap partition available. Continuing without."))
 				self.settings["swap"] = False
 			else:
 				# No swap specified. Prompt for one.
@@ -166,7 +166,7 @@ class CLIFrontend(cli.CLIFrontend):
 				if not choice:
 					# Should not use swap. ok...
 					self.settings["swap"] = False
-					warn("No swap selected.")
+					warn(_("No swap selected."))
 				else:
 					# Check if choice is into disk's partition
 					_swap_par = False
@@ -1052,7 +1052,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		if interactive:
 			# Prompt
-			res = self.entry("Enter the number of the partition(s)/device(s) you want to edit here")
+			res = self.entry(_("Enter the number of the partition(s)/device(s) you want to edit here"))
 			
 			return res, choices
 

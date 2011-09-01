@@ -1,4 +1,4 @@
-linstaller (1.51.0~pre4-1) UNRELEASED; urgency=low
+linstaller (1.51.0~pre4-1) emily; urgency=low
 
   [ tuxpenguin ]
   * Translated some spaghetti-English periods into English.
@@ -17,8 +17,9 @@ linstaller (1.51.0~pre4-1) UNRELEASED; urgency=low
     - Install MOs
   * debian/linstaller.install:
     - Ship /usr/share/locale.
+  * Make translatable some more strings.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Sep 2011 13:44:16 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Sep 2011 14:27:05 +0200
 
 linstaller (1.51.0~pre3-1) emily; urgency=low
 

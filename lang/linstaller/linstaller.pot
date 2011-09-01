@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-31 19:32+0200\n"
+"POT-Creation-Date: 2011-09-01 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,8 +213,16 @@ msgstr ""
 msgid "Wrong partition selected!"
 msgstr ""
 
+#: linstaller/modules/partdisks/front.py:161
+msgid "No swap partition available. Continuing without."
+msgstr ""
+
 #: linstaller/modules/partdisks/front.py:165
 msgid "Select your swap partition (press ENTER to not use swap)"
+msgstr ""
+
+#: linstaller/modules/partdisks/front.py:169
+msgid "No swap selected."
 msgstr ""
 
 #: linstaller/modules/partdisks/front.py:194
@@ -662,6 +670,10 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front.py:1046
 msgid "Commit"
+msgstr ""
+
+#: linstaller/modules/partdisks/front.py:1055
+msgid "Enter the number of the partition(s)/device(s) you want to edit here"
 msgstr ""
 
 #: linstaller/modules/unsquash/inst.py:24
