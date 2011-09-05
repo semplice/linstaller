@@ -1,3 +1,13 @@
+linstaller (1.51.0~pre5-1) emily; urgency=low
+
+  * Added preseed support for "root_noformat": if True, it will not format
+    the partition that should be used as /.
+    Works only via preseed and only into the root/swap selection dialog.
+  * live-config-linstaller: linstalleralan: copy config from /etc/alan,
+    added menu item icon.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 05 Sep 2011 18:11:22 +0200
+
 linstaller (1.51.0~pre4-1) emily; urgency=low
 
   [ tuxpenguin ]

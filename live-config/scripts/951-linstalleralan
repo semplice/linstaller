@@ -46,7 +46,7 @@ Configure_linstalleralan ()
 		
 		# We should first copy tree.conf from /etc/alan to /home/$LIVE_USERNAME/.config/alan.
 		mkdir -p /home/$LIVE_USERNAME/.config/alan # create directories
-		cp /usr/share/alan/tree.conf /home/$LIVE_USERNAME/.config/alan/tree.conf # copy file
+		cp /etc/alan/tree.conf /home/$LIVE_USERNAME/.config/alan/tree.conf # copy file
 		chown -R $LIVE_USERNAME:$LIVE_USERNAME /home/$LIVE_USERNAME/.config/alan # change owner of alan directory in .config
 		
 		# Now we can simply add a new category, say installer and specify the extension linstaller_alan.
@@ -59,6 +59,7 @@ extensions = linstalleralan
 [ext:linstalleralan]
 ext = linstaller_alan
 name = STOCK_INSTALL_SEMPLICE
+icon = document-save
 ### END ADDED ###
 EOF
 

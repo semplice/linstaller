@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# linstaller timezone module frontend - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# linstaller partdisks module frontend - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
@@ -143,12 +143,12 @@ class CLIFrontend(cli.CLIFrontend):
 			self.changed[choice] = {"obj":_root_par, "changes":{"useas":"/"}}
 			self.settings["root"] = choice
 			
-			if not self.settings["root_filesystem"]:
+			if not self.settings["root_filesystem"] and not self.settings["root_noformat"]:
 				# No filesystem for root specified.
 				# Prompt for one.
 				
 				return self.edit_partitions_format(_root_par, self.changed[choice]["changes"], _return="partsel")
-			else:
+			elif not self.settings["root_noformat"]:
 				self.changed[choice]["changes"]["format"] = self.settings["root_filesystem"]
 				self.changed[choice]["changes"]["format_real"] = self.settings["root_filesystem"]
 				self.touched[lib.return_device(choice)] = True
@@ -1069,6 +1069,7 @@ class Module(module.Module):
 		
 		self.cache("root")
 		self.cache("root_filesystem")
+		self.cache("root_noformat")
 		self.cache("swap")
 		self.cache("swap_noformat")
 		
