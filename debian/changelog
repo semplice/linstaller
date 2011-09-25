@@ -6,7 +6,7 @@ linstaller (1.51.0~pre5-1) emily; urgency=low
   * live-config-linstaller: linstalleralan: copy config from /etc/alan,
     added menu item icon.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 05 Sep 2011 18:11:22 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 25 Sep 2011 11:35:36 +0200
 
 linstaller (1.51.0~pre4-1) emily; urgency=low
 
