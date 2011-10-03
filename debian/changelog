@@ -1,3 +1,12 @@
+linstaller (1.51.0-1) emily; urgency=low
+
+  * linstalleralan: ported to alan 0.4.0, support for "config" option
+                    in order to specify configuration file from the
+                    tree.conf.
+  * Release for Beta1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Oct 2011 12:48:14 +0200
+
 linstaller (1.51.0~pre5-1) emily; urgency=low
 
   * Added preseed support for "root_noformat": if True, it will not format

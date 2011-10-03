@@ -10,6 +10,8 @@ import alan.core.structure as struct
 import alan.core.objects.core as core
 import alan.core.actions.glob as ga
 
+import alan.core.extension
+
 import t9n.library as trans
 
 _ = trans.translation_init("linstaller")
@@ -18,19 +20,26 @@ _ = trans.translation_init("linstaller")
 coders = { "Eugenio Paolantonio":"http://blog.medesimo.eu" }
 infos = {"Coders":coders}
 
-# Initiate pipemenu
-menu = struct.PipeMenu()
-menu.start() # add initial tag
+class Extension(alan.core.extension.Extension):
+	def run(self):
+		# Initiate pipemenu
+		self.menu = struct.PipeMenu()
+		self.menu.start() # add initial tag
 
-# Alias menu.insert() to i()
-i = menu.insert
+		# Get linstaller configuration file, if any
+		config = self.cfg.printv("config")
+		if not config:
+			config = "default"
 
-### Begin!
+		# Alias self.menu.insert() to i()
+		i = self.menu.insert
 
-install = core.item(_("Go Classic!"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=default start"))
+		### Begin!
 
-i(install)
+		install = core.item(_("Go Classic!"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
 
-# End
-menu.end()
+		i(install)
+
+		# End
+		self.menu.end()
 
