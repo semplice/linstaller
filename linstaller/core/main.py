@@ -5,7 +5,7 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 ####
-VERSION = "1.51.0~pre3"
+VERSION = "1.51.1"
 ####
 
 import os, sys

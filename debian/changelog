@@ -1,3 +1,9 @@
+linstaller (1.51.1-1) emily; urgency=low
+
+  * partdisks: deal with invalid partition tables
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 24 Oct 2011 11:20:52 +0200
+
 linstaller (1.51.0-1) emily; urgency=low
 
   * linstalleralan: ported to alan 0.4.0, support for "config" option

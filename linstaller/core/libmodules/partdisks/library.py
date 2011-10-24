@@ -122,7 +122,12 @@ def return_devices():
 				# This is not a partition, but an entire device. We can continue.
 
 				devices[device] = p.device.Device(path="/dev/%s" % device)
-				disks[device] = p.disk.Disk(device=devices[device])
+				try:
+					disks[device] = p.disk.Disk(device=devices[device])
+				except p.disk._ped.DiskLabelException:
+					# Deal with invalid partition tables
+					verbose("Unable to obtain a disk object of /dev/%s - Skipping" % device)
+					del devices[device] # Remove device from device list
 			
 	return devices, disks
 
