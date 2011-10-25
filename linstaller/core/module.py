@@ -48,12 +48,8 @@ class Module:
 		# Start frnt.
 		res = frnt.start()
 		
-		if res == "restart":
-			# Frontend requested to restart
-			return "restart"
-		elif res == "kthxbye":
-			# Frontend requested to reboot
-			return "kthxbye"
+		if res in ("restart", "kthxbye", "fullrestart"):
+			return res
 	
 	def seedpre(self):
 		pass

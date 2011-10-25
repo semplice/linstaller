@@ -97,11 +97,11 @@ def verbose(message):
 
 # Process execution
 
-def sexec(command):
+def sexec(command, shell=True):
 	""" A simple function that will execute a command by invoking execute class. """
 	
 	# Declare class
-	clss = execute(command)
+	clss = execute(command, shell=shell)
 	# Start thread
 	clss.start()
 	

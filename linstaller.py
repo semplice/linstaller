@@ -16,8 +16,6 @@ _ = t9n.library.translation_init("linstaller")
 
 import os, sys
 
-reboot = False
-
 def launch_module(module, special):
 	global reboot
 	
@@ -70,6 +68,9 @@ def launch_module(module, special):
 	elif res == "kthxbye":
 		# Reboot
 		return "kthxbye"
+	elif res == "fullrestart":
+		# restart linstaller
+		return "fullrestart"
 
 
 ## Welcome the linstaller :)
@@ -153,10 +154,8 @@ elif _action == "start":
 	for module in main_settings["modules"].split(" "):
 		if module:
 			res = launch_module(module, main_settings["special"].split(" "))
-			if res == "exit":
+			if res in ("exit", "kthxbye", "fullrestart"):
 				break # Exit.
-			elif res == "kthxbye":
-				reboot = True # Reboot
 
 	# Finished installation. Revert changes made to the system.
 	executed_special.reverse() # Reverse.
@@ -168,10 +167,13 @@ elif _action == "start":
 		# Revert
 		_revertc.revert()
 	
-	if reboot:
+	if res == "kthxbye":
 		# We should reboot?
 		verbose("KTHXBYE")
 		m.sexec("reboot")
+	elif res == "fullrestart":
+		verbose("Doing full linstaller restart, as requested.")
+		sys.exit(os.system(" ".join(sys.argv)))
 	
 	sys.exit(0)
 

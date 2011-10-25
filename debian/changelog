@@ -2,8 +2,16 @@ linstaller (1.51.2-1) emily; urgency=low
 
   * partdisks: use the correct partition in the "delete a system"
                option in the automatic partitioner.
+  * modules: added new update module: checks for linstaller updates.
+             Seeds: 'packages' in [module:update].
+             Type: frontend only.
+  * linstaller: support for full application restart
+  * linstaller: some syntax changes for restart,reboot,fullrestart
+                actions.
+  * config/semplice-base: updated to match inclusion of update
+                          module.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Oct 2011 16:09:12 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Oct 2011 18:05:46 +0200
 
 linstaller (1.51.1-1) emily; urgency=low
 
