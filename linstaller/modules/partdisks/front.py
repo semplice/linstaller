@@ -597,8 +597,12 @@ class CLIFrontend(cli.CLIFrontend):
 				if not result in actions:
 					return self.automatic(warning=_("You didn't entered a valid value."))
 				
+				if actions[result] == "back":
+					# Go back.
+					return self.automatic()
+				
 				# If we can continue, delete partition!!
-				lib.delete_partition(part)
+				lib.delete_partition(actions[result])
 				
 				# Now there is freespace ;-)
 				# So use "freespace".

@@ -1,3 +1,10 @@
+linstaller (1.51.2-1) emily; urgency=low
+
+  * partdisks: use the correct partition in the "delete a system"
+               option in the automatic partitioner.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Oct 2011 16:09:12 +0200
+
 linstaller (1.51.1-1) emily; urgency=low
 
   * partdisks: deal with invalid partition tables
