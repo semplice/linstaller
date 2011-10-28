@@ -15,8 +15,9 @@ linstaller (1.52.0-1) emily; urgency=low
   * linstalleralan: Renamed "Go Classic!" to "Launch linstaller", as
                     in emily only the CLI ("Classic") frontend will
                     be available, and this only confuses people ;)
+  * debian/source/format: this is a not native package.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:57:41 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 12:02:52 +0200
 
 linstaller (1.51.1-1) emily; urgency=low
 
