@@ -9,7 +9,7 @@ Homepage: http://launchpad.net/linstaller
 
 Package: linstaller
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-progressbar, linstaller-modules-base
+Depends: ${misc:Depends}, ${python:Depends}, python-progressbar, linstaller-modules-base (= ${binary:Version})
 Description: Modular GNU/Linux distribution installer
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.

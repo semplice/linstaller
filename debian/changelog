@@ -11,8 +11,9 @@ linstaller (1.51.2-1) emily; urgency=low
   * config/semplice-base: updated to match inclusion of update
                           module.
   * core/main: support for shell=False on sexec.
+  * debian/control: linstaller: depend on modules = ${binary:Version}
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Oct 2011 18:09:43 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:53:25 +0200
 
 linstaller (1.51.1-1) emily; urgency=low
 
