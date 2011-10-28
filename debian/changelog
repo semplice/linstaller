@@ -1,4 +1,4 @@
-linstaller (1.51.2-1) emily; urgency=low
+linstaller (1.52.0-1) emily; urgency=low
 
   * partdisks: use the correct partition in the "delete a system"
                option in the automatic partitioner.
@@ -16,7 +16,7 @@ linstaller (1.51.2-1) emily; urgency=low
                     in emily only the CLI ("Classic") frontend will
                     be available, and this only confuses people ;)
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:56:09 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:57:41 +0200
 
 linstaller (1.51.1-1) emily; urgency=low
 
