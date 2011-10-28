@@ -36,7 +36,7 @@ class Extension(alan.core.extension.Extension):
 
 		### Begin!
 
-		install = core.item(_("Go Classic!"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
+		install = core.item(_("Launch linstaller"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
 
 		i(install)
 

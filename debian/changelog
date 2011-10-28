@@ -12,8 +12,11 @@ linstaller (1.51.2-1) emily; urgency=low
                           module.
   * core/main: support for shell=False on sexec.
   * debian/control: linstaller: depend on modules = ${binary:Version}
+  * linstalleralan: Renamed "Go Classic!" to "Launch linstaller", as
+                    in emily only the CLI ("Classic") frontend will
+                    be available, and this only confuses people ;)
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:53:25 +0200
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 11:56:09 +0200
 
 linstaller (1.51.1-1) emily; urgency=low
 
