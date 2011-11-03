@@ -2,8 +2,10 @@ linstaller (1.52.1-1) emily; urgency=low
 
   * partdisks: library: fixed failed return if no disks are
     available.
+  * setup.py and debian/: ship update module; depend on apt.cache
+    (python-apt).
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 03 Nov 2011 21:19:50 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 03 Nov 2011 21:28:26 +0100
 
 linstaller (1.52.0-1) emily; urgency=low
 

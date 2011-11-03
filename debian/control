@@ -21,7 +21,7 @@ Description: Modular GNU/Linux distribution installer
 
 Package: linstaller-modules-base
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted,
+Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted, python-apt,
  squashfs-tools,
  user-setup,
  dosfstools, hfsprogs, reiser4progs, e2fsprogs,
