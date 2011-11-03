@@ -466,7 +466,7 @@ def write_memory(changed):
 			
 			if not result: failed[name] = thing
 		
-	return failed
+		return failed
 	
 
 def check_distributions(obj=False):

@@ -1,3 +1,10 @@
+linstaller (1.52.1-1) emily; urgency=low
+
+  * partdisks: library: fixed failed return if no disks are
+    available.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 03 Nov 2011 21:19:50 +0100
+
 linstaller (1.52.0-1) emily; urgency=low
 
   * partdisks: use the correct partition in the "delete a system"
