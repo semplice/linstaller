@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-28 11:59+0200\n"
+"POT-Creation-Date: 2011-11-13 11:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,13 @@ msgstr ""
 #: linstaller/core/cli_frontend.py:105
 #, python-format
 msgid "Unknown value %s. Please re-try."
+msgstr ""
+
+#: linstaller/core/cli_frontend.py:117
+#: linstaller/modules/partdisks/front.py:441
+#: linstaller/modules/partdisks/front.py:503
+#: linstaller/modules/partdisks/front.py:896
+msgid "Please insert your action here"
 msgstr ""
 
 #: linstaller/modules/summary/front.py:18
@@ -420,12 +427,6 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front.py:432
 msgid "Delete all partitions on the disk"
-msgstr ""
-
-#: linstaller/modules/partdisks/front.py:441
-#: linstaller/modules/partdisks/front.py:503
-#: linstaller/modules/partdisks/front.py:896
-msgid "Please insert your action here"
 msgstr ""
 
 #: linstaller/modules/partdisks/front.py:445
