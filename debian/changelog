@@ -1,3 +1,11 @@
+linstaller (1.52.2-1) emily; urgency=low
+
+  * core/cli_frontend: new action_list widget
+  * modules/: new module, widget_test (the widget factory
+    for linstaller! :D)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 13 Nov 2011 11:00:05 +0100
+
 linstaller (1.52.1-1) emily; urgency=low
 
   * partdisks: library: fixed failed return if no disks are

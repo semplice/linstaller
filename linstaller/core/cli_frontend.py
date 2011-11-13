@@ -113,3 +113,60 @@ class CLIFrontend:
 
 		widgets = [text, progressbar.Percentage(), ' ', progressbar.Bar(marker='#',left='[',right=']'),' ', progressbar.ETA()]
 		return progressbar.ProgressBar(widgets=widgets, maxval=maxval)
+	
+	def action_list(self, lst, typ="ordered", after=False, selection_text=_("Please insert your action here"), skip_list=False):
+		""" Creates a ordered/unordered list.
+		
+		Paramters:
+		lst = dictionary that contains action name and action to be executed.
+		type = "ordered" or "unordered". Default is "ordered".
+		after = str that will be printed after the list.
+		selection_text = text of the selection entry
+		
+		skip_list = internal
+		
+		WARNING: UNORDERED LIST WILL *NOT* PROMPT FOR ANYTHING.
+		"""
+		
+		actions = {}
+		
+		ORDERED_OPERATOR = 0
+		UNORDERED_OPERATOR = "*"
+		
+		if not skip_list:
+			if typ == "unordered":
+				# unordered uses tuples/lists for actions.
+				
+				for thing in lst:
+					print "  %s %s" % (UNORDERED_OPERATOR, thing)
+			else:
+				# An example lst: {"Format partition":self.edit_partitions_format, ...}
+				
+				for name, action in lst.items():
+					ORDERED_OPERATOR += 1 # Increase the operator by one
+				
+					# Print string
+					print "  %d) %s" % (ORDERED_OPERATOR, name)
+					
+					# Link number to action
+					actions[ORDERED_OPERATOR] = action
+				
+			# Print after.
+			if after: print "\n" + after
+			
+		if typ == "unordered": return # If unordered, exit.
+		
+		print
+		
+		# Make the question
+		result = self.entry(selection_text)
+		try:
+			result = int(result)
+		except:
+			return self.list(lst, typ=typ, selection_text=selection_text, skip_list=True)
+		if not result in actions:
+			return self.list(lst, typ=typ, selection_text=selection_text, skip_list=True)
+		
+		return actions[result]
+
+			
