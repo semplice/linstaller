@@ -84,6 +84,7 @@ verbose("started linstaller - version %s" % m.VERSION)
 _action = False
 _config = "default"
 _frontend = "cli"
+_modules = False
 
 # Parse arguments
 for arg in sys.argv:
@@ -97,6 +98,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--frontend requires an argument!")
 		_frontend = arg[1]
+	elif arg[0] in ("--modules","-m"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--modules requires an argument!")
+		_modules = arg[1]
 	elif arg[0] == "help":
 		_action = "help"
 	elif arg[0] == "start":
@@ -112,6 +117,7 @@ if _action == "help":
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
+	print _(" -m|--modules		- Overrides the modules to be executed")
 	print
 	print _("Recognized actions:")
 	print _(" help			- Displays this help message, then exits.")
@@ -137,7 +143,11 @@ elif _action == "start":
 	main_settings = {}
 	main_settings["frontend"] = _frontend
 	main_settings["distro"] = cfg.printv("distribution")
-	main_settings["modules"] = cfg.printv("modules")
+	if not _modules:
+		main_settings["modules"] = cfg.printv("modules")
+	else:
+		# Modules specified via --modules option
+		main_settings["modules"] = _modules
 	main_settings["special"] = cfg.printv("special")
 	
 	verbose("Frontend: %s" % main_settings["frontend"])

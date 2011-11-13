@@ -3,8 +3,10 @@ linstaller (1.52.2-1) emily; urgency=low
   * core/cli_frontend: new action_list widget
   * modules/: new module, widget_test (the widget factory
     for linstaller! :D)
+  * linstaller.py: modules overriding supported via the
+    -m and --modules flags.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 13 Nov 2011 11:00:05 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 13 Nov 2011 11:17:47 +0100
 
 linstaller (1.52.1-1) emily; urgency=low
 
