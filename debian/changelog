@@ -1,3 +1,9 @@
+linstaller (1.52.2.1-2) emily; urgency=low
+
+  * debian/control: linstaller-modules-base: depend on parted.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 19:12:21 +0100
+
 linstaller (1.52.2.1-1) emily; urgency=low
 
   * modules/partdisks: always declare choices[num] while printing

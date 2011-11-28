@@ -24,8 +24,8 @@ Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted, python-apt,
  squashfs-tools,
  user-setup,
- dosfstools, hfsprogs, reiser4progs, e2fsprogs,
- grub-pc 
+ dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted,
+ grub-pc [i386, amd64]
 Description: Modular GNU/Linux distribution installer -- base modules
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
