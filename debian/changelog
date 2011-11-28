@@ -1,4 +1,4 @@
-linstaller (1.52.2.1-2) emily; urgency=low
+linstaller (1.52.2.2-1) emily; urgency=low
 
   * debian/control: linstaller-modules-base: depend on parted.
 
