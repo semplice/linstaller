@@ -1,3 +1,13 @@
+linstaller (1.52.2.1-1) emily; urgency=low
+
+  * modules/partdisks: always declare choices[num] while printing
+    partitions; pull self.changed obj from choices[num] instead of
+    hardcoding to disk; do the partition table creation *before*
+    committing in the object (and before that, remove the device
+    from touched).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 18:47:09 +0100
+
 linstaller (1.52.2-1) emily; urgency=low
 
   * core/cli_frontend: new action_list widget

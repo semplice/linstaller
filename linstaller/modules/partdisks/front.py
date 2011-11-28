@@ -297,7 +297,23 @@ class CLIFrontend(cli.CLIFrontend):
 				# Figure 1: A FIXME big like an house.
 				if "-1" in key:
 					continue				
-				
+
+				# New partition table?
+				if "newtable" in cng:
+					progress = lib.new_table(obj, cng["newtable"])
+					info(_("Creating new partition table on %s...") % key)
+					status = progress.wait()
+					if status != 0:
+						# Failed ...
+						if interactive:
+							return self.edit_partitions(warning=_("FAILED: new partition table in %s") % key)
+						else:
+							raise m.CmdError(_("FAILED: new partition table in %s") % key)
+					
+					# Clear touched, as only this action can be done if we do not own a disk.
+					del self.touched[obj.path]
+
+
 				# Commit on the disk.
 				lib.commit(obj, self.touched)
 								
@@ -316,19 +332,7 @@ class CLIFrontend(cli.CLIFrontend):
 							return self.edit_partitions(warning=_("FAILED: formatting %s") % key)
 						else:
 							raise m.CmdError(_("FAILED: formatting %s") % key)
-				
-				# New partition table?
-				if "newtable" in cng:
-					progress = lib.new_table(obj, cng["newtable"])
-					info(_("Creating new partition table on %s...") % key)
-					status = progress.wait()
-					if status != 0:
-						# Failed ...
-						if interactive:
-							return self.edit_partitions(warning=_("FAILED: new partition table in %s") % key)
-						else:
-							raise m.CmdError(_("FAILED: new partition table in %s") % key)
-				
+								
 				# Check if it is root or swap
 				if "useas" in cng:
 					if cng["useas"] == "/":
@@ -971,19 +975,21 @@ class CLIFrontend(cli.CLIFrontend):
 		choices = {}
 
 		for device, obj in self.devices.iteritems():
-			
-			disk = self.disks[device]
-			
+	
 			num +=1
 			if interactive:
 				_num = "%s) " % num
-				choices[num] = disk
 			else:
 				_num = ""
-		
+
+			disk = self.disks[device]
+			choices[num] = disk
+
+			if disk == "notable": choices[num] = obj
+			
 			# Cache obj in self.changed
 			if not obj.path in self.changed:
-				self.changed[obj.path] = {"obj":disk, "changes":{}}
+				self.changed[obj.path] = {"obj":choices[num], "changes":{}}
 			
 			# Check if this should be changed.
 			if obj.path in self.changed and not self.changed[obj.path]["changes"] == {}:
@@ -995,7 +1001,7 @@ class CLIFrontend(cli.CLIFrontend):
 			if disk == "notable":
 				print
 				print("   No partition table.")
-				choices[num] = device
+				print
 			
 			if not only_disks and disk != "notable":
 				print
