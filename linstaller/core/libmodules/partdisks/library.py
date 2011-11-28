@@ -39,6 +39,10 @@ supported = {
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
 	}
 
+supported_tables = {
+	"mbr" : "msdos",
+}
+
 def is_disk(dsk):
 	""" Checks if dsk is a disk. Returns True if so.
 	
@@ -126,8 +130,8 @@ def return_devices():
 					disks[device] = p.disk.Disk(device=devices[device])
 				except p.disk._ped.DiskLabelException:
 					# Deal with invalid partition tables
-					verbose("Unable to obtain a disk object of /dev/%s - Skipping" % device)
-					del devices[device] # Remove device from device list
+					verbose("Unable to obtain a disk object of /dev/%s - No partition table?" % device)
+					disks[device] = "notable"
 			
 	return devices, disks
 
@@ -254,6 +258,18 @@ def format_partition_for_real(obj, fs):
 	
 	# Return object to frontend, it should handle all.
 	return mkfs
+
+def new_table(obj, tabletype):
+	""" Uses parted's mktable command to create a new partition table. """
+	
+	table = supported_tables[tabletype]
+	device = obj
+	
+	prted = m.execute("parted -s %s mktable %s" % (obj.path, table))
+	prted.start()
+	
+	# Return object to frontend
+	return prted
 
 def format_partition(obj, fs):
 	""" Formats partition with fs """

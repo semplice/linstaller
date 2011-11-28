@@ -317,6 +317,18 @@ class CLIFrontend(cli.CLIFrontend):
 						else:
 							raise m.CmdError(_("FAILED: formatting %s") % key)
 				
+				# New partition table?
+				if "newtable" in cng:
+					progress = lib.new_table(obj, cng["newtable"])
+					info(_("Creating new partition table on %s...") % key)
+					status = progress.wait()
+					if status != 0:
+						# Failed ...
+						if interactive:
+							return self.edit_partitions(warning=_("FAILED: new partition table in %s") % key)
+						else:
+							raise m.CmdError(_("FAILED: new partition table in %s") % key)
+				
 				# Check if it is root or swap
 				if "useas" in cng:
 					if cng["useas"] == "/":
@@ -420,7 +432,7 @@ class CLIFrontend(cli.CLIFrontend):
 			
 			actions[num + 1] = (_("<- Back"), self.edit_partitions)
 		
-		else:
+		elif type(obj) == lib.p.disk.Disk:
 			# A disk.
 			
 			device = obj.device
@@ -432,6 +444,17 @@ class CLIFrontend(cli.CLIFrontend):
 			actions[1] = (_("Delete all partitions on the disk"), self.edit_partitions_deleteall)
 			actions[2] = (_("Unmark changes"), self.edit_partitions_unmark)
 			actions[3] = (_("<- Back"), self.edit_partitions)
+		else:
+			# A device.
+			
+			device = obj
+			
+			print("   %s - %s (%s GB)\n" % (device.path, device.model, round(device.getSize(unit="GB"), 2)))
+			
+			actions = {}
+			# Populate actions
+			actions[1] = (_("Create MBR partition table"), self.edit_partitions_newmbr)
+			actions[2] = (_("<- Back"), self.edit_partitions)
 		
 		# Print actions
 		for num, act in actions.iteritems():
@@ -722,6 +745,12 @@ class CLIFrontend(cli.CLIFrontend):
 		self.touched[device.device.path] = True
 		return self.edit_partitions(information=_("Changes marked succesfully. Now write the changes to memory."))
 
+	def edit_partitions_newmbr(self, device, device_changes):
+		""" Marks a device to be erased with a new MBR partition table. """
+				
+		device_changes["newtable"] = "mbr"
+		self.touched[device.path] = True
+		return self.edit_partitions(information=_("Changes marked succesfully. Please save changes."))
 	
 	def edit_partitions_format(self, device, device_changes, _return="edit"):
 		""" Marks a partition to be formatted. """
@@ -963,7 +992,12 @@ class CLIFrontend(cli.CLIFrontend):
 				_changed = ""
 			print("%s%s - %s (%s GB)%s" % (_num, obj.path, obj.model, round(obj.getSize(unit="GB"), 2),_changed))
 			
-			if not only_disks:
+			if disk == "notable":
+				print
+				print("   No partition table.")
+				choices[num] = device
+			
+			if not only_disks and disk != "notable":
 				print
 				# now print available partitions.
 				for part in list(disk._partitions) + disk.getFreeSpacePartitions():
