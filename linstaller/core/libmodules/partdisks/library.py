@@ -441,12 +441,13 @@ def umount_bulk(basepath):
 def write_memory(changed):
 	""" Writes, in memory, the changes made. """
 	
+	failed = {}
+	
 	for name, changes in changed.items():
 		verbose("Writing changes of %s in memory..." % name)
 		
 		# get object
 		obj = changes["obj"]
-		failed = {}
 		
 		for thing, value in changes["changes"].items():
 			# Write the changes
@@ -486,7 +487,7 @@ def write_memory(changed):
 			
 			if not result: failed[name] = thing
 		
-		return failed
+	return failed
 	
 
 def check_distributions(obj=False):
