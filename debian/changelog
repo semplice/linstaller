@@ -1,3 +1,10 @@
+linstaller (1.52.3-1) emily; urgency=low
+
+  * modules/partdisks: library: fixed going back after a partition
+    table is created.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 11:12:19 +0100
+
 linstaller (1.52.2.2-2) emily; urgency=low
 
   * debian/control: do not restrict grub-pc: emily supports only i386 and amd64.

@@ -229,7 +229,11 @@ def commit(obj, touched):
 			return
 		
 		# If obj is a device, get appropriate disk
-		obj = disks[obj]
+		try:
+			obj = disks[obj]
+		except KeyError:
+			verbose("Unable to get an appropriate disk. This may happen when returning back after a partition table creation.")
+			return
 	else:
 		if not obj.device.path in touched:
 			# Nothing to commit
