@@ -501,7 +501,7 @@ class CLIFrontend(cli.CLIFrontend):
 
 		if not jumpto:
 			print(_("Available disks:"))
-			res, choices = self.print_devices_partitions(interactive=True, only_disks=True)
+			res, choices = self.print_devices_partitions(interactive=True, only_disks=True, skip_notable=True)
 			try:
 				res = int(res)
 			except ValueError:
@@ -968,13 +968,21 @@ class CLIFrontend(cli.CLIFrontend):
 			else:
 				return self.edit_partitions(information=_("Ok! You can continue."))
 	
-	def print_devices_partitions(self, interactive=False, only_disks=False):
+	def print_devices_partitions(self, interactive=False, only_disks=False, skip_notable=False):
 		""" Prints hard disks and partititons """	
 
 		num = 0
 		choices = {}
 
 		for device, obj in self.devices.iteritems():
+
+			disk = self.disks[device]
+
+			# If should skip disks without table, do it now.
+			if skip_notable:
+				if disk == "notable":
+					verbose("Disk %s has no partition table. Create a partition table then re-run this action." %  device)
+					continue
 	
 			num +=1
 			if interactive:
@@ -982,7 +990,6 @@ class CLIFrontend(cli.CLIFrontend):
 			else:
 				_num = ""
 
-			disk = self.disks[device]
 			choices[num] = disk
 
 			if disk == "notable": choices[num] = obj

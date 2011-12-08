@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-28 18:14+0100\n"
+"POT-Creation-Date: 2011-12-08 12:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,9 +55,9 @@ msgid "Unknown value %s. Please re-try."
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:117
-#: linstaller/modules/partdisks/front.py:464
-#: linstaller/modules/partdisks/front.py:526
-#: linstaller/modules/partdisks/front.py:925
+#: linstaller/modules/partdisks/front.py:468
+#: linstaller/modules/partdisks/front.py:530
+#: linstaller/modules/partdisks/front.py:929
 msgid "Please insert your action here"
 msgstr ""
 
@@ -343,350 +343,350 @@ msgstr ""
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:311
-#, python-format
-msgid "Formatting %s..."
-msgstr ""
-
-#: linstaller/modules/partdisks/front.py:316
-#: linstaller/modules/partdisks/front.py:318
-#, python-format
-msgid "FAILED: formatting %s"
-msgstr ""
-
-#: linstaller/modules/partdisks/front.py:323
+#: linstaller/modules/partdisks/front.py:304
 #, python-format
 msgid "Creating new partition table on %s..."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:328
-#: linstaller/modules/partdisks/front.py:330
+#: linstaller/modules/partdisks/front.py:309
+#: linstaller/modules/partdisks/front.py:311
 #, python-format
 msgid "FAILED: new partition table in %s"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:354
+#: linstaller/modules/partdisks/front.py:327
+#, python-format
+msgid "Formatting %s..."
+msgstr ""
+
+#: linstaller/modules/partdisks/front.py:332
+#: linstaller/modules/partdisks/front.py:334
+#, python-format
+msgid "FAILED: formatting %s"
+msgstr ""
+
+#: linstaller/modules/partdisks/front.py:358
 msgid "Edit Partition structure"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:364
 #: linstaller/modules/partdisks/front.py:368
-#: linstaller/modules/partdisks/front.py:504
+#: linstaller/modules/partdisks/front.py:372
 #: linstaller/modules/partdisks/front.py:508
+#: linstaller/modules/partdisks/front.py:512
 msgid "You didn't entered a valid number."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:378
+#: linstaller/modules/partdisks/front.py:382
 msgid "Editing disk/partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:380
+#: linstaller/modules/partdisks/front.py:384
 msgid "You've selected:"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:385
-#: linstaller/modules/partdisks/front.py:1006
+#: linstaller/modules/partdisks/front.py:389
+#: linstaller/modules/partdisks/front.py:1019
 msgid "not formatted"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:387
-#: linstaller/modules/partdisks/front.py:1008
+#: linstaller/modules/partdisks/front.py:391
+#: linstaller/modules/partdisks/front.py:1021
 msgid "free space"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:390
-#: linstaller/modules/partdisks/front.py:1011
+#: linstaller/modules/partdisks/front.py:394
+#: linstaller/modules/partdisks/front.py:1024
 msgid "extended"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:423
+#: linstaller/modules/partdisks/front.py:427
 msgid "Add partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:426
-#: linstaller/modules/partdisks/front.py:767
+#: linstaller/modules/partdisks/front.py:430
+#: linstaller/modules/partdisks/front.py:771
 msgid "Format partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:427
-#: linstaller/modules/partdisks/front.py:798
+#: linstaller/modules/partdisks/front.py:431
+#: linstaller/modules/partdisks/front.py:802
 msgid "Delete partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:428
-#: linstaller/modules/partdisks/front.py:844
+#: linstaller/modules/partdisks/front.py:432
+#: linstaller/modules/partdisks/front.py:848
 msgid "Resize partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:429
-#: linstaller/modules/partdisks/front.py:816
+#: linstaller/modules/partdisks/front.py:433
+#: linstaller/modules/partdisks/front.py:820
 msgid "Use as..."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:430
-#: linstaller/modules/partdisks/front.py:445
-#: linstaller/modules/partdisks/front.py:903
+#: linstaller/modules/partdisks/front.py:434
+#: linstaller/modules/partdisks/front.py:449
+#: linstaller/modules/partdisks/front.py:907
 msgid "Unmark changes"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:433
-#: linstaller/modules/partdisks/front.py:446
-#: linstaller/modules/partdisks/front.py:457
-#: linstaller/modules/partdisks/front.py:601
-#: linstaller/modules/partdisks/front.py:1089
+#: linstaller/modules/partdisks/front.py:437
+#: linstaller/modules/partdisks/front.py:450
+#: linstaller/modules/partdisks/front.py:461
+#: linstaller/modules/partdisks/front.py:605
+#: linstaller/modules/partdisks/front.py:1102
 msgid "<- Back"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:444
+#: linstaller/modules/partdisks/front.py:448
 msgid "Delete all partitions on the disk"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:456
+#: linstaller/modules/partdisks/front.py:460
 msgid "Create MBR partition table"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:468
-#: linstaller/modules/partdisks/front.py:470
-#: linstaller/modules/partdisks/front.py:929
-#: linstaller/modules/partdisks/front.py:931
+#: linstaller/modules/partdisks/front.py:472
+#: linstaller/modules/partdisks/front.py:474
+#: linstaller/modules/partdisks/front.py:933
+#: linstaller/modules/partdisks/front.py:935
 msgid "You didn't entered a valid action."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:487
-#: linstaller/modules/partdisks/front.py:513
+#: linstaller/modules/partdisks/front.py:491
+#: linstaller/modules/partdisks/front.py:517
 msgid "Automatic partitioner"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:499
+#: linstaller/modules/partdisks/front.py:503
 msgid "Available disks:"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:516
+#: linstaller/modules/partdisks/front.py:520
 msgid "Use the free space"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:517
+#: linstaller/modules/partdisks/front.py:521
 msgid "Delete another system"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:518
-#: linstaller/modules/partdisks/front.py:736
+#: linstaller/modules/partdisks/front.py:522
+#: linstaller/modules/partdisks/front.py:740
 msgid "Delete all partitions"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:519
+#: linstaller/modules/partdisks/front.py:523
 msgid "Back"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:530
-#: linstaller/modules/partdisks/front.py:532
+#: linstaller/modules/partdisks/front.py:534
+#: linstaller/modules/partdisks/front.py:536
 msgid "You haven't entered a valid action."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:544
+#: linstaller/modules/partdisks/front.py:548
 msgid "Too little free space"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:547
+#: linstaller/modules/partdisks/front.py:551
 msgid "Failed to add partition (AUTOMATIC)"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:551
-#: linstaller/modules/partdisks/front.py:581
+#: linstaller/modules/partdisks/front.py:555
+#: linstaller/modules/partdisks/front.py:585
 msgid "Automatic partitioner choices"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:577
+#: linstaller/modules/partdisks/front.py:581
 msgid "No distribution to delete!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:606
+#: linstaller/modules/partdisks/front.py:610
 msgid "Whatever will be the selection, this swap partition will be used:"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:611
+#: linstaller/modules/partdisks/front.py:615
 msgid "A swap partition, if all conditions are meet, will be created."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:615
+#: linstaller/modules/partdisks/front.py:619
 msgid "Please insert your value here"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:619
-#: linstaller/modules/partdisks/front.py:621
+#: linstaller/modules/partdisks/front.py:623
+#: linstaller/modules/partdisks/front.py:625
 msgid "You didn't entered a valid value."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:643
+#: linstaller/modules/partdisks/front.py:647
 msgid "Are you happy with this? Enter 'y' to write changes in memory"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:670
+#: linstaller/modules/partdisks/front.py:674
 msgid "Successfully added partitions."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:675
+#: linstaller/modules/partdisks/front.py:679
 msgid "Add a partition"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:677
+#: linstaller/modules/partdisks/front.py:681
 #, python-format
 msgid "Current free space size: %s"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:678
+#: linstaller/modules/partdisks/front.py:682
 msgid ""
 "You can insert the percentage of the partition (e.g: 50%) or the full size "
 "of the new partition, in MB."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:680
-#: linstaller/modules/partdisks/front.py:851
+#: linstaller/modules/partdisks/front.py:684
+#: linstaller/modules/partdisks/front.py:855
 msgid "Insert the value here [press ENTER to go back]"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:692
-#: linstaller/modules/partdisks/front.py:863
+#: linstaller/modules/partdisks/front.py:696
+#: linstaller/modules/partdisks/front.py:867
 msgid "Wrong percentage specified!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:705
-#: linstaller/modules/partdisks/front.py:876
+#: linstaller/modules/partdisks/front.py:709
+#: linstaller/modules/partdisks/front.py:880
 msgid "Wrong value specified!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:710
-#: linstaller/modules/partdisks/front.py:890
+#: linstaller/modules/partdisks/front.py:714
+#: linstaller/modules/partdisks/front.py:894
 msgid "Not enough space!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:731
+#: linstaller/modules/partdisks/front.py:735
 msgid "Done. Now add a filesystem to the partition."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:746
+#: linstaller/modules/partdisks/front.py:750
 msgid "Changes marked succesfully. Now write the changes to memory."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:753
+#: linstaller/modules/partdisks/front.py:757
 msgid "Changes marked succesfully. Please save changes."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:771
+#: linstaller/modules/partdisks/front.py:775
 msgid "Available Filesystems:"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:776
+#: linstaller/modules/partdisks/front.py:780
 msgid "Insert the filesystem you want to use here"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:778
-#: linstaller/modules/partdisks/front.py:825
+#: linstaller/modules/partdisks/front.py:782
+#: linstaller/modules/partdisks/front.py:829
 #, python-format
 msgid "[press ENTER for '%s']"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:787
+#: linstaller/modules/partdisks/front.py:791
 #, python-format
 msgid "%s is not a supported filesystem!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:793
-#: linstaller/modules/partdisks/front.py:839
+#: linstaller/modules/partdisks/front.py:797
+#: linstaller/modules/partdisks/front.py:843
 msgid "Changes marked succesfully."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:800
+#: linstaller/modules/partdisks/front.py:804
 msgid "You can't delete freespace!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:805
+#: linstaller/modules/partdisks/front.py:809
 msgid "The disk containing this partitions is already marked as deleted."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:811
-#: linstaller/modules/partdisks/front.py:897
+#: linstaller/modules/partdisks/front.py:815
+#: linstaller/modules/partdisks/front.py:901
 msgid "Changes marked succesfully. Now write the changes in memory."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:818
+#: linstaller/modules/partdisks/front.py:822
 msgid "You can't execute this action on freespace or on an extended partition!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:820
+#: linstaller/modules/partdisks/front.py:824
 msgid "Here you can insert the mount point of this partition."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:821
+#: linstaller/modules/partdisks/front.py:825
 msgid "For example, if you want to mount as /home, insert '/home'."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:823
+#: linstaller/modules/partdisks/front.py:827
 msgid "Insert the mountpoint here"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:835
+#: linstaller/modules/partdisks/front.py:839
 #, python-format
 msgid "%s is not a valid mountpoint!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:846
+#: linstaller/modules/partdisks/front.py:850
 msgid "You can't resize freespace or an extended partition!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:848
+#: linstaller/modules/partdisks/front.py:852
 #, python-format
 msgid "Current partition size: %s"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:849
+#: linstaller/modules/partdisks/front.py:853
 msgid ""
 "You can insert the percentage of the resize (e.g: 50%) or the full size for "
 "the resized partition, in MB."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:850
+#: linstaller/modules/partdisks/front.py:854
 msgid ""
 "In order to make change to the free space that the resize operation will "
 "make, you will need to write in memory the changes."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:866
 #: linstaller/modules/partdisks/front.py:870
+#: linstaller/modules/partdisks/front.py:874
 msgid "Partition is already at the given value!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:907
+#: linstaller/modules/partdisks/front.py:911
 msgid "You didn't have made changes!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:915
+#: linstaller/modules/partdisks/front.py:919
 msgid "Unmark all changes"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:918
+#: linstaller/modules/partdisks/front.py:922
 #, python-format
 msgid "Unmark '%(action)s' (value: %(value)s)"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:945
+#: linstaller/modules/partdisks/front.py:949
 msgid "Items unmarked successfully."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:950
-#: linstaller/modules/partdisks/front.py:1074
+#: linstaller/modules/partdisks/front.py:954
+#: linstaller/modules/partdisks/front.py:1087
 msgid "Write to memory"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:952
+#: linstaller/modules/partdisks/front.py:956
 msgid "Do you want to write to memory your changes?"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:953
+#: linstaller/modules/partdisks/front.py:957
 msgid "This will let you continue to manage the partitioning scheme."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:954
+#: linstaller/modules/partdisks/front.py:958
 #, python-format
 msgid ""
 "%(note)s: This will %(not)s write the changes to the disk! It only simulates "
@@ -694,46 +694,46 @@ msgid ""
 "This will let you add new partitions on the freed space."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:954
+#: linstaller/modules/partdisks/front.py:958
 msgid "NOTE"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:954
+#: linstaller/modules/partdisks/front.py:958
 msgid "not"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:955
+#: linstaller/modules/partdisks/front.py:959
 msgid ""
 "You can always restore original structure via the appropriate option into "
 "the main menu."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:958
+#: linstaller/modules/partdisks/front.py:962
 msgid "Do you want to write to memory the changes?"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:963
+#: linstaller/modules/partdisks/front.py:967
 #, python-format
 msgid "Something has failed: %s!"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:965
+#: linstaller/modules/partdisks/front.py:969
 msgid "Ok! You can continue."
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:1069
+#: linstaller/modules/partdisks/front.py:1082
 msgid "Automatic partitioning"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:1079
+#: linstaller/modules/partdisks/front.py:1092
 msgid "Reload original structure"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:1084
+#: linstaller/modules/partdisks/front.py:1097
 msgid "Commit"
 msgstr ""
 
-#: linstaller/modules/partdisks/front.py:1093
+#: linstaller/modules/partdisks/front.py:1106
 msgid "Enter the number of the partition(s)/device(s) you want to edit here"
 msgstr ""
 

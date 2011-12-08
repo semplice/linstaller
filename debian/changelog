@@ -4,8 +4,10 @@ linstaller (1.52.3-1) emily; urgency=low
     table is created.
   * modules/partdisks: library: fixed object processing when writing
     to RAM.
+  * modules/partdisks: frontend: do not show tableless disks in the
+    automatic partitioner.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 11:39:01 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 11:59:46 +0100
 
 linstaller (1.52.2.2-2) emily; urgency=low
 
