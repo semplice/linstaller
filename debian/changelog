@@ -1,3 +1,12 @@
+linstaller (1.52.4-1) emily; urgency=low
+
+  * modules/partdisks: frontend: preseed root_noformat and swap_noformat
+    if already formatted via edit_partitions.
+    Reduces disk stress and should fix a crash when starting from an empty
+    disk.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 14:09:06 +0100
+
 linstaller (1.52.3-1) emily; urgency=low
 
   * modules/partdisks: library: fixed going back after a partition

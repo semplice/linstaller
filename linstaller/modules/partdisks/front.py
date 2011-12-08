@@ -338,9 +338,11 @@ class CLIFrontend(cli.CLIFrontend):
 					if cng["useas"] == "/":
 						# Preseed
 						self.settings["root"] = key
+						self.settings["root_noformat"] = True
 					elif cng["useas"] == "swap":
 						# Preseed
 						self.settings["swap"] = key
+						self.settings["swap_noformat"] = True
 				
 		# Preseed *all* changes
 		self.settings["changed"] = self.changed
