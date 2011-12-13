@@ -15,6 +15,43 @@ import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 class CLIFrontend:
+	class __ProgressBar:
+		""" Wrapper to standard progressbar, in order to reduce installer crashes caused by progressbar exceptions. """
+		
+		def __init__(self, widgets, maxval):
+			""" Creates the progressbar. """
+
+			self.widgets = widgets
+			self.maxval = maxval
+			
+			self.create_progressbar()
+		
+		def create_progressbar(self):
+			""" Creates the progressbar. """
+			
+			self.progressbar = progressbar.ProgressBar(widgets=self.widgets, maxval=self.maxval)
+		
+		def start(self):
+			""" Starts the progressbar. """
+			
+			self.progressbar.start()
+		
+		def update(self, num):
+			""" Updates the progressbar. """
+			
+			try:
+				self.progressbar.update(num)
+			except:
+				# Generate a new progressbar, and update to the given value
+				self.create_progressbar()
+				self.update(num)
+		
+		def finish(self):
+			""" Finishes the progressbar. """
+			
+			self.progressbar.finish()
+
+	
 	def __init__(self, moduleclass):
 		
 		self.moduleclass = moduleclass
@@ -112,7 +149,7 @@ class CLIFrontend:
 		""" Creates a progressbar object. """
 
 		widgets = [text, progressbar.Percentage(), ' ', progressbar.Bar(marker='#',left='[',right=']'),' ', progressbar.ETA()]
-		return progressbar.ProgressBar(widgets=widgets, maxval=maxval)
+		return self.__ProgressBar(widgets=widgets, maxval=maxval)
 	
 	def action_list(self, lst, typ="ordered", after=False, selection_text=_("Please insert your action here"), skip_list=False):
 		""" Creates a ordered/unordered list.

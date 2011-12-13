@@ -1,3 +1,9 @@
+linstaller (2.0.0~pre1-1) emily; urgency=low
+
+  * core/cli_frontend: new progressbar wrapper (class __ProgressBar).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 13 Dec 2011 18:01:39 +0100
+
 linstaller (1.52.4-1) emily; urgency=low
 
   * modules/partdisks: frontend: preseed root_noformat and swap_noformat
