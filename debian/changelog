@@ -1,3 +1,13 @@
+linstaller (2.0.0~pre2-1) emily; urgency=low
+
+  * linstaller: added ability to preseed from command-line;
+  * core/config: support initial (file-less) configurations;
+  * modules/widget_test: splitted tests; added sequence, progressbar_val,
+    progressbar_sleep seeds;
+  * core/module: support default items in cache().
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 15 Dec 2011 20:13:35 +0100
+
 linstaller (2.0.0~pre1-1) emily; urgency=low
 
   * core/cli_frontend: new progressbar wrapper (class __ProgressBar).

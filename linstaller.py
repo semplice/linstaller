@@ -86,6 +86,8 @@ _config = "default"
 _frontend = "cli"
 _modules = False
 
+preseeds = {}
+
 # Parse arguments
 for arg in sys.argv:
 	# Split = arguments
@@ -106,13 +108,23 @@ for arg in sys.argv:
 		_action = "help"
 	elif arg[0] == "start":
 		_action = "start"
+	elif arg[0][0] == ":":
+		# Preseed.
+		__module, __option, __value = arg[0].split(":")[1:] # Get seed
+		
+		if not __module in preseeds:
+			# Create a new dictionary
+			preseeds[__module] = {}
+		
+		# Add the seed
+		preseeds[__module][__option] = __value
 
 if not _action:
 	print _("You have to pass at least an action!")
 	_action = "help"
 
 if _action == "help":
-	print _("SYNTAX: %s <options> [ACTION]") % sys.argv[0]
+	print _("SYNTAX: %s <options> [ACTION] <:seed:option:value>") % sys.argv[0]
 	print
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
@@ -122,6 +134,20 @@ if _action == "help":
 	print _("Recognized actions:")
 	print _(" help			- Displays this help message, then exits.")
 	print _(" start			- Starts the installer.")
+	print
+	print _("Preseeding:")
+	print _(""" linstaller supports preseeding. Seeds can be specified into the
+ configuration file of the distribution, or with the notation below:
+ 
+ :module:option:value
+ 
+ Examples:
+ 
+ :userhost:root:True		- Enables root
+ :language:ask:True		- Asks for language
+ :partdisks:swap_noformat:True	- Does not format swap partition
+""")
+
 	sys.exit(0)
 elif _action == "start":
 	
@@ -138,6 +164,17 @@ elif _action == "start":
 	
 	# Load configuration file
 	cfg = config.ConfigRead(_config, "linstaller")
+	
+	# Merge the seeds eventually specified
+	for module, seeds in preseeds.items():
+		# Add section, if not-existent
+		if not cfg.has_section("module:%s" % module):
+			cfg.add("module:%s" % module)
+		
+		# Set option, value:
+		for option, value in seeds.items():
+			verbose("Setting %(option)s = %(value)s in %(module)s" % {"option":option, "value":value, "module":module})
+			cfg.set("module:%s" % module, option, value)
 	
 	# Populate main_settings
 	main_settings = {}

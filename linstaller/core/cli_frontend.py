@@ -42,6 +42,7 @@ class CLIFrontend:
 			try:
 				self.progressbar.update(num)
 			except:
+				verbose("Progressbar crashed")
 				# Generate a new progressbar, and update to the given value
 				self.create_progressbar()
 				self.update(num)

@@ -54,10 +54,10 @@ class Module:
 	def seedpre(self):
 		pass
 	
-	def cache(self, var):
+	def cache(self, var, default=False):
 		""" Cache var into self.settings. """
 		
-		self.settings[var] = False
+		self.settings[var] = default
 	
 	def preseed(self):
 		""" looks for preseeded items into configuration. """

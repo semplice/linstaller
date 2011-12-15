@@ -29,7 +29,7 @@ class Config:
 		
 		# Open the file, if it is initial just open it in ram...
 		self.config = cparser.SafeConfigParser()
-		self.config.read(self.path)
+		if not initial: self.config.read(self.path)
 		
 		# Should check if it is a fork
 		if self.has_section("linstaller:extends"):
@@ -128,9 +128,9 @@ class Config:
 
 class ConfigRead(Config):
 	""" Simple class to read config files. """
-	def __init__(self, file, module=False):
+	def __init__(self, file, module=False, initial=False):
 		
-		Config.__init__(self, file, False)
+		Config.__init__(self, file, initial)
 		self.module = module # Module ("section") name.
 	
 	def printv(self, opt, section=False):
