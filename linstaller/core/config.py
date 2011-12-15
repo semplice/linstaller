@@ -141,6 +141,14 @@ class ConfigRead(Config):
 			section = self.module
 		
 		if self.has_option(section, opt):
-			return self.get(section, opt)
+			value = self.get(section, opt)
+			if value.lower() == "true":
+				return True
+			elif value.lower() == "false":
+				return False
+			elif value.lower() == "none":
+				return None
+			else:
+				return value
 		else:
 			return False

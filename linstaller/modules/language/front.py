@@ -21,7 +21,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		self.header(_("Language & Keyboard selection"))
 		
-		if not self.settings["ask"] == "False":
+		if self.settings["ask"]:
 			verbose("Asking for language and keyboard.")
 			# If ask is "False", do not ask at all, instead using system's language and keyboard
 			

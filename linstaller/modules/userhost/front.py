@@ -35,14 +35,14 @@ class CLIFrontend(cli.CLIFrontend):
 		verbose("Selected password.")
 		
 		# Root
-		if not self.settings["root"] or self.settings["root"] != "False":
-			if not self.settings["root"] == "True":
+		if not self.settings["root"] == None:
+			if not self.settings["root"]:
 				res = self.question(_("Do you want to enable root account?"), default=False)
 			else:
 				res = True
 			if res and not self.settings["rootpassword"]:
 				self.settings["rootpassword"] = self.password_prompt(_("root's password"))
-				self.settings["root"] = "True"
+				self.settings["root"] = True
 				verbose("Selected root password.")
 			elif not res:
 				verbose("Root disabled.")

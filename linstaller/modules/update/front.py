@@ -20,7 +20,6 @@ class CLIFrontend(cli.CLIFrontend):
 	def start(self):
 		""" Start the frontend """
 		
-		if not self.settings["packages"]: self.settings["packages"] = "linstaller linstaller-modules-base"
 		verbose("packages are: %s" % self.settings["packages"])
 		
 		self.header(_("Installer Updates"))
@@ -90,4 +89,4 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Caches variables used by this module. """
 		
-		self.cache("packages")
+		self.cache("packages", "linstaller linstaller-modules-base")

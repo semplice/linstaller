@@ -37,7 +37,7 @@ class CLIFrontend(cli.CLIFrontend):
 		self.header(_("Disk partitioning"))
 
 		# Check if root and swap are preseeded.
-		if self.settings["root"] and self.settings["swap"]:
+		if self.settings["root"] and self.settings["swap"] != False:
 			# They are. We can skip this step.
 			
 			## ROOT
@@ -53,12 +53,12 @@ class CLIFrontend(cli.CLIFrontend):
 			## SWAP
 			
 			# Get an appropriate device object
-			_swap_dev = self.disks[lib.return_device(self.settings["swap"]).replace("/dev/","")]
-			if _swap_dev == "False":
+			if not self.settings["swap"]:
 				# Swap disabled
 				self.settings["swap_noformat"] = True # Do not format swap, as it doesn't exist ;)
 			else:
 				# Get an appropriate partition object
+				_swap_dev = self.disks[lib.return_device(self.settings["swap"]).replace("/dev/","")]
 				_swap_par = _swap_dev.getPartitionByPath(self.settings["swap"])
 				
 				self.changed[self.settings["swap"]] = {"obj":_swap_par, "changes":{"useas":"swap"}}
@@ -86,7 +86,7 @@ class CLIFrontend(cli.CLIFrontend):
 			self.commit()
 
 			verbose("Selected %s as root partition" % self.settings["root"])
-			if self.settings["swap"] != "False":
+			if self.settings["swap"]:
 				verbose("Selected %s as swap partition" % self.settings["swap"])
 			else:
 				verbose("Swap disabled.")
@@ -107,7 +107,7 @@ class CLIFrontend(cli.CLIFrontend):
 			self.partition_selection()
 			
 		verbose("Selected %s as root partition" % self.settings["root"])
-		if self.settings["swap"] != "False":
+		if self.settings["swap"]:
 			verbose("Selected %s as swap partition" % self.settings["swap"])
 		else:
 			verbose("Swap disabled.")
@@ -153,19 +153,19 @@ class CLIFrontend(cli.CLIFrontend):
 				self.changed[choice]["changes"]["format_real"] = self.settings["root_filesystem"]
 				self.touched[lib.return_device(choice)] = True
 
-		if not self.settings["swap"]:
+		if self.settings["swap"] == False:
 			
 			swaps = lib.swap_available(deep=True)
 			if swaps == []:
 				# No swap available
 				warn(_("No swap partition available. Continuing without."))
-				self.settings["swap"] = False
+				self.settings["swap"] = None
 			else:
 				# No swap specified. Prompt for one.
 				choice = self.entry(_("Select your swap partition (press ENTER to not use swap)"), blank=True)
 				if not choice:
 					# Should not use swap. ok...
-					self.settings["swap"] = False
+					self.settings["swap"] = None
 					warn(_("No swap selected."))
 				else:
 					# Check if choice is into disk's partition
@@ -188,8 +188,6 @@ class CLIFrontend(cli.CLIFrontend):
 						self.changed[choice]["changes"]["format"] = "linux-swap(v1)"
 						self.changed[choice]["changes"]["format_real"] = "linux-swap(v1)"
 						self.touched[lib.return_device(self.settings["swap"])] = True
-		elif self.settings["swap"] == "False":
-			self.settings["swap"] = False # Disable swap
 		
 		res = self.question("\n" + _("Are you really sure to continue? This will destroy selected partitions."), default=False)
 		if res:	

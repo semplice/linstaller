@@ -26,7 +26,7 @@ class CLIFrontend(cli.CLIFrontend):
 		print
 		
 		print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})
-		if self.moduleclass.modules_settings["userhost"]["root"] == "enabled":
+		if self.moduleclass.modules_settings["userhost"]["root"]:
 			# Root enabled
 			print(_("Root account is enabled."))
 		print(_("The computer hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})

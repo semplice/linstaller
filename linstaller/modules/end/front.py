@@ -21,7 +21,7 @@ class CLIFrontend(cli.CLIFrontend):
 		print(_("Please reboot and remove the install media to get the installed system."))
 		print
 		
-		if not self.settings["reboot"] == "True":
+		if not self.settings["reboot"]:
 			# We should continue?
 			res = self.question(_("Do you want to reboot now?"), default=True)
 			if res:

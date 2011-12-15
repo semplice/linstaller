@@ -5,8 +5,15 @@ linstaller (2.0.0~pre2-1) emily; urgency=low
   * modules/widget_test: splitted tests; added sequence, progressbar_val,
     progressbar_sleep seeds;
   * core/module: support default items in cache().
+  * modules/update: specify default when calling cache().
+  * core/config: return booleans instead of strings if True, False or None.
+    (not case-sensitive).
+  * modules/*: some logic changes due to the above modification.
+    swap (partdisks) and root (userhost) requires None to disable.
+  * config/semplice: changed root = False to root = None, due to the change
+    above.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 15 Dec 2011 20:13:35 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 15 Dec 2011 22:18:20 +0100
 
 linstaller (2.0.0~pre1-1) emily; urgency=low
 

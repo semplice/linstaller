@@ -9,7 +9,7 @@ ask = False
 
 # Disable root
 [module:userhost]
-root = False
+root = None
 
 # We support only grub currently
 [module:bootloader]

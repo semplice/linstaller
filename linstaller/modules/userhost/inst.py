@@ -31,7 +31,7 @@ class Install(module.Install):
 		username = self.moduleclass.modules_settings["userhost"]["username"]
 		password = self.moduleclass.modules_settings["userhost"]["password"]
 		root = self.moduleclass.modules_settings["userhost"]["root"]
-		if root == "True":
+		if root:
 			# get root password
 			rootpassword = self.moduleclass.modules_settings["userhost"]["rootpassword"]
 		
@@ -41,7 +41,7 @@ class Install(module.Install):
 		db.set("passwd/username", username)
 		db.set("passwd/user-password", password)
 		# Enable root?
-		if root == "True":
+		if root:
 			db.set("passwd/root-login", "true")
 			db.set("passwd/root-password", rootpassword)
 		else:
