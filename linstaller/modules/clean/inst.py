@@ -7,8 +7,7 @@
 import linstaller.core.cli_frontend as cli
 import linstaller.core.module as module
 import linstaller.core.main as m
-import commands
-import shutil
+import os, shutil
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
@@ -38,7 +37,6 @@ class CLIFrontend(cli.CLIFrontend):
 
 		verbose("Removing linstaller-related configuration files...")
 		try:
-			# NETWORKING: set.
 			self.moduleclass.install.removeconfiguration()
 			progress.update(1)
 		finally:

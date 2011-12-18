@@ -1,4 +1,5 @@
 /usr/bin/linstaller_wrapper.sh
+/usr/bin/mount_nolive.sh
 /usr/share/linstaller/linstaller.py
 /usr/share/linstaller/linstaller/core/*.py
 /usr/share/linstaller/linstaller/core/*.pyc

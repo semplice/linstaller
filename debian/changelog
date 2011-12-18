@@ -1,3 +1,13 @@
+linstaller (2.0.0~pre3-1) emily; urgency=low
+
+  * modules/unsquash: fixed the crash on window resizing.
+  * modules/partdisks: inst: do not raise an exception when umount
+    fails in revert.
+  * mount_nolive.sh: added.
+  * setup.py and debian/: ship the clean module and mount_nolive.sh.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 11:49:45 +0100
+
 linstaller (2.0.0~pre2-1) emily; urgency=low
 
   * linstaller: added ability to preseed from command-line;

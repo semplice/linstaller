@@ -98,10 +98,16 @@ class Module(module.Module):
 			if _used:
 				for part in _used:
 					if lib.is_mounted(part):
-						lib.umount(path=part)
+						try:
+							lib.umount(path=part)
+						except:
+							pass
 		
 		# Umount target, finally.
-		lib.umount(path="/linstaller/target")
+		try:
+			lib.umount(path="/linstaller/target")
+		except:
+			pass
 	
 	def seedpre(self):
 		""" Cache settings """

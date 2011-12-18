@@ -35,15 +35,21 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		output = [None]
 		while unsquashfs.process.poll() == None:
-			toappend = unsquashfs.process.stdout.readline()
-			if output[-1] != toappend:
-				output.append(toappend)
-				
-				num = len(output)
-				
-				# If num > filenum, the progressbar will crash.
-				if not num > filenum:
-					progress.update(num)
+			try:
+				toappend = unsquashfs.process.stdout.readline()
+				if output[-1] != toappend:
+					output.append(toappend)
+					
+					num = len(output)
+					
+					# If num > filenum, the progressbar will crash.
+					if not num > filenum:
+						progress.update(num)
+			except:
+				# It may fail when resizing the terminal window.
+				# This will cause unsync between the progressbar and the unsquashing process.
+				# But it's better than let the installer crash ;-)
+				pass
 		progress.finish()
 		
 		if unsquashfs.process.returncode != 0:
