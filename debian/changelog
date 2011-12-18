@@ -1,3 +1,9 @@
+linstaller (2.0.0~pre3.1-1) emily; urgency=low
+
+  * Rebuild which adds mount_nolive.sh.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 12:11:09 +0100
+
 linstaller (2.0.0~pre3-1) emily; urgency=low
 
   * modules/unsquash: fixed the crash on window resizing.
