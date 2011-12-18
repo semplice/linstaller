@@ -12,8 +12,11 @@ linstaller (2.0.0~pre2-1) emily; urgency=low
     swap (partdisks) and root (userhost) requires None to disable.
   * config/semplice: changed root = False to root = None, due to the change
     above.
+  * modules/: added new clean module; cleans /etc/linstaller if custom
+    configurations are manually shipped during an ipothetical remaster.
+  * config/semplice-base: added the clean frontend to modules.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 15 Dec 2011 22:18:20 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 10:58:42 +0100
 
 linstaller (2.0.0~pre1-1) emily; urgency=low
 
