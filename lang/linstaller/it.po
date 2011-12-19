@@ -7,54 +7,54 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-12-08 12:00+0100\n"
+"POT-Creation-Date: 2011-12-18 10:58+0100\n"
 "PO-Revision-Date: 2011-12-08 10:59+0000\n"
 "Last-Translator: Eugenio Paolantonio <me@medesimo.eu>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-18 04:47+0000\n"
+"X-Launchpad-Export-Date: 2011-12-19 05:20+0000\n"
 "X-Generator: Launchpad (build 14525)\n"
 
-#: linstaller/core/cli_frontend.py:52
+#: linstaller/core/cli_frontend.py:90
 msgid "You must insert something!"
 msgstr "È necessario inserire qualcosa!"
 
-#: linstaller/core/cli_frontend.py:70
+#: linstaller/core/cli_frontend.py:108
 msgid "[Y/n]"
 msgstr "[S/n]"
 
-#: linstaller/core/cli_frontend.py:73
+#: linstaller/core/cli_frontend.py:111
 msgid "[y/N]"
 msgstr "[s/N]"
 
-#: linstaller/core/cli_frontend.py:76
+#: linstaller/core/cli_frontend.py:114
 msgid "[y/n]"
 msgstr "[s/n]"
 
-#: linstaller/core/cli_frontend.py:91
+#: linstaller/core/cli_frontend.py:129
 msgid "y"
 msgstr "s"
 
-#: linstaller/core/cli_frontend.py:94
+#: linstaller/core/cli_frontend.py:132
 msgid "n"
 msgstr "n"
 
-#: linstaller/core/cli_frontend.py:97
+#: linstaller/core/cli_frontend.py:135
 msgid "yes"
 msgstr "sì"
 
-#: linstaller/core/cli_frontend.py:100
+#: linstaller/core/cli_frontend.py:138
 msgid "no"
 msgstr "no"
 
-#: linstaller/core/cli_frontend.py:105
+#: linstaller/core/cli_frontend.py:143
 #, python-format
 msgid "Unknown value %s. Please re-try."
 msgstr "Valore %s sconosciuto. Riprovare."
 
-#: linstaller/core/cli_frontend.py:117
+#: linstaller/core/cli_frontend.py:155
 #: linstaller/modules/partdisks/front.py:468
 #: linstaller/modules/partdisks/front.py:530
 #: linstaller/modules/partdisks/front.py:929
@@ -112,13 +112,17 @@ msgstr ""
 "Il bootloader (%(bootloader)s) verrà installato in %(bootloaderpath)s."
 
 #: linstaller/modules/summary/front.py:40
-#: linstaller/modules/partdisks/front.py:275
+#: linstaller/modules/partdisks/front.py:273
 msgid "Do you really want to continue?"
 msgstr "Si vuole veramente continuare?"
 
 #: linstaller/modules/summary/front.py:45
 msgid "Installing..."
 msgstr "Installazione in corso..."
+
+#: linstaller/modules/clean/inst.py:34
+msgid "Cleaning:"
+msgstr ""
 
 #: linstaller/modules/userhost/inst.py:99
 msgid "Creating user:"
@@ -175,47 +179,47 @@ msgstr "Le password non coincidono! Riprovare."
 msgid "Configuring networking:"
 msgstr "Configurazione della rete:"
 
-#: linstaller/modules/update/front.py:26
+#: linstaller/modules/update/front.py:25
 msgid "Installer Updates"
 msgstr "Aggiornamenti del programma di installazione"
 
-#: linstaller/modules/update/front.py:28
+#: linstaller/modules/update/front.py:27
 #, python-format
 msgid "%(distroname)s's installer improves every day."
 msgstr ""
 "Il programma di installazione di %(distroname)s si migliora ogni giorno."
 
-#: linstaller/modules/update/front.py:29
+#: linstaller/modules/update/front.py:28
 msgid ""
 "It is good measure to have the latest version before installing the "
 "distribution."
 msgstr ""
 "È buona norma avere l'ultima versione prima di installare la distribuzione."
 
-#: linstaller/modules/update/front.py:31
+#: linstaller/modules/update/front.py:30
 msgid "Would you like to check for installer updates?"
 msgstr "Si vogliono controllare gli aggiornamenti?"
 
-#: linstaller/modules/update/front.py:50
+#: linstaller/modules/update/front.py:49
 #, python-format
 msgid "Found version %(version)s of %(package)s."
 msgstr "Trovata la versione %(version)s del pacchetto %(package)s."
 
-#: linstaller/modules/update/front.py:58
+#: linstaller/modules/update/front.py:57
 msgid "No updates found."
 msgstr "Nessun aggiornamento trovato."
 
-#: linstaller/modules/update/front.py:77
+#: linstaller/modules/update/front.py:76
 msgid "Installer updated"
 msgstr "L'installer è stato aggiornato"
 
-#: linstaller/modules/update/front.py:79
+#: linstaller/modules/update/front.py:78
 msgid "The installer packages have been updated successfully."
 msgstr ""
 "I pacchetti del programma di installazione sono stati aggiornati "
 "correttamente."
 
-#: linstaller/modules/update/front.py:81
+#: linstaller/modules/update/front.py:80
 msgid "Press ENTER to start the updated installer"
 msgstr "Premere INVIO per avviare l'installer aggiornato"
 
@@ -277,39 +281,39 @@ msgstr "Selezionare la partizione di swap (premere INVIO per non usarla)"
 msgid "No swap selected."
 msgstr "Nessuna partizione di swap selezionata."
 
-#: linstaller/modules/partdisks/front.py:194
+#: linstaller/modules/partdisks/front.py:192
 msgid ""
 "Are you really sure to continue? This will destroy selected partitions."
 msgstr ""
 "Si vuole veramente continuare? Questo processo formatterà le partizioni "
 "selezionate."
 
-#: linstaller/modules/partdisks/front.py:211
+#: linstaller/modules/partdisks/front.py:209
 msgid "Reload original table"
 msgstr "Ricarica la tabella iniziale"
 
-#: linstaller/modules/partdisks/front.py:213
+#: linstaller/modules/partdisks/front.py:211
 msgid "This will reload the original partition table."
 msgstr "Questa azione ricaricherà la tabella iniziale."
 
-#: linstaller/modules/partdisks/front.py:214
+#: linstaller/modules/partdisks/front.py:212
 msgid "All changes you've done will be lost."
 msgstr "Tutti i cambiamenti fatti saranno perduti."
 
-#: linstaller/modules/partdisks/front.py:216
+#: linstaller/modules/partdisks/front.py:214
 msgid "Do you want to continue?"
 msgstr "Si vuole continuare?"
 
-#: linstaller/modules/partdisks/front.py:245
+#: linstaller/modules/partdisks/front.py:243
 msgid "Go back"
 msgstr "Torna indietro"
 
-#: linstaller/modules/partdisks/front.py:247
+#: linstaller/modules/partdisks/front.py:245
 msgid ""
 "It appears that you have uncommited changes to the partitioning scheme."
 msgstr "Sembra che dei cambiamenti non siano stati salvati."
 
-#: linstaller/modules/partdisks/front.py:248
+#: linstaller/modules/partdisks/front.py:246
 msgid ""
 "If you want to commit them, you need first to write to memory the changes "
 "and then to commit."
@@ -317,7 +321,7 @@ msgstr ""
 "Nel caso si volesse salvarli, bisognerebbe prima scrivere i cambiamenti in "
 "memoria, quindi salvarli."
 
-#: linstaller/modules/partdisks/front.py:249
+#: linstaller/modules/partdisks/front.py:247
 msgid ""
 "To do so, you should go to the 'edit partitions' page and select the "
 "relative options."
@@ -325,19 +329,19 @@ msgstr ""
 "Per fare ciò, è necessario andare nella pagina di modifica delle partizioni "
 "e selezionare le opzioni appropriate."
 
-#: linstaller/modules/partdisks/front.py:251
+#: linstaller/modules/partdisks/front.py:249
 msgid "Do you really want to go back without saving changes?"
 msgstr "Si vuole veramente tornare indietro senza salvare i cambiamenti?"
 
-#: linstaller/modules/partdisks/front.py:262
+#: linstaller/modules/partdisks/front.py:260
 msgid "Commit changes"
 msgstr "Salva cambiamenti"
 
-#: linstaller/modules/partdisks/front.py:264
+#: linstaller/modules/partdisks/front.py:262
 msgid "This table is going to be applied:"
 msgstr "Questa tabella verrà applicata:"
 
-#: linstaller/modules/partdisks/front.py:271
+#: linstaller/modules/partdisks/front.py:269
 #, python-format
 msgid ""
 "%(warning)s: This will COMMIT ALL THE CHANGES YOU'VE DONE on the physical "
@@ -345,38 +349,38 @@ msgid ""
 msgstr ""
 "%(warning)s: Questo SALVERÀ TUTTI I CAMBIAMENTI FATTI nei dischi fisici."
 
-#: linstaller/modules/partdisks/front.py:271
+#: linstaller/modules/partdisks/front.py:269
 msgid "WARNING"
 msgstr "ATTENZIONE"
 
-#: linstaller/modules/partdisks/front.py:272
+#: linstaller/modules/partdisks/front.py:270
 msgid "This is the last time that you can check your new partition table."
 msgstr ""
 "Questa è l'ultima possibilità per controllare la nuova tabella delle "
 "partizioni."
 
-#: linstaller/modules/partdisks/front.py:273
+#: linstaller/modules/partdisks/front.py:271
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
 msgstr "Se si continua, non si potrà RIPRISTINARE LA VECCHIA TABELLA!"
 
-#: linstaller/modules/partdisks/front.py:304
+#: linstaller/modules/partdisks/front.py:302
 #, python-format
 msgid "Creating new partition table on %s..."
 msgstr "Creazione della nuova tabella delle partizioni su %s..."
 
+#: linstaller/modules/partdisks/front.py:307
 #: linstaller/modules/partdisks/front.py:309
-#: linstaller/modules/partdisks/front.py:311
 #, python-format
 msgid "FAILED: new partition table in %s"
 msgstr "FALLITO: nuova tabella delle partizioni su %s"
 
-#: linstaller/modules/partdisks/front.py:327
+#: linstaller/modules/partdisks/front.py:325
 #, python-format
 msgid "Formatting %s..."
 msgstr "Formattazione di %s..."
 
+#: linstaller/modules/partdisks/front.py:330
 #: linstaller/modules/partdisks/front.py:332
-#: linstaller/modules/partdisks/front.py:334
 #, python-format
 msgid "FAILED: formatting %s"
 msgstr "FALLITO: formattazione di %s"
@@ -930,44 +934,62 @@ msgstr "Installer il bootloader nell'MBR?"
 msgid "Launch linstaller"
 msgstr "Avvia linstaller"
 
-#: linstaller.py:111
+#: linstaller.py:123
 msgid "You have to pass at least an action!"
 msgstr "È necessario specificare almeno un'azione!"
 
-#: linstaller.py:115
+#: linstaller.py:127
 #, python-format
-msgid "SYNTAX: %s <options> [ACTION]"
-msgstr "SINTASSI: %s <opzioni> [AZIONE]"
+msgid "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
+msgstr ""
 
-#: linstaller.py:117
+#: linstaller.py:129
 msgid "Recognized options:"
 msgstr "Opzioni riconosciute:"
 
-#: linstaller.py:118
+#: linstaller.py:130
 msgid " -c|--config\t\t- Selects the configuration file to read"
 msgstr " -c|--config\t\t- Seleziona il file di configurazione da leggere"
 
-#: linstaller.py:119
+#: linstaller.py:131
 msgid " -f|--frontend\t\t- Selects the frontend to use (def: cli)"
 msgstr " -f|--frontend\t\t- Seleziona il frontend da usare (def: cli)"
 
-#: linstaller.py:120
+#: linstaller.py:132
 msgid " -m|--modules\t\t- Overrides the modules to be executed"
 msgstr " -m|--modules\t\t- Cambia i moduli da eseguire"
 
-#: linstaller.py:122
+#: linstaller.py:134
 msgid "Recognized actions:"
 msgstr "Azioni riconosciute:"
 
-#: linstaller.py:123
+#: linstaller.py:135
 msgid " help\t\t\t- Displays this help message, then exits."
 msgstr " help\t\t\t- Visualizza il messaggio d'aiuto, quindi esce."
 
-#: linstaller.py:124
+#: linstaller.py:136
 msgid " start\t\t\t- Starts the installer."
 msgstr " start\t\t\t- Avvia l'installatore."
 
-#: linstaller.py:129
+#: linstaller.py:138
+msgid "Preseeding:"
+msgstr ""
+
+#: linstaller.py:139
+msgid ""
+" linstaller supports preseeding. Seeds can be specified into the\n"
+" configuration file of the distribution, or with the notation below:\n"
+" \n"
+" :module:option:value\n"
+" \n"
+" Examples:\n"
+" \n"
+" :userhost:root:True\t\t- Enables root\n"
+" :language:ask:True\t\t- Asks for language\n"
+" :partdisks:swap_noformat:True\t- Does not format swap partition\n"
+msgstr ""
+
+#: linstaller.py:155
 #, python-format
 msgid "%s does not exist! Adjust --config accordingly."
 msgstr "%s non esiste! Regolare --config di conseguenza."
