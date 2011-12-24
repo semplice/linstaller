@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-12-18 10:58+0100\n"
-"PO-Revision-Date: 2011-12-08 10:59+0000\n"
+"PO-Revision-Date: 2011-12-23 11:46+0000\n"
 "Last-Translator: Eugenio Paolantonio <me@medesimo.eu>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-19 05:20+0000\n"
-"X-Generator: Launchpad (build 14525)\n"
+"X-Launchpad-Export-Date: 2011-12-24 06:36+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
 #: linstaller/core/cli_frontend.py:90
 msgid "You must insert something!"
@@ -122,7 +122,7 @@ msgstr "Installazione in corso..."
 
 #: linstaller/modules/clean/inst.py:34
 msgid "Cleaning:"
-msgstr ""
+msgstr "Pulizia:"
 
 #: linstaller/modules/userhost/inst.py:99
 msgid "Creating user:"
@@ -941,7 +941,7 @@ msgstr "È necessario specificare almeno un'azione!"
 #: linstaller.py:127
 #, python-format
 msgid "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
-msgstr ""
+msgstr "SINTASSI: %s <opzioni> [AZIONE] <:seed:opzione:valore>"
 
 #: linstaller.py:129
 msgid "Recognized options:"
@@ -973,7 +973,7 @@ msgstr " start\t\t\t- Avvia l'installatore."
 
 #: linstaller.py:138
 msgid "Preseeding:"
-msgstr ""
+msgstr "Preseed:"
 
 #: linstaller.py:139
 msgid ""
@@ -988,6 +988,16 @@ msgid ""
 " :language:ask:True\t\t- Asks for language\n"
 " :partdisks:swap_noformat:True\t- Does not format swap partition\n"
 msgstr ""
+" linstaller supporta i preseed. I seed possono essere specificati nel\n"
+" file di configurazione della distribuzione, o con la notazione seguente:\n"
+" \n"
+" :modulo:opzione:valore\n"
+" \n"
+" Esempi:\n"
+" \n"
+" :userhost:root:True\t\t- Abilita root\n"
+" :language:ask:True\t\t- Chiede la lingua\n"
+" :partdisks:swap_noformat:True\t- Non formatta la partizione di swap\n"
 
 #: linstaller.py:155
 #, python-format
