@@ -1,3 +1,9 @@
+linstaller (2.10.0-1) pulse; urgency=low
+
+  * Initial upload to pulse.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 25 Dec 2011 11:38:30 +0100
+
 linstaller (2.0.0-1) emily; urgency=low
 
   * Final 2.0.0 release.
