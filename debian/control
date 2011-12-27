@@ -9,7 +9,7 @@ Homepage: http://launchpad.net/linstaller
 
 Package: linstaller
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-progressbar, linstaller-modules-base (= ${binary:Version})
+Depends: ${misc:Depends}, ${python:Depends}, linstaller-modules-base (= ${binary:Version}), linstaller-frontend-cli (= ${binary:Version})
 Description: Modular GNU/Linux distribution installer
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
@@ -19,6 +19,18 @@ Description: Modular GNU/Linux distribution installer
  .
  This package contains the main executable and the core libraries.
 
+Package: linstaller-frontend-cli
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-progressbar
+Description: Modular GNU/Linux distribution installer
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the command-line frontend.
+ 
 Package: linstaller-modules-base
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted, python-apt,

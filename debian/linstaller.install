@@ -6,5 +6,6 @@
 /usr/share/linstaller/linstaller/core/libmodules/__init__.*
 /usr/share/linstaller/linstaller/__init__.*
 /usr/share/linstaller/linstaller/modules/__init__.*
+/usr/share/linstaller/linstaller/frontends/__init__.*
 
 /usr/share/locale

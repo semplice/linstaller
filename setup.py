@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# pylaivng setup (using distutils)
+# linstaller setup (using distutils)
 # Copyright (C) 2011 Eugenio "g7" Paolantonio. All rights reserved.
 # Work released under the GNU GPL license, version 3.
 
@@ -12,7 +12,7 @@ setup(name='linstaller',
       author_email='me@medesimo.eu',
       url='http://launchpad.net/linstaller',
       scripts=['linstaller.py'],
-      packages=["linstaller", "linstaller.core", "linstaller.core.libmodules",
+      packages=["linstaller", "linstaller.core", "linstaller.frontends", "linstaller.core.libmodules",
       "linstaller.core.libmodules.chroot",
       "linstaller.core.libmodules.partdisks",
       "linstaller.core.libmodules.unsquash",
@@ -30,8 +30,13 @@ setup(name='linstaller',
       "linstaller.modules.timezone",
       "linstaller.modules.unsquash",
       "linstaller.modules.update",
+      
       "linstaller.modules.userhost",
+      "linstaller.modules.userhost.inst",
+      "linstaller.modules.userhost.front",
+      
       "linstaller.modules.welcome",
+      "linstaller.modules.welcome.front",
       ],
       data_files=[("/usr/bin", ["linstaller_wrapper.sh", "mount_nolive.sh"]),
       ("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive"]),
