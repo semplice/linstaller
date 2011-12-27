@@ -27,7 +27,7 @@ class Module():
 		for comp in components[1:]:
 			self.module = getattr(self.module, comp)
 		
-		self.mloaded = self.module.Module(main_settings, modules_settings, cfg)
+		self.mloaded = self.module.Module(main_settings, modules_settings, cfg, module)
 		return self.mloaded
 	
 	def __del__(self):

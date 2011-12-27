@@ -1,8 +1,15 @@
 linstaller (2.10.0-1) pulse; urgency=low
 
   * Initial upload to pulse.
+  * Added linstaller.frontends where store frontends core files.
+  * core/:
+    - ported cli_frontend to linstaller.frontends.cli
+    - added frontend auto-discovery feature (default for 3.x modules)
+    - pass the package path to Module
+  * modules/:
+    - Ported welcome and userhost to 3.x-style modules package structure.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 25 Dec 2011 11:38:30 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 27 Dec 2011 19:33:42 +0100
 
 linstaller (2.0.0-1) emily; urgency=low
 

@@ -25,16 +25,29 @@ class Install:
 		self.ch.close()	
 
 class Module:
-	def __init__(self, main_settings, modules_settings, cfg):
+	def __init__(self, main_settings, modules_settings, cfg, package):
 		""" This init function will take the args and submodule passed to the module. """
 		
-		self.main_settings, self.modules_settings, self.cfg = main_settings, modules_settings, cfg
+		self.main_settings, self.modules_settings, self.cfg, self.package = main_settings, modules_settings, cfg, package
 		
 		self.settings = {}
 		self.changed = {} # Convienent dict to store changed items. Useful mainly for partdisks.
 		
 		self.seedpre()
 		self.preseed()
+
+	def _associate_(self):
+		""" This is here to maintain compatibility with linstaller 2.x.
+		Will be removed after all modules have been ported to 3.x. """
+		
+		# Frontend discovery
+		frontend = "%s.%s" % (self.package, self.main_settings["frontend"])
+		loaded = __import__(frontend)
+		components = frontend.split(".")
+		for comp in components[1:]:
+			loaded = getattr(loaded, comp)
+						
+		self._frontends = {self.main_settings["frontend"]:loaded.Frontend}
 
 	def start(self):
 		""" Start the module. """
