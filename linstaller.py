@@ -17,6 +17,10 @@ _ = t9n.library.translation_init("linstaller")
 import os, sys
 
 def launch_module(module, special):
+	""" Launches module.
+	special is a list that contains all the 'special' modules.
+	"""
+
 	global reboot
 	
 	# Adjust cfg.module to read "module:<modulename>"
@@ -71,9 +75,29 @@ def launch_module(module, special):
 	elif res == "fullrestart":
 		# restart linstaller
 		return "fullrestart"
+	elif res == "back":
+		# go back.
+		return "back"
 
+def loop_modules(startfrom=1):
+	""" Loop modules.
+	
+	If startfrom is used, the loop will start at that specific module. (int)
+	"""
 
-## Welcome the linstaller :)
+	count = 0
+	
+	for module in main_settings["modules"].split(" "):
+		if module:
+			count += 1
+			if count < startfrom: continue
+			res = launch_module(module, main_settings["special"].split(" "))
+			if res in ("exit", "kthxbye", "fullrestart"):
+				return res # Exit.
+			elif res == "back":
+				return loop_modules(startfrom=count-1)
+
+## Welcome to linstaller :)
 ## This is the main executable, and should be called with something like this:
 ##  linstaller --config=<configuration> start
 ## where <configuration> should be a configuration file in /etc/linstaller (without path).
@@ -198,11 +222,7 @@ elif _action == "start":
 	executed_special = []
 	
 	# Begin loop modules...
-	for module in main_settings["modules"].split(" "):
-		if module:
-			res = launch_module(module, main_settings["special"].split(" "))
-			if res in ("exit", "kthxbye", "fullrestart"):
-				break # Exit.
+	res = loop_modules()
 
 	# Finished installation. Revert changes made to the system.
 	executed_special.reverse() # Reverse.

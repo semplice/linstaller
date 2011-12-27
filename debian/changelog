@@ -9,8 +9,12 @@ linstaller (2.10.1-1) pulse; urgency=low
     - Ported welcome and userhost to 3.x-style modules package structure.
   * debian/: new package linstaller-frontend-cli which ships the cli frontend.
   * setup.py: updated to install frontends and modules inst/front.
+  * linstaller: moved the loop code to new function loop_modules().
+  * linstaller: support "back" res (restarts a loop starting from the module
+    before the current)
+  * modules/update: translate "Updating APT cache..." string.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 27 Dec 2011 19:47:49 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 27 Dec 2011 22:25:03 +0100
 
 linstaller (2.10.0-1) pulse; urgency=low
 

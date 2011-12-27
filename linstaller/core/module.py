@@ -37,8 +37,7 @@ class Module:
 		self.preseed()
 
 	def _associate_(self):
-		""" This is here to maintain compatibility with linstaller 2.x.
-		Will be removed after all modules have been ported to 3.x. """
+		""" Get appropriate frontend. """
 		
 		# Frontend discovery
 		frontend = "%s.%s" % (self.package, self.main_settings["frontend"])
@@ -61,7 +60,7 @@ class Module:
 		# Start frnt.
 		res = frnt.start()
 		
-		if res in ("restart", "kthxbye", "fullrestart"):
+		if res in ("restart", "kthxbye", "fullrestart","back"):
 			return res
 	
 	def seedpre(self):

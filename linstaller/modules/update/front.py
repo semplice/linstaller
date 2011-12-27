@@ -32,7 +32,7 @@ class CLIFrontend(cli.CLIFrontend):
 			# Do checking.
 			
 			cac = cache.Cache()
-			info("Updating APT cache...")
+			info(_("Updating APT cache..."))
 			try:
 				cac.update()
 			except:
