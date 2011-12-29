@@ -11,7 +11,6 @@ class Install(module.Install):
 	def set(self, timezone):
 		""" Sets timezone. """
 		
-		verbose("Setting timezone")
 		self.moduleclass.tz.set(timezone)
 
 class Module(module.Module):

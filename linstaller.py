@@ -25,17 +25,17 @@ def launch_module(module, special):
 	
 	# Adjust cfg.module to read "module:<modulename>"
 	cfg.module = "module:%s" % module.split(".")[0]
-	
-	# Load module...
-	mod = mh.Module(module)
-	modclass = mod.load(main_settings, modules_settings, cfg)
-	
-	# It is special? Add to executed_special.
-	if module in special:
-		executed_special.append(module)
-	
+
 	# Start module
 	try:
+		# Load module...
+		mod = mh.Module(module)
+		modclass = mod.load(main_settings, modules_settings, cfg)
+		
+		# It is special? Add to executed_special.
+		if module in special:
+			executed_special.append(module)
+
 		res = modclass.start()
 	except exceptions.SystemExit:
 		return "exit"

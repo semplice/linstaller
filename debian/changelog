@@ -16,8 +16,11 @@ linstaller (2.10.1-1) pulse; urgency=low
   * modules/: ported everything to 3.x, except widget_test.
   * core/module.py: onchroot support on Install (default == True).
     Specifies if the install phase should be done in chroot or not.
+  * partdisks: handle KeyErrors in commit
+  * core/module.py: load frontend before entering in chroot
+  * linstaller.py: revert too if a frontend does not exist.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 12:50:17 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 16:18:32 +0100
 
 linstaller (2.10.0-1) pulse; urgency=low
 

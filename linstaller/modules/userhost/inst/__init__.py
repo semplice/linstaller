@@ -6,7 +6,7 @@
 
 import linstaller.core.module as module
 
-import linstaller.core.libmodules.chroot.library as lib
+import linstaller.core.main as m
 
 import os, sys
 

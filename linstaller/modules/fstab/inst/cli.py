@@ -10,7 +10,7 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
 
-class CLIFrontend(cli.CLIFrontend):
+class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 

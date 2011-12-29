@@ -27,6 +27,11 @@ class Install(module.Install):
 			os.remove("/etc/semplice-live-mode")
 
 class Module(module.Module):
+	def _associate_(self):
+		""" Shut up associate as we do not have any frontend. """
+		
+		pass
+	
 	def start(self):
 		""" Start module """
 		

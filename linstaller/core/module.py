@@ -39,9 +39,12 @@ class Module:
 		self.seedpre()
 		self.preseed()
 
+		# Associate
+		self._associate_()
+
 	def _associate_(self):
 		""" Get appropriate frontend. """
-		
+				
 		# Frontend discovery
 		frontend = "%s.%s" % (self.package, self.main_settings["frontend"])
 		loaded = __import__(frontend)
@@ -53,9 +56,6 @@ class Module:
 
 	def start(self):
 		""" Start the module. """
-		
-		# Associate
-		self._associate_()
 		
 		# Initiate the relevant frontend class.
 		frnt = self._frontends[self.main_settings["frontend"]](self)

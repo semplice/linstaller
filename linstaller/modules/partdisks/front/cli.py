@@ -277,8 +277,12 @@ class Frontend(cli.Frontend):
 			# Ok, continue.
 			lst, dct = lib.device_sort(self.changed)
 			for key in lst:
-				obj = dct[key]["obj"]
-				cng = dct[key]["changes"]
+				try:
+					obj = dct[key]["obj"]
+					cng = dct[key]["changes"]
+				except:
+					verbose("Unable to get a correct object/changes from %s." % key)
+					continue # Skip.
 								
 				verbose("Committing changes in %s" % key)
 				
