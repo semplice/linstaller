@@ -66,12 +66,15 @@ def swap_available(deep=False):
 	swaps = []
 	
 	for disk, obj in disks.iteritems():
-		for part in obj._partitions:
-			if part.fileSystem:
-				if "linux-swap" in part.fileSystem.type:
-					# YAY!
-					swaps.append(part)
-					if not deep: return part
+		try:
+			for part in obj._partitions:
+				if part.fileSystem:
+					if "linux-swap" in part.fileSystem.type:
+						# YAY!
+						swaps.append(part)
+						if not deep: return part
+		except AttributeError:
+			pass
 
 	if deep:
 		return swaps

@@ -1,3 +1,10 @@
+linstaller (2.0.0.1-1) emily; urgency=low
+
+  * partdisks: library: do not raise an exception if AttributeError when
+    checking for swap partitions.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 20:09:38 +0100
+
 linstaller (2.0.0-1) emily; urgency=low
 
   * Final 2.0.0 release.
