@@ -19,8 +19,10 @@ linstaller (2.10.1-1) pulse; urgency=low
   * partdisks: handle KeyErrors in commit
   * core/module.py: load frontend before entering in chroot
   * linstaller.py: revert too if a frontend does not exist.
+  * partdisks: library: do not raise an exception if AttributeError when
+    checking for swap partitions.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 16:18:32 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 21:38:47 +0100
 
 linstaller (2.10.0-1) pulse; urgency=low
 
