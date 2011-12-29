@@ -4,10 +4,7 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
 import linstaller.core.module as module
-import t9n.library
-_ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
 import linstaller.core.libmodules.partdisks.library as lib
@@ -15,6 +12,11 @@ import linstaller.core.libmodules.partdisks.library as lib
 import os
 
 class Module(module.Module):
+	def _associate_(self):
+		""" Shut up associate as we do not have any frontend. """
+		
+		pass
+		
 	def start(self):
 		""" Start override to unsquash. """
 		

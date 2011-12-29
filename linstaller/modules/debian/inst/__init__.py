@@ -4,15 +4,8 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
 import linstaller.core.module as module
 import linstaller.core.main as m
-import commands
-import t9n.library
-_ = t9n.library.translation_init("linstaller")
-
-from linstaller.core.main import warn,info,verbose
-import linstaller.core.libmodules.chroot.library as lib
 
 # NOTE: This is a debian-specific module.
 
@@ -30,33 +23,6 @@ class Install(module.Install):
 		
 		m.sexec("apt-get remove --yes --force-yes --purge %s -o DPkg::NoTriggers=true" % pkg)
 
-class CLIFrontend(cli.CLIFrontend):
-	def start(self):
-		""" Start the frontend """
-
-		verbose("Removing live-specific packages...")
-		
-		# Get a progressbar
-		progress = self.progressbar(_("Removing live-specific packages:"), self.moduleclass.install.get())
-
-		# Start progressbar
-		progress.start()
-
-		try:
-			num = 0
-			for pkg in self.moduleclass.packages:
-				num += 1
-				verbose("  Removing %s" % pkg)
-				
-				# Remove package
-				self.moduleclass.install.remove(pkg)
-				progress.update(num)
-		finally:
-			# Exit
-			self.moduleclass.install.close()
-		
-		progress.finish()
-
 class Module(module.Module):
 	def start(self):
 		""" Start module """
@@ -71,11 +37,6 @@ class Module(module.Module):
 		self.install = Install(self)
 		
 		module.Module.start(self)
-		
-	def _associate_(self):
-		""" Associate frontends. """
-		
-		self._frontends = {"cli":CLIFrontend}
 	
 	def seedpre(self):
 		""" Cache configuration """

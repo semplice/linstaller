@@ -4,15 +4,10 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
 import linstaller.core.module as module
 import linstaller.core.main as m
-import commands
-import t9n.library
-_ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
-import linstaller.core.libmodules.chroot.library as lib
 
 class Install(module.Install):
 	def grub_install(self):
@@ -39,47 +34,13 @@ class Install(module.Install):
 
 		m.sexec("update-grub")
 
-class CLIFrontend(cli.CLIFrontend):
-	def start(self):
-		""" Start the frontend """
-
-		_install = {"grub":self.moduleclass.install.grub_install}
-		_update = {"grub":self.moduleclass.install.grub_update}
-
-		# Get bootloader
-		bootloader = self.moduleclass.modules_settings["bootloader"]["bootloader"]
-
-		verbose("Installing %s bootloader..." % bootloader)
-		
-		# Get a progressbar
-		progress = self.progressbar(_("Installing bootloader:"), 2)
-
-		# Start progressbar
-		progress.start()
-
-		try:
-			# PASS 1: INSTALL
-			_install[bootloader]()
-			progress.update(1)
-			
-			# PASS 2: UPDATE
-			_update[bootloader]()
-			progress.update(2)
-		finally:
-			# Exit
-			self.moduleclass.install.close()
-		
-		progress.finish()
-
 class Module(module.Module):
 	def start(self):
 		""" Start module """
 		
 		self.install = Install(self)
+		self._install = {"grub":self.install.grub_install}
+		self._update = {"grub":self.install.grub_update}
 		
 		module.Module.start(self)
-		
-	def _associate_(self):
-		""" Associate frontends. """
-		
-		self._frontends = {"cli":CLIFrontend}
+

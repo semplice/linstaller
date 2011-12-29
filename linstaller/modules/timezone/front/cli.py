@@ -4,18 +4,14 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
+import linstaller.frontends.cli as cli
 import linstaller.core.main as m
-import linstaller.core.module as module
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
-from liblaiv_setup import TimeZone
-# Start timezone class
-tz = TimeZone()
 
-class CLIFrontend(cli.CLIFrontend):
+class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 		
@@ -23,7 +19,7 @@ class CLIFrontend(cli.CLIFrontend):
 		
 		# Get the current timezone...
 		if not self.settings["timezone"]:
-			timezone = tz.get_current_timezone()
+			timezone = self.moduleclass.tz.get_current_timezone()
 			print _("Default timezone is:")
 			print
 			print ("  %s" % timezone)
@@ -42,7 +38,7 @@ class CLIFrontend(cli.CLIFrontend):
 		""" Timezone selection """
 
 		self.header(_("Select the region where you live"))
-		reg, rreg, tim = tz.list()
+		reg, rreg, tim = self.moduleclass.tz.list()
 
 		# Print regions
 		for num, name in reg.iteritems():
@@ -75,15 +71,4 @@ class CLIFrontend(cli.CLIFrontend):
 		if not choice in listed:
 			warn(_("Unknown zone."))
 			return self.select_timezone()
-		return tz.join(reg[rchoice], listed[choice])
-
-class Module(module.Module):
-	def _associate_(self):
-		""" Associate frontends. """
-		
-		self._frontends = {"cli":CLIFrontend}
-	
-	def seedpre(self):
-		""" Caches variables used by this module. """
-		
-		self.cache("timezone")
+		return self.moduleclass.tz.join(reg[rchoice], listed[choice])

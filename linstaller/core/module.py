@@ -10,19 +10,22 @@ import linstaller.core.libmodules.chroot.library as chlib
 class Install:
 	""" Executed during install. """
 	
-	def __init__(self, moduleclass):
+	def __init__(self, moduleclass, onchroot=True):
 		""" Sets moduleclass to self.moduleclass """
 		
 		self.moduleclass = moduleclass
+		self.onchroot = onchroot
 		
-		# Enter in chroot
-		self.ch = chlib.Chroot()
-		self.ch.open()
+		if self.onchroot:
+			# Enter in chroot
+			self.ch = chlib.Chroot()
+			self.ch.open()
 
 	def close(self):
 		""" Return to normal root. """
 		
-		self.ch.close()	
+		if self.onchroot:
+			self.ch.close()	
 
 class Module:
 	def __init__(self, main_settings, modules_settings, cfg, package):

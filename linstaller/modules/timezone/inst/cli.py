@@ -4,21 +4,13 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
-import linstaller.core.module as module
-import linstaller.core.main as m
+import linstaller.frontends.cli as cli
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-import linstaller.core.libmodules.chroot.library as lib
-
 from linstaller.core.main import warn,info,verbose
 
-from liblaiv_setup import TimeZone
-# Start timezone class
-tz = TimeZone()
-
-class CLIFrontend(cli.CLIFrontend):
+class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 
@@ -26,30 +18,15 @@ class CLIFrontend(cli.CLIFrontend):
 		progress = self.progressbar(_("Setting timezone:"), 100)
 		
 		verbose("Setting timezone")
-		
-		# Enter in target
-		chroot = lib.Chroot()
-		chroot.open()
-		
 		# Get timezone
 		timezone = self.moduleclass.modules_settings["timezone"]["timezone"]
 		
-		# Start progressbar
-		progress.start()
-		
+		progress.start() # Start progressbar	
 		try:
-			# Set timezone
-			tz.set(timezone)
+			self.moduleclass.install.set(timezone)
 		finally:
-			# Exit from chroot
-			chroot.close()
+			self.moduleclass.install.close() # Exit
 		
 		progress.finish()
 		
 		verbose("New timezone is: %s." % timezone)
-
-class Module(module.Module):
-	def _associate_(self):
-		""" Associate frontends. """
-		
-		self._frontends = {"cli":CLIFrontend}

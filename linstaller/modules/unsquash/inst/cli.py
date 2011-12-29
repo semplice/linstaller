@@ -4,16 +4,14 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
-import linstaller.core.cli_frontend as cli
-import linstaller.core.module as module
+import linstaller.frontends.cli as cli
 import linstaller.core.main as m
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
-import linstaller.core.libmodules.unsquash.library as lib
 
-class CLIFrontend(cli.CLIFrontend):
+class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 
@@ -64,31 +62,3 @@ class CLIFrontend(cli.CLIFrontend):
 		verbose("Mounting /proc, /dev and /sys")
 		
 		self.moduleclass.unsquash.mount()
-
-class Module(module.Module):
-	def start(self):
-		""" Start override to unsquash. """
-
-		self.unsquash = lib.Unsquash(self.settings["image"])
-
-		module.Module.start(self)
-	
-	def revert(self):
-		""" Revert mounts """
-		
-		self.unsquash = lib.Unsquash(self.settings["image"])
-		
-		try:
-			self.unsquash.revert()
-		except:
-			pass # Try only, if it does not succeed, it is nothing faulty.
-	
-	def _associate_(self):
-		""" Associate frontends. """
-		
-		self._frontends = {"cli":CLIFrontend}
-	
-	def seedpre(self):
-		""" Cache preseeds. """
-		
-		self.cache("image")
