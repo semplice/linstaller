@@ -6,7 +6,7 @@
 from distutils.core import setup
 
 setup(name='linstaller',
-      version='2.10.0',
+      version='2.10.1',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -17,19 +17,49 @@ setup(name='linstaller',
       "linstaller.core.libmodules.partdisks",
       "linstaller.core.libmodules.unsquash",
       "linstaller.modules",
+      
       "linstaller.modules.bootloader",
+      "linstaller.modules.bootloader.front",
+      "linstaller.modules.bootloader.inst",
+      
       "linstaller.modules.debian",
+      "linstaller.modules.debian.inst",
+      
       "linstaller.modules.clean",
+      "linstaller.modules.clean.inst",
+      
       "linstaller.modules.end",
+      "linstaller.modules.end.front",
+      
       "linstaller.modules.fstab",
+      "linstaller.modules.fstab.inst",
+      
       "linstaller.modules.language",
+      "linstaller.modules.language.front",
+      "linstaller.modules.language.inst",
+      
       "linstaller.modules.network",
+      "linstaller.modules.network.inst",
+      
       "linstaller.modules.partdisks",
+      "linstaller.modules.partdisks.front",
+      "linstaller.modules.partdisks.inst",
+      
       "linstaller.modules.semplice",
+      "linstaller.modules.semplice.inst",
+      
       "linstaller.modules.summary",
+      "linstaller.modules.summary.front",
+      
       "linstaller.modules.timezone",
+      "linstaller.modules.timezone.front",
+      "linstaller.modules.timezone.inst",
+      
       "linstaller.modules.unsquash",
+      "linstaller.modules.unsquash.inst",
+      
       "linstaller.modules.update",
+      "linstaller.modules.update.front",
       
       "linstaller.modules.userhost",
       "linstaller.modules.userhost.inst",
