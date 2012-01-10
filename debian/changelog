@@ -1,3 +1,10 @@
+linstaller (2.10.3-1) pulse; urgency=low
+
+  * userhost: renamed the password_max_chars preseed to password_min_chars:
+    should sleep a bit more.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 20:04:08 +0100
+
 linstaller (2.10.2-1) pulse; urgency=low
 
   * setup.py: do not ship semplice inst module, as it doesn't exist.

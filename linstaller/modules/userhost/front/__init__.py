@@ -13,7 +13,7 @@ class Module(module.Module):
 		self.cache("userfullname")
 		self.cache("username")
 		self.cache("password")
-		self.cache("password_max_chars", "4")
+		self.cache("password_min_chars", "4")
 		self.cache("root")
 		self.cache("rootpassword")
 		self.cache("hostname")

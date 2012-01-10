@@ -83,8 +83,8 @@ class Frontend(cli.Frontend):
 		""" A simple password prompt """
 		
 		passw1 = self.entry(text, password=True)
-		if len(passw1) < int(self.settings["password_max_chars"]):
-			warn(_("The password should be composed of at least %s charchters.") % self.settings["password_max_chars"])
+		if len(passw1) < int(self.settings["password_min_chars"]):
+			warn(_("The password should be composed of at least %s charchters.") % self.settings["password_min_chars"])
 			return self.password_prompt(text)
 		passw2 = self.entry(text + _(" (again)"), password=True)
 		
