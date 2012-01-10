@@ -1,3 +1,10 @@
+linstaller (2.0.1~pre2.1-1) emily; urgency=low
+
+  * userhost: renamed the password_max_chars preseed to password_min_chars:
+    should sleep a bit more.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 20:01:32 +0100
+
 linstaller (2.0.1~pre2-1) emily; urgency=low
 
   * userhost: lowered minimum password charchters to 4, now

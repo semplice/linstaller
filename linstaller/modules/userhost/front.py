@@ -84,9 +84,9 @@ class CLIFrontend(cli.CLIFrontend):
 		""" A simple password prompt """
 		
 		passw1 = self.entry(text, password=True)
-		if len(passw1) < int(self.settings["password_max_chars"]):
+		if len(passw1) < int(self.settings["password_min_chars"]):
 			# Pasword lenght is lesser than six
-			warn(_("The password should be composed of at least %s charchters.") % self.settings["password_max_chars"])
+			warn(_("The password should be composed of at least %s charchters.") % self.settings["password_min_chars"])
 			return self.password_prompt(text)
 		passw2 = self.entry(text + _(" (again)"), password=True)
 		
@@ -110,7 +110,7 @@ class Module(module.Module):
 		self.cache("userfullname")
 		self.cache("username")
 		self.cache("password")
-		self.cache("password_max_chars", "4")
+		self.cache("password_min_chars", "4")
 		self.cache("root")
 		self.cache("rootpassword")
 		self.cache("hostname")
