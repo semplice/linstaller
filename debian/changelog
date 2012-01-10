@@ -1,3 +1,10 @@
+linstaller (2.0.1~pre2-1) emily; urgency=low
+
+  * userhost: lowered minimum password charchters to 4, now
+    configurable via the password_max_chars preseed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 19:35:19 +0100
+
 linstaller (2.0.0.1-1) emily; urgency=low
 
   * partdisks: library: do not raise an exception if AttributeError when
