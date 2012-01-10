@@ -1,3 +1,11 @@
+linstaller (2.10.2-1) pulse; urgency=low
+
+  * setup.py: do not ship semplice inst module, as it doesn't exist.
+  * userhost: lowered minimum password charchters to 4, now
+    configurable via the password_max_chars preseed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 19:52:07 +0100
+
 linstaller (2.10.1-1) pulse; urgency=low
 
   * Added linstaller.frontends where store frontends core files.

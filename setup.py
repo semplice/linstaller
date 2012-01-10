@@ -46,7 +46,7 @@ setup(name='linstaller',
       "linstaller.modules.partdisks.inst",
       
       "linstaller.modules.semplice",
-      "linstaller.modules.semplice.inst",
+#      "linstaller.modules.semplice.inst",
       
       "linstaller.modules.summary",
       "linstaller.modules.summary.front",
