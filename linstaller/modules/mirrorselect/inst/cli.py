@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+# linstaller mirrorselect module install - (C) 2012 Eugenio "g7" Paolantonio and the Semplice Team.
+# All rights reserved. Work released under the GNU GPL license, version 3 or later.
+#
+# This is a module of linstaller, should not be executed as a standalone application.
+
+import linstaller.frontends.cli as cli
+import linstaller.core.main as m
+import t9n.library
+_ = t9n.library.translation_init("linstaller")
+
+from linstaller.core.main import warn,info,verbose
+
+class Frontend(cli.Frontend):
+	def start(self):
+		""" Start the frontend """
+
+		# Sets
+		sets = self.moduleclass.modules_settings["mirrorselect"]["sets"].split(" ")
+		check = self.moduleclass.modules_settings["mirrorselect"]["check"]
+
+		if check == None:
+			return # Should not check
+
+		if not self.moduleclass.install.prechecks():
+			return # We can't continue.
+
+		# Get a progressbar
+		progress = self.progressbar(_("Selecting mirrors:"), len(sets))
+
+		# Start progressbar
+		progress.start()
+		
+		try:
+			num = 0
+			for set in sets:
+				num += 1
+				self.moduleclass.install.select(set)
+				progress.update(num)
+		finally:
+			# Exit from chroot
+			self.moduleclass.install.close()	
+		
+		progress.finish()

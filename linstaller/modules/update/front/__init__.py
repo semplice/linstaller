@@ -38,7 +38,7 @@ class Install(module.Install):
 		for pkg in pkgs:
 			try:
 				if self.cac[pkg].is_upgradable:
-					info(_("Found version %(version)s of %(package)s.") % {"package":pkg, "version":cac[pkg].candidate.version})
+					info(_("Found version %(version)s of %(package)s.") % {"package":pkg, "version":self.cac[pkg].candidate.version})
 					verbose("Marking %s to be upgrated." % pkg)
 					self.cac[pkg].mark_upgrade()
 					atleastone = True
@@ -67,4 +67,4 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Caches variables used by this module. """
 		
-		self.cache("packages", "linstaller linstaller-modules-base")
+		self.cache("packages", "linstaller linstaller-modules-base linstaller-frontend-cli")

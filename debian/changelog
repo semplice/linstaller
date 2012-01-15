@@ -1,3 +1,11 @@
+linstaller (2.10.4-1) pulse; urgency=low
+
+  * Added mirrorselect module.
+  * Begin work on the gtk3 frontend.
+  * Fixed crash if some updates are found.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 15 Jan 2012 16:34:21 +0100
+
 linstaller (2.10.3-1) pulse; urgency=low
 
   * userhost: renamed the password_max_chars preseed to password_min_chars:

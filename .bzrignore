@@ -1,1 +1,5 @@
 linstaller/modules/*/*.old
+linstaller/modules/*/*/gtk3.*
+linstaller/frontends/gtk3.py
+linstaller/modules/welcome/front/gtk3.py
+linstaller/modules/userhost/front/gtk3.py
