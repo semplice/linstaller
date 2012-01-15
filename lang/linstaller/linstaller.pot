@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-10 19:53+0100\n"
+"POT-Creation-Date: 2012-01-15 16:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,37 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:932
 #: linstaller/frontends/cli.py:155 linstaller/frontends/gtk3.py:276
 msgid "Please insert your action here"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/inst/cli.py:29
+msgid "Selecting mirrors:"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:18
+msgid "Mirror selection"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:22
+#, python-format
+msgid "%(distroname)s has many mirrors worldwide."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:23
+msgid ""
+"You can let the installer to test all mirrors and to find the fastest for "
+"your zone."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:25
+msgid "This requires a working internet connection."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:29
+msgid "Do you want to check for the fastest mirror?"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:37
+msgid "Do you want to enable deb-src entries?"
 msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:17
