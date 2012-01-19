@@ -26,7 +26,7 @@ setup(name='linstaller',
       "linstaller.modules.debian.inst",
       
       "linstaller.modules.mirrorselect",
-      "linstaller.modules.mirrorselect.front"
+      "linstaller.modules.mirrorselect.front",
       "linstaller.modules.mirrorselect.inst",
       
       "linstaller.modules.clean",
