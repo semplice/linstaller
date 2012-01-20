@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-01-10 19:53+0100\n"
+"POT-Creation-Date: 2012-01-19 16:57+0100\n"
 "PO-Revision-Date: 2011-12-23 11:46+0000\n"
 "Last-Translator: Eugenio Paolantonio <me@medesimo.eu>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-11 05:09+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-01-20 05:14+0000\n"
+"X-Generator: Launchpad (build 14700)\n"
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/cli.py:90
 #: linstaller/frontends/gtk3.py:211
@@ -70,6 +70,37 @@ msgstr "Valore %s sconosciuto. Riprovare."
 #: linstaller/frontends/cli.py:155 linstaller/frontends/gtk3.py:276
 msgid "Please insert your action here"
 msgstr "Inserire l'azione qui"
+
+#: linstaller/modules/mirrorselect/inst/cli.py:29
+msgid "Selecting mirrors:"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:18
+msgid "Mirror selection"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:22
+#, python-format
+msgid "%(distroname)s has many mirrors worldwide."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:23
+msgid ""
+"You can let the installer to test all mirrors and to find the fastest for "
+"your zone."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:25
+msgid "This requires a working internet connection."
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:29
+msgid "Do you want to check for the fastest mirror?"
+msgstr ""
+
+#: linstaller/modules/mirrorselect/front/cli.py:37
+msgid "Do you want to enable deb-src entries?"
+msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:17
 msgid "Summary"
