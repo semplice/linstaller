@@ -47,15 +47,9 @@ class Unsquash:
 	def mount(self):
 		""" Mounts proc, dev, sys into target. """
 		
-		# FIXME: maybe this is not the best place to put this?
+		pass # Handled by partdisks
 		
-		m.sexec("mount -o bind /proc " + os.path.join(self.TARGET, "proc"))
-		m.sexec("mount -o bind /dev " + os.path.join(self.TARGET, "dev"))
-		m.sexec("mount -o bind /sys " + os.path.join(self.TARGET, "sys"))
-	
 	def revert(self):
 		"""  Umounts proc, dev, sys from target """
 		
-		m.sexec("umount " + os.path.join(self.TARGET, "proc"))
-		m.sexec("umount " + os.path.join(self.TARGET, "dev"))
-		m.sexec("umount " + os.path.join(self.TARGET, "sys"))
+		pass # Handled by partdisks

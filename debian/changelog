@@ -1,3 +1,16 @@
+linstaller (2.10.6-1) pulse; urgency=low
+
+  * linstaller.py: populate modules_settings from the inline
+    preseeds.
+  * partdisks: library: mount_partition can now skip mountpoint check
+    if check == False.
+  * partdisks: library: fixed opts handling if remounting.
+  * partdisks: inst: do not require "changed" from frontend.
+  * partdisks: inst: bind-mount /dev, /sys and /proc (moved from
+    unsquash).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Jan 2012 23:40:30 +0100
+
 linstaller (2.10.5-1) pulse; urgency=low
 
   * Fixed setup.py

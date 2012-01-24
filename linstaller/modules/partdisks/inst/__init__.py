@@ -33,12 +33,26 @@ class Module(module.Module):
 		
 		# Then mount at TARGET
 		lib.mount_partition(path=root, target="/linstaller/target")
+
+		used = []
+
+		# Bind-mount /dev, /sys and /proc
+		for point in ("/dev","/sys","/proc"):
+			fullpath = os.path.join("/linstaller/target",os.path.basename(point))
+			if lib.is_mounted(fullpath):
+				lib.umount(path=fullpath)
+			
+			# We can go?
+			lib.mount_partition(path=point, opts="bind", target=fullpath, check=False)
+			used.append(fullpath)
 		
 		# Mount every partition which has "useas" on it
 		# Get changed.
-		changed = self.modules_settings["partdisks"]["changed"]
-
-		used = []
+		try:
+			changed = self.modules_settings["partdisks"]["changed"]
+		except:
+			# Pass
+			changed = {}
 
 		for key, value in changed.items():
 			if not "useas" in value["changes"]:
@@ -81,7 +95,7 @@ class Module(module.Module):
 			else:
 				# Partition will be used during unsquash, we should remember when linstaller will execute revert
 				used.append(key)
-		
+				
 		# Store used
 		self.settings["used"] = used
 			

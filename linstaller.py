@@ -188,18 +188,7 @@ elif _action == "start":
 	
 	# Load configuration file
 	cfg = config.ConfigRead(_config, "linstaller")
-	
-	# Merge the seeds eventually specified
-	for module, seeds in preseeds.items():
-		# Add section, if not-existent
-		if not cfg.has_section("module:%s" % module):
-			cfg.add("module:%s" % module)
 		
-		# Set option, value:
-		for option, value in seeds.items():
-			verbose("Setting %(option)s = %(value)s in %(module)s" % {"option":option, "value":value, "module":module})
-			cfg.set("module:%s" % module, option, value)
-	
 	# Populate main_settings
 	main_settings = {}
 	main_settings["frontend"] = _frontend
@@ -217,7 +206,21 @@ elif _action == "start":
 	
 	# Create modules_settings
 	modules_settings = {}
-	
+
+	# Merge the seeds eventually specified
+	for module, seeds in preseeds.items():
+		# Add section, if not-existent
+		if not cfg.has_section("module:%s" % module):
+			cfg.add("module:%s" % module)
+		
+		# Set option, value:
+		for option, value in seeds.items():
+			verbose("Setting %(option)s = %(value)s in %(module)s" % {"option":option, "value":value, "module":module})
+			cfg.set("module:%s" % module, option, value)
+			
+		# Fill modules settings too, will be overriden by the frontend if the module runs.
+		modules_settings[module] = seeds
+
 	# 'special' modules executed
 	executed_special = []
 	

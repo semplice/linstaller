@@ -337,7 +337,7 @@ def is_mounted(obj):
 			return {"path":items[0], "mountpoint":items[2], "type":items[4], "options":items[-1].replace("(","").replace(")","").replace("\n","")}
 
 
-def mount_partition(parted_part=None, path=None, opts=False, target=False):
+def mount_partition(parted_part=None, path=None, opts=False, target=False, check=True):
 	""" Mounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -363,7 +363,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False):
 		os.makedirs(_mountpoint) # Create directory
 	else:
 		# Mountpoint already exists. See if it is mounted...
-		if os.path.ismount(_mountpoint):
+		if os.path.ismount(_mountpoint) and check:
 			# Check if the _mountpoint is the place of the partition we want.
 			infos = is_mounted(path)
 			if not infos:
@@ -372,7 +372,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False):
 			
 			# It is mounted. We can directly return this mountpoint.
 			if opts:
-				for opt in opts:
+				for opt in opts.split(","):
 					if not opt in is_mounted(path)["options"]:
 						# It is mounted, but the options are not here
 						# Remount.
@@ -381,13 +381,13 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False):
 			return _mountpoint
 	
 	# Check if the partition is already mounted on another mountpoint.
-	if is_mounted(path):
+	if is_mounted(path) and check:
 		# It is mounted.
 		
 		_mountpoint = is_mounted(path)["mountpoint"]
 		
 		if opts:
-			for opt in opts:
+			for opt in opts.split(","):
 				if not opt in is_mounted(path)["options"]:
 					# It is mounted, but the options are not here
 					# Remount.
