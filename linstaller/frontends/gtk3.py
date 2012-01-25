@@ -179,6 +179,64 @@ class Frontend:
 		
 		self.window = self.InstallerWindow(self)
 		self.window.show_all()
+		
+		# Error handler
+		self.error_handler = {}
+		# Steps (if not all required steps are fullfilled, an hold header will show)
+		self.steps = []
+		# Completed steps (to match the above)
+		self.completed_steps = []
+
+	def error_check(self):
+		""" Checks for errors, and handles header and button sensivity
+		changes accordingly. """
+		
+		output = []
+		
+		if len(self.error_handler) != 0:
+			# Something went wrong
+			for key, value in self.error_handler.items():
+				output.append(value)
+		
+			self.window.set_header("error", _("You can't continue."), "\n".join(output))
+		else:
+			if self.steps_completed:
+				self.window.set_header("ok", _("You can continue."), _("Press the next button to continue."))
+			else:
+				self.window.set_header("hold", _("You can't continue."), _("Please set"))
+
+	@property
+	def steps_completed(self):
+		""" Returns True if the user has completed all required steps.
+		Otherwise, it returns False."""
+				
+		for step in self.steps:
+			if not step in self.completed_steps:
+				return False
+		
+		return True
+	
+	def step_complete(self, step):
+		""" Marks a step as complete. """
+		
+		if not step in self.completed_steps:
+			self.completed_steps.append(step)
+	
+	def step_incomplete(self, step):
+		""" Removes a step from completed_steps. """
+		
+		if step in self.completed_steps:
+			self.completed_steps.remove(step)
+	
+	def error_add(self, step, error):
+		""" Adds an error to self.error_handler. """
+		
+		self.error_handler[step] = error
+	
+	def error_remove(self, step):
+		""" Removes an error from self.error_handler. """
+		
+		if step in self.error_handler: del self.error_handler[step]
 	
 	def end(self):
 		""" close frontend and parents. """

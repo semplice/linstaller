@@ -8,8 +8,10 @@ linstaller (2.10.6-1) pulse; urgency=low
   * partdisks: inst: do not require "changed" from frontend.
   * partdisks: inst: bind-mount /dev, /sys and /proc (moved from
     unsquash).
+  * frontends/gtk3: errors and steps handling.
+  * userhost: gtk3 frontend: completed.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Jan 2012 23:40:30 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 25 Jan 2012 17:26:13 +0100
 
 linstaller (2.10.5-1) pulse; urgency=low
 
