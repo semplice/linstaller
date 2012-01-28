@@ -12,7 +12,7 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose,root_check
 
 class Frontend(gtk3.Frontend):
-	def start(self):
+	def gtk_start(self):
 		""" Start the frontend """
 		
 		# Check if we are root...
@@ -28,6 +28,5 @@ class Frontend(gtk3.Frontend):
 		self.window.text_new()
 		
 		self.window.reset_position()
-		gtk3.Gtk.main()
 
 		verbose("Starting installation prompts.")

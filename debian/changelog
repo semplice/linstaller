@@ -10,8 +10,13 @@ linstaller (2.10.6-1) pulse; urgency=low
     unsquash).
   * frontends/gtk3: errors and steps handling.
   * userhost: gtk3 frontend: completed.
+  * frontends/gtk3: exit from the loop via a thread; fixed button sequence;
+    line_wrap on new text; new section object (doesn't work); fixed
+    reset_position; override start action: modules should use the gtk_start
+    function instead.
+  * userhost: gtk3 frontend: use section (doesn't work).
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 25 Jan 2012 17:26:13 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 28 Jan 2012 22:23:30 +0100
 
 linstaller (2.10.5-1) pulse; urgency=low
 

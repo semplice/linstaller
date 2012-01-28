@@ -9,6 +9,8 @@ import getpass
 
 from gi.repository import Gtk, Gdk
 
+import threading
+
 import linstaller.core.main as m
 from linstaller.core.main import warn,info,verbose
 
@@ -21,8 +23,26 @@ head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_
 
 class Frontend:
 	class InstallerWindow(Gtk.Window):
+		class bye_bye_gtk(threading.Thread):
+			def __init__(self, window):
+				self.window = window
+				
+				threading.Thread.__init__(self)
+
+			def run(self):
+				""" Workaround to exit from the gtk loop to avoid multiple windows. """
+				
+				self.window.destroy()
+				Gtk.main_quit()
+				
 		def __init__(self, frontend, header=False):
 			""" Initialize the InstallerWindow. """
+			
+			# Window status
+			self.window_status = False
+			
+			# Not resizable
+			self.set_resizable(False)
 			
 			Gtk.Window.__init__(self, title=header)
 			
@@ -43,9 +63,10 @@ class Frontend:
 			self.button_back.connect("clicked",self.on_back)
 			
 			self.button_box = Gtk.ButtonBox()
+			self.button_box.set_layout(Gtk.ButtonBoxStyle.END)
 			self.button_box.pack_start(self.button_cancel, True, True, 0)
-			self.button_box.pack_start(self.button_next, True, True, 0)
 			self.button_box.pack_start(self.button_back, True, True, 0)
+			self.button_box.pack_start(self.button_next, True, True, 0)
 			
 			# Create another vbox, on which put the header.
 			self.page_vbox = Gtk.VBox()	
@@ -57,6 +78,7 @@ class Frontend:
 			# Create the header.
 			self.header_eventbox = Gtk.EventBox()
 			self.header = Gtk.HBox()
+			self.header.set_homogeneous(False)
 			self.header_icon = Gtk.Image()
 			self.header_message_container = Gtk.VBox()
 			self.header_message_title = Gtk.Label()
@@ -96,10 +118,29 @@ class Frontend:
 			""" Adds new text to the page_vbox. """
 			
 			text = Gtk.Label()
+			text.set_line_wrap(True)
 			text.set_markup(string)
+			text.set_justify(Gtk.Justification.LEFT)
 			text.show()
 			
 			self.page_vbox.pack_start(text, True, True, 0)
+		
+		def section(self, title, objects):
+			""" Adds a new section and reparents the objects there. """
+			
+			section = Gtk.Frame()
+			section.show()
+			
+			# New VBox
+			vbox = Gtk.VBox()
+			vbox.show()
+			
+			section.add(vbox)
+			
+			# Reparent objects
+			for obj in objects:
+				obj.reparent(vbox)
+				vbox.pack_start(obj, True, True, 0)
 		
 		def entry(self, string, password=False):
 			""" Adds a new entry to the page_vbox. """
@@ -156,19 +197,21 @@ class Frontend:
 		def reset_position(self):
 			""" Resets the window position. """
 			
-			self.set_position(Gtk.WindowPosition.CENTER)
+			self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+			self.resize(480,200)
 
 		def on_cancel(self, button, other=None):
 			Gtk.main_quit()
 			self.frontend.end()
 		
 		def on_back(self, button):
-			Gtk.main_quit()
-			return "back"
+			bye = self.bye_bye_gtk(self)
+			bye.start()
+			self.window_status = "back"
 		
 		def on_next(self, button):
-			Gtk.main_quit()
-			return
+			bye = self.bye_bye_gtk(self)
+			bye.start()
 
 	
 	def __init__(self, moduleclass):
@@ -186,6 +229,26 @@ class Frontend:
 		self.steps = []
 		# Completed steps (to match the above)
 		self.completed_steps = []
+
+	def start(self):
+		""" Wrapper around the gtk3 frontend startup.
+		GTK3 modules must use gtk_start instead of this.
+		"""
+		
+		# Add objects
+		self.gtk_start()
+		
+		# Reset
+		self.window.reset_position()
+		
+		# Launch loop
+		Gtk.main()
+		
+		# Return status
+		if not self.window.window_status:
+			return
+		else:
+			return self.window.window_status
 
 	def error_check(self):
 		""" Checks for errors, and handles header and button sensivity

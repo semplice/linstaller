@@ -12,7 +12,7 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose
 
 class Frontend(gtk3.Frontend):
-	def start(self):
+	def gtk_start(self):
 		""" Start the frontend """
 		
 		# Set the steps
@@ -23,6 +23,7 @@ class Frontend(gtk3.Frontend):
 		# Initial user
 		self.userfullname_container, self.userfullname = self.window.entry(_("New user's full name (e.g. John Doe)"))
 		self.username_container, self.username = self.window.entry(_("%s's username (no spaces; e.g: john)") % self.settings["userfullname"])
+		self.window.section(_("User"), [self.userfullname_container, self.username_container])
 		self.window.text_new()
 		
 		# Passwords
@@ -91,7 +92,6 @@ class Frontend(gtk3.Frontend):
 		self.root_password2.connect("changed", self.on_root_password_change)
 		self.hostname.connect("changed", self.on_hostname_change)
 				
-		gtk3.Gtk.main()
 		
 	def on_userfullname_change(self, obj):
 		""" Handles userfullname change. """
