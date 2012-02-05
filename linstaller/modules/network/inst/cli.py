@@ -18,7 +18,7 @@ class Frontend(cli.Frontend):
 		verbose("Configuring networking...")
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Configuring networking:"), 1)
+		progress = self.progressbar(_("Configuring networking:"), 2)
 
 		# Start progressbar
 		progress.start()
@@ -31,6 +31,9 @@ class Frontend(cli.Frontend):
 		finally:
 			# Exit
 			self.moduleclass.install.close()
+			# Copy resolv.conf
+			self.moduleclass.install.copy_resolvconf()
+			progress.update(2)
 		
 		progress.finish()
 

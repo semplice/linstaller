@@ -1,3 +1,12 @@
+linstaller (2.10.7-1) pulse; urgency=low
+
+  * config/semplice-base: execute network.inst too
+  * modules/network: copy host's resolv.conf to the target
+  * modules/mirrorselect: correctly close the chroot if the prechecks
+    returns False.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 05 Feb 2012 19:47:04 +0100
+
 linstaller (2.10.6-1) pulse; urgency=low
 
   * linstaller.py: populate modules_settings from the inline

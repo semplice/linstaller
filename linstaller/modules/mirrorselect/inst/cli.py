@@ -19,12 +19,6 @@ class Frontend(cli.Frontend):
 		sets = self.moduleclass.modules_settings["mirrorselect"]["sets"].split(" ")
 		check = self.moduleclass.modules_settings["mirrorselect"]["check"]
 
-		if check == None:
-			return # Should not check
-
-		if not self.moduleclass.install.prechecks():
-			return # We can't continue.
-
 		# Get a progressbar
 		progress = self.progressbar(_("Selecting mirrors:"), len(sets))
 
@@ -32,6 +26,12 @@ class Frontend(cli.Frontend):
 		progress.start()
 		
 		try:
+			if check == None:
+				return # Should not check
+
+			if not self.moduleclass.install.prechecks():
+				return # We can't continue.
+
 			num = 0
 			for set in sets:
 				num += 1
