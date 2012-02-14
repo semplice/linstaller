@@ -43,6 +43,9 @@ proc   /proc   proc   defaults   0   0
 					opts = "sw"
 					mountpoint = "none"
 					filesystem = "swap"
+				elif filesystem == "vfat":
+					# FAT partition, needs special opts.
+					opts = "auto,users,rw,quiet,umask=000,shortname=lower"
 				else:
 					# Normal partition.
 					opts = "defaults"
