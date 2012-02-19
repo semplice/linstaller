@@ -15,6 +15,10 @@ class Install(module.Install):
 		
 		if os.path.exists("/etc/linstaller/"):
 			shutil.rmtree("/etc/linstaller/")
+		
+		# Remove too /linstaller directory that may have been created on target after some strange behaviour
+		if os.path.exists("/linstaller"):
+			shutil.rmtree("/linstaller")
 
 class Module(module.Module):
 	def start(self):

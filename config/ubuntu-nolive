@@ -1,0 +1,20 @@
+## NOLIVE LINSTALLER CONFIGURATION FILE FOR UBUNTU
+
+[linstaller:extends]
+source = ubuntu
+
+[module:partdisks]
+# Do not format swap
+swap_noformat = True
+
+[module:unsquash]
+# This only works if using the mount_nolive.sh script
+image = /linstaller/source/casper/filesystem.squashfs
+
+[module:debian]
+# This only works if using the mount_nolive.sh script
+remove = /linstaller/source/casper/filesystem.manifest-remove
+
+# Ubuntu live kernel
+[module:ubuntu]
+kernel = /linstaller/source/casper/vmlinuz

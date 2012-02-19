@@ -48,8 +48,22 @@ Description: Modular GNU/Linux distribution installer -- base modules
  This package contains the base modules needed to install a Semplice
  System.
 
+Package: linstaller-modules-ubuntu
+Architecture: all
+Depends: linstaller (= ${binary:Version}), python-apt
+Description: Modular GNU/Linux distribution installer -- ubuntu support modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the modules needed to install an ubuntu-based
+ distribution.
+
 Package: linstaller-config-semplice
 Architecture: all
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version})
 Description: Modular GNU/Linux distribution installer -- semplice configuration
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
@@ -59,6 +73,20 @@ Description: Modular GNU/Linux distribution installer -- semplice configuration
  .
  This package contains the linstaller configuration files to
  install Semplice Linux.
+
+Package: linstaller-config-ubuntu
+Architecture: all
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-ubuntu (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- ubuntu configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install an Ubuntu-based distribution.
+
 
 Package: alan-ext-linstaller
 Architecture: all

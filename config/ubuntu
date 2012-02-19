@@ -1,0 +1,32 @@
+## UBUNTU CONFIGURATION FILE FOR LINSTALLER
+## Tested: Ubuntu 12.04.
+
+[linstaller]
+distribution = Ubuntu
+modules = welcome.front language.front update.front timezone.front userhost.front partdisks.front bootloader.front summary.front partdisks.inst unsquash.inst language.inst timezone.inst userhost.inst fstab.inst network.inst debian.inst ubuntu.inst clean.inst bootloader.inst end.front
+special = partdisks.inst unsquash.inst
+
+[module:unsquash]
+image = /cdrom/casper/filesystem.squashfs
+
+[module:debian]
+remove = /cdrom/casper/filesystem.manifest-remove
+
+[module:update]
+packages = linstaller linstaller-frontend-cli linstaller-modules-base linstaller-modules-ubuntu linstaller-config-ubuntu
+
+# Do not ask for language, use the system's one instead.
+[module:language]
+ask = False
+
+# Disable root
+[module:userhost]
+root = None
+
+# We support only grub currently
+[module:bootloader]
+bootloader = grub
+
+# Ubuntu live kernel
+[module:ubuntu]
+kernel = /cdrom/casper/vmlinuz

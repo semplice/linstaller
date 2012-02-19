@@ -17,7 +17,12 @@ class Install(module.Install):
 		""" Gets the number of the packages to be removed. """
 		
 		return len(self.moduleclass.packages)
+	
+	def configure(self):
+		""" Runs dpkg --configure -a. """
 		
+		m.sexec("dpkg --configure -a")
+	
 	def remove(self, pkg):
 		""" Removes pkg. """
 		

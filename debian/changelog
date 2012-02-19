@@ -1,8 +1,18 @@
 linstaller (2.11.0-1) pulse; urgency=low
 
   * fstab: fixed automounting of vfat partitions.
+  * config/: added ubuntu and ubuntu-nolive configurations.
+  * modules/clean: search for /linstaller in target and, if any, delete it
+  * modules/debian: ensure dpkg is configured before starting removing pkgs
+  * modules/ubuntu: added, recompiles python modules and copies the kernel
+    from the image.
+  * setup.py: ship the ubuntu module.
+  * debian/:
+    - Added linstaller-config-ubuntu package
+    - Added linstaller-modules-ubuntu package
+    - linstaller-config-semplice now depends on linstaller and modules-base
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Feb 2012 23:53:47 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 12:18:41 +0100
 
 linstaller (2.10.7-1) pulse; urgency=low
 

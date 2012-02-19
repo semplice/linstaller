@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# linstaller debian module install - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# linstaller ubuntu module install - (C) 2012 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
@@ -10,32 +10,33 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
 
-# NOTE: This is a debian-specific module.
+# NOTE: This is a ubuntu-specific module.
 
 class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
-
-		verbose("Removing live-specific packages...")
-		
+				
 		# Get a progressbar
-		progress = self.progressbar(_("Removing live-specific packages:"), self.moduleclass.install.get())
+		progress = self.progressbar(_("Configuring the final system:"), 2)
 
 		# Start progressbar
 		progress.start()
+		
+		# Copy kernel
+		#verbose("Copying kernel...")
+		#self.moduleclass.copy_kernel()
+		#progress.update(1)
 
 		try:
-			# Configure
-			self.moduleclass.install.configure()
+			# Set kernel and initramfs
+			verbose("Configuring kernel...")
+			self.moduleclass.install.set_kernel()
+			progress.update(1)
 			
-			num = 0
-			for pkg in self.moduleclass.packages:
-				num += 1
-				verbose("  Removing %s" % pkg)
-				
-				# Remove package
-				self.moduleclass.install.remove(pkg)
-				progress.update(num)
+			# Recompile python modules
+			verbose("Recompiling python modules...")
+			self.moduleclass.install.configure_python()
+			progress.update(2)
 		finally:
 			# Exit
 			self.moduleclass.install.close()
