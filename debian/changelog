@@ -4,8 +4,9 @@ linstaller (2.0.2~pre1-1) emily; urgency=low
   * modules/fstab: handle mountpoints not handled by partdisks
   * modules/partdisks: inst: sort partition list by mountpoint; when revert(),
     use the reverse of "used".
+  * config/semplice-base: move fstab.inst before end.front.
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:33:41 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:34:12 +0100
 
 linstaller (2.0.1~pre2.1-1) emily; urgency=low
 
