@@ -1,3 +1,9 @@
+linstaller (2.11.1-1) pulse; urgency=low
+
+  * setup.py: ship ubuntu and ubuntu-nolive configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:22:31 +0100
+
 linstaller (2.11.0-1) pulse; urgency=low
 
   * fstab: fixed automounting of vfat partitions.
