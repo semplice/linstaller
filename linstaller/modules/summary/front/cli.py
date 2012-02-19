@@ -8,7 +8,7 @@ import linstaller.frontends.cli as cli
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-from linstaller.core.main import warn,info,verbose
+from linstaller.core.main import warn,info,verbose,bold
 
 class Frontend(cli.Frontend):
 	def start(self):
@@ -16,12 +16,27 @@ class Frontend(cli.Frontend):
 		
 		self.header(_("Summary"))
 				
-		print(_("%(distroname)s will be installed in %(rootpartition)s.") % {"distroname":self.moduleclass.main_settings["distro"], "rootpartition":self.moduleclass.modules_settings["partdisks"]["root"]})
-		print(_("%(swappartition)s will be used as swap.") % {"swappartition":self.moduleclass.modules_settings["partdisks"]["swap"]})
+		# Parse changed partitions
+		print(_("These partitions will be used:") + "\n")
+		changed = self.moduleclass.modules_settings["partdisks"]["changed"]
+		for obj, value in changed.items():
+			fs = value["obj"].fileSystem.type
+			mountpoint = value["changes"]["useas"]
+			
+			# If /, tell the user that the distribution will be installed here
+			if mountpoint == "/":
+				text = ": " + bold(_("%(distroname)s will be installed here.") % {"distroname":self.moduleclass.main_settings["distro"]})
+			else:
+				text = ""
+			
+			print(_(" - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s") % {"part":obj, "filesystem":fs, "mountpoint":mountpoint, "text":text})
+		
+		#print(_("%(distroname)s will be installed in %(rootpartition)s.") % {"distroname":self.moduleclass.main_settings["distro"], "rootpartition":self.moduleclass.modules_settings["partdisks"]["root"]})
+		#print(_("%(swappartition)s will be used as swap.") % {"swappartition":self.moduleclass.modules_settings["partdisks"]["swap"]})
 		print
 		
 		print(_("The default locale will be %(locale)s.") % {"locale":self.moduleclass.modules_settings["language"]["language"]})
-		print(_("The default keyboard layout will be %(layout)s") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
+		print(_("The default keyboard layout will be %(layout)s.") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
 		print
 		
 		print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})

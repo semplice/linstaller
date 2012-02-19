@@ -11,8 +11,9 @@ linstaller (2.11.0-1) pulse; urgency=low
     - Added linstaller-config-ubuntu package
     - Added linstaller-modules-ubuntu package
     - linstaller-config-semplice now depends on linstaller and modules-base
+  * modules/summary: print all changed partitions instead of only / and swap
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 12:18:41 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 13:58:25 +0100
 
 linstaller (2.10.7-1) pulse; urgency=low
 

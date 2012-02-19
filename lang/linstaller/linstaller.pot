@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 16:57+0100\n"
+"POT-Creation-Date: 2012-02-19 13:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,47 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/cli.py:90
-#: linstaller/frontends/gtk3.py:211
+#: linstaller/frontends/gtk3.py:332
 msgid "You must insert something!"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:108 linstaller/frontends/cli.py:108
-#: linstaller/frontends/gtk3.py:229
+#: linstaller/frontends/gtk3.py:350
 msgid "[Y/n]"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:111 linstaller/frontends/cli.py:111
-#: linstaller/frontends/gtk3.py:232
+#: linstaller/frontends/gtk3.py:353
 msgid "[y/N]"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:114 linstaller/frontends/cli.py:114
-#: linstaller/frontends/gtk3.py:235
+#: linstaller/frontends/gtk3.py:356
 msgid "[y/n]"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:129 linstaller/frontends/cli.py:129
-#: linstaller/frontends/gtk3.py:250
+#: linstaller/frontends/gtk3.py:371
 msgid "y"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:132 linstaller/frontends/cli.py:132
-#: linstaller/frontends/gtk3.py:253
+#: linstaller/frontends/gtk3.py:374
 msgid "n"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:135 linstaller/frontends/cli.py:135
-#: linstaller/frontends/gtk3.py:256
+#: linstaller/frontends/gtk3.py:377
 msgid "yes"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:138 linstaller/frontends/cli.py:138
-#: linstaller/frontends/gtk3.py:259
+#: linstaller/frontends/gtk3.py:380
 msgid "no"
 msgstr ""
 
 #: linstaller/core/cli_frontend.py:143 linstaller/frontends/cli.py:143
-#: linstaller/frontends/gtk3.py:264
+#: linstaller/frontends/gtk3.py:385
 #, python-format
 msgid "Unknown value %s. Please re-try."
 msgstr ""
@@ -67,11 +67,11 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:471
 #: linstaller/modules/partdisks/front/cli.py:533
 #: linstaller/modules/partdisks/front/cli.py:932
-#: linstaller/frontends/cli.py:155 linstaller/frontends/gtk3.py:276
+#: linstaller/frontends/cli.py:155 linstaller/frontends/gtk3.py:397
 msgid "Please insert your action here"
 msgstr ""
 
-#: linstaller/modules/mirrorselect/inst/cli.py:29
+#: linstaller/modules/mirrorselect/inst/cli.py:23
 msgid "Selecting mirrors:"
 msgstr ""
 
@@ -106,57 +106,61 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:19
-#, python-format
-msgid "%(distroname)s will be installed in %(rootpartition)s."
-msgstr ""
-
 #: linstaller/modules/summary/front/cli.py:20
-#, python-format
-msgid "%(swappartition)s will be used as swap."
+msgid "These partitions will be used:"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:23
+#: linstaller/modules/summary/front/cli.py:28
 #, python-format
-msgid "The default locale will be %(locale)s."
-msgstr ""
-
-#: linstaller/modules/summary/front/cli.py:24
-#, python-format
-msgid "The default keyboard layout will be %(layout)s"
-msgstr ""
-
-#: linstaller/modules/summary/front/cli.py:27
-#, python-format
-msgid "The main user will be %(userfullname)s (%(username)s)."
-msgstr ""
-
-#: linstaller/modules/summary/front/cli.py:30
-msgid "Root account is enabled."
-msgstr ""
-
-#: linstaller/modules/summary/front/cli.py:31
-#, python-format
-msgid "The computer hostname will be %(hostname)s."
+msgid "%(distroname)s will be installed here."
 msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:32
 #, python-format
+msgid " - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s"
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:38
+#, python-format
+msgid "The default locale will be %(locale)s."
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:39
+#, python-format
+msgid "The default keyboard layout will be %(layout)s."
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:42
+#, python-format
+msgid "The main user will be %(userfullname)s (%(username)s)."
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:45
+msgid "Root account is enabled."
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:46
+#, python-format
+msgid "The computer hostname will be %(hostname)s."
+msgstr ""
+
+#: linstaller/modules/summary/front/cli.py:47
+#, python-format
 msgid "The machine will use this timezone: %(timezone)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:35
+#: linstaller/modules/summary/front/cli.py:50
 #, python-format
 msgid ""
 "The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:39
+#: linstaller/modules/summary/front/cli.py:54
 #: linstaller/modules/partdisks/front/cli.py:272
 msgid "Do you really want to continue?"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:44
+#: linstaller/modules/summary/front/cli.py:59
 msgid "Installing..."
 msgstr ""
 
@@ -169,79 +173,88 @@ msgid "Creating user:"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:18
-#: linstaller/modules/userhost/front/gtk3.py:18
+#: linstaller/modules/userhost/front/gtk3.py:21
 msgid "Users & Hostname"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:22
-#: linstaller/modules/userhost/front/gtk3.py:21
-#: linstaller/modules/userhost/front/gtk3.py:141
+#: linstaller/modules/userhost/front/gtk3.py:24
 msgid "New user's full name (e.g. John Doe)"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:24
-#: linstaller/modules/userhost/front/gtk3.py:22
-#: linstaller/modules/userhost/front/gtk3.py:143
+#: linstaller/modules/userhost/front/gtk3.py:25
 #, python-format
 msgid "%s's username (no spaces; e.g: john)"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:31
-#: linstaller/modules/userhost/front/gtk3.py:26
-#: linstaller/modules/userhost/front/gtk3.py:150
+#: linstaller/modules/userhost/front/gtk3.py:30
 #, python-format
 msgid "%s's password"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:39
-#: linstaller/modules/userhost/front/gtk3.py:33
-#: linstaller/modules/userhost/front/gtk3.py:158
+#: linstaller/modules/userhost/front/gtk3.py:37
 msgid "Do you want to enable root account?"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:43
-#: linstaller/modules/userhost/front/gtk3.py:34
-#: linstaller/modules/userhost/front/gtk3.py:162
+#: linstaller/modules/userhost/front/gtk3.py:38
 msgid "root's password"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:57
-#: linstaller/modules/userhost/front/gtk3.py:40
-#: linstaller/modules/userhost/front/gtk3.py:176
+#: linstaller/modules/userhost/front/gtk3.py:44
 msgid "Computer's name (e.g. johndesktop)"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:77
-#: linstaller/modules/userhost/front/gtk3.py:196
 #, python-format
 msgid "You can't use these chars in the %s, please re-try: "
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:87
+#: linstaller/modules/userhost/front/gtk3.py:143
 #, python-format
 msgid "The password should be composed of at least %s charchters."
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:89
-#: linstaller/modules/userhost/front/gtk3.py:209
-#: linstaller/frontends/gtk3.py:132
+#: linstaller/frontends/gtk3.py:173
 msgid " (again)"
 msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:93
+#: linstaller/modules/userhost/front/gtk3.py:145
 msgid "The passwords doesn't match! Please retry."
 msgstr ""
 
-#: linstaller/modules/userhost/front/gtk3.py:18
+#: linstaller/modules/userhost/front/gtk3.py:21
 msgid "Set users and hostname"
 msgstr ""
 
-#: linstaller/modules/userhost/front/gtk3.py:207
-msgid "The password should be composed of at least six charchters."
+#: linstaller/modules/userhost/front/gtk3.py:26
+msgid "User"
 msgstr ""
 
-#: linstaller/modules/userhost/front/gtk3.py:213
-msgid "The passwords don't match! Please retry."
+#: linstaller/modules/userhost/front/gtk3.py:115
+#, python-format
+msgid "You can't use %s in the username"
+msgstr ""
+
+#: linstaller/modules/userhost/front/gtk3.py:180
+#, python-format
+msgid "The root password should be composed of at least %s charchters."
+msgstr ""
+
+#: linstaller/modules/userhost/front/gtk3.py:182
+msgid "The root passwords doesn't match! Please retry."
+msgstr ""
+
+#: linstaller/modules/userhost/front/gtk3.py:200
+#, python-format
+msgid "You can't use %s in the hostname"
 msgstr ""
 
 #: linstaller/modules/network/inst/cli.py:21
@@ -290,6 +303,10 @@ msgstr ""
 #: linstaller/modules/update/front/__init__.py:41
 #, python-format
 msgid "Found version %(version)s of %(package)s."
+msgstr ""
+
+#: linstaller/modules/ubuntu/inst/cli.py:20
+msgid "Configuring the final system:"
 msgstr ""
 
 #: linstaller/modules/language/inst/cli.py:19
@@ -953,6 +970,22 @@ msgstr ""
 
 #: linstaller/modules/bootloader/front/cli.py:42
 msgid "Do you want to install the bootloader into the MBR?"
+msgstr ""
+
+#: linstaller/frontends/gtk3.py:264 linstaller/frontends/gtk3.py:269
+msgid "You can't continue."
+msgstr ""
+
+#: linstaller/frontends/gtk3.py:267
+msgid "You can continue."
+msgstr ""
+
+#: linstaller/frontends/gtk3.py:267
+msgid "Press the next button to continue."
+msgstr ""
+
+#: linstaller/frontends/gtk3.py:269
+msgid "Please set"
 msgstr ""
 
 #: alan/linstaller_alan.py:39
