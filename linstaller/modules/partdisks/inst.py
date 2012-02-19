@@ -38,11 +38,26 @@ class Module(module.Module):
 
 		used = []
 
+		mountpo = []
+		changeslist = {}
+		
+		# Regenerate changed to sort it sanely
 		for key, value in changed.items():
 			if not "useas" in value["changes"]:
 				# There isn't "useas" in changes; skipping this item
 				continue
-			
+
+			mountpo.append(value["changes"]["useas"])
+			changeslist[value["changes"]["useas"]] = key
+		
+		mountpo.sort()
+
+		for point in mountpo:
+			# Get correct partition
+			key = changeslist[point]
+			# Get value
+			value = changed[key]
+
 			# Get useas
 			useas = value["changes"]["useas"]
 			
@@ -94,7 +109,7 @@ class Module(module.Module):
 		
 		# See if "used" was... used :)
 		if "partdisks.inst" in self.modules_settings and "used" in self.modules_settings["partdisks.inst"]:
-			_used = self.modules_settings["partdisks.inst"]["used"]
+			_used = self.modules_settings["partdisks.inst"]["used"].reverse()
 			if _used:
 				for part in _used:
 					if lib.is_mounted(part):

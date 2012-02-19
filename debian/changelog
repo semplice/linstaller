@@ -1,8 +1,11 @@
 linstaller (2.0.2~pre1-1) emily; urgency=low
 
   * fstab: fixed automounting of vfat partitions.
+  * modules/fstab: handle mountpoints not handled by partdisks
+  * modules/partdisks: inst: sort partition list by mountpoint; when revert(),
+    use the reverse of "used".
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Feb 2012 23:52:14 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:33:41 +0100
 
 linstaller (2.0.1~pre2.1-1) emily; urgency=low
 
