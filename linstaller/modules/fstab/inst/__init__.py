@@ -5,7 +5,10 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import linstaller.core.module as module
+import linstaller.core.main as m
+import os
 import commands
+import shutil
 
 class Install(module.Install):
 	def generate(self):
@@ -49,6 +52,28 @@ proc   /proc   proc   defaults   0   0
 				else:
 					# Normal partition.
 					opts = "defaults"
+				
+				# We need to properly set-up mountpoints for partitions which are not formatted but the user asked us
+				# to mount at boot.
+				# The module needs to check if the partition is already mounted (thus handled by partdisks) or, if not,
+				# should check the mountpoint (and if exists, backup it and replace with an empty directory).
+				
+				if not mountpoint in ("/","none","swap"):
+					if not os.path.exists(mountpoint):
+						# Mountpoint doesn't exist, we can directly create it and be fine
+						os.makedirs(mountpoint)
+					elif not os.path.ismount(mountpoint):
+						# Mountpoint exists and is not mounted (if mounted, it's already handled by partdisks)
+						if not os.path.isdir(mountpoint):
+							# Is the user unlucky? :) This should never happen in real use.
+							raise m.UserError(_("mountpoint %s exists and it isn't a directory. Please change the mountpoint path.") % mountpoint)
+						
+						# The mountpoint exists and it's a directory. Check if it's empty.
+						if len(os.listdir(mountpoint)) != 0:
+							# It isn't. We need to backup it and create another mountpoint.
+							shutil.move(mountpoint, "%s.linstaller_backup" % mountpoint)
+							os.makedirs(mountpoint)
+						# If it's empty, we are fine.
 				
 				fstab.write("# %(drive)s\nUUID=%(uuid)s   %(mpoint)s   %(filesystem)s   %(opts)s   0   0\n" % {"drive":key, "uuid":UUID, "mpoint":mountpoint, "filesystem":filesystem, "opts":opts})
 			

@@ -20,16 +20,19 @@ class Frontend(cli.Frontend):
 		print(_("These partitions will be used:") + "\n")
 		changed = self.moduleclass.modules_settings["partdisks"]["changed"]
 		for obj, value in changed.items():
-			fs = value["obj"].fileSystem.type
-			mountpoint = value["changes"]["useas"]
-			
-			# If /, tell the user that the distribution will be installed here
-			if mountpoint == "/":
-				text = ": " + bold(_("%(distroname)s will be installed here.") % {"distroname":self.moduleclass.main_settings["distro"]})
-			else:
-				text = ""
-			
-			print(_(" - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s") % {"part":obj, "filesystem":fs, "mountpoint":mountpoint, "text":text})
+			try:
+				fs = value["obj"].fileSystem.type
+				mountpoint = value["changes"]["useas"]
+				
+				# If /, tell the user that the distribution will be installed here
+				if mountpoint == "/":
+					text = ": " + bold(_("%(distroname)s will be installed here.") % {"distroname":self.moduleclass.main_settings["distro"]})
+				else:
+					text = ""
+				
+				print(_(" - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s") % {"part":obj, "filesystem":fs, "mountpoint":mountpoint, "text":text})
+			except:
+				verbose("Unable to print details for %s" % obj)
 		
 		#print(_("%(distroname)s will be installed in %(rootpartition)s.") % {"distroname":self.moduleclass.main_settings["distro"], "rootpartition":self.moduleclass.modules_settings["partdisks"]["root"]})
 		#print(_("%(swappartition)s will be used as swap.") % {"swappartition":self.moduleclass.modules_settings["partdisks"]["swap"]})

@@ -12,8 +12,11 @@ linstaller (2.11.0-1) pulse; urgency=low
     - Added linstaller-modules-ubuntu package
     - linstaller-config-semplice now depends on linstaller and modules-base
   * modules/summary: print all changed partitions instead of only / and swap
+  * modules/fstab: handle mountpoints not handled by partdisks
+  * modules/partdisks: inst: sort partition list by mountpoint; when revert(),
+    use the reverse of "used".
 
- -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 13:58:25 +0100
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:14:02 +0100
 
 linstaller (2.10.7-1) pulse; urgency=low
 

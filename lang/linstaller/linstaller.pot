@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-19 13:58+0100\n"
+"POT-Creation-Date: 2012-02-19 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,57 +110,57 @@ msgstr ""
 msgid "These partitions will be used:"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:28
+#: linstaller/modules/summary/front/cli.py:29
 #, python-format
 msgid "%(distroname)s will be installed here."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:32
+#: linstaller/modules/summary/front/cli.py:33
 #, python-format
 msgid " - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:38
+#: linstaller/modules/summary/front/cli.py:41
 #, python-format
 msgid "The default locale will be %(locale)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:39
+#: linstaller/modules/summary/front/cli.py:42
 #, python-format
 msgid "The default keyboard layout will be %(layout)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:42
+#: linstaller/modules/summary/front/cli.py:45
 #, python-format
 msgid "The main user will be %(userfullname)s (%(username)s)."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:45
+#: linstaller/modules/summary/front/cli.py:48
 msgid "Root account is enabled."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:46
+#: linstaller/modules/summary/front/cli.py:49
 #, python-format
 msgid "The computer hostname will be %(hostname)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:47
+#: linstaller/modules/summary/front/cli.py:50
 #, python-format
 msgid "The machine will use this timezone: %(timezone)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:50
+#: linstaller/modules/summary/front/cli.py:53
 #, python-format
 msgid ""
 "The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s."
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:54
+#: linstaller/modules/summary/front/cli.py:57
 #: linstaller/modules/partdisks/front/cli.py:272
 msgid "Do you really want to continue?"
 msgstr ""
 
-#: linstaller/modules/summary/front/cli.py:59
+#: linstaller/modules/summary/front/cli.py:62
 msgid "Installing..."
 msgstr ""
 
@@ -891,6 +891,13 @@ msgstr ""
 
 #: linstaller/modules/fstab/inst/cli.py:20
 msgid "Configuring fstab:"
+msgstr ""
+
+#: linstaller/modules/fstab/inst/__init__.py:69
+#, python-format
+msgid ""
+"mountpoint %s exists and it isn't a directory. Please change the mountpoint "
+"path."
 msgstr ""
 
 #: linstaller/modules/timezone/inst/cli.py:18
