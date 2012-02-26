@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.net
+
+[linstaller.master]
+file_filter = lang/linstaller/<lang>.po
+source_file = lang/linstaller/linstaller.pot
+source_lang = en
+type = PO
