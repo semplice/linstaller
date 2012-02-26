@@ -1,3 +1,9 @@
+linstaller (2.11.2-1) pulse; urgency=low
+
+  * Switched to GIT.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 26 Feb 2012 23:26:27 +0100
+
 linstaller (2.11.1-1) pulse; urgency=low
 
   * setup.py: ship ubuntu and ubuntu-nolive configs.
