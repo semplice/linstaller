@@ -1,3 +1,9 @@
+linstaller (2.0.2~pre1.1-1) emily; urgency=low
+
+  * setup.py: set version accordingly.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 27 Feb 2012 20:21:21 +0100
+
 linstaller (2.0.2~pre1-1) emily; urgency=low
 
   * fstab: fixed automounting of vfat partitions.
