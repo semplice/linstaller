@@ -1,2 +1,0 @@
-live-config/configs/*	/etc/live/config.conf.d
-live-config/scripts/*	/lib/live/config
