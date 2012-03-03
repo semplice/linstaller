@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-# partdisks library. - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# partdisks library. - (C) 2011-12 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import parted as p
+import _ped
 import linstaller.core.main as m
 import operator
 import os
@@ -42,6 +43,11 @@ supported = {
 supported_tables = {
 	"mbr" : "msdos",
 }
+
+flags = {
+	"boot":_ped.PARTITION_BOOT,
+}
+
 
 def is_disk(dsk):
 	""" Checks if dsk is a disk. Returns True if so.
@@ -164,6 +170,35 @@ def restore_devices():
 	global disks
 	
 	devices, disks = return_devices()
+
+def return_partition(partition):
+	""" Returns a partition object which matches 'partition' """
+	
+	# Strip /dev/, if any
+	partition = partition.replace("/dev/","")
+	
+	# Get device
+	dev = return_device(partition)
+	dev = disks[dev]
+	
+	# Search for partition
+	for part in dev._partitions:
+		if part.path == "/dev/%s" % partition:
+			# Found.
+			return part
+	
+	# If we are here, nothing found.
+	return None
+
+def setFlag(partition, flag):
+	""" Sets the specified flag into the partition (which must be a parted.Partition object) """
+	
+	return partition.setFlag(flags[flag])
+
+def unsetFlag(partition, flag):
+	""" Unsets the specified flag into the partition (which must be a parted.Partition object) """
+	
+	return partition.unsetFlag(flags[flag])
 
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """

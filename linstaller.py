@@ -23,8 +23,12 @@ def launch_module(module, special):
 
 	global reboot
 	
+	mname = module.split(".")
+	del mname[-1]
+	mname = ".".join(mname)
+	
 	# Adjust cfg.module to read "module:<modulename>"
-	cfg.module = "module:%s" % module.split(".")[0]
+	cfg.module = "module:%s" % mname
 
 	# Start module
 	try:
@@ -61,7 +65,7 @@ def launch_module(module, special):
 	# Update modules_settings
 	if not module.split(".")[-1] == "inst":
 		# Frontend. Add only the module name
-		modules_settings[module.split(".")[0]] = modclass.return_settings()
+		modules_settings[mname] = modclass.return_settings()
 	else:
 		# .inst module. Add it anyway, but with ".inst"
 		modules_settings[module] = modclass.return_settings()
