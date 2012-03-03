@@ -9,6 +9,7 @@ import _ped
 import linstaller.core.main as m
 import operator
 import os
+import commands
 
 from linstaller.core.main import info,warn,verbose
 
@@ -110,7 +111,7 @@ def return_device(dev):
 	
 	return dev
 
-def return_devices():
+def return_devices(onlyusb=False):
 	""" Returns a list of devices. """
 	
 	# We will check /proc/partitions.
@@ -141,6 +142,13 @@ def return_devices():
 					# Deal with invalid partition tables
 					verbose("Unable to obtain a disk object of /dev/%s - No partition table?" % device)
 					disks[device] = "notable"
+				
+				if onlyusb:
+					# Check if it is an usb device...
+					if commands.getoutput("udevadm info --query=property -n /dev/%s | grep ID_BUS" % device) != "ID_BUS=usb":
+						# It isn't. Remove.
+						del devices[device]
+						del disks[device]
 			
 	return devices, disks
 
@@ -163,13 +171,13 @@ def device_sort(dct):
 	
 	return lst, dct
 
-def restore_devices():
+def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
 	
 	global devices
 	global disks
 	
-	devices, disks = return_devices()
+	devices, disks = return_devices(onlyusb=onlyusb)
 
 def return_partition(partition):
 	""" Returns a partition object which matches 'partition' """

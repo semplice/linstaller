@@ -24,6 +24,11 @@ class Frontend(cli.Frontend):
 		#self.devices, self.disks = lib.return_devices() # Obtain devices
 		self.devices, self.disks = lib.devices, lib.disks
 
+		if self.settings["onlyusb"]:
+			self.onlyusb = True # Keep track of onlyusb
+			# Only usb, we need to rebuild devices.
+			lib.restore_devices(onlyusb=True)
+
 		self.touched = {}
 		self.changed = {}
 
@@ -92,17 +97,22 @@ class Frontend(cli.Frontend):
 
 			# Skip to next module
 			return
-
-		self.print_devices_partitions()
 		
-		res = self.question(_("Do you want to change the partition table?"), default=False)
-		if res:
-			# We should change partition structure.
-			res = self.edit_partitions()
-			# Restart this module
-			return self.main()
+		# If skip_to_selection == True, we need to skip the following block.
+		if self.settings["skip_to_selection"] != True:
+			self.print_devices_partitions()
+			
+			res = self.question(_("Do you want to change the partition table?"), default=False)
+			if res:
+				# We should change partition structure.
+				res = self.edit_partitions()
+				# Restart this module
+				return self.main()
+			else:
+				# Check if root and swap are preseeded.
+				self.partition_selection()
 		else:
-			# Check if root and swap are preseeded.
+			# Run partition_selction()
 			self.partition_selection()
 			
 		verbose("Selected %s as root partition" % self.settings["root"])
@@ -188,7 +198,13 @@ class Frontend(cli.Frontend):
 						self.changed[choice]["changes"]["format_real"] = "linux-swap(v1)"
 						self.touched[lib.return_device(self.settings["swap"])] = True
 		
-		res = self.question("\n" + _("Are you really sure to continue? This will destroy selected partitions."), default=False)
+		if self.settings["root_noformat"]:
+			# Do not alarm the user that we are going to format something -- as we will not format anything (if not swap)
+			quest = _("Do you really want to continue?")
+		else:
+			quest = _("Do you really want to continue? This will destroy selected partitions.")
+		
+		res = self.question("\n" + quest, default=False)
 		if res:	
 			# Write to memory
 			lib.write_memory(self.changed)
@@ -215,7 +231,7 @@ class Frontend(cli.Frontend):
 				return self.edit_partitions()
 		
 		# Reload.
-		lib.restore_devices()
+		lib.restore_devices(onlyusb=self.onlyusb)
 		self.disks, self.devices = lib.disks, lib.devices
 		
 		# Remove touched
