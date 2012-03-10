@@ -12,4 +12,3 @@ source = semplice-persistent
 image = /linstaller/source/live/filesystem.squashfs
 vmlinuz = /linstaller/source/live/vmlinuz
 initrd = /linstaller/source/live/initrd.img
-syslinux = /linstaller/source/isolinux
