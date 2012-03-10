@@ -1,3 +1,9 @@
+linstaller (2.13.1-2) pulse; urgency=low
+
+  * debian/control: fixed dependencies in the linstaller-modules-echo package.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 20:38:46 +0100
+
 linstaller (2.13.1-1) pulse; urgency=low
 
   * config/semplice-persistent-nolive: removed isolinux seed.
