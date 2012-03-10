@@ -1,3 +1,23 @@
+linstaller (2.13.0-2) pulse; urgency=low
+
+  * config/: added semplice-persistent and semplice-persistent-nolive configurations. 
+  * linstaller.py: handle submodules as well.
+  * partdisks: library: added return_partition, setFlag, unsetFlag functions.
+  * modules/echo: preleminary release of echo.
+  * config/semplice-persistent: partdisks: disable swap, enable skip_to_selection and onlyusb.
+  * partdisks: added onlyusb and skip_to_selection seeds; do not tell the use that we're are
+               formatting partitions if root_noformat is True (as we are not formatting root,
+               which is the partition that user don't want to be wiped).
+  * modules/echo: added fake module where store shared things.
+  * linstaller.py: remove last word after last dot only if it's "inst" or "front".
+  * modules/echo/partusb: use a pythonic-way to create the empty file.
+  * modules/partdisks: added ability to not mount virtual (/proc, /dev, /sys) partitions.
+  * modules/summary: do not crash if something is missing, usb-persistence support.
+  * modules/echo/partusb: added frontend.
+  * config/semplice-persistent: some changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 18:56:03 +0100
+
 linstaller (2.11.2-1) pulse; urgency=low
 
   * Switched to GIT.
