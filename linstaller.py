@@ -24,7 +24,9 @@ def launch_module(module, special):
 	global reboot
 	
 	mname = module.split(".")
-	del mname[-1]
+	# Check if the module is front or inst... (if not, leave everything as-is)
+	if mname[-1] in ("front", "inst"):
+		del mname[-1] # Remove. Useless.
 	mname = ".".join(mname)
 	
 	# Adjust cfg.module to read "module:<modulename>"

@@ -22,7 +22,7 @@ class Module(module.Module):
 		self.path = self.modules_settings["echo.partusb.inst"]["path"]
 		if self.path[-1] != "/":
 			self.path = self.path + "/"
-		self.image_path = self.modules_settings["echo.copy.inst"]["path"]
+		self.image_path = self.modules_settings["echo"]["image_path"]
 		self.part_suffix = self.modules_settings["echo.partusb.inst"]["suffix"]
 				
 		args = []

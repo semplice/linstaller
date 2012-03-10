@@ -36,15 +36,17 @@ class Module(module.Module):
 
 		used = []
 
-		# Bind-mount /dev, /sys and /proc
-		for point in ("/dev","/sys","/proc"):
-			fullpath = os.path.join("/linstaller/target",os.path.basename(point))
-			if lib.is_mounted(fullpath):
-				lib.umount(path=fullpath)
-			
-			# We can go?
-			lib.mount_partition(path=point, opts="bind", target=fullpath, check=False)
-			used.append(fullpath)
+
+		# Bind-mount /dev, /sys and /proc (if no_virtual_partitions is not True):
+		if not self.settings["no_virtual_partitions"]:
+			for point in ("/dev","/sys","/proc"):
+				fullpath = os.path.join("/linstaller/target",os.path.basename(point))
+				if lib.is_mounted(fullpath):
+					lib.umount(path=fullpath)
+				
+				# We can go?
+				lib.mount_partition(path=point, opts="bind", target=fullpath, check=False)
+				used.append(fullpath)
 		
 		# Mount every partition which has "useas" on it
 		# Get changed.
@@ -143,4 +145,5 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Cache settings """
 		
+		self.cache("no_virtual_partitions")
 		self.cache("used")

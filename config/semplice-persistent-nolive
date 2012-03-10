@@ -3,7 +3,11 @@
 [linstaller:extends]
 source = semplice-persistent
 
-[module:echo.copy]
+#[module:echo.partusb]
+# This only works if using the mount_nolive.sh script
+#image = /linstaller/source/live/filesystem.squashfs
+
+[module:echo]
 # This only works if using the mount_nolive.sh script
 image = /linstaller/source/live/filesystem.squashfs
 vmlinuz = /linstaller/source/live/vmlinuz

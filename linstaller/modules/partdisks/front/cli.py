@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# linstaller partdisks module frontend - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# linstaller partdisks module frontend - (C) 2011-12 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
@@ -17,6 +17,8 @@ import linstaller.core.libmodules.partdisks.library as lib
 class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
+		
+		self.onlyusb = False
 
 		# Cache distribs
 		self.distribs = lib.check_distributions()

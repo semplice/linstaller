@@ -14,7 +14,7 @@ class Module(module.Module):
 	def copy(self):
 		""" Copies image to /linstaller/target/PATH/filesystem.squashfs. """
 		
-		path = os.path.join("/linstaller/target", self.settings["path"])
+		path = os.path.join("/linstaller/target", self.modules_settings["echo"]["image_path"])
 		
 		# Create path if it doesn't exist
 		if not os.path.exists(path): os.makedirs(path)
@@ -27,11 +27,11 @@ class Module(module.Module):
 		if os.path.exists(image): raise m.UserError("%s already exists!" % image)
 		
 		# Copy the image
-		shutil.copy(self.settings["image"], image)
+		shutil.copy(self.modules_settings["echo"]["image"], image)
 		
 		# Copy vmlinuz and initrd
-		shutil.copy(self.settings["vmlinuz"], vmlinuz)
-		shutil.copy(self.settings["initrd"], initrd)
+		shutil.copy(self.modules_settings["echo"]["vmlinuz"], vmlinuz)
+		shutil.copy(self.modules_settings["echo"]["initrd"], initrd)
 	
 	def copy_syslinux(self):
 		""" Copies syslinux configuration to /linstaller/target/syslinux """
@@ -40,13 +40,4 @@ class Module(module.Module):
 		
 		if not os.path.exists(syslinux):
 			# Copy the directory
-			shutil.copytree(self.settings["syslinux"], syslinux)
-				
-	def seedpre(self):
-		""" Cache preseeds. """
-		
-		self.cache("image","/live/image/live/filesystem.squashfs")
-		self.cache("vmlinuz","/live/image/live/vmlinuz")
-		self.cache("initrd","/live/image/live/initrd.img")
-		self.cache("path","live")
-		self.cache("syslinux","/usr/share/syslinux/themes/semplice-pulse/syslinux-live")
+			shutil.copytree(self.modules_settings["echo"]["syslinux"], syslinux)
