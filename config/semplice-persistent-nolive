@@ -1,0 +1,15 @@
+## ECHO CONFIGURATION FOR SEMPLICE (NOLIVE VERSION)
+
+[linstaller:extends]
+source = semplice-persistent
+
+#[module:echo.partusb]
+# This only works if using the mount_nolive.sh script
+#image = /linstaller/source/live/filesystem.squashfs
+
+[module:echo]
+# This only works if using the mount_nolive.sh script
+image = /linstaller/source/live/filesystem.squashfs
+vmlinuz = /linstaller/source/live/vmlinuz
+initrd = /linstaller/source/live/initrd.img
+syslinux = /linstaller/source/isolinux

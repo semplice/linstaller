@@ -38,19 +38,43 @@ class Frontend(cli.Frontend):
 		#print(_("%(swappartition)s will be used as swap.") % {"swappartition":self.moduleclass.modules_settings["partdisks"]["swap"]})
 		print
 		
-		print(_("The default locale will be %(locale)s.") % {"locale":self.moduleclass.modules_settings["language"]["language"]})
-		print(_("The default keyboard layout will be %(layout)s.") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
+		# USB-Persistence
+		try:
+			size = self.moduleclass.modules_settings["echo.partusb"]["size"]
+			print(_("The persistence partion will be of %s MB.") % size)
+			print
+		except:
+			pass
+		
+		try:
+			print(_("The default locale will be %(locale)s.") % {"locale":self.moduleclass.modules_settings["language"]["language"]})
+		except:
+			pass
+		try:
+			print(_("The default keyboard layout will be %(layout)s.") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
+		except:
+			pass
 		print
 		
-		print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})
-		if self.moduleclass.modules_settings["userhost"]["root"]:
-			# Root enabled
-			print(_("Root account is enabled."))
-		print(_("The computer hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})
-		print(_("The machine will use this timezone: %(timezone)s.") % {"timezone":self.moduleclass.modules_settings["timezone"]["timezone"]})
+		try:
+			print(_("The main user will be %(userfullname)s (%(username)s).") % {"userfullname":self.moduleclass.modules_settings["userhost"]["userfullname"], "username":self.moduleclass.modules_settings["userhost"]["username"]})
+			if self.moduleclass.modules_settings["userhost"]["root"]:
+				# Root enabled
+				print(_("Root account is enabled."))
+			print(_("The computer hostname will be %(hostname)s.") % {"hostname":self.moduleclass.modules_settings["userhost"]["hostname"]})
+		except:
+			pass
+		
+		try:
+			print(_("The machine will use this timezone: %(timezone)s.") % {"timezone":self.moduleclass.modules_settings["timezone"]["timezone"]})
+		except:
+			pass
 		print
 		
-		print(_("The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s.") % {"bootloader":self.moduleclass.modules_settings["bootloader"]["bootloader"],"bootloaderpath":self.moduleclass.modules_settings["bootloader"]["device"]})
+		try:
+			print(_("The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s.") % {"bootloader":self.moduleclass.modules_settings["bootloader"]["bootloader"],"bootloaderpath":self.moduleclass.modules_settings["bootloader"]["device"]})
+		except:
+			pass
 		print
 				
 		# We should continue?

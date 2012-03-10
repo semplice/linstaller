@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-# partdisks library. - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# partdisks library. - (C) 2011-12 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import parted as p
+import _ped
 import linstaller.core.main as m
 import operator
 import os
+import commands
 
 from linstaller.core.main import info,warn,verbose
 
@@ -42,6 +44,11 @@ supported = {
 supported_tables = {
 	"mbr" : "msdos",
 }
+
+flags = {
+	"boot":_ped.PARTITION_BOOT,
+}
+
 
 def is_disk(dsk):
 	""" Checks if dsk is a disk. Returns True if so.
@@ -104,7 +111,7 @@ def return_device(dev):
 	
 	return dev
 
-def return_devices():
+def return_devices(onlyusb=False):
 	""" Returns a list of devices. """
 	
 	# We will check /proc/partitions.
@@ -135,6 +142,13 @@ def return_devices():
 					# Deal with invalid partition tables
 					verbose("Unable to obtain a disk object of /dev/%s - No partition table?" % device)
 					disks[device] = "notable"
+				
+				if onlyusb:
+					# Check if it is an usb device...
+					if commands.getoutput("udevadm info --query=property -n /dev/%s | grep ID_BUS" % device) != "ID_BUS=usb":
+						# It isn't. Remove.
+						del devices[device]
+						del disks[device]
 			
 	return devices, disks
 
@@ -157,13 +171,42 @@ def device_sort(dct):
 	
 	return lst, dct
 
-def restore_devices():
+def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
 	
 	global devices
 	global disks
 	
-	devices, disks = return_devices()
+	devices, disks = return_devices(onlyusb=onlyusb)
+
+def return_partition(partition):
+	""" Returns a partition object which matches 'partition' """
+	
+	# Strip /dev/, if any
+	partition = partition.replace("/dev/","")
+	
+	# Get device
+	dev = return_device(partition)
+	dev = disks[dev]
+	
+	# Search for partition
+	for part in dev._partitions:
+		if part.path == "/dev/%s" % partition:
+			# Found.
+			return part
+	
+	# If we are here, nothing found.
+	return None
+
+def setFlag(partition, flag):
+	""" Sets the specified flag into the partition (which must be a parted.Partition object) """
+	
+	return partition.setFlag(flags[flag])
+
+def unsetFlag(partition, flag):
+	""" Unsets the specified flag into the partition (which must be a parted.Partition object) """
+	
+	return partition.unsetFlag(flags[flag])
 
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """

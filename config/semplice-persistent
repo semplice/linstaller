@@ -1,0 +1,22 @@
+## ECHO CONFIGURATION FOR SEMPLICE
+
+[linstaller:extends]
+source = semplice
+
+[linstaller]
+distribution = Semplice on USB
+modules = echo welcome.front language.front update.front timezone.front userhost.front partdisks.front echo.partusb.front summary.front partdisks.inst echo.copy.inst echo.partusb.inst echo.configure.inst echo.bootloader.inst end.front
+
+[module:partdisks]
+swap = None
+root_noformat = True
+skip_to_selection = True
+onlyusb = True
+no_virtual_partitions = True
+
+[module:userhost]
+# Seed password, as we are not using it
+password = disabled
+
+[module:echo.bootloader]
+bootloader = syslinux
