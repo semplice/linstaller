@@ -1,3 +1,11 @@
+linstaller (2.13.1-1) pulse; urgency=low
+
+  * config/semplice-persistent-nolive: removed isolinux seed.
+  * setup.py: ship echo.
+  * debian/: new package linstaller-modules-echo; ship semplice-persistent configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 19:25:05 +0100
+
 linstaller (2.13.0-2) pulse; urgency=low
 
   * config/: added semplice-persistent and semplice-persistent-nolive configurations. 
