@@ -32,11 +32,25 @@ proc   /proc   proc   defaults   0   0
 			# Get changed.
 			changed = self.moduleclass.modules_settings["partdisks"]["changed"]
 
+			mountpo = []
+			changeslist = {}
+			
+			# Regenerate changed to sort it sanely
 			for key, value in changed.items():
-				
 				if not "useas" in value["changes"]:
 					# There isn't "useas" in changes; skipping this item
 					continue
+
+				mountpo.append(value["changes"]["useas"])
+				changeslist[value["changes"]["useas"]] = key
+			
+			mountpo.sort()
+
+			for point in mountpo:
+				# Get correct partition
+				key = changeslist[value]
+				# Get value
+				value = changed[key]
 				
 				# Get UUID
 				UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (key))
