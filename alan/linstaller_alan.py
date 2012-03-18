@@ -30,15 +30,25 @@ class Extension(alan.core.extension.Extension):
 		config = self.cfg.printv("config")
 		if not config:
 			config = "default"
+		persistent_disabled = self.cfg.printv("persistent_disabled")
+
+		config_persistent = self.cfg.printv("config_persistent")
+		if not config_persistent:
+			config_persistent = "semplice-persistent"
 
 		# Alias self.menu.insert() to i()
 		i = self.menu.insert
 
 		### Begin!
 
-		install = core.item(_("Launch linstaller"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
+		install = core.item(_("Start installer"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
+		
+		persistent = core.item(_("Start USB persistent installer"), ga.execute("roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config_persistent))
 
 		i(install)
+		if not persistent_disabled:
+			i(core.separator)
+			i(persistent)
 
 		# End
 		self.menu.end()
