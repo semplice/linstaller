@@ -1,3 +1,9 @@
+linstaller (2.0.2-1) emily; urgency=low
+
+  * modules/fstab: correctly sort partitions before generating fstab.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 24 Mar 2012 17:14:58 +0100
+
 linstaller (2.0.2~pre1.1-1) emily; urgency=low
 
   * setup.py: set version accordingly.
