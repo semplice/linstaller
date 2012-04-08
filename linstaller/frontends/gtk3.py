@@ -22,19 +22,7 @@ head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Frontend:
-	class InstallerWindow(Gtk.Window):
-		class bye_bye_gtk(threading.Thread):
-			def __init__(self, window):
-				self.window = window
-				
-				threading.Thread.__init__(self)
-
-			def run(self):
-				""" Workaround to exit from the gtk loop to avoid multiple windows. """
-				
-				self.window.destroy()
-				Gtk.main_quit()
-				
+	class InstallerWindow(Gtk.Window):				
 		def __init__(self, frontend, header=False):
 			""" Initialize the InstallerWindow. """
 			
@@ -128,37 +116,91 @@ class Frontend:
 		def section(self, title, objects):
 			""" Adds a new section and reparents the objects there. """
 			
-			section = Gtk.Frame()
+			section = Gtk.Frame(label=title)
 			section.show()
 			
 			# New VBox
-			vbox = Gtk.VBox()
-			vbox.show()
+			#vbox = Gtk.VBox()
+			#vbox.show()
 			
-			section.add(vbox)
+			#section.add(vbox)
 			
 			# Reparent objects
-			for obj in objects:
-				obj.reparent(vbox)
-				vbox.pack_start(obj, True, True, 0)
+			#for obj in objects:
+			#	obj.reparent(vbox)
+			#	vbox.pack_start(obj, True, True, 0)
+			
+			self.page_vbox.pack_start(section, True, True, 0)
+			
+			return section
 		
-		def entry(self, string, password=False):
+		class table:
+			def __init__(self, rows, columns, homogeneous=True):
+				""" Creates a table. """
+				
+				self.rows = rows
+				self.columns = columns
+				
+				self.rows_done = 0
+				
+				self.table = Gtk.Table(rows, columns, homogeneous)
+				self.table.show()
+				
+			def append(self, leng, objs):
+				""" Appends the object to the table.
+				
+				leng is the number of the objects to append
+				objs is a tuple containing the objects.
+				"""
+				
+				objs = tuple(objs)
+				
+				if objs == () or len(objs) != leng:
+					warn("Unable to append objects to table. Check your arguments.")
+					return
+				
+				self.item_n = 0
+				
+				# Append items.
+				for item in objs:
+					self.table.attach(item, self.item_n, self.item_n + 1, self.rows_done, self.rows_done + 1)
+					self.item_n += 1
+				
+				self.rows_done += 1
+				
+		
+		def entry(self, string, password=False, target=False):
 			""" Adds a new entry to the page_vbox. """
 			
-			container = Gtk.HBox()
+			
+			if not target: target = self.page_vbox
+			
 			label = Gtk.Label()
 			text = label.set_markup(string)
+
 			entry = Gtk.Entry()
+			
+			label.show()
+			entry.show()
 			if password:
 				entry.set_visibility(False)
-			
-			container.pack_start(label, True, True, 0)
-			container.pack_start(entry, True, True, 0)
-			container.show_all()
-			
-			self.page_vbox.pack_start(container, True, True, 0)
-			
-			return container, entry
+
+			if target == self.page_vbox:
+				container = Gtk.HBox()
+				container.pack_start(label, True, True, 0)
+				container.pack_start(entry, True, True, 0)
+				container.show_all()
+				
+				self.page_vbox.pack_start(container, True, True, 0)
+				
+				return container, entry
+			#elif type(target) == self.table:
+			else:
+				# It's a table. Attach.
+				
+				target.append(2, (label, entry))
+				
+				return label, entry
 		
 		def password_entry(self, string):
 			""" Adds a new password entry to the page_vbox. """
@@ -194,6 +236,20 @@ class Frontend:
 			
 			return container, switch
 		
+		def checkbox(self, label, default=False):
+			""" Adds a new checkbox to the page_vbox. """
+			
+			cbox = Gtk.CheckButton(label=label)
+			
+			if default:
+				cbox.set_active(True)
+			else:
+				cbox.set_active(False)
+			
+			self.page_vbox.pack_start(cbox, True, True, 0)
+			
+			return cbox
+		
 		def reset_position(self):
 			""" Resets the window position. """
 			
@@ -205,13 +261,13 @@ class Frontend:
 			self.frontend.end()
 		
 		def on_back(self, button):
-			bye = self.bye_bye_gtk(self)
-			bye.start()
+			self.destroy()
+			Gtk.main_quit()
 			self.window_status = "back"
 		
 		def on_next(self, button):
-			bye = self.bye_bye_gtk(self)
-			bye.start()
+			self.destroy()
+			Gtk.main_quit()
 
 	
 	def __init__(self, moduleclass):
