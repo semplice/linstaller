@@ -42,7 +42,7 @@ proc   /proc   proc   defaults   0   0
 
 			for point in mountpo:
 				# Get correct partition
-				key = changeslist[value]
+				key = changeslist[point]
 				# Get value
 				value = changed[key]
 				
