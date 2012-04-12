@@ -615,9 +615,12 @@ def automatic_check(obj, by="freespace", swap_created=False):
 						#obj.removePartition(part)
 						
 						# Add the new one
-						part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
-						
-						return part, swap, swap_created
+						try:
+							part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+							return part, swap, swap_created
+						except:
+							verbose("Unable to add a partition (reached the partition limit?)")
+							return False, False, False
 					else:
 						# We should create a swap partition.
 						
