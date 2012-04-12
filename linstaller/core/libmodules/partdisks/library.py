@@ -632,10 +632,8 @@ def automatic_check(obj, by="freespace", swap_created=False):
 						# Ok, we can now make a new swap partition.
 						try:
 							swap = add_partition(obj, start=starts, size=MbToSector(mem), type=p.PARTITION_NORMAL, filesystem="linux-swap(v1)")
-							return part, swap, swap_created
 						except:
 							verbose("Unable to add a partition (reached the partition limit?)")
-							return False, False, False
 						
 						# We can now run again this.
 						return automatic_check(obj, by="freespace", swap_created=True)
