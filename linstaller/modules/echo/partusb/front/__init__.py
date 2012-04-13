@@ -50,4 +50,3 @@ class Module(module.Module):
 		""" Caches variables used by this module. """
 		
 		self.cache("size")
-		self.cache("image","/live/image/live/filesystem.squashfs")
