@@ -51,3 +51,4 @@ class Module(module.Module):
 		
 		self.cache("size")
 		self.cache("allfreespace")
+		self.cache("type","live-rw")

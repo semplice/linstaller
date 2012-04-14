@@ -12,14 +12,17 @@ from linstaller.core.main import verbose
 import os
 
 class Module(module.Module):
-	def create(self, typ="live-rw"):
+	def create(self):
 		""" Creates the persistent filesystem at /linstaller/target/PATH/TYP-SUFFIX. """
+		
+		if not self.settings["type"]:
+			self.settings["type"] = "live-rw"
 				
 		if not self.settings["size"]:
 			self.settings["size"] = self.modules_settings["echo.partusb"]["size"]
 		
 		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
-		image = os.path.join(path, "%s-%s" % (typ, self.settings["suffix"]))
+		image = os.path.join(path, "%s-%s" % (self.settings["type"], self.settings["suffix"]))
 		
 		# Create path if it doesn't exist
 		if not os.path.exists(path): os.makedirs(path)
@@ -33,11 +36,14 @@ class Module(module.Module):
 			f.write("\x00")
 		
 
-	def format(self, typ="live-rw"):
+	def format(self):
 		""" Formats the previously created persistent filesystem. """
-		
+
+		if not self.settings["type"]:
+			self.settings["type"] = "live-rw"
+			
 		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
-		image = os.path.join(path, "%s-%s" % (typ, self.settings["suffix"]))
+		image = os.path.join(path, "%s-%s" % (self.settings["type"], self.settings["suffix"]))
 		
 		# Format
 		m.sexec("mkfs.ext2 -F %s" % image)
@@ -48,3 +54,4 @@ class Module(module.Module):
 		self.cache("path", "/persistent")
 		self.cache("size")
 		self.cache("suffix","live")
+		self.cache("type")
