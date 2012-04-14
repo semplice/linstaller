@@ -33,13 +33,14 @@ class Frontend(cli.Frontend):
 		is_fat = self.moduleclass.is_fat(part)
 		
 		# Get the size of the things we will copy during install...
-		size = 0
-		size += os.path.getsize(self.moduleclass.modules_settings["echo"]["image"]) # Squashfs image
-		size += os.path.getsize(self.moduleclass.modules_settings["echo"]["vmlinuz"]) # Kernel image
-		size += os.path.getsize(self.moduleclass.modules_settings["echo"]["initrd"]) # Initrd image
-		size += self.moduleclass.dirsize(self.moduleclass.modules_settings["echo"]["syslinux"]) # Syslinux directory
-		# Then remove from freespace.
-		freespace -= size
+		if not self.settings["allfreespace"]:
+			size = 0
+			size += os.path.getsize(self.moduleclass.modules_settings["echo"]["image"]) # Squashfs image
+			size += os.path.getsize(self.moduleclass.modules_settings["echo"]["vmlinuz"]) # Kernel image
+			size += os.path.getsize(self.moduleclass.modules_settings["echo"]["initrd"]) # Initrd image
+			size += self.moduleclass.dirsize(self.moduleclass.modules_settings["echo"]["syslinux"]) # Syslinux directory
+			# Then remove from freespace.
+			freespace -= size
 		
 		# Convert to megabytes
 		freespace = freespace / 1024 / 1024
