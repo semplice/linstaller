@@ -17,6 +17,3 @@ no_virtual_partitions = True
 [module:userhost]
 # Seed password, as we are not using it
 password = disabled
-
-[module:echo.bootloader]
-bootloader = syslinux
