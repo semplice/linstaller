@@ -37,15 +37,17 @@ class Module(module.Module):
 			
 			fs = part.fileSystem.type
 			if fs in ("fat32"):
+				dire = "-d"
 				bootloader = "syslinux"
 			elif fs in ("ext2","ext3","ext4"):
+				dire = ""
 				bootloader = "extlinux"
 		
 		verbose("Selected location: %s" % target)
 
 		directory = "/linstaller/target/syslinux"
 			
-		m.sexec("%(bootloader)s -i -d '%(dir)s' '%(location)s'" % {"bootloader":bootloader, "dir":directory,"location":target})
+		m.sexec("%(bootloader)s -i %(dire)s '%(dir)s' '%(location)s'" % {"bootloader":bootloader, "dire":dire, "dir":directory,"location":target})
 		
 		# Make partition bootable...
 		verbose("Making partition bootable...")
