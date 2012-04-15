@@ -37,6 +37,8 @@ class Frontend(cli.Frontend):
 				num += 1
 				self.moduleclass.install.select(set)
 				progress.update(num)
+		except:
+			warn(_("Mirrorselect crashed. Please check sources.list(.d) later."))
 		finally:
 			# Exit from chroot
 			self.moduleclass.install.close()	
