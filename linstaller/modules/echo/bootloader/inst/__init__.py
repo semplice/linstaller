@@ -30,6 +30,8 @@ class Module(module.Module):
 		if part == None:
 			raise m.UserError("Target device %s not found." % target)
 		
+		directory = "/linstaller/target/syslinux"
+		
 		bootloader = self.settings["bootloader"]
 		if not bootloader:
 			# We should get the bootloader ourselves.
@@ -39,17 +41,30 @@ class Module(module.Module):
 			if fs in ("fat32"):
 				bootloader = "syslinux"
 			elif fs in ("ext2","ext3","ext4"):
+				args = "-i '%(location)s'" % {"location":target}
 				bootloader = "extlinux"
 		
-		verbose("Selected location: %s" % target)
-
-		directory = "/linstaller/target/syslinux"
+		if bootloader == "syslinux":
+			args = "-i -d '%(dir)s' '%(location)s'" % {"dir":directory,"location":target}
+		elif bootloader == "extlinux":
+			# Generate extlinux configuration file (FIXME)
+			with open(os.path.join(directory, "extlinux.cfg"), "w") as f:
+				f.write("include syslinux.cfg\n")
 			
-		m.sexec("%(bootloader)s -i -d '%(dir)s' '%(location)s'" % {"bootloader":bootloader, "dir":directory,"location":target})
+			# Install MBR (warning: we do not make backups! Are they needed on USB drives MBR?)
+			# FIXME: maybe find a cooler way to do this?
+			m.sexec("dd if=/usr/lib/extlinux/mbr.bin of='%s' bs=440 count=1" % lib.return_device(target))
+			
+			args = "-i '%(dir)s'" % {"dir":directory}
+		
+		verbose("Selected location: %s" % target)
+					
+		m.sexec("%(bootloader)s %(args)s" % {"bootloader":bootloader, "args":args})
 		
 		# Make partition bootable...
 		verbose("Making partition bootable...")
 		lib.setFlag(part, "boot")
+		lib.commit(part, (target)) # Commit
 				
 	def seedpre(self):
 		""" Cache preseeds. """

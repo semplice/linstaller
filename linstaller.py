@@ -94,7 +94,7 @@ def loop_modules(startfrom=1):
 	count = 0
 	
 	for module in main_settings["modules"].split(" "):
-		if module:
+		if module and module not in _removemodules:
 			count += 1
 			if count < startfrom: continue
 			res = launch_module(module, main_settings["special"].split(" "))
@@ -115,6 +115,7 @@ _action = False
 _config = "default"
 _frontend = "cli"
 _modules = False
+_removemodules = []
 
 preseeds = {}
 
@@ -134,6 +135,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--modules requires an argument!")
 		_modules = arg[1]
+	elif arg[0] in ("--remove","-r"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--remove requires an argument!")
+		_removemodules = arg[1].split(" ")
 	elif arg[0] == "help":
 		_action = "help"
 	elif arg[0] == "start":
@@ -160,6 +165,7 @@ if _action == "help":
 	print _(" -c|--config		- Selects the configuration file to read")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print _(" -m|--modules		- Overrides the modules to be executed")
+	print _(" -r|--remove		- Removes the specified modules from the modules list")
 	print
 	print _("Recognized actions:")
 	print _(" help			- Displays this help message, then exits.")

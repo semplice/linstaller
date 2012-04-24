@@ -21,13 +21,19 @@ class Frontend(gtk3.Frontend):
 		self.window.set_header("info", _("Users & Hostname"), _("Set users and hostname"))
 		
 		# Initial user
+		#sect = self.window.section(_("User"), ["", ""])
+		
+		table = self.window.table(2, 2)
+		
 		self.userfullname_container, self.userfullname = self.window.entry(_("New user's full name (e.g. John Doe)"))
-		self.username_container, self.username = self.window.entry(_("%s's username (no spaces; e.g: john)") % self.settings["userfullname"])
-		self.window.section(_("User"), [self.userfullname_container, self.username_container])
+		self.username_container, self.username = self.window.entry(_("New user's username (no spaces; e.g: john)"))
+		
+		#sect.add(self.userfullname_container)
+		
 		self.window.text_new()
 		
 		# Passwords
-		password1, password2 = self.window.password_entry_with_confirm(_("%s's password") % self.settings["userfullname"])
+		password1, password2 = self.window.password_entry_with_confirm(_("New user's password"))
 		self.window.text_new()
 		
 		self.password1_container, self.password1 = password1

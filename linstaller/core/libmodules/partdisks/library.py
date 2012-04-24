@@ -615,9 +615,12 @@ def automatic_check(obj, by="freespace", swap_created=False):
 						#obj.removePartition(part)
 						
 						# Add the new one
-						part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
-						
-						return part, swap, swap_created
+						try:
+							part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+							return part, swap, swap_created
+						except:
+							verbose("Unable to add a partition (reached the partition limit?)")
+							return False, False, False
 					else:
 						# We should create a swap partition.
 						
@@ -654,9 +657,13 @@ def automatic_check(obj, by="freespace", swap_created=False):
 							#obj.removePartition(part)
 							
 							# Add the new one
-							part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
-							
-							return part, swap, swap_created
+							try:
+								part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+								return part, swap, swap_created
+							except:
+								verbose("Unable to add a partition (reached the partition limit?)")
+								return False, False, False
+
 						
 						# Get were part starts
 						starts = part.geometry.start
@@ -666,8 +673,11 @@ def automatic_check(obj, by="freespace", swap_created=False):
 						#obj.removePartition(part)
 						
 						# Ok, we can now make a new swap partition.
-						swap = add_partition(obj, start=starts, size=MbToSector(mem), type=p.PARTITION_NORMAL, filesystem="linux-swap(v1)")
-						
+						try:
+							swap = add_partition(obj, start=starts, size=MbToSector(mem), type=p.PARTITION_NORMAL, filesystem="linux-swap(v1)")
+						except:
+							verbose("Unable to add a partition (reached the partition limit?)")
+													
 						# We can now run again this.
 						return automatic_check(obj, by="freespace", swap_created=True)
 				elif size == min_size or size > min_size:
@@ -682,9 +692,13 @@ def automatic_check(obj, by="freespace", swap_created=False):
 					#obj.deletePartition(part)
 								
 					# Add the new one
-					part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+					try:
+						part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+						return part, swap, swap_created
+					except:
+						verbose("Unable to add a partition (reached the partition limit?)")
+						return False, False, False
 
-					return part, swap, swap_created
 				else:
 					# No way :(
 					
