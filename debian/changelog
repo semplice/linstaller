@@ -1,3 +1,22 @@
+linstaller (2.13.2-1) pulse; urgency=low
+
+  * alan: Added an item to start echo. mouldes/fstab: correctly sort partitions before generating the fstab.
+  * Some changes to gtk3 frontend.
+  * fixed fstab loop.
+  * partdisks: library: do not crash if we reach partition limit in automatic.
+  * as above.
+  * partdisks: library: fixed indentation error, try/except in swap, too.
+  * modules/echo.partusb: frontend: removed useless seeds. linstaller.py: new -r|--remove argument which specifies the modules to remove from list.
+  * modules/echo.partusb: frontend: added new seed "allfreespace", does not calculate the freespace by checking the freespace and removing the image's files
+  * modules/echo.partusb: added support for 'type'
+  * config/semplice-persistent: removed erroneous preseed to syslinux
+  * modules/echo.bootloader: inst: some changes to bootloader installation, still to refine.
+  * modules/mirrorselect: install: do not crash if mirrorselect crashes.
+  * modules/echo.bootloader: install: fixed extlinux installation
+  * release 2.13.2.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Apr 2012 19:10:23 +0200
+
 linstaller (2.13.1-2) pulse; urgency=low
 
   * debian/control: fixed dependencies in the linstaller-modules-echo package.
