@@ -1,3 +1,11 @@
+linstaller (2.13.3-1) pulse; urgency=low
+
+  * do not format swap partition by default.
+  * debian/:
+    - make echo depend on extlinux, too.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 30 Apr 2012 18:07:58 +0200
+
 linstaller (2.13.2-1) pulse; urgency=low
 
   * alan: Added an item to start echo. mouldes/fstab: correctly sort partitions before generating the fstab.
