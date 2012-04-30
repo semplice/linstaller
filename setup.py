@@ -6,7 +6,7 @@
 from distutils.core import setup
 
 setup(name='linstaller',
-      version='2.13.2',
+      version='2.13.3',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
