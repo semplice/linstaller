@@ -318,8 +318,8 @@ class CLIFrontend(cli.CLIFrontend):
 				# Should format?
 				if "format_real" in cng:
 					# If this is going to be the swap partition, if swap_nofromat is setted, we should not format.
-					if "useas" in cng and cng["useas"] == "swap" and self.settings["swap_noformat"]:
-						continue
+					#if "useas" in cng and cng["useas"] == "swap" and self.settings["swap_noformat"]:
+					#	continue
 					# Yes.
 					progress = lib.format_partition_for_real(obj, cng["format_real"])
 					info(_("Formatting %s...") % key)
