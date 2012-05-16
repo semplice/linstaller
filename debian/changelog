@@ -1,3 +1,11 @@
+linstaller (2.0.3-1) emily; urgency=low
+
+  * partdisks: library: do not crash if we reach partition limit in automatic.
+  * partdisks: library: do not return anything after swap creation, as we have nothing to return.
+  * do not format swap partition by default.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 16 May 2012 17:44:40 +0200
+
 linstaller (2.0.2.1-1) emily; urgency=low
 
   * Fixed fstab loop.
