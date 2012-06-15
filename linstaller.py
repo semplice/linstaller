@@ -7,6 +7,7 @@
 import linstaller.core.main as m
 import linstaller.core.config as config
 import linstaller.core.modulehelper as mh
+import linstaller.core.servicehelper as sh
 from linstaller.core.main import warn, info, verbose
 
 import exceptions
@@ -15,6 +16,18 @@ import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 import os, sys
+
+def close_services():
+	for service, obj in service_started.items():
+		obj.close()
+
+def modulechange_services(module):
+	for service, obj in service_started.items():
+		obj.do_module_change(module)
+
+def frontendchange_services(frontend):
+	for service, obj in service_started.items():
+		obj.do_frontend_change(frontend)
 
 def launch_module(module, special):
 	""" Launches module.
@@ -36,12 +49,13 @@ def launch_module(module, special):
 	try:
 		# Load module...
 		mod = mh.Module(module)
-		modclass = mod.load(main_settings, modules_settings, cfg)
+		modclass = mod.load(main_settings, modules_settings, service_started, cfg)
 		
 		# It is special? Add to executed_special.
 		if module in special:
 			executed_special.append(module)
 
+		modulechange_services(modclass)
 		res = modclass.start()
 	except exceptions.SystemExit:
 		return "exit"
@@ -59,6 +73,9 @@ def launch_module(module, special):
 			
 			# Revert
 			_revertc.revert()
+		
+		# close services
+		close_services()
 		
 		# Now raise the original exception	
 		print sys.exc_info()[0]
@@ -115,6 +132,7 @@ _action = False
 _config = "default"
 _frontend = "cli"
 _modules = False
+_services = ["sample", "glade"]
 _removemodules = []
 
 preseeds = {}
@@ -233,6 +251,18 @@ elif _action == "start":
 		# Fill modules settings too, will be overriden by the frontend if the module runs.
 		modules_settings[module] = seeds
 
+	# Start services
+	service_started = {} # started services
+	service_space = {} # services share space
+	for service in _services:
+		srv = sh.Service(service)
+		srvclass = srv.load(main_settings, service_space, cfg)
+		
+		# Start.
+		srvclass.start()
+		
+		service_started[service] = srvclass
+
 	# 'special' modules executed
 	executed_special = []
 	
@@ -248,6 +278,9 @@ elif _action == "start":
 		
 		# Revert
 		_revertc.revert()
+	
+	# close services
+	close_services()
 	
 	if res == "kthxbye":
 		# We should reboot?

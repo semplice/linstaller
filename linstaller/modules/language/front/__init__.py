@@ -14,7 +14,7 @@ class Module(module.Module):
 		self.la = Language()
 		self.ke = Keyboard()
 		
-		module.Module.start(self)
+		return module.Module.start(self)
 	
 	def seedpre(self):
 		""" Caches variables used by this module. """
