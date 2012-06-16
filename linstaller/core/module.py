@@ -67,7 +67,7 @@ class Module:
 		# Start frnt.
 		res = self.frnt.start()
 		
-		if res in ("restart", "kthxbye", "fullrestart","back"):
+		if res in ("restart", "kthxbye", "fullrestart","back","casper"):
 			return res
 	
 	def module_next(self):

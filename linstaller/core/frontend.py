@@ -21,16 +21,30 @@ class Frontend:
 		""" Tells the frontend to exit with res == None.
 		The frontend must listen to res status. """
 		
+		self.on_switching_module()
 		self.res = None
 	
 	def module_prev(self):
 		""" Tells the frontend to exit with res == back.
 		The frontend must listen to res status. """
 		
+		self.on_switching_module()
 		self.res = "back"
+	
+	def module_casper(self):
+		""" Tells the frontend to exit with res == casper.
+		The frontend must listen to res status. """
+		
+		self.on_switching_module()
+		self.res = "casper"
 	
 	def end(self):
 		""" close frontend and parents. """
 		
 		main.verbose("User requested to end.")
 		sys.exit(0)
+
+	def on_switching_module(self):
+		""" Called when switching module. """
+		
+		pass

@@ -10,8 +10,15 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose,root_check		
 
+#from gi.repository import Gtk
+
 class Frontend(glade.Frontend):
 	def ready(self):
+		# Set header
+		self.set_header("info", _("Welcome!"), _("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"])
+		
+		#self.objects["parent"].next_button.modify_bg(Gtk.STATE_NORMAL, "#000")
+		
 		# Get text label
 		text = self.objects["builder"].get_object("text")
 		

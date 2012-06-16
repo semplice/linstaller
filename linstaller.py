@@ -17,6 +17,10 @@ _ = t9n.library.translation_init("linstaller")
 
 import os, sys
 
+import time
+
+lastres = None
+
 def close_services():
 	for service, obj in service_started.items():
 		obj.close()
@@ -101,12 +105,20 @@ def launch_module(module, special):
 	elif res == "back":
 		# go back.
 		return "back"
+	elif res == "casper":
+		# execute last res
+		return "casper"
 
 def loop_modules(startfrom=1):
 	""" Loop modules.
 	
 	If startfrom is used, the loop will start at that specific module. (int)
 	"""
+
+	global lastres
+
+	if startfrom < 1:
+		startfrom = 1
 
 	count = 0
 	
@@ -115,6 +127,11 @@ def loop_modules(startfrom=1):
 			count += 1
 			if count < startfrom: continue
 			res = launch_module(module, main_settings["special"].split(" "))
+			if res == "casper":
+				res = lastres
+			else:
+				lastres = res
+			
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.
 			elif res == "back":
@@ -250,6 +267,7 @@ elif _action == "start":
 			
 		# Fill modules settings too, will be overriden by the frontend if the module runs.
 		modules_settings[module] = seeds
+		modules_settings[module]["_preexecuted"] = True # The module has only been PREexecuted, not executed. It will be removed when the module runs.
 
 	# Start services
 	service_started = {} # started services
@@ -260,6 +278,8 @@ elif _action == "start":
 		
 		# Start.
 		srvclass.start()
+		while srvclass.is_ready == False:
+			time.sleep(0.1) # Wait until the service is ready
 		
 		service_started[service] = srvclass
 

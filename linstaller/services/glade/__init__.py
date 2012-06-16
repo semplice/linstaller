@@ -17,7 +17,7 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import info, warn, verbose
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GObject, Gdk
 
 GObject.threads_init()
 
@@ -26,6 +26,10 @@ MAINDIR = os.path.join(os.path.dirname(m.__file__), "..")
 MODULESDIR = os.path.join(MAINDIR, "modules/")
 
 uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
+
+### HEADER TYPES ###
+head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
 	""" The glade service is the core of the linstaller's glade frontend.
@@ -36,14 +40,28 @@ class Service(linstaller.core.service.Service):
 	def on_frontend_change(self):
 		""" Focus on the frontend of the current module. """
 		
+		print("Inizio frontend change")
+		
 		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
 		if "glade" in self.main_settings["frontend"]:
+			if not self.pages_built:
+				# We should wait until the pages are built
+				while not self.pages_built:
+					time.sleep(0.3)	
+			print("Objects...")
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
-			self.current_frontend.ready()
-	
+			GObject.idle_add(self.current_frontend.on_objects_ready)
+			print("Ready...")
+			GObject.idle_add(self.current_frontend.ready)
+			
+			# Set sensitivity, the frontend is up and running
+			self.main.set_sensitive(True)
+						
+			print("Tutto ok!")
+			
 	def build_pages(self):
 		""" Searches for support glade files and adds them to the pages object. """
-		
+				
 		self.modules_objects = {}
 		
 		# Get modules
@@ -57,14 +75,12 @@ class Service(linstaller.core.service.Service):
 		for module in modules.split(" "):
 			module_new = module.replace(".","/")
 			module_new = os.path.join(MODULESDIR, module_new + "/glade/module.glade")
-			
-			print module_new
-			
+						
 			if not os.path.exists(module_new):
 				warn(_("Module path %s does not exist! Skipping...") % module_new)
 				continue
 						
-			objects_list = {}
+			objects_list = {"parent":self}
 			# New builder
 			objects_list["builder"] = Gtk.Builder()
 			objects_list["builder"].add_from_file(module_new)
@@ -86,12 +102,47 @@ class Service(linstaller.core.service.Service):
 	def GUI_init(self):
 		""" Get objects, show things... """
 		
+		self.pages_built = False
+		
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file(uipath)
 		
 		### MAIN WINDOW
 		self.main = self.builder.get_object("main_window")
 		self.main.connect("destroy", self.please_exit)
+		
+		self.box = self.builder.get_object("box")
+		
+		### HEADER
+		self.header_eventbox = Gtk.EventBox()
+		
+		#self.header = Gtk.HBox()
+		#self.header.set_homogeneous(False)
+		#self.header_icon = Gtk.Image()
+		#self.header_message_container = Gtk.VBox()
+		#self.header_message_title = Gtk.Label()
+		#self.header_message_subtitle = Gtk.Label()
+
+		#self.header_message_container.pack_start(self.header_message_title, True, True, 0)
+		#self.header_message_container.pack_start(self.header_message_subtitle, True, True, 0)
+		
+		#self.header.pack_start(self.header_icon, True, True, 0)
+		#self.header.pack_start(self.header_message_container, True, True, 0)
+
+		self.header_alignment = self.builder.get_object("header_alignment")
+
+		self.header = self.builder.get_object("header")
+		self.header_icon = self.builder.get_object("header_icon")
+		self.header_message_container = self.builder.get_object("header_message_container")
+		self.header_message_title = self.builder.get_object("header_message_title")
+		self.header_message_subtitle = self.builder.get_object("header_message_subtitle")
+		self.header_alignment.reparent(self.header_eventbox)
+		#self.header_eventbox.add(self.header)
+		
+		self.box.pack_start(self.header_eventbox, True, True, 0)
+		self.box.reorder_child(self.header_eventbox, 0)
+				
+		### PAGES
 		
 		self.pages = self.builder.get_object("pages")
 		
@@ -102,10 +153,42 @@ class Service(linstaller.core.service.Service):
 		self.back_button.connect("clicked", self.on_back_button_click)
 		self.cancel_button.connect("clicked", self.on_cancel_button_click)
 		
+		
+		# Set back button as unsensitive, as we're in the first page
+		self.back_button.set_sensitive(False)
+		
 		self.build_pages()
+		self.pages_built = True
 		
 		self.main.show_all()
 	
+	def set_header(self, icon, title, subtitle):
+		""" Sets the header with the delcared icon, title and subtitle. """
+				
+		# Get color
+		color_s = head_col[icon]
+		color = Gdk.RGBA()
+		color.parse(color_s)
+
+		# Get icon
+		icon = head_ico[icon]
+			
+		# Set icon
+		self.header_icon.set_from_stock(icon, 6)
+		# Set header message and window title
+		self.header_message_title.set_markup("<b><big>%s</big></b>" % title)
+		self.header_message_subtitle.set_text(subtitle)
+		self.main.set_title(title + " - " + _("%s Installer") % self.main_settings["distro"])
+		
+		# Set color
+		self.header_eventbox.override_background_color(0, color)
+
+	def change_entry_status(self, obj, status, tooltip=None):
+		""" Changes entry secondary icon for object. """
+				
+		obj.set_icon_from_stock(Gtk.EntryIconPosition.SECONDARY, head_ico[status])
+		obj.set_icon_tooltip_text(Gtk.EntryIconPosition.SECONDARY, tooltip)
+
 	def please_exit(self, obj):
 		""" Executed when the main window is destroyed. """
 		
@@ -119,14 +202,27 @@ class Service(linstaller.core.service.Service):
 	def on_next_button_click(self, obj):
 		""" Executed when the Next button is clicked. """
 		
+		# Make sure everything is not sensitive until the frontend is up and running
+		self.main.set_sensitive(False)
+		
 		self.next_module()
 		self.pages.next_page()
+		
+		# Ensure the back button is clickable
+		self.back_button.set_sensitive(True)
 	
 	def on_back_button_click(self, obj):
 		""" Executed when the Back button is clicked. """
-		
+
+		# Make sure everything is not sensitive until the frontend is up and running
+		self.main.set_sensitive(False)
+
 		self.prev_module()
 		self.pages.prev_page()
+		
+		# If this is the first page, make unsensitive the button.
+		if self.pages.get_current_page() == 0:
+			self.back_button.set_sensitive(False)
 
 	def ready(self):
 		

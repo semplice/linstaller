@@ -17,3 +17,21 @@ class Module(module.Module):
 		self.cache("root")
 		self.cache("rootpassword")
 		self.cache("hostname")
+
+	def check(self, what, string):
+		""" Checks if a hostname/username is valid. """
+		
+		if what == "hostname":
+			ALLOWED_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-"
+		else:
+			ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789.-"
+		
+		unallowed = []
+		for lettera in string:
+			if lettera not in ALLOWED_CHARS and '" %s "' % lettera not in unallowed:
+				unallowed.append('" %s "' % lettera)
+
+		if unallowed:
+			return unallowed
+		else:
+			return True
