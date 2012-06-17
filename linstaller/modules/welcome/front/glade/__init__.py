@@ -17,6 +17,9 @@ class Frontend(glade.Frontend):
 		# Set header
 		self.set_header("info", _("Welcome!"), _("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"])
 		
+		if not self.is_module_virgin:
+			return
+		
 		#self.objects["parent"].next_button.modify_bg(Gtk.STATE_NORMAL, "#000")
 		
 		# Get text label

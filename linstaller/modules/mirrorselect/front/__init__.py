@@ -10,7 +10,7 @@ class Module(module.Module):
 	def start(self):
 		""" Start module. """
 		
-		module.Module.start(self)
+		return module.Module.start(self)
 	
 	def seedpre(self):
 		""" Caches variables used by this module. """

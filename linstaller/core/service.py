@@ -83,3 +83,13 @@ class Service(threading.Thread):
 		""" Executed when the frontend is changed. """
 		
 		pass
+	
+	def do_caspered(self, status):
+		""" Executed when a casper status has been done. """
+		
+		self.on_caspered(status)
+	
+	def on_caspered(self, status):
+		""" Override this to do things when caspered is triggered. """
+		
+		pass

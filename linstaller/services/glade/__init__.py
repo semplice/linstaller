@@ -161,6 +161,8 @@ class Service(linstaller.core.service.Service):
 		self.pages_built = True
 		
 		self.main.show_all()
+		#self.main.set_resizable(True)
+		#self.main.fullscreen()
 	
 	def set_header(self, icon, title, subtitle):
 		""" Sets the header with the delcared icon, title and subtitle. """
@@ -199,7 +201,7 @@ class Service(linstaller.core.service.Service):
 		
 		self.main.destroy()
 
-	def on_next_button_click(self, obj):
+	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
 		
 		# Make sure everything is not sensitive until the frontend is up and running
@@ -211,7 +213,7 @@ class Service(linstaller.core.service.Service):
 		# Ensure the back button is clickable
 		self.back_button.set_sensitive(True)
 	
-	def on_back_button_click(self, obj):
+	def on_back_button_click(self, obj=None):
 		""" Executed when the Back button is clicked. """
 
 		# Make sure everything is not sensitive until the frontend is up and running
@@ -223,6 +225,16 @@ class Service(linstaller.core.service.Service):
 		# If this is the first page, make unsensitive the button.
 		if self.pages.get_current_page() == 0:
 			self.back_button.set_sensitive(False)
+
+	def on_caspered(self, status):
+		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
+		
+		if status == None:
+			# Forward
+			self.on_next_button_click() # Trigger on_next_button_click
+		elif status == "back":
+			# Back
+			self.on_back_button_click() # Trigger on_back_button_click
 
 	def ready(self):
 		

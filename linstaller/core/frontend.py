@@ -28,8 +28,12 @@ class Frontend:
 		""" Tells the frontend to exit with res == back.
 		The frontend must listen to res status. """
 		
+		print("Going back....")
+		
 		self.on_switching_module()
 		self.res = "back"
+		
+		print("res should be... " + self.res)
 	
 	def module_casper(self):
 		""" Tells the frontend to exit with res == casper.

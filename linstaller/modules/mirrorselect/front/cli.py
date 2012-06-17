@@ -38,5 +38,5 @@ class Frontend(cli.Frontend):
 				if res:
 					self.settings["enable_sources"] = True
 				else:
-					self.settings["enable_sources"] = None
+					self.settings["enable_sources"] = False
 

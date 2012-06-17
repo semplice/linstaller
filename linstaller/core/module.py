@@ -33,7 +33,7 @@ class Module:
 		
 		self.main_settings, self.modules_settings, self.cfg, self.service_started, self.package = main_settings, modules_settings, cfg, service_started, package
 		
-		self.settings = {}
+		self.settings = {"caspered":False}
 		self.changed = {} # Convienent dict to store changed items. Useful mainly for partdisks.
 		
 		self.seedpre()
@@ -80,6 +80,11 @@ class Module:
 	
 	def module_prev(self):
 		""" Tells the frontend to close the module with "back" result. """
+		
+		print "GOING BACK"
+		self.frnt.module_prev()
+		
+		return
 		
 		try:
 			self.frnt.module_prev()

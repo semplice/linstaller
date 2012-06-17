@@ -55,6 +55,42 @@ class Frontend(glade.Frontend):
 		self.hostname = self.objects["builder"].get_object("hostname")
 		self.hostname.connect("changed", self.on_hostname_change)
 		
+		# if virgin, set header
+		if not self.is_module_virgin:
+			# Update the header with the checks, but then return
+			# Do *ALL* checks (if we're not caspered)
+			if not self.settings["caspered"]:
+				self.on_userfullname_change(self.userfullname)
+				self.on_username_change(self.username)
+				self.on_userpassword_change(self.userpassword)
+				self.on_hostname_change(self.hostname)
+				
+				# And root?
+				if self.settings["root"] != None:
+					self.on_enableroot_change(self.enableroot)
+					if self.settings["root"]:
+						self.on_rootpassword_change(self.rootpassword)
+				
+				return
+			else:
+				# Caspered before, caspered now.
+				self.module_casper()
+		else:
+			# Ensure we set hold status to all entries
+			self.change_entry_status(self.userfullname, "hold")
+			self.change_entry_status(self.username, "hold")
+			self.change_entry_status(self.userpassword, "hold")
+			self.change_entry_status(self.userpassword_confirm, "hold")
+			self.change_entry_status(self.hostname, "hold")
+			# Root is handled by the callbacks
+		
+		# Determine if we should hide the main frame and/or go directly to the next module
+		#if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:
+		#	self.user_frame.hide()
+			
+		#	if self.settings["root"] == None or (self.settings["root"] != None and self.settings["rootpassword"]):
+		#		self.module_casper()
+		
 		# Users
 		if self.settings["userfullname"]:
 			# Hide userfullname
@@ -104,29 +140,21 @@ class Frontend(glade.Frontend):
 			elif self.settings["root"] == True:
 				# Ensure the expander is opened
 				self.root_expander.set_expanded(True)
-		
-		# Do *ALL* checks
-		self.on_userfullname_change(self.userfullname)
-		self.on_username_change(self.username)
-		self.on_userpassword_change(self.userpassword)
-		self.on_hostname_change(self.hostname)
-		
-		# if virgin, set header
-		if self.is_module_virgin:
-			self.set_header("info", _("Users & Hostname"), _("Set users and hostname"))
 
+		self.set_header("info", _("Users & Hostname"), _("Set users and hostname"))
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:
 			self.user_frame.hide()
 			
 			if self.settings["root"] == None or (self.settings["root"] != None and self.settings["rootpassword"]):
+				self.settings["caspered"] = True
 				self.module_casper()
 
-	def on_switching_module(self):
-		""" Override on_switching_module. """
-		
-		self.root_expander.set_expanded(False)
+	#def on_switching_module(self):
+	#	""" Override on_switching_module. """
+	#	
+	#	self.root_expander.set_expanded(False)
 			
 	def on_userfullname_change(self, obj):
 		""" Called when userfullname is changed. """
@@ -134,6 +162,8 @@ class Frontend(glade.Frontend):
 		if obj.get_text():
 			self.steps_completed("userfullname")
 			self.change_entry_status(obj, "ok")
+			
+			self.settings["userfullname"] = obj.get_text()
 		else:
 			self.steps_uncompleted("userfullname")
 			self.change_entry_status(obj, "hold")
@@ -151,6 +181,8 @@ class Frontend(glade.Frontend):
 			if result == True:
 				self.steps_completed("username")
 				self.change_entry_status(obj, "ok")
+				
+				self.settings["username"] = result
 			else:
 				failmessage = _("The username must not contain these characters: %s") % ", ".join(result)
 				self.steps_failed("username", failmessage)
@@ -162,14 +194,25 @@ class Frontend(glade.Frontend):
 		# Get the passwords
 		passw1 = self.userpassword.get_text()
 		passw2 = self.userpassword_confirm.get_text()
-		
+				
 		# Check
 		if passw1:
+			if len(passw1) < int(self.settings["password_min_chars"]):
+				failmessage = _("The password should be composed of at least %s characters.") % self.settings["password_min_chars"]
+				self.steps_failed("userpassword", failmessage)
+				self.change_entry_status(self.userpassword, "error", failmessage)
+				self.change_entry_status(self.userpassword_confirm, "error", failmessage)
+				
+				return
+				
 			if passw1 == passw2:
 				# They are the same!
 				self.steps_completed("userpassword")
 				self.change_entry_status(self.userpassword, "ok")
 				self.change_entry_status(self.userpassword_confirm, "ok")
+				
+				self.settings["password"] == passw1
+				
 			else:
 				# They doesn't match!
 				failmessage = _("The user passwords doesn't match!")
@@ -191,11 +234,22 @@ class Frontend(glade.Frontend):
 		
 		# Check
 		if passw1:
+			if len(passw1) < int(self.settings["password_min_chars"]):
+				failmessage = _("The password should be composed of at least %s characters.") % self.settings["password_min_chars"]
+				self.steps_failed("rootpassword", failmessage)
+				self.change_entry_status(self.rootpassword, "error", failmessage)
+				self.change_entry_status(self.rootpassword_confirm, "error", failmessage)
+				
+				return
+			
 			if passw1 == passw2:
 				# They are the same!
 				self.steps_completed("rootpassword")
 				self.change_entry_status(self.rootpassword, "ok")
 				self.change_entry_status(self.rootpassword_confirm, "ok")
+				
+				self.settings["rootpassword"] = passw1
+				
 			else:
 				# They doesn't match!
 				failmessage = _("The root passwords doesn't match!")
@@ -221,6 +275,9 @@ class Frontend(glade.Frontend):
 			if result == True:
 				self.steps_completed("hostname")
 				self.change_entry_status(obj, "ok")
+				
+				self.settings["hostname"] = result
+				
 			else:
 				failmessage = _("The hostname must not contain these characters: %s") % ", ".join(result)
 				self.steps_failed("hostname", failmessage)
@@ -249,4 +306,9 @@ class Frontend(glade.Frontend):
 			
 			# Remove the rootpassword step from the steps
 			self.steps_remove("rootpassword")
+			self.steps_failed_remove("rootpassword")
+			
+			# Set entry_status on hold
+			self.change_entry_status(self.rootpassword, "hold")
+			self.change_entry_status(self.rootpassword_confirm, "hold")
 	

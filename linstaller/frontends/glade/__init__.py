@@ -92,18 +92,14 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		if not step in self.steps:
 			self.steps.append(step)
-		if step in self.steps_fail:
-			del self.steps_fail[step] # Clean the index_fail
-		self.steps_check()
+		self.steps_failed_remove(step)
 	
 	def steps_uncompleted(self, step):
 		""" Removes from self.steps the uncompleted step """
 		
 		if step in self.steps:
 			self.steps.remove(step)
-		if step in self.steps_fail:
-			del self.steps_fail[step] # Clean the index_fail
-		self.steps_check()
+		self.steps_failed_remove(step)
 	
 	def steps_failed(self, step, message):
 		""" Adds step to the index_fail """
@@ -123,6 +119,13 @@ class Frontend(linstaller.core.frontend.Frontend):
 		if step in self.steps_index:
 			del self.steps_index[step]
 		
+		self.steps_check()
+	
+	def steps_failed_remove(self, step):
+		""" Removes step from the index_fail """
+		
+		if step in self.steps_fail:
+			del self.steps_fail[step]
 		self.steps_check()
 	
 	def on_steps_ok(self):
@@ -158,6 +161,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 		while self.res == False:
 			time.sleep(0.3)
 		
+		print("res changed! it's now %s" % self.res)
 		return self.res
 	
 	def set_header(self, icon, title, subtitle):
@@ -170,7 +174,12 @@ class Frontend(linstaller.core.frontend.Frontend):
 		Use this method instead of the stock hide on the object to avoid hangs and freezes. """
 		
 		self.idle_add(obj.hide)
-		
+	
+	#def module_casper(self, obj):
+	#	""" Return casper, but before change page. """
+	#	
+	#	
+	
 	def ready(self):
 		""" Ovveride this function to manage frontend objects (declared onto the self.objects dictionary). """
 		

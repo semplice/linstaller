@@ -29,9 +29,9 @@ def modulechange_services(module):
 	for service, obj in service_started.items():
 		obj.do_module_change(module)
 
-def frontendchange_services(frontend):
+def caspered_services(status):
 	for service, obj in service_started.items():
-		obj.do_frontend_change(frontend)
+		obj.do_caspered(status)
 
 def launch_module(module, special):
 	""" Launches module.
@@ -61,6 +61,9 @@ def launch_module(module, special):
 
 		modulechange_services(modclass)
 		res = modclass.start()
+		
+		print("%s has returned %s!" % (module, str(res)))
+		
 	except exceptions.SystemExit:
 		return "exit"
 	except:
@@ -128,6 +131,10 @@ def loop_modules(startfrom=1):
 			if count < startfrom: continue
 			res = launch_module(module, main_settings["special"].split(" "))
 			if res == "casper":
+				
+				# We should trigger the on_caspered signal to services, just in case..
+				caspered_services(lastres)
+				
 				res = lastres
 			else:
 				lastres = res
@@ -135,6 +142,7 @@ def loop_modules(startfrom=1):
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.
 			elif res == "back":
+				print "going back"
 				return loop_modules(startfrom=count-1)
 
 ## Welcome to linstaller :)
