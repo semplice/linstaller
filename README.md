@@ -18,7 +18,7 @@ Install
 
 Use the distutils-based setup.py to install linstaller:
 
-   sudo python2.7 setup.py install
+> sudo python2.7 setup.py install
 
 You can then symlink /usr/lib/linstaller/linstaller.py to /usr/bin/linstaller.
 
@@ -27,10 +27,15 @@ Start
 
 To start linstaller you should use this command:
 
-   sudo linstaller -c=semplice start
+> sudo linstaller -c=semplice start
 
 where 'semplice' is the configuration file of the distribution (currently
 only semplice is available).
 You can symlink 'semplice' to 'default' and not use the -c switch.
 
 To specify the frontend, you can use the -f switch.
+
+---------------------------------------
+
+&copy; 2011-2012 [Semplice Linux](http://semplice-linux.org) Project. All rights reserved.
+Work released under the terms of the [GNU GPL license](http://www.gnu.org/licenses/gpl.html), version 3 or later.
