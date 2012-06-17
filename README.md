@@ -1,5 +1,5 @@
 linstaller - a simple yet powerful GNU/linux installer
-------------------------------------------------------
+======================================================
 
 linstaller is a modular and preseedable GNU/Linux distribution
 installer, written in python.
@@ -14,16 +14,16 @@ The project's name has three different meanings:
    previous installer.
 
 Install
-=======
+-------
 
 Use the distutils-based setup.py to install linstaller:
 
    sudo python2.7 setup.py install
 
-You can symlink /usr/lib/linstaller/linstaller.py to /usr/bin/linstaller.
+You can then symlink /usr/lib/linstaller/linstaller.py to /usr/bin/linstaller.
 
 Start
-=====
+-----
 
 To start linstaller you should use this command:
 
@@ -32,3 +32,5 @@ To start linstaller you should use this command:
 where 'semplice' is the configuration file of the distribution (currently
 only semplice is available).
 You can symlink 'semplice' to 'default' and not use the -c switch.
+
+To specify the frontend, you can use the -f switch.
