@@ -1,3 +1,9 @@
+linstaller (2.14.0-2) pulse; urgency=low
+
+  * debian/: Every package is supported by all architectures.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Jun 2012 17:38:29 +0200
+
 linstaller (2.14.0-1) pulse; urgency=low
 
   * Services support (Modules which runs on threads)

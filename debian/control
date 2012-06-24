@@ -77,7 +77,7 @@ Description: Modular GNU/Linux distribution installer -- persistent usb creator
  in an USB device.
 
 Package: linstaller-modules-raspberrypi
-Architecture: armel
+Architecture: all
 Depends: linstaller (= ${binary:Version})
 Description: Modular GNU/Linux distribution installer -- raspberrypi support modules
  linstaller is a modular and preseedable GNU/Linux distribution
@@ -103,7 +103,7 @@ Description: Modular GNU/Linux distribution installer -- semplice configuration
  install Semplice Linux.
 
 Package: linstaller-config-semplice-raspberrypi
-Architecture: armel
+Architecture: all
 Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-raspberrypi (= ${binary:Version})
 Description: Modular GNU/Linux distribution installer -- raspberrypi configuration
  linstaller is a modular and preseedable GNU/Linux distribution
