@@ -3,7 +3,7 @@ Maintainer: Eugenio Paolantonio (g7) <me@medesimo.eu>
 Section: python
 Priority: optional
 Build-Depends: python (>= 2.6.6-3), python2.7, debhelper (>= 7.4.3)
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3.1
 X-Python-Version: >= 2.7
 Vcs-Git: git://github.com/semplice/linstaller.git
 Vcs-Browser: https://github.com/semplice/linstaller
@@ -76,6 +76,19 @@ Description: Modular GNU/Linux distribution installer -- persistent usb creator
  This package contains the modules needed to create a persistent debian-live system
  in an USB device.
 
+Package: linstaller-modules-raspberrypi
+Architecture: armel
+Depends: linstaller (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- raspberrypi support modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the modules needed to install semplice on a
+ Raspberry Pi(TM).
+
 Package: linstaller-config-semplice
 Architecture: all
 Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version})
@@ -89,6 +102,19 @@ Description: Modular GNU/Linux distribution installer -- semplice configuration
  This package contains the linstaller configuration files to
  install Semplice Linux.
 
+Package: linstaller-config-semplice-raspberrypi
+Architecture: armel
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-raspberrypi (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- raspberrypi configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install Semplice Linux on a Raspberry Pi(TM).
+
 Package: linstaller-config-ubuntu
 Architecture: all
 Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-ubuntu (= ${binary:Version})
@@ -101,7 +127,6 @@ Description: Modular GNU/Linux distribution installer -- ubuntu configuration
  .
  This package contains the linstaller configuration files to
  install an Ubuntu-based distribution.
-
 
 Package: alan-ext-linstaller
 Architecture: all

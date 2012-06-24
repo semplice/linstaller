@@ -1,3 +1,31 @@
+linstaller (2.14.0-1) pulse; urgency=low
+
+  * Services support (Modules which runs on threads)
+  * New glade frontend (gtk3, every module has its own glade file)
+  * Glade service (preloads the glade files and shows the gtk3 window)
+  * Other minor things
+  * modules/userhost: added and completed glade frontend.
+  * linstaller.py: if module is preseeded, add _preexecuted to its seeds
+  * linstaller.py: "casper" return status: it returns the old module's return status
+  * frontends/glade: implemented steps, some more signals
+  * services/glade: added header.
+  * services/glade: change_entry_status() which changes an entry's secondary icon with icons that matches the header.
+  * modules/mirrorselect: added glade frontend.
+  * modules/welcome: glade: added the "how to use this application" section
+  * frontends/glade and services/glade (and core/): support on_caspered signal.
+  * modules/: made the glade frontends less crashy and faster
+  * Moved README to README.md
+  * Updated README.md
+  * modules/partdisks/front: added some bits of the glade frontend.
+  * modules/raspberrypi: added
+  * config/: added semplice-raspberrypi configuration. setup.py: ship raspberrypi config and module.
+  
+  * debian/:
+    - added linstaller-config-semplice-raspberrypi and linstaller-modules-raspberrypi packages.
+    - Bumped to Standards-Version: 3.9.3.1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Jun 2012 15:46:02 +0200
+
 linstaller (2.13.3-1) pulse; urgency=low
 
   * do not format swap partition by default.
