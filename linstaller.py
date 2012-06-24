@@ -60,10 +60,7 @@ def launch_module(module, special):
 			executed_special.append(module)
 
 		modulechange_services(modclass)
-		res = modclass.start()
-		
-		print("%s has returned %s!" % (module, str(res)))
-		
+		res = modclass.start()		
 	except exceptions.SystemExit:
 		return "exit"
 	except:
@@ -76,7 +73,7 @@ def launch_module(module, special):
 		for modu in executed_special:
 			verbose("Reverting %s" % modu)
 			_revert = mh.Module(modu)
-			_revertc = _revert.load(main_settings, modules_settings, cfg)
+			_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
 			
 			# Revert
 			_revertc.revert()
@@ -157,7 +154,8 @@ _action = False
 _config = "default"
 _frontend = "cli"
 _modules = False
-_services = ["sample", "glade"]
+#_services = ["sample", "glade"]
+_services = False
 _removemodules = []
 
 preseeds = {}
@@ -178,6 +176,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--modules requires an argument!")
 		_modules = arg[1]
+	elif arg[0] in ("--services","-s"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--services requires an argument!")
+		_services = arg[1]
 	elif arg[0] in ("--remove","-r"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--remove requires an argument!")
@@ -208,6 +210,7 @@ if _action == "help":
 	print _(" -c|--config		- Selects the configuration file to read")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print _(" -m|--modules		- Overrides the modules to be executed")
+	print _(" -s|--services		- Overrides the services to be executed")
 	print _(" -r|--remove		- Removes the specified modules from the modules list")
 	print
 	print _("Recognized actions:")
@@ -253,6 +256,11 @@ elif _action == "start":
 	else:
 		# Modules specified via --modules option
 		main_settings["modules"] = _modules
+	if not _services:
+		main_settings["services"] = cfg.printv("services")
+	else:
+		# Modules specified via --modules option
+		main_settings["services"] = _services
 	main_settings["special"] = cfg.printv("special")
 	
 	verbose("Frontend: %s" % main_settings["frontend"])
@@ -280,16 +288,17 @@ elif _action == "start":
 	# Start services
 	service_started = {} # started services
 	service_space = {} # services share space
-	for service in _services:
-		srv = sh.Service(service)
-		srvclass = srv.load(main_settings, service_space, cfg)
-		
-		# Start.
-		srvclass.start()
-		while srvclass.is_ready == False:
-			time.sleep(0.1) # Wait until the service is ready
-		
-		service_started[service] = srvclass
+	if main_settings["services"]:
+		for service in main_settings["services"].split(" "):
+			srv = sh.Service(service)
+			srvclass = srv.load(main_settings, service_space, cfg)
+			
+			# Start.
+			srvclass.start()
+			while srvclass.is_ready == False:
+				time.sleep(0.1) # Wait until the service is ready
+			
+			service_started[service] = srvclass
 
 	# 'special' modules executed
 	executed_special = []
