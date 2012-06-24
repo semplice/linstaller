@@ -1,3 +1,10 @@
+linstaller (2.14.1-1) pulse; urgency=low
+
+  * linstaller.py: added arguments to pass services via command-line; added services support in config file; fixed revert.
+  * config/semplice-raspberrypi: ask for language; no_virtual_partitions in partdisks; removed summary and network.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 25 Jun 2012 00:55:30 +0200
+
 linstaller (2.14.0-3) pulse; urgency=low
 
   * debian/control: make linstaller-modules-base depend on firmware-raspberrypi if
