@@ -39,7 +39,7 @@ Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-
  squashfs-tools,
  user-setup,
  dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted,
- grub-pc
+ grub-pc | firmware-raspberrypi
 Description: Modular GNU/Linux distribution installer -- base modules
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
