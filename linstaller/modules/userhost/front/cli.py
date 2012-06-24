@@ -57,27 +57,18 @@ class Frontend(cli.Frontend):
 			self.settings["hostname"] = self.check("hostname", _("Computer's name (e.g. johndesktop)"))
 		
 		verbose("Selected hostname %s." % self.settings["hostname"])
-			
+	
 	def check(self, what, text):
-		""" Checks if a hostname/username is valid. """
-		
-		if what == "hostname":
-			ALLOWED_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-"
-		else:
-			ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789.-"
+		""" Checks the username/hostname. """
 		
 		string = self.entry(text)
 		
-		unallowed = []
-		for lettera in string:
-			if lettera not in ALLOWED_CHARS:
-				unallowed += lettera
-
-		if unallowed:
-			warn(_("You can't use these chars in the %s, please re-try: ") % (what) + str(unallowed))
-			return self.check(what, text)
-		else:
+		result = self.moduleclass.check(what, string)
+		if result == True:
 			return string
+		else:
+			warn(_("You can't use these chars in the %s, please re-try: ") % (what) + str(result))
+			return self.check(what, text)
 	
 	def password_prompt(self, text):
 		""" A simple password prompt """

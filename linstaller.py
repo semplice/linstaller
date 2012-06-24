@@ -7,6 +7,7 @@
 import linstaller.core.main as m
 import linstaller.core.config as config
 import linstaller.core.modulehelper as mh
+import linstaller.core.servicehelper as sh
 from linstaller.core.main import warn, info, verbose
 
 import exceptions
@@ -15,6 +16,22 @@ import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
 import os, sys
+
+import time
+
+lastres = None
+
+def close_services():
+	for service, obj in service_started.items():
+		obj.close()
+
+def modulechange_services(module):
+	for service, obj in service_started.items():
+		obj.do_module_change(module)
+
+def caspered_services(status):
+	for service, obj in service_started.items():
+		obj.do_caspered(status)
 
 def launch_module(module, special):
 	""" Launches module.
@@ -36,13 +53,17 @@ def launch_module(module, special):
 	try:
 		# Load module...
 		mod = mh.Module(module)
-		modclass = mod.load(main_settings, modules_settings, cfg)
+		modclass = mod.load(main_settings, modules_settings, service_started, cfg)
 		
 		# It is special? Add to executed_special.
 		if module in special:
 			executed_special.append(module)
 
+		modulechange_services(modclass)
 		res = modclass.start()
+		
+		print("%s has returned %s!" % (module, str(res)))
+		
 	except exceptions.SystemExit:
 		return "exit"
 	except:
@@ -59,6 +80,9 @@ def launch_module(module, special):
 			
 			# Revert
 			_revertc.revert()
+		
+		# close services
+		close_services()
 		
 		# Now raise the original exception	
 		print sys.exc_info()[0]
@@ -84,12 +108,20 @@ def launch_module(module, special):
 	elif res == "back":
 		# go back.
 		return "back"
+	elif res == "casper":
+		# execute last res
+		return "casper"
 
 def loop_modules(startfrom=1):
 	""" Loop modules.
 	
 	If startfrom is used, the loop will start at that specific module. (int)
 	"""
+
+	global lastres
+
+	if startfrom < 1:
+		startfrom = 1
 
 	count = 0
 	
@@ -98,9 +130,19 @@ def loop_modules(startfrom=1):
 			count += 1
 			if count < startfrom: continue
 			res = launch_module(module, main_settings["special"].split(" "))
+			if res == "casper":
+				
+				# We should trigger the on_caspered signal to services, just in case..
+				caspered_services(lastres)
+				
+				res = lastres
+			else:
+				lastres = res
+			
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.
 			elif res == "back":
+				print "going back"
 				return loop_modules(startfrom=count-1)
 
 ## Welcome to linstaller :)
@@ -115,6 +157,7 @@ _action = False
 _config = "default"
 _frontend = "cli"
 _modules = False
+_services = ["sample", "glade"]
 _removemodules = []
 
 preseeds = {}
@@ -232,6 +275,21 @@ elif _action == "start":
 			
 		# Fill modules settings too, will be overriden by the frontend if the module runs.
 		modules_settings[module] = seeds
+		modules_settings[module]["_preexecuted"] = True # The module has only been PREexecuted, not executed. It will be removed when the module runs.
+
+	# Start services
+	service_started = {} # started services
+	service_space = {} # services share space
+	for service in _services:
+		srv = sh.Service(service)
+		srvclass = srv.load(main_settings, service_space, cfg)
+		
+		# Start.
+		srvclass.start()
+		while srvclass.is_ready == False:
+			time.sleep(0.1) # Wait until the service is ready
+		
+		service_started[service] = srvclass
 
 	# 'special' modules executed
 	executed_special = []
@@ -248,6 +306,9 @@ elif _action == "start":
 		
 		# Revert
 		_revertc.revert()
+	
+	# close services
+	close_services()
 	
 	if res == "kthxbye":
 		# We should reboot?

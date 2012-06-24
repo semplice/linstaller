@@ -18,7 +18,7 @@ class Module():
 		
 		self.modulename = modulename
 	
-	def load(self, main_settings, modules_settings, cfg):
+	def load(self, main_settings, modules_settings, service_started, cfg):
 		verbose("\nLoading module %s..." % self.modulename)
 		# This http://stackoverflow.com/questions/951124/dynamic-loading-of-python-modules/951846#951846 is very helpful! Thanks!
 		module = "linstaller.modules.%s" % self.modulename
@@ -27,7 +27,7 @@ class Module():
 		for comp in components[1:]:
 			self.module = getattr(self.module, comp)
 		
-		self.mloaded = self.module.Module(main_settings, modules_settings, cfg, module)
+		self.mloaded = self.module.Module(main_settings, modules_settings, service_started, cfg, module)
 		return self.mloaded
 	
 	def __del__(self):

@@ -28,12 +28,12 @@ class Install:
 			self.ch.close()	
 
 class Module:
-	def __init__(self, main_settings, modules_settings, cfg, package):
+	def __init__(self, main_settings, modules_settings, service_started, cfg, package):
 		""" This init function will take the args and submodule passed to the module. """
 		
-		self.main_settings, self.modules_settings, self.cfg, self.package = main_settings, modules_settings, cfg, package
+		self.main_settings, self.modules_settings, self.cfg, self.service_started, self.package = main_settings, modules_settings, cfg, service_started, package
 		
-		self.settings = {}
+		self.settings = {"caspered":False}
 		self.changed = {} # Convienent dict to store changed items. Useful mainly for partdisks.
 		
 		self.seedpre()
@@ -58,13 +58,38 @@ class Module:
 		""" Start the module. """
 		
 		# Initiate the relevant frontend class.
-		frnt = self._frontends[self.main_settings["frontend"]](self)
+		self.frnt = self._frontends[self.main_settings["frontend"]](self)
+		
+		# Trigger the frontend change
+		for service, obj in self.service_started.items():
+			obj.do_frontend_change(self.frnt)
 		
 		# Start frnt.
-		res = frnt.start()
+		res = self.frnt.start()
 		
-		if res in ("restart", "kthxbye", "fullrestart","back"):
+		if res in ("restart", "kthxbye", "fullrestart","back","casper"):
 			return res
+	
+	def module_next(self):
+		""" Tells the frontend to close the module (thus let linstaller go on the next one) """
+		
+		try:
+			self.frnt.module_next()
+		except:
+			pass
+	
+	def module_prev(self):
+		""" Tells the frontend to close the module with "back" result. """
+		
+		print "GOING BACK"
+		self.frnt.module_prev()
+		
+		return
+		
+		try:
+			self.frnt.module_prev()
+		except:
+			pass
 	
 	def seedpre(self):
 		pass

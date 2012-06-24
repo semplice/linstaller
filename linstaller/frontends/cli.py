@@ -8,13 +8,15 @@ import os, sys
 import getpass
 import progressbar
 
+import linstaller.core.frontend
+
 import linstaller.core.main as m
 from linstaller.core.main import warn,info,verbose
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-class Frontend:
+class Frontend(linstaller.core.frontend.Frontend):
 	class __ProgressBar:
 		""" Wrapper to standard progressbar, in order to reduce installer crashes caused by progressbar exceptions. """
 		
@@ -51,19 +53,6 @@ class Frontend:
 			""" Finishes the progressbar. """
 			
 			self.progressbar.finish()
-
-	
-	def __init__(self, moduleclass):
-		
-		self.moduleclass = moduleclass
-		self.settings = moduleclass.settings
-		self.changed = moduleclass.changed
-	
-	def end(self):
-		""" close frontend and parents. """
-		
-		verbose("User requested to end.")
-		sys.exit(0)
 	
 	def header(self, _pass):
 		""" Displays the installer's header (new page) """

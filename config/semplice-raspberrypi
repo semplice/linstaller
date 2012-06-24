@@ -1,0 +1,14 @@
+## SEMPLICE (RASPBERRYPI RELEASE) MAIN LINSTALLER CONFIGURATION FILE
+
+[linstaller]
+distribution = Semplice on Raspberry Pi
+modules = welcome.front language.front timezone.front userhost.front summary.front partdisks.inst language.inst timezone.inst raspberrypi.inst userhost.inst network.inst debian.inst
+special = partdisks.inst
+
+[module:partdisks]
+root = /dev/mmcblk0p2
+root_noformat = True
+swap = False
+
+[module:debian]
+remove = /filesystem.packages-remove
