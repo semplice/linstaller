@@ -180,6 +180,25 @@ class Frontend(linstaller.core.frontend.Frontend):
 	#	
 	#	
 	
+	def on_next_button_click(self):
+		""" Executed when the module has other pages (and the frontend needs to map appropiately the next button).
+		If it returns None, the service will switch to the next module as normal.
+		If it doesn't return None, the service will stop after this method. """
+		
+		return None
+
+	def on_back_button_click(self):
+		""" Executed when the module has other pages (and the frontend needs to map appropiately the back button).
+		If it returns None, the service will switch to the back module as normal.
+		If it doesn't return None, the service will stop after this method. """
+		
+		return None
+	
+	def pre_ready(self):
+		""" Override this function to do something before the ready() invocation. """
+		
+		pass
+	
 	def ready(self):
 		""" Ovveride this function to manage frontend objects (declared onto the self.objects dictionary). """
 		

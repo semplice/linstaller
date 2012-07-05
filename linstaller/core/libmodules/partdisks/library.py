@@ -13,6 +13,9 @@ import commands
 
 from linstaller.core.main import info,warn,verbose
 
+import t9n.library
+_ = t9n.library.translation_init("linstaller")
+
 global devices
 global disks
 
@@ -39,7 +42,7 @@ supported = {
 	"reiserfs" : ("/sbin/mkfs.reiser4",""),
 	"xfs" : ("/sbin/mkfs.xfs",""),
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
-	}
+}
 
 supported_tables = {
 	"mbr" : "msdos",
@@ -47,6 +50,13 @@ supported_tables = {
 
 flags = {
 	"boot":_ped.PARTITION_BOOT,
+}
+
+sample_mountpoints = {
+	None : _("Do not set a mountpoint."),
+	"/" : _("Root (/)"),
+	"/home" : _("Home Partition (/home)"),
+	"/usr" : _("Global applications (/usr)"),
 }
 
 
@@ -566,6 +576,74 @@ def check_distributions(obj=False):
 		distribs[line[0]] = line[1] # Add.
 	
 	return distribs
+
+def automatic_precheck(by="freespace", distribs=None):
+	""" Performs a check on obj (a Disk object) to see if the user can install the distribution in that disk. """
+	
+	if swap_available():
+		swap = swap_available()
+	else:
+		swap = None
+	
+	if by == "freespace":
+		for name, obj in disks.items():
+			device = obj.device
+			if obj.getFreeSpacePartitions():
+				# There is!
+				# Check the size of the partitions...
+				part_sizes = {}
+				for part in obj.getFreeSpacePartitions():
+					size = round(part.getLength("MB"), 2)
+					# Add part object and size in part_sizes
+					part_sizes[part] = size
+				
+				# Now sort them by value...
+				part_sizes = sorted(part_sizes.iteritems(), key=operator.itemgetter(1), reverse=True)
+
+				for tupl in part_sizes:
+					part, size = tupl
+					# We are now looking at them from bigger to smaller.
+					if (size == rec_size or size > rec_size) and (obj.partitions == 4 or obj.partitions > 4):
+						# Uh cool! This partition can be used for a full semplice experience.
+						# But before, we should check if there is already a swap partition.
+						return part, swap
+	elif by == "delete":
+		delete = {}
+		for name, obj in disks.items():
+			device = obj.device
+						
+			if not distribs:
+				# No distributions.
+				return None, None
+			
+			for path, name in distribs.iteritems():
+				# Assume that we are happy with swap
+				# Get a partition object
+				if not return_device(device.path) in path:
+					continue
+				part = obj.getPartitionByPath(path)
+				print obj, part
+				if not part:
+					# We should never get here
+					continue
+				
+				# Check size
+				if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
+					# We can.
+					delete[part] = name
+			
+		# Now sort them by value...
+		delete = sorted(delete.iteritems(), key=operator.itemgetter(1), reverse=True)
+			
+		# Get an available swap partition.
+		swap = swap_available()
+			
+		# Return.
+		return delete, swap
+
+				
+	return None, None
+			
 
 def automatic_check(obj, by="freespace", swap_created=False):
 	""" Performs a check on obj (a Disk object) to see if the user can install the distribution in that disk. """

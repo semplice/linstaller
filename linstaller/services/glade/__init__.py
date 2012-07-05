@@ -37,6 +37,14 @@ class Service(linstaller.core.service.Service):
 	trigger modules changes (whose GUIs are preloaded by this service), 
 	thus reducing lags and presenting a cleaner environment. """
 	
+	def return_color(self, typ):
+		""" Returns color for typ. """
+		
+		if typ in head_col:
+			return head_col[typ]
+		else:
+			return None
+	
 	def on_frontend_change(self):
 		""" Focus on the frontend of the current module. """
 		
@@ -52,6 +60,8 @@ class Service(linstaller.core.service.Service):
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
 			GObject.idle_add(self.current_frontend.on_objects_ready)
 			print("Ready...")
+			GObject.idle_add(self.current_frontend.pre_ready)
+			print("Ready ready")
 			GObject.idle_add(self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
@@ -204,6 +214,9 @@ class Service(linstaller.core.service.Service):
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
 		
+		if self.current_frontend.on_next_button_click() != None:
+			return
+		
 		# Make sure everything is not sensitive until the frontend is up and running
 		self.main.set_sensitive(False)
 		
@@ -215,6 +228,9 @@ class Service(linstaller.core.service.Service):
 	
 	def on_back_button_click(self, obj=None):
 		""" Executed when the Back button is clicked. """
+
+		if self.current_frontend.on_back_button_click() != None:
+			return
 
 		# Make sure everything is not sensitive until the frontend is up and running
 		self.main.set_sensitive(False)
