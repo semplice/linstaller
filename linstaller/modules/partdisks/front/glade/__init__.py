@@ -19,9 +19,7 @@ from gi.repository import Gtk, GObject
 
 class Frontend(glade.Frontend):	
 	def ready(self):
-		
-		
-		
+				
 		self.onlyusb = False
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
@@ -263,18 +261,36 @@ class Frontend(glade.Frontend):
 		## current_selected:
 		if selection:
 			self.current_selected = {"value": model.get_value(_iter, 0), "model": model, "iter":_iter}
+			if description != "notable":
+				part = self.get_partition_from_selected()
+				if part.type == 2:
+					is_extended = True
+				else:
+					is_extended = False
+			else:
+				is_extended = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
 			if "-" in self.current_selected["value"]:
 				self.add_button.set_sensitive(True)
 				self.remove_button.set_sensitive(False)
+				self.edit_button.set_sensitive(False)
 			else:
 				self.add_button.set_sensitive(False)
 				self.remove_button.set_sensitive(True)
+				self.edit_button.set_sensitive(True)
+			if is_extended:
+				self.remove_button.set_sensitive(False)
+				self.edit_button.set_sensitive(False)
 	
 	def get_device_from_selected(self):
 		""" Returns a device object from self.current_selected. """
 		
 		return self.devices[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
+
+	def get_disk_from_selected(self):
+		""" Returns a device object from self.current_selected. """
+		
+		return self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 	
 	def get_partition_from_selected(self):
 		""" Returns a partition object from self.current_selected. """
@@ -295,13 +311,30 @@ class Frontend(glade.Frontend):
 		
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
 		self.idle_add(self.newtable_window.show)
-	
+
+	def on_remove_button_clicked(self, obj):
+		""" Called when the remove button has been clicked. """
+		
+		self.remove_window.set_markup("<big><b>" + _("Do you really want to remove %s?") % self.get_partition_from_selected().path + "</b></big>")
+		
+		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		self.idle_add(self.remove_window.show)
+
+	def on_delete_button_clicked(self, obj):
+		""" Called when the delete button has been clicked. """
+
+		self.delete_window.set_markup("<big><b>" + _("Do you really want to delete all partitions on %s?") % self.get_device_from_selected().path + "</b></big>")
+
+		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		self.idle_add(self.delete_window.show)
+
 	def on_add_button_clicked(self, obj):
 		""" Called when the add button has been clicked. """
 		
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
 		
 		self.prepare_partition_window_for_add()
+		self.on_manual_radio_changed()
 		
 		self.idle_add(self.partition_window.show)
 	
@@ -310,11 +343,9 @@ class Frontend(glade.Frontend):
 		
 		# Get the device
 		device = self.get_partition_from_selected()
-		
-		print round(device.getLength("MiB"), 3)
-		
+				
 		# Adjust the adjustment
-		self.size_adjustment.set_lower(1)
+		self.size_adjustment.set_lower(0.01)
 		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
 
 		# Populate the size
@@ -323,37 +354,110 @@ class Frontend(glade.Frontend):
 		# Ensure the format checkbox is set to True and unsensitive...
 		self.format_box.set_active(True)
 		self.format_box.set_sensitive(False)
+
+		# Ensure we make sensitive/unsensitive the fs combobox
+		self.on_formatbox_change(self.format_box)
 		
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
 		
+		# Clear mountpoint
+		self.mountpoint_entry.set_text("")
+		self.mountpoint_combo.set_active(-1)
+		
 		# Connect buttons
-		self.partition_ok.connect("clicked", self.on_add_window_button_clicked)
-		self.partition_cancel.connect("clicked", self.on_add_window_button_clicked)
+		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
+		if self.partition_cancel_id: self.partition_cancel.disconnect(self.partition_cancel_id)
+		self.partition_ok_id = self.partition_ok.connect("clicked", self.on_add_window_button_clicked)
+		self.partition_cancel_id = self.partition_cancel.connect("clicked", self.on_add_window_button_clicked)
+
+	def on_edit_button_clicked(self, obj):
+		""" Called when the edit button has been clicked. """
+		
+		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		
+		self.prepare_partition_window_for_edit()
+		self.on_manual_radio_changed()
+		
+		self.idle_add(self.partition_window.show)
 	
+	def prepare_partition_window_for_edit(self):
+		""" Prepares the partition window for edit partition action. """
+				
+		# Get the device
+		device = self.get_partition_from_selected()
+		
+		self.current_length = round(device.getLength("MiB"), 3)
+		
+		# Adjust the adjustment
+		self.size_adjustment.set_lower(0.01)
+		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+
+		# Populate the size
+		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
+		
+		# Unset the format checkbox if we should.
+		self.format_box.set_sensitive(True) # Ensure is sensitive
+		if device.path in self.changed and "format" in self.changed[device.path]["changes"]:
+			# To format; set the box to True
+			self.format_box.set_active(True)
+			# Set too the filesystem, as it is specified in "format".
+			self.current_fs = self.changed[device.path]["changes"]["format"]
+			self.current_toformat = True
+		else:
+			# Unset the format box
+			self.format_box.set_active(False)
+			# Set the filesystem
+			if device.fileSystem != None:
+				self.current_fs = device.fileSystem.type
+			else:
+				self.current_fs = None
+			self.current_toformat = False
+		
+		if self.current_fs:
+			self.filesystem_combo.set_active(self.fs_table[self.current_fs])
+		else:
+			self.filesystem_combo.set_active(-1)
+
+		# Clear mountpoint
+		self.mountpoint_entry.set_text("")
+		self.mountpoint_combo.set_active(-1)
+
+		# Get current mountpoint (if any)...
+		if "useas" in self.changed[device.path]["changes"]:
+			self.current_mountpoint = self.changed[device.path]["changes"]["useas"]
+			if self.current_mountpoint in self.mountp_table:
+				self.mountpoint_combo.set_active(self.mountp_table[self.current_mountpoint])
+			else:
+				self.mountpoint_combo.set_active(-1)
+				self.mountpoint_entry.set_text(self.current_mountpoint)
+		
+		# Ensure we make sensitive/unsensitive the fs combobox
+		self.on_formatbox_change(self.format_box)
+		
+		# Connect buttons
+		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
+		if self.partition_cancel_id: self.partition_cancel.disconnect(self.partition_cancel_id)
+		self.partition_ok_id = self.partition_ok.connect("clicked", self.on_edit_window_button_clicked)
+		self.partition_cancel_id = self.partition_cancel.connect("clicked", self.on_edit_window_button_clicked)
+
 	def queue_for_format(self, path, fs):
 		""" Queues for format. """
 		
-		if path in self.changed:
-			dic = self.changed[path]
-		else:
-			dic = {}
+		dic = self.changed[path]["changes"]
 		
 		dic["format"] = fs
 		
-		self.changed[path] = dic
+		self.changed[path]["changes"] = dic
 	
-	def change_mountpoint(self, path, fs):
+	def change_mountpoint(self, path, mpoint):
 		""" Changes the mountpoint in self.changed. """
 		
-		if path in self.changed:
-			dic = self.changed[path]
-		else:
-			dic = {}
+		dic = self.changed[path]["changes"]
 		
-		dic["useas"] = fs
+		dic["useas"] = mpoint
 		
-		self.changed[path] = dic
+		self.changed[path]["changes"] = dic
 		
 	def get_mountpoint(self):
 		""" Gets the mountpoint from the ComboboxTextEntry which asks for mountpoint. """
@@ -387,6 +491,10 @@ class Frontend(glade.Frontend):
 			part = self.get_partition_from_selected()
 			
 			res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=None)
+			
+			# Add the new partition to changed
+			self.changed[res.path] = {"obj":res, "changes":{}}
+			
 			self.queue_for_format(res.path, self.fs_table_inverse[self.filesystem_combo.get_active()])
 			self.change_mountpoint(res.path, self.get_mountpoint())
 			
@@ -396,7 +504,72 @@ class Frontend(glade.Frontend):
 		
 		# Restore sensitivity
 		self.objects["parent"].main.set_sensitive(True)
+
+	def on_edit_window_button_clicked(self, obj):
+		""" Called when a button on the edit partition window has been clicked. """
+		
+		self.idle_add(self.partition_window.hide)
+		
+		if obj == self.partition_ok:
+			# Yes.
+			# Edit the partition
 			
+			part = self.get_partition_from_selected()
+			
+			# What we should do?
+			# Check if the size has been changed...
+			newsize = self.size_manual_entry.get_value()
+			if newsize != self.current_length:
+				# Yes! We need to resize!
+				res = lib.resize_partition(part, lib.MbToSector(float(newsize)))
+				if not res:
+					# Failed! Ouch!
+					self.set_header("error", _("Failed to resize partition."), _("Please double-check the inserted values."))
+					
+					self.objects["parent"].main.set_sensitive(True)
+					return
+			
+			# We should format?
+			newtoformat = self.format_box.get_active()
+			if newtoformat != self.current_toformat:
+				if not newtoformat:
+					if part.path in self.changed and "format" in self.changed[part.path]["changes"]:
+						del self.changed[part.path]["changes"]["format"]
+			
+			if newtoformat:	
+				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+				if newfs != self.current_fs:
+					# Yes! We need to format!
+					self.queue_for_format(part.path, newfs)
+			
+			# We should change mountpoint?
+			newmountpoint = self.get_mountpoint()
+			if newmountpoint != self.current_mountpoint:
+				# Yes! We need to change mountpoint!
+				self.change_mountpoint(part.path, newmountpoint)
+					
+			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+			
+			self.manual_populate()
+		
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)
+			
+	def on_formatbox_change(self, obj):
+		""" Called when formatbox has been toggled. """
+		
+		if obj.get_active():
+			# Make the combobox sensitive
+			self.filesystem_combo.set_sensitive(True)
+		else:
+			# Make it unsensitive
+			self.filesystem_combo.set_sensitive(False)
+			# ...and restore the filesystem
+			if self.current_fs:
+				self.filesystem_combo.set_active(self.fs_table[self.current_fs])
+			else:
+				self.filesystem_combo.set_active(-1)
+		
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
 		
@@ -420,11 +593,58 @@ class Frontend(glade.Frontend):
 		
 		# Restore sensitivity
 		self.objects["parent"].main.set_sensitive(True)
+
+	def on_remove_window_button_clicked(self, obj):
+		""" Called when a button on the remove window has been clicked. """
 		
-				
+		self.idle_add(self.remove_window.hide)
+		
+		part = self.get_partition_from_selected()
+		
+		if obj == self.remove_yes:
+			# Yes.
+			# Remove the partition
+			res = lib.delete_partition(part)
+			if not res:
+				# Failed!
+				self.set_header("error", _("Unable to remove the partition."), _("Why did it happen?!"))
+			else:
+				# Ok!
+				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+			
+			self.manual_populate()
+		
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)
+
+	def on_delete_window_button_clicked(self, obj):
+		""" Called when a button on the delete window has been clicked. """
+		
+		self.idle_add(self.delete_window.hide)
+		
+		dev = self.get_disk_from_selected()
+		
+		if obj == self.delete_yes:
+			# Yes.
+			# Clear the device
+			res = lib.delete_all(dev)
+			if not res:
+				# Failed!
+				self.set_header("error", _("Unable to delete all partitions."), _("Why did it happen?!"))
+			else:
+				# Ok!
+				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+			
+			self.manual_populate()
+		
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)
+	
 	def manual_frame_creator(self, device, disk):
 		""" Creates frames etc for the objects passed. """
-				
+		
+		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "changes":{}}
+		
 		container = {}
 		container["frame_label"] = Gtk.Label()
 		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, device.model, round(device.getSize(unit="GB"), 2)))
@@ -466,6 +686,8 @@ class Frontend(glade.Frontend):
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Size"), Gtk.CellRendererText(), text=5, cell_background=6))
 
 			for part in partitions:
+				if not part.path in self.changed: self.changed[part.path] = {"obj":part, "changes":{}}
+
 				name = []
 				if part.path in self.distribs:
 					name.append(self.distribs[part.path])
@@ -487,9 +709,9 @@ class Frontend(glade.Frontend):
 					_size = round(part.getLength("kB"), 2)
 					_unit = "kB"
 
-				if part.path in self.changed and "format" in self.changed[part.path]:
+				if part.path in self.changed and "format" in self.changed[part.path]["changes"]:
 					# We need to format the partition, so don't use the one that parted returns to us
-					_fs = self.changed[part.path]["format"]
+					_fs = self.changed[part.path]["changes"]["format"]
 					_to_format = True
 				else:
 					# See what parted tells us
@@ -506,20 +728,21 @@ class Frontend(glade.Frontend):
 					
 					_to_format = False
 				
-				if part.path in self.changed and "useas" in self.changed[part.path]:
+				if part.path in self.changed and "useas" in self.changed[part.path]["changes"]:
 					# Set mountpoint.
-					_mpoint = self.changed[part.path]["useas"]
+					_mpoint = self.changed[part.path]["changes"]["useas"]
 					if _mpoint == None:
 						_mpoint = ""
 				else:
 					_mpoint = ""
-				
-				if part.path in self.previously_changed:
-					# This was changed previously, "ok" color.
-					_bg = self.objects["parent"].return_color("ok")
-				elif part.path in self.changed:
+								
+				if self.changed[part.path]["changes"] != {}:
+					print "%s was changed" % part.path
 					# This was changed now, "hold" color.
 					_bg = self.objects["parent"].return_color("hold")
+				elif part.path in self.previously_changed:
+					# This was changed previously, "ok" color.
+					_bg = self.objects["parent"].return_color("ok")
 				else:
 					# No change
 					_bg = None
@@ -540,6 +763,13 @@ class Frontend(glade.Frontend):
 	def manual_populate(self):
 		""" Populates the harddisk_container with content. """
 
+		# Make everything unsensitive...
+		self.add_button.set_sensitive(False)
+		self.remove_button.set_sensitive(False)
+		self.edit_button.set_sensitive(False)
+		self.newtable_button.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
+
 		for child in self.harddisk_container.get_children():
 			child.destroy()
 
@@ -553,6 +783,18 @@ class Frontend(glade.Frontend):
 		
 		self.harddisk_container.show_all()
 	
+	def on_manual_radio_changed(self, obj=None):
+		""" Called when the radios on the add/edit partition window are changed. """
+		
+		if self.size_manual_radio.get_active():
+			# The entry is selected. Make unsensitive the scale.
+			self.size_manual_entry.set_sensitive(True)
+			self.size_scale_scale.set_sensitive(False)
+		else:
+			# The scale is selected. Make unsensitive the entry.
+			self.size_manual_entry.set_sensitive(False)
+			self.size_scale_scale.set_sensitive(True)
+	
 	def manual_ready(self):
 		""" Called when the manual window is ready. """
 		
@@ -561,18 +803,22 @@ class Frontend(glade.Frontend):
 		self.changed = {}
 		self.previously_changed = []
 		
+		self.mountpoints_added = {}
+		self.mountpoints_added_inverse = {}
+		
 		self.manual_devices = {}
 		self.treeview_description = {}
-		
+
+		self.partition_ok_id = None
+		self.partition_cancel_id = None
+
 		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
-		
-		# Get the harddisk_container and populate it
-		self.harddisk_container = self.objects["builder"].get_object("harddisk_container")
-		self.manual_populate()
 		
 		# Get windows
 		self.partition_window = self.objects["builder"].get_object("partition_window")
 		self.newtable_window = self.objects["builder"].get_object("newtable_window")
+		self.remove_window = self.objects["builder"].get_object("remove_window")
+		self.delete_window = self.objects["builder"].get_object("delete_window")
 		
 		## Partition window:
 		self.size_manual_radio = self.objects["builder"].get_object("size_manual_radio")
@@ -587,9 +833,16 @@ class Frontend(glade.Frontend):
 		self.partition_cancel = self.objects["builder"].get_object("partition_cancel")
 		self.partition_ok = self.objects["builder"].get_object("partition_ok")
 		
+		# Connect the radios...
+		self.size_manual_radio.connect("toggled", self.on_manual_radio_changed)
+		self.size_scale_radio.connect("toggled", self.on_manual_radio_changed)
+		
+		# Connect format box
+		self.format_box.connect("toggled", self.on_formatbox_change)
+		
 		# Build a list of filesystem to append to self.filesystem_combo
-		self.fs_table = {}
-		self.fs_table_inverse = {}
+		self.fs_table = {None:-1}
+		self.fs_table_inverse = {-1:None}
 		
 		list_store = Gtk.ListStore(GObject.TYPE_STRING)
 		fs_num = -1
@@ -625,7 +878,19 @@ class Frontend(glade.Frontend):
 		self.newtable_yes = self.objects["builder"].get_object("newtable_yes")
 		self.newtable_no.connect("clicked", self.on_newtable_window_button_clicked)
 		self.newtable_yes.connect("clicked", self.on_newtable_window_button_clicked)
-		
+
+		## Remove window:
+		self.remove_no = self.objects["builder"].get_object("remove_no")
+		self.remove_yes = self.objects["builder"].get_object("remove_yes")
+		self.remove_no.connect("clicked", self.on_remove_window_button_clicked)
+		self.remove_yes.connect("clicked", self.on_remove_window_button_clicked)
+
+		## Delete window:
+		self.delete_no = self.objects["builder"].get_object("delete_no")
+		self.delete_yes = self.objects["builder"].get_object("delete_yes")
+		self.delete_no.connect("clicked", self.on_delete_window_button_clicked)
+		self.delete_yes.connect("clicked", self.on_delete_window_button_clicked)
+
 		# Get toolbar buttons
 		self.add_button = self.objects["builder"].get_object("add_button")
 		self.remove_button = self.objects["builder"].get_object("remove_button")
@@ -637,15 +902,15 @@ class Frontend(glade.Frontend):
 
 		# Connect them
 		self.add_button.connect("clicked", self.on_add_button_clicked)
+		self.edit_button.connect("clicked", self.on_edit_button_clicked)
 		self.newtable_button.connect("clicked", self.on_newtable_button_clicked)
+		self.remove_button.connect("clicked", self.on_remove_button_clicked)
+		self.delete_button.connect("clicked", self.on_delete_button_clicked)
 		self.refresh_button.connect("clicked", self.refresh_manual)
 
-		# Make everything unsensitive...
-		self.add_button.set_sensitive(False)
-		self.remove_button.set_sensitive(False)
-		self.edit_button.set_sensitive(False)
-		self.newtable_button.set_sensitive(False)
-		self.delete_button.set_sensitive(False)
+		# Get the harddisk_container and populate it
+		self.harddisk_container = self.objects["builder"].get_object("harddisk_container")
+		self.manual_populate()
 
 	def on_automatic_button_clicked(self, obj):
 		""" Called when automatic_button is clicked. """
