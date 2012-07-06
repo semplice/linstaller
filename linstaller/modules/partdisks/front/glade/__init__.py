@@ -64,7 +64,9 @@ class Frontend(glade.Frontend):
 	
 	def refresh_manual(self, obj=None):
 		""" Refreshes the manual partitioning page. """
-		
+
+		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
+
 		self.refresh()
 		
 		# Clear changed
@@ -725,9 +727,12 @@ class Frontend(glade.Frontend):
 					_size = round(part.getLength("MiB"), 2)
 					_unit = "MiB"
 				else:
-					# Last try.. using kilobytes
-					_size = round(part.getLength("kB"), 2)
-					_unit = "kB"
+					## Last try.. using kilobytes
+					#_size = round(part.getLength("kB"), 2)
+					#_unit = "kB"
+					
+					# Partition is too small and can be confusing. Simply do not show it.
+					continue
 
 				if part.path in self.changed and "format" in self.changed[part.path]["changes"]:
 					# We need to format the partition, so don't use the one that parted returns to us
@@ -783,13 +788,6 @@ class Frontend(glade.Frontend):
 	def manual_populate(self):
 		""" Populates the harddisk_container with content. """
 
-		# Make everything unsensitive...
-		self.add_button.set_sensitive(False)
-		self.remove_button.set_sensitive(False)
-		self.edit_button.set_sensitive(False)
-		self.newtable_button.set_sensitive(False)
-		self.delete_button.set_sensitive(False)
-
 		for child in self.harddisk_container.get_children():
 			child.destroy()
 
@@ -802,6 +800,13 @@ class Frontend(glade.Frontend):
 			self.harddisk_container.pack_start(self.manual_devices[obj.path]["frame"], True, True, True)
 		
 		self.harddisk_container.show_all()
+
+		# Make everything unsensitive...
+		self.add_button.set_sensitive(False)
+		self.remove_button.set_sensitive(False)
+		self.edit_button.set_sensitive(False)
+		self.newtable_button.set_sensitive(False)
+		self.delete_button.set_sensitive(False)
 	
 	def on_manual_radio_changed(self, obj=None):
 		""" Called when the radios on the add/edit partition window are changed. """
