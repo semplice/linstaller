@@ -365,6 +365,8 @@ class Frontend(glade.Frontend):
 		self.mountpoint_entry.set_text("")
 		self.mountpoint_combo.set_active(-1)
 		
+		self.partition_ok.set_sensitive(True)
+		
 		# Connect buttons
 		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
 		if self.partition_cancel_id: self.partition_cancel.disconnect(self.partition_cancel_id)
@@ -431,9 +433,13 @@ class Frontend(glade.Frontend):
 			else:
 				self.mountpoint_combo.set_active(-1)
 				self.mountpoint_entry.set_text(self.current_mountpoint)
+		else:
+			self.current_mountpoint = None
 		
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
+		
+		self.partition_ok.set_sensitive(True)
 		
 		# Connect buttons
 		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
@@ -444,20 +450,16 @@ class Frontend(glade.Frontend):
 	def queue_for_format(self, path, fs):
 		""" Queues for format. """
 		
-		dic = self.changed[path]["changes"]
-		
-		dic["format"] = fs
-		
-		self.changed[path]["changes"] = dic
+		self.changed[path]["changes"]["format"] = fs
 	
 	def change_mountpoint(self, path, mpoint):
 		""" Changes the mountpoint in self.changed. """
 		
-		dic = self.changed[path]["changes"]
+		self.changed[path]["changes"]["useas"] = mpoint
 		
-		dic["useas"] = mpoint
-		
-		self.changed[path]["changes"] = dic
+		# Add to mountpoints_added if there is a mpoint
+		if mpoint:
+			self.mountpoints_added[mpoint] = path
 		
 	def get_mountpoint(self):
 		""" Gets the mountpoint from the ComboboxTextEntry which asks for mountpoint. """
@@ -476,6 +478,21 @@ class Frontend(glade.Frontend):
 			result = self.mountp_table_inverse[active]
 		
 		return result
+	
+	def on_mountpoint_change(self, obj):
+		""" Called when a mountpoint on the partition window has been changed. """
+		
+		# Get mpoint
+		mpoint = self.get_mountpoint()
+		
+		if mpoint in self.mountpoints_added and self.mountpoints_added[mpoint] != self.get_partition_from_selected().path:
+			# No way! :)
+			self.change_entry_status(self.mountpoint_entry, "error", _("Mountpoint already used!"))
+			self.partition_ok.set_sensitive(False)
+		else:
+			# Not used! yay!
+			self.change_entry_status(self.mountpoint_entry, "ok")
+			self.partition_ok.set_sensitive(True)
 	
 	def on_add_window_button_clicked(self, obj):
 		""" Called when a button on the add partition window has been clicked. """
@@ -547,6 +564,9 @@ class Frontend(glade.Frontend):
 			if newmountpoint != self.current_mountpoint:
 				# Yes! We need to change mountpoint!
 				self.change_mountpoint(part.path, newmountpoint)
+				# Remove the old mountpoint from the list
+				if self.current_mountpoint:
+					del self.mountpoints_added[self.current_mountpoint]
 					
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 			
@@ -804,7 +824,6 @@ class Frontend(glade.Frontend):
 		self.previously_changed = []
 		
 		self.mountpoints_added = {}
-		self.mountpoints_added_inverse = {}
 		
 		self.manual_devices = {}
 		self.treeview_description = {}
@@ -839,6 +858,13 @@ class Frontend(glade.Frontend):
 		
 		# Connect format box
 		self.format_box.connect("toggled", self.on_formatbox_change)
+		
+		# Connect mountpoint entry and combobox...
+		self.mountpoint_combo.connect("changed", self.on_mountpoint_change)
+		self.mountpoint_entry.connect("changed", self.on_mountpoint_change)
+		
+		# An empty mountpoint is fine...
+		self.change_entry_status(self.mountpoint_entry, "ok")
 		
 		# Build a list of filesystem to append to self.filesystem_combo
 		self.fs_table = {None:-1}
