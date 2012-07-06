@@ -62,21 +62,32 @@ class Frontend(glade.Frontend):
 		lib.restore_devices(onlyusb=self.onlyusb)
 		self.disks, self.devices = lib.disks, lib.devices
 	
-	def refresh_manual(self, obj=None):
+	def refresh_manual(self, obj=None, complete=True):
 		""" Refreshes the manual partitioning page. """
 
 		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
 
 		self.refresh()
 		
-		# Clear changed
-		self.changed.clear()
+		# Also remove flags.
+		for name, changes in self.changed.items():
+			if complete:
+				# Clear.
+				changes["changes"].clear()
+			else:
+				# Remove all but useas
+				for key, value in changes["changes"].items():
+					if not key == "useas":
+						del changes["changes"][key]
+		
+		# Clear touched
+		self.touched = []
 		
 		self.manual_populate()
 	
 	def apply(self):
 		""" Applies the changes to the devices. """
-		
+				
 		lst, dct = lib.device_sort(self.changed)
 		for key in lst:
 			try:
@@ -107,14 +118,12 @@ class Frontend(glade.Frontend):
 			# Should format?
 			if "format" in cng:
 				progress = lib.format_partition_for_real(obj, cng["format"])
-				info(_("Formatting %s...") % key)
+				self.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
 				status = progress.wait()
 				if status != 0:
 					# Failed ...
-					if interactive:
-						return self.edit_partitions(warning=_("FAILED: formatting %s") % key)
-					else:
-						raise m.CmdError(_("FAILED: formatting %s") % key)
+					self.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+					return False
 							
 			# Check if it is root or swap
 			if "useas" in cng:
@@ -126,6 +135,13 @@ class Frontend(glade.Frontend):
 					# Preseed
 					self.settings["swap"] = key
 					self.settings["swap_noformat"] = True
+
+		# Preseed *all* changes
+		self.settings["changed"] = self.changed
+		
+		# Add to self.previously_changed
+		for item in self.touched:
+			if not item in self.previously_changed: self.previously_changed.append(item)
 
 	def automatic_buttons_creator(self, by, info):
 		""" Creates the buttons that are showed on the automatic wizard. """
@@ -330,6 +346,12 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
 		self.idle_add(self.delete_window.show)
 
+	def on_apply_button_clicked(self, obj):
+		""" Called when the apply button has been clicked. """
+
+		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		self.idle_add(self.apply_window.show)
+
 	def on_add_button_clicked(self, obj):
 		""" Called when the add button has been clicked. """
 		
@@ -519,6 +541,8 @@ class Frontend(glade.Frontend):
 			
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 			
+			if not res.path in self.touched: self.touched.append(res.path)
+			
 			self.manual_populate()
 		
 		# Restore sensitivity
@@ -557,9 +581,7 @@ class Frontend(glade.Frontend):
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
-				if newfs != self.current_fs:
-					# Yes! We need to format!
-					self.queue_for_format(part.path, newfs)
+				self.queue_for_format(part.path, newfs)
 			
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -569,9 +591,11 @@ class Frontend(glade.Frontend):
 				# Remove the old mountpoint from the list
 				if self.current_mountpoint:
 					del self.mountpoints_added[self.current_mountpoint]
-					
+
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
-			
+
+			if not part.path in self.touched: self.touched.append(part.path)
+						
 			self.manual_populate()
 		
 		# Restore sensitivity
@@ -634,6 +658,8 @@ class Frontend(glade.Frontend):
 				# Ok!
 				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 			
+			if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
+			
 			self.manual_populate()
 		
 		# Restore sensitivity
@@ -656,8 +682,30 @@ class Frontend(glade.Frontend):
 			else:
 				# Ok!
 				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
-			
+
+			if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
+
 			self.manual_populate()
+		
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)
+
+	def on_apply_window_button_clicked(self, obj):
+		""" Called when a button on the apply window has been clicked. """
+		
+		self.idle_add(self.apply_window.hide)
+		
+		dev = self.get_disk_from_selected()
+		
+		if obj == self.apply_yes:
+			# Yes.
+			# APPLY! :)
+			
+			res = self.apply()
+			self.refresh_manual(complete=False)
+			
+			if not res == False:
+				self.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))
 		
 		# Restore sensitivity
 		self.objects["parent"].main.set_sensitive(True)
@@ -761,7 +809,7 @@ class Frontend(glade.Frontend):
 				else:
 					_mpoint = ""
 								
-				if self.changed[part.path]["changes"] != {}:
+				if self.changed[part.path]["changes"] != {} and not (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]):
 					print "%s was changed" % part.path
 					# This was changed now, "hold" color.
 					_bg = self.objects["parent"].return_color("hold")
@@ -826,6 +874,7 @@ class Frontend(glade.Frontend):
 		self.current_selected = None
 		
 		self.changed = {}
+		self.touched = []
 		self.previously_changed = []
 		
 		self.mountpoints_added = {}
@@ -843,6 +892,7 @@ class Frontend(glade.Frontend):
 		self.newtable_window = self.objects["builder"].get_object("newtable_window")
 		self.remove_window = self.objects["builder"].get_object("remove_window")
 		self.delete_window = self.objects["builder"].get_object("delete_window")
+		self.apply_window = self.objects["builder"].get_object("apply_window")
 		
 		## Partition window:
 		self.size_manual_radio = self.objects["builder"].get_object("size_manual_radio")
@@ -922,6 +972,12 @@ class Frontend(glade.Frontend):
 		self.delete_no.connect("clicked", self.on_delete_window_button_clicked)
 		self.delete_yes.connect("clicked", self.on_delete_window_button_clicked)
 
+		## Apply window:
+		self.apply_no = self.objects["builder"].get_object("apply_no")
+		self.apply_yes = self.objects["builder"].get_object("apply_yes")
+		self.apply_no.connect("clicked", self.on_apply_window_button_clicked)
+		self.apply_yes.connect("clicked", self.on_apply_window_button_clicked)
+
 		# Get toolbar buttons
 		self.add_button = self.objects["builder"].get_object("add_button")
 		self.remove_button = self.objects["builder"].get_object("remove_button")
@@ -938,6 +994,7 @@ class Frontend(glade.Frontend):
 		self.remove_button.connect("clicked", self.on_remove_button_clicked)
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)
 		self.refresh_button.connect("clicked", self.refresh_manual)
+		self.apply_button.connect("clicked", self.on_apply_button_clicked)
 
 		# Get the harddisk_container and populate it
 		self.harddisk_container = self.objects["builder"].get_object("harddisk_container")

@@ -286,7 +286,7 @@ def commit(obj, touched):
 		
 		# If obj is a device, get appropriate disk
 		try:
-			obj = disks[obj]
+			obj = disks[return_device(obj.path).replace("/dev/","")]
 		except KeyError:
 			verbose("Unable to get an appropriate disk. This may happen when returning back after a partition table creation.")
 			return
