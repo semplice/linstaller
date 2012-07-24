@@ -21,9 +21,10 @@ class Progress(threading.Thread):
 	""" Thread that will make something :) Override the progress function and put there commands to execute!
 	Calling Frontend() class is available at self.parent. """
 	
-	def __init__(self, parent):
+	def __init__(self, parent, quit=True):
 		
 		self.parent = parent
+		self.quit = quit
 		
 		threading.Thread.__init__(self)
 	
@@ -35,7 +36,7 @@ class Progress(threading.Thread):
 		self.progress()
 		
 		# Switch over! 
-		self.parent.objects["parent"].on_next_button_click()
+		if self.quit: self.parent.objects["parent"].on_next_button_click()
 
 class Frontend(linstaller.core.frontend.Frontend):
 	def __init__(self, moduleclass):

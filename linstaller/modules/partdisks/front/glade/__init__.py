@@ -17,6 +17,82 @@ import linstaller.core.libmodules.partdisks.library as lib
 
 from gi.repository import Gtk, GObject
 
+class Apply(glade.Progress):
+	def progress(self):
+		""" Applies the changes to the devices. """
+				
+		lst, dct = lib.device_sort(self.parent.changed)
+		for key in lst:
+			try:
+				obj = dct[key]["obj"]
+				cng = dct[key]["changes"]
+			except:
+				verbose("Unable to get a correct object/changes from %s." % key)
+				continue # Skip.
+							
+			verbose("Committing changes in %s" % key)
+			
+			# If working in a Virtual freespace partition, pyparted will segfault.
+			# The following is a workaround, but should be fixed shortly.
+			#                FIXME
+			#           FIXME     FIXME
+			#      FIXME    ______     FIXME
+			# FIXME        |      |         FIXME
+			# FIXME        |      |               FIXME
+			# FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+			# ------------------------------------------
+			# Figure 1: A FIXME big like an house.
+			if "-1" in key:
+				continue				
+
+			# Commit on the disk.
+			self.parent.set_header("hold", _("Committing changes to %s...") % key, _("This may take a while."))
+			try:
+				lib.commit(obj, self.parent.touched)
+			except:
+				self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+				return
+							
+			# Should format?
+			if "format" in cng:
+				progress = lib.format_partition_for_real(obj, cng["format"])
+				self.parent.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
+				status = progress.wait()
+				if status != 0:
+					# Failed ...
+					self.parent.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+					return False
+							
+			# Check if it is root or swap
+			if "useas" in cng:
+				if cng["useas"] == "/":
+					# Preseed
+					self.parent.settings["root"] = key
+					self.parent.settings["root_noformat"] = True
+				elif cng["useas"] == "swap":
+					# Preseed
+					self.parent.settings["swap"] = key
+					self.parent.settings["swap_noformat"] = True
+
+		# Preseed *all* changes
+		self.parent.settings["changed"] = self.parent.changed
+		
+		# Add to self.previously_changed
+		for item in self.parent.touched:
+			if not item in self.parent.previously_changed: self.parent.previously_changed.append(item)
+
+		self.parent.refresh_manual(complete=False)
+		
+		# If we're here, ok!	
+		self.parent.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
+
+		# Enable Next button
+		self.parent.on_steps_ok()
+
+		# Restore sensitivity
+		self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
 class Frontend(glade.Frontend):	
 	def ready(self):
 				
@@ -69,6 +145,8 @@ class Frontend(glade.Frontend):
 
 		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
 
+		self.has_swap_warning_showed = False
+
 		self.refresh()
 		
 		# Also remove flags.
@@ -89,62 +167,13 @@ class Frontend(glade.Frontend):
 	
 	def apply(self):
 		""" Applies the changes to the devices. """
-				
-		lst, dct = lib.device_sort(self.changed)
-		for key in lst:
-			try:
-				obj = dct[key]["obj"]
-				cng = dct[key]["changes"]
-			except:
-				verbose("Unable to get a correct object/changes from %s." % key)
-				continue # Skip.
-							
-			verbose("Committing changes in %s" % key)
-			
-			# If working in a Virtual freespace partition, pyparted will segfault.
-			# The following is a workaround, but should be fixed shortly.
-			#                FIXME
-			#           FIXME     FIXME
-			#      FIXME    ______     FIXME
-			# FIXME        |      |         FIXME
-			# FIXME        |      |               FIXME
-			# FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-			# ------------------------------------------
-			# Figure 1: A FIXME big like an house.
-			if "-1" in key:
-				continue				
-
-			# Commit on the disk.
-			lib.commit(obj, self.touched)
-							
-			# Should format?
-			if "format" in cng:
-				progress = lib.format_partition_for_real(obj, cng["format"])
-				self.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
-				status = progress.wait()
-				if status != 0:
-					# Failed ...
-					self.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
-					return False
-							
-			# Check if it is root or swap
-			if "useas" in cng:
-				if cng["useas"] == "/":
-					# Preseed
-					self.settings["root"] = key
-					self.settings["root_noformat"] = True
-				elif cng["useas"] == "swap":
-					# Preseed
-					self.settings["swap"] = key
-					self.settings["swap_noformat"] = True
-
-		# Preseed *all* changes
-		self.settings["changed"] = self.changed
 		
-		# Add to self.previously_changed
-		for item in self.touched:
-			if not item in self.previously_changed: self.previously_changed.append(item)
-
+		# Apply!
+		clss = Apply(self, quit=False)
+		clss.start()
+		
+		return
+	
 	def automatic_buttons_creator(self, by, info):
 		""" Creates the buttons that are showed on the automatic wizard. """
 		
@@ -699,17 +728,7 @@ class Frontend(glade.Frontend):
 		dev = self.get_disk_from_selected()
 			
 		res = self.apply()
-		self.refresh_manual(complete=False)
-			
-		if not res == False:
-			self.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
 
-		# Enable Next button
-		self.on_steps_ok()
-
-		# Restore sensitivity
-		self.apply_window.set_sensitive(True)
-		self.objects["parent"].main.set_sensitive(True)
 
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
@@ -718,7 +737,7 @@ class Frontend(glade.Frontend):
 			# Yes.
 			# APPLY! :)
 			self.apply_window.set_sensitive(False)
-			self.idle_add(self.manual_apply)
+			self.idle_add(self.apply)
 		else:
 			# Restore sensitivity
 			self.objects["parent"].main.set_sensitive(True)
@@ -856,7 +875,7 @@ class Frontend(glade.Frontend):
 		""" Populates the harddisk_container with content. """
 
 		for child in self.harddisk_container.get_children():
-			child.destroy()
+			self.idle_add(child.destroy)
 
 		for name, obj in self.devices.items():
 			self.manual_devices[obj.path] = self.manual_frame_creator(obj, self.disks[name])
@@ -864,16 +883,16 @@ class Frontend(glade.Frontend):
 				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = self.manual_devices[obj.path]["description"]
 			else:
 				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = None
-			self.harddisk_container.pack_start(self.manual_devices[obj.path]["frame"], True, True, True)
+			self.idle_add(self.harddisk_container.pack_start, self.manual_devices[obj.path]["frame"], True, True, True)
 		
-		self.harddisk_container.show_all()
+		self.idle_add(self.harddisk_container.show_all)
 
 		# Make everything unsensitive...
-		self.add_button.set_sensitive(False)
-		self.remove_button.set_sensitive(False)
-		self.edit_button.set_sensitive(False)
-		self.newtable_button.set_sensitive(False)
-		self.delete_button.set_sensitive(False)
+		self.idle_add(self.add_button.set_sensitive, False)
+		self.idle_add(self.remove_button.set_sensitive, False)
+		self.idle_add(self.edit_button.set_sensitive, False)
+		self.idle_add(self.newtable_button.set_sensitive, False)
+		self.idle_add(self.delete_button.set_sensitive, False)
 	
 	def on_manual_radio_changed(self, obj=None):
 		""" Called when the radios on the add/edit partition window are changed. """

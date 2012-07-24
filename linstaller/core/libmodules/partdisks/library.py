@@ -54,6 +54,7 @@ flags = {
 
 sample_mountpoints = {
 	None : _("Do not set a mountpoint."),
+	"swap" : _("Swap"),
 	"/" : _("Root (/)"),
 	"/home" : _("Home Partition (/home)"),
 	"/usr" : _("Global applications (/usr)"),
