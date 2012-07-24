@@ -12,9 +12,30 @@ from linstaller.core.main import warn,info,verbose
 import linstaller.core.frontend
 
 import time
+import threading
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
+
+class Progress(threading.Thread):
+	""" Thread that will make something :) Override the progress function and put there commands to execute!
+	Calling Frontend() class is available at self.parent. """
+	
+	def __init__(self, parent):
+		
+		self.parent = parent
+		
+		threading.Thread.__init__(self)
+	
+	def progress(self):
+		pass
+	
+	def run(self):
+		# Run progress()
+		self.progress()
+		
+		# Switch over! 
+		self.parent.objects["parent"].on_next_button_click()
 
 class Frontend(linstaller.core.frontend.Frontend):
 	def __init__(self, moduleclass):
@@ -169,6 +190,21 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		self.idle_add(self.objects["parent"].set_header, icon, title, subtitle)
 	
+	def progress_set_text(self, text=_("Please wait...")):
+		""" Sets the current progress text (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_text, text)
+	
+	def progress_set_quota(self, quota=100):
+		""" Sets the current progressbar's quota (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_quota, quota)
+	
+	def progress_set_percentage(self, final):
+		""" Sets the current progressbar's percentage (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_percentage, final)
+	
 	def hide(self, obj):
 		""" Hides the selected object.
 		Use this method instead of the stock hide on the object to avoid hangs and freezes. """
@@ -201,5 +237,10 @@ class Frontend(linstaller.core.frontend.Frontend):
 	
 	def ready(self):
 		""" Ovveride this function to manage frontend objects (declared onto the self.objects dictionary). """
+		
+		pass
+	
+	def process(self):
+		""" Override this function to process things. """
 		
 		pass

@@ -50,10 +50,12 @@ class Frontend(glade.Frontend):
 		self.automatic_button = self.objects["builder"].get_object("automatic_button")
 		self.automatic_button.connect("clicked", self.on_automatic_button_clicked)
 		
+		self.automatic_button.set_sensitive(False) # Set insensitive, automatic not ready for Beta1
+		
 		self.manual_button = self.objects["builder"].get_object("manual_button")
 		self.manual_button.connect("clicked", self.on_manual_button_clicked)
 
-		# Diable next button
+		# Disable next button
 		self.on_steps_hold()
 	
 	def refresh(self):
@@ -594,6 +596,7 @@ class Frontend(glade.Frontend):
 
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
+			if part.path in self.previously_changed: self.previously_changed.remove(part.path)
 			if not part.path in self.touched: self.touched.append(part.path)
 						
 			self.manual_populate()
@@ -690,26 +693,39 @@ class Frontend(glade.Frontend):
 		# Restore sensitivity
 		self.objects["parent"].main.set_sensitive(True)
 
+	def manual_apply(self):
+		""" Workaround to get the apply window hidden while doing things. """
+
+		dev = self.get_disk_from_selected()
+			
+		res = self.apply()
+		self.refresh_manual(complete=False)
+			
+		if not res == False:
+			self.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
+
+		# Enable Next button
+		self.on_steps_ok()
+
+		# Restore sensitivity
+		self.apply_window.set_sensitive(True)
+		self.objects["parent"].main.set_sensitive(True)
+
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
-		
-		self.idle_add(self.apply_window.hide)
-		
-		dev = self.get_disk_from_selected()
-		
+				
 		if obj == self.apply_yes:
 			# Yes.
 			# APPLY! :)
-			
-			res = self.apply()
-			self.refresh_manual(complete=False)
-			
-			if not res == False:
-				self.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))
+			self.apply_window.set_sensitive(False)
+			self.idle_add(self.manual_apply)
+		else:
+			# Restore sensitivity
+			self.objects["parent"].main.set_sensitive(True)
 		
-		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
-	
+		#self.apply_window.set_sensitive(True)
+		self.idle_add(self.apply_window.hide)
+			
 	def manual_frame_creator(self, device, disk):
 		""" Creates frames etc for the objects passed. """
 		
@@ -808,14 +824,17 @@ class Frontend(glade.Frontend):
 						_mpoint = ""
 				else:
 					_mpoint = ""
-								
-				if self.changed[part.path]["changes"] != {} and not (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]):
+
+				if part.path in self.previously_changed:
+					# This was changed previously, "ok" color.
+					_bg = self.objects["parent"].return_color("ok")
+				elif self.changed[part.path]["changes"] != {}:
 					print "%s was changed" % part.path
 					# This was changed now, "hold" color.
 					_bg = self.objects["parent"].return_color("hold")
-				elif part.path in self.previously_changed:
-					# This was changed previously, "ok" color.
-					_bg = self.objects["parent"].return_color("ok")
+					
+					# Also, there are some changes, so disable the next button.
+					self.on_steps_hold()
 				else:
 					# No change
 					_bg = None
@@ -870,6 +889,8 @@ class Frontend(glade.Frontend):
 	
 	def manual_ready(self):
 		""" Called when the manual window is ready. """
+		
+		self.has_swap_warning_showed = False
 		
 		self.current_selected = None
 		
@@ -1029,7 +1050,34 @@ class Frontend(glade.Frontend):
 			if current == 1:
 				self.automatic_container.hide()
 			
+			# Disable next button
+			self.on_steps_hold()
+			
 			self.pages_notebook.set_current_page(0)
 			return True
-
+	
+	def on_next_button_click(self):
+		""" Override on_next_button_click. """
+		
+		if self.pages_notebook.get_current_page() == 2:
+			# We are in manual, and we need to check if the / partition is selected...
+			
+			if not "/" in self.mountpoints_added:
+				# Error!
+				self.set_header("error", _("You can't continue!"), _("You need to specify the root (/) partition."))
+				return True
+			
+			# Check for swap too...
+			if not "swap" in self.mountpoints_added:
+				# Warning!
+				if not self.has_swap_warning_showed:
+					# Show it
+					self.set_header("hold", _("Are you sure?"), _("It seems you haven't selected a swap partition.\nSelect one now, or press Forward to continue without one."))
+					self.has_swap_warning_showed = True
+					return True
+				else:
+					self.has_swap_warning_showed = False
+			
+			# Seed changed
+			self.settings["changed"] = self.changed
 		

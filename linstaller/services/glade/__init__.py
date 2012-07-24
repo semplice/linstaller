@@ -37,6 +37,13 @@ class Service(linstaller.core.service.Service):
 	trigger modules changes (whose GUIs are preloaded by this service), 
 	thus reducing lags and presenting a cleaner environment. """
 	
+	def __init__(self, main_settings, service_space, cfg):
+		""" __init__ override. """
+		
+		linstaller.core.service.Service.__init__(self, main_settings, service_space, cfg)
+
+		self.on_inst = False
+	
 	def return_color(self, typ):
 		""" Returns color for typ. """
 		
@@ -44,6 +51,73 @@ class Service(linstaller.core.service.Service):
 			return head_col[typ]
 		else:
 			return None
+	
+	def on_module_change(self):
+		""" Handle modules. """
+				
+		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
+		if "glade" in self.main_settings["frontend"]:
+			moduletype = self.current_module.package.split(".")[-1]
+			
+			if not self.on_inst and moduletype == "inst":
+				# Point of non-return (do not worry, we can actually return :D). Disable Next/Back/Cancel buttons, hide pages and show the progressbar boxes.
+				
+				GObject.idle_add(self.cancel_button.set_sensitive, False)
+				GObject.idle_add(self.back_button.set_sensitive, False)
+				GObject.idle_add(self.next_button.set_sensitive, False)
+				#self.pages.hide()
+				GObject.idle_add(self.inst.show_all)
+				
+				## Calculate how many steps are possible by every module (100.0 / len(inst_modules))
+				self.possible = 1.0 / len(self.inst_modules)
+				self.current = 0.0
+				
+				self.on_inst = True
+			elif moduletype == "front":
+				# hmm... new module is frontend, need to restore some things...
+				
+				GObject.idle_add(self.cancel_button.set_sensitive, True)
+				GObject.idle_add(self.back_button.set_sensitive, False) # We can't go back!
+				GObject.idle_add(self.next_button.set_sensitive, True)
+				#self.pages.hide()
+				GObject.idle_add(self.inst.hide)
+
+				self.on_inst = False	
+			elif self.on_inst:
+				# Finish older module's percentage
+				self.progress_finish_percentage()
+		
+	def progress_set_text(self, text):
+		""" Sets the text of the progress label """
+		
+		GObject.idle_add(self.progress_label.set_markup, "<i>%s</i>" % text)
+		
+	def progress_set_quota(self, quota=100):
+		""" Sets the final quota for this job. """
+		
+		self.quota = float(quota)
+	
+	def progress_set_percentage(self, final):
+		""" Update the progress percentage with final. """
+		
+		try:
+			final = self.quota / final # Get the exact percentage from quota
+			final = self.possible / final # Get the final exact percentage
+			if final < self.possible:
+				# We can safely update the progressbar.
+				GObject.idle_add(self.progress_bar.set_fraction, self.current + final)
+			else:
+				# Assume we reached the maximum.
+				GObject.idle_add(self.progress_bar.set_fraction, self.current + self.possible)
+		except:
+			pass
+	
+	def progress_finish_percentage(self):
+		""" Updates the progress bar to the maximum possible by the module. """
+				
+		self.current += self.possible
+		GObject.idle_add(self.progress_bar.set_fraction, self.current)
+		
 	
 	def on_frontend_change(self):
 		""" Focus on the frontend of the current module. """
@@ -55,7 +129,8 @@ class Service(linstaller.core.service.Service):
 			if not self.pages_built:
 				# We should wait until the pages are built
 				while not self.pages_built:
-					time.sleep(0.3)	
+					time.sleep(0.3)
+						
 			print("Objects...")
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
 			GObject.idle_add(self.current_frontend.on_objects_ready)
@@ -65,14 +140,19 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
-			self.main.set_sensitive(True)
+			GObject.idle_add(self.main.set_sensitive, True)
+			
+			print("Process")
+			GObject.idle_add(self.current_frontend.process)
 						
 			print("Tutto ok!")
+			
 			
 	def build_pages(self):
 		""" Searches for support glade files and adds them to the pages object. """
 				
 		self.modules_objects = {}
+		self.inst_modules = []
 		
 		# Get modules
 		modules = self.main_settings["modules"]
@@ -83,14 +163,28 @@ class Service(linstaller.core.service.Service):
 		# GLADE FRONTEND WILL BE SEARCHED IN welcome/front/glade/ AND NOT in welcome/front/glade.py!
 		
 		for module in modules.split(" "):
+			if module.split(".")[-1] == "inst":
+				is_inst = True
+			else:
+				is_inst = False
+				
 			module_new = module.replace(".","/")
 			module_new = os.path.join(MODULESDIR, module_new + "/glade/module.glade")
 						
-			if not os.path.exists(module_new):
+			if not os.path.exists(module_new) and not is_inst:
 				warn(_("Module path %s does not exist! Skipping...") % module_new)
 				continue
 						
 			objects_list = {"parent":self}
+			
+			if is_inst:
+				# Inst module, skipping from now but adding to self.inst_modules...
+				
+				self.modules_objects[module] = objects_list
+				
+				self.inst_modules.append(module)
+				continue
+			
 			# New builder
 			objects_list["builder"] = Gtk.Builder()
 			objects_list["builder"].add_from_file(module_new)
@@ -122,6 +216,9 @@ class Service(linstaller.core.service.Service):
 		self.main.connect("destroy", self.please_exit)
 		
 		self.box = self.builder.get_object("box")
+		self.inst = self.builder.get_object("inst")
+		
+		self.buttons_area = self.builder.get_object("buttons_area")
 		
 		### HEADER
 		self.header_eventbox = Gtk.EventBox()
@@ -151,6 +248,10 @@ class Service(linstaller.core.service.Service):
 		
 		self.box.pack_start(self.header_eventbox, True, True, 0)
 		self.box.reorder_child(self.header_eventbox, 0)
+		
+		### PROGRESSBAR
+		self.progress_label = self.builder.get_object("progress_label")
+		self.progress_bar = self.builder.get_object("progress_bar")
 				
 		### PAGES
 		
@@ -165,12 +266,16 @@ class Service(linstaller.core.service.Service):
 		
 		
 		# Set back button as unsensitive, as we're in the first page
-		self.back_button.set_sensitive(False)
+		GObject.idle_add(self.back_button.set_sensitive, False)
 		
 		self.build_pages()
 		self.pages_built = True
 		
-		self.main.show_all()
+		GObject.idle_add(self.main.show_all)
+
+		# Hide inst
+		GObject.idle_add(self.inst.hide)
+
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
 	
@@ -186,20 +291,20 @@ class Service(linstaller.core.service.Service):
 		icon = head_ico[icon]
 			
 		# Set icon
-		self.header_icon.set_from_stock(icon, 6)
+		GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
 		# Set header message and window title
-		self.header_message_title.set_markup("<b><big>%s</big></b>" % title)
-		self.header_message_subtitle.set_text(subtitle)
-		self.main.set_title(title + " - " + _("%s Installer") % self.main_settings["distro"])
+		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title)
+		GObject.idle_add(self.header_message_subtitle.set_text, subtitle)
+		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
 		# Set color
-		self.header_eventbox.override_background_color(0, color)
+		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
 				
-		obj.set_icon_from_stock(Gtk.EntryIconPosition.SECONDARY, head_ico[status])
-		obj.set_icon_tooltip_text(Gtk.EntryIconPosition.SECONDARY, tooltip)
+		GObject.idle_add(obj.set_icon_from_stock, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
+		GObject.idle_add(obj.set_icon_tooltip_text, Gtk.EntryIconPosition.SECONDARY, tooltip)
 
 	def please_exit(self, obj):
 		""" Executed when the main window is destroyed. """
@@ -218,13 +323,13 @@ class Service(linstaller.core.service.Service):
 			return
 		
 		# Make sure everything is not sensitive until the frontend is up and running
-		self.main.set_sensitive(False)
+		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
 		
-		self.next_module()
-		self.pages.next_page()
+		GObject.idle_add(self.next_module)
+		GObject.idle_add(self.pages.next_page)
 		
 		# Ensure the back button is clickable
-		self.back_button.set_sensitive(True)
+		if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
 	
 	def on_back_button_click(self, obj=None):
 		""" Executed when the Back button is clicked. """
@@ -233,14 +338,14 @@ class Service(linstaller.core.service.Service):
 			return
 
 		# Make sure everything is not sensitive until the frontend is up and running
-		self.main.set_sensitive(False)
+		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
 
-		self.prev_module()
-		self.pages.prev_page()
+		GObject.idle_add(self.prev_module)
+		GObject.idle_add(self.pages.prev_page)
 		
 		# If this is the first page, make unsensitive the button.
-		if self.pages.get_current_page() == 0:
-			self.back_button.set_sensitive(False)
+		if not self.on_inst and self.pages.get_current_page() in (0, -1):
+			GObject.idle_add(self.back_button.set_sensitive, False)
 
 	def on_caspered(self, status):
 		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
