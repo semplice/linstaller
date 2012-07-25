@@ -31,9 +31,24 @@ iface lo inet loopback
 """)
 
 class Module(module.Module):
+	def _associate_(self):
+		""" Shut up associate as we do not have any frontend. """
+		
+		pass
+
 	def start(self):
 		""" Start module """
 		
 		self.install = Install(self)
 		
-		module.Module.start(self)
+		verbose("Configuring networking...")
+		
+		try:
+			# NETWORKING: set.
+			self.install.configure()
+		finally:
+			# Exit
+			self.install.close()
+			# Copy resolv.conf
+			self.install.copy_resolvconf()
+		
