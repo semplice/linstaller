@@ -319,7 +319,7 @@ elif _action == "start":
 	for modu in executed_special:
 		verbose("Reverting %s" % modu)
 		_revert = mh.Module(modu)
-		_revertc = _revert.load(main_settings, modules_settings, cfg)
+		_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
 		
 		# Revert
 		_revertc.revert()

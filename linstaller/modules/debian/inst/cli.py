@@ -19,7 +19,7 @@ class Frontend(cli.Frontend):
 		verbose("Removing live-specific packages...")
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Removing live-specific packages:"), self.moduleclass.install.get())
+		progress = self.progressbar(_("Removing live-specific packages:"), 1)
 
 		# Start progressbar
 		progress.start()
@@ -28,14 +28,10 @@ class Frontend(cli.Frontend):
 			# Configure
 			self.moduleclass.install.configure()
 			
-			num = 0
-			for pkg in self.moduleclass.packages:
-				num += 1
-				verbose("  Removing %s" % pkg)
-				
-				# Remove package
-				self.moduleclass.install.remove(pkg)
-				progress.update(num)
+			verbose("  Removing %s" % " ".join(self.moduleclass.packages))
+			
+			self.moduleclass.install.remove_with_triggers(self.moduleclass.packages)
+			progress.update(1)
 		finally:
 			# Exit
 			self.moduleclass.install.close()

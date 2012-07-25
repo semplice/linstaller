@@ -14,26 +14,31 @@ from linstaller.core.main import warn,info,verbose
 class Progress(glade.Progress):
 	def progress(self):
 		
+		self.parent.progress_wait_for_quota()
+		
 		try:
 			verbose("Creating user")
 			# USER: set.
+			self.parent.progress_set_text(_("Creating user..."))
 			self.parent.moduleclass.install.user_set()
 			self.parent.progress_set_percentage(1)
 			
 			# USER: commit.
+			self.parent.progress_set_text(_("Committing changes..."))
 			self.parent.moduleclass.install.user_commit()
 			self.parent.progress_set_percentage(2)
 			
 			verbose("Setting username")
 			# HOSTNAME: commit
+			self.parent.progress_set_text(_("Setting hostname..."))
 			self.parent.moduleclass.install.host_commit()
 			self.parent.progress_set_percentage(3)
 		finally:
 			# Exit
 			self.parent.moduleclass.install.close()
 
-class Frontend(cli.Frontend):
-	def start(self):
+class Frontend(glade.Frontend):
+	def ready(self):
 		""" Start the frontend """
 
 		self.progress_set_quota(3)
@@ -41,6 +46,6 @@ class Frontend(cli.Frontend):
 	def process(self):
 		""" Called when we should do things! """
 		
-		prog = Process(self)
+		prog = Progress(self)
 		prog.start()
 

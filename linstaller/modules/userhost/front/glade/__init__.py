@@ -94,30 +94,30 @@ class Frontend(glade.Frontend):
 		# Users
 		if self.settings["userfullname"]:
 			# Hide userfullname
-			self.userfullname_t.hide()
-			self.userfullname.hide()
+			self.idle_add(self.userfullname_t.hide)
+			self.idle_add(self.userfullname.hide)
 		if self.settings["username"]:
 			# Hide username
-			self.username_t.hide()
-			self.username.hide()
+			self.idle_add(self.username_t.hide)
+			self.idle_add(self.username.hide)
 				
 		# Passwords
 		if  self.settings["password"]:
 			# Hide password and pasword confirm
-			self.userpassword_t.hide()
-			self.userpassword.hide()
-			self.userpassword_confirm_t.hide()
-			self.userpassword_confirm.hide()
+			self.idle_add(self.userpassword_t.hide)
+			self.idle_add(self.userpassword.hide)
+			self.idle_add(self.userpassword_confirm_t.hide)
+			self.idle_add(self.userpassword_confirm.hide)
 	
 		# Hostname
 		if self.settings["hostname"]:
-			self.hostname_t.hide()
-			self.hostname.hide()
+			self.idle_add(self.hostname_t.hide)
+			self.idle_add(self.hostname.hide)
 				
 		# Root
 		if self.settings["root"] == None:
 			# Disable everything root-related
-			self.root_expander.hide()
+			self.idle_add(self.root_expander.hide)
 		else:
 			# See if we should hide the rootpassword fields (if preseeded)
 			# We should mark root as enabled?
@@ -133,19 +133,19 @@ class Frontend(glade.Frontend):
 				self.on_enableroot_change(self.enableroot)
 			if self.settings["rootpassword"]:
 				# Hide password frame
-				self.rootpassword_frame.hide()
+				self.idle_add(self.rootpassword_frame.hide)
 				
 				# Make the root switch unsensitive
-				self.enableroot.set_sensitive(False)
+				self.idle_add(self.enableroot.set_sensitive, False)
 			elif self.settings["root"] == True:
 				# Ensure the expander is opened
-				self.root_expander.set_expanded(True)
+				self.idle_add(self.root_expander.set_expanded, True)
 
 		self.set_header("info", _("Users & Hostname"), _("Set users and hostname"))
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:
-			self.user_frame.hide()
+			self.idle_add(self.user_frame.hide)
 			
 			if self.settings["root"] == None or (self.settings["root"] != None and self.settings["rootpassword"]):
 				self.settings["caspered"] = True
@@ -182,7 +182,7 @@ class Frontend(glade.Frontend):
 				self.steps_completed("username")
 				self.change_entry_status(obj, "ok")
 				
-				self.settings["username"] = result
+				self.settings["username"] = text
 			else:
 				failmessage = _("The username must not contain these characters: %s") % ", ".join(result)
 				self.steps_failed("username", failmessage)
@@ -211,7 +211,7 @@ class Frontend(glade.Frontend):
 				self.change_entry_status(self.userpassword, "ok")
 				self.change_entry_status(self.userpassword_confirm, "ok")
 				
-				self.settings["password"] == passw1
+				self.settings["password"] = passw1
 				
 			else:
 				# They doesn't match!
@@ -276,7 +276,7 @@ class Frontend(glade.Frontend):
 				self.steps_completed("hostname")
 				self.change_entry_status(obj, "ok")
 				
-				self.settings["hostname"] = result
+				self.settings["hostname"] = text
 				
 			else:
 				failmessage = _("The hostname must not contain these characters: %s") % ", ".join(result)
@@ -311,4 +311,3 @@ class Frontend(glade.Frontend):
 			# Set entry_status on hold
 			self.change_entry_status(self.rootpassword, "hold")
 			self.change_entry_status(self.rootpassword_confirm, "hold")
-	

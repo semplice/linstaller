@@ -51,7 +51,12 @@ class Apply(glade.Progress):
 				lib.commit(obj, self.parent.touched)
 			except:
 				self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
-				return
+
+				# Restore sensitivity
+				self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+				return False
 							
 			# Should format?
 			if "format" in cng:
@@ -61,6 +66,11 @@ class Apply(glade.Progress):
 				if status != 0:
 					# Failed ...
 					self.parent.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+					# Restore sensitivity
+					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
 					return False
 							
 			# Check if it is root or swap
@@ -111,8 +121,8 @@ class Frontend(glade.Frontend):
 		### SOME TIME-CONSUMING THINGS
 		if True:
 			# Cache distribs
-			#self.distribs = lib.check_distributions()
-			self.distribs = {}
+			self.distribs = lib.check_distributions()
+			#self.distribs = {}
 
 			self.devices, self.disks = lib.devices, lib.disks
 
@@ -1085,6 +1095,9 @@ class Frontend(glade.Frontend):
 				# Error!
 				self.set_header("error", _("You can't continue!"), _("You need to specify the root (/) partition."))
 				return True
+			else:
+				# Set root.
+				self.settings["root"] = self.mountpoints_added["/"]
 			
 			# Check for swap too...
 			if not "swap" in self.mountpoints_added:
@@ -1096,6 +1109,8 @@ class Frontend(glade.Frontend):
 					return True
 				else:
 					self.has_swap_warning_showed = False
+			else:
+				self.settings["swap"] = self.mountpoints_added["swap"]
 			
 			# Seed changed
 			self.settings["changed"] = self.changed

@@ -43,6 +43,8 @@ class Service(linstaller.core.service.Service):
 		linstaller.core.service.Service.__init__(self, main_settings, service_space, cfg)
 
 		self.on_inst = False
+		self.quota = None
+		self.old_module = None
 	
 	def return_color(self, typ):
 		""" Returns color for typ. """
@@ -85,7 +87,10 @@ class Service(linstaller.core.service.Service):
 				self.on_inst = False	
 			elif self.on_inst:
 				# Finish older module's percentage
-				self.progress_finish_percentage()
+				if self.old_module in self.inst_modules: self.progress_finish_percentage()
+			
+			
+			self.old_module = self.current_module.package.replace("linstaller.modules.","")
 		
 	def progress_set_text(self, text):
 		""" Sets the text of the progress label """
@@ -97,12 +102,18 @@ class Service(linstaller.core.service.Service):
 		
 		self.quota = float(quota)
 	
+	def progress_get_quota(self):
+		""" Returns the current progress quota. """
+		
+		return self.quota
+	
 	def progress_set_percentage(self, final):
 		""" Update the progress percentage with final. """
 		
 		try:
 			final = self.quota / final # Get the exact percentage from quota
 			final = self.possible / final # Get the final exact percentage
+						
 			if final < self.possible:
 				# We can safely update the progressbar.
 				GObject.idle_add(self.progress_bar.set_fraction, self.current + final)
@@ -182,7 +193,8 @@ class Service(linstaller.core.service.Service):
 				
 				self.modules_objects[module] = objects_list
 				
-				self.inst_modules.append(module)
+				if os.path.exists(os.path.dirname(module_new)):
+					self.inst_modules.append(module)
 				continue
 			
 			# New builder
@@ -326,7 +338,7 @@ class Service(linstaller.core.service.Service):
 		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
 		
 		GObject.idle_add(self.next_module)
-		GObject.idle_add(self.pages.next_page)
+		if not self.on_inst: GObject.idle_add(self.pages.next_page)
 		
 		# Ensure the back button is clickable
 		if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
@@ -341,7 +353,7 @@ class Service(linstaller.core.service.Service):
 		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
 
 		GObject.idle_add(self.prev_module)
-		GObject.idle_add(self.pages.prev_page)
+		if not self.on_inst: GObject.idle_add(self.pages.prev_page)
 		
 		# If this is the first page, make unsensitive the button.
 		if not self.on_inst and self.pages.get_current_page() in (0, -1):

@@ -14,6 +14,8 @@ import linstaller.core.frontend
 import time
 import threading
 
+import sys
+
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
@@ -43,6 +45,8 @@ class Frontend(linstaller.core.frontend.Frontend):
 
 		linstaller.core.frontend.Frontend.__init__(self, moduleclass)
 
+		self.should_exit = None
+
 		self.is_module_virgin = True
 
 		self.objects = None
@@ -61,6 +65,16 @@ class Frontend(linstaller.core.frontend.Frontend):
 		if _mod in moduleclass.modules_settings and not "_preexecuted" in moduleclass.modules_settings[_mod]:
 			self.settings = moduleclass.modules_settings[_mod]
 			self.is_module_virgin = False
+	
+	def prepare_for_exit(self):
+		""" Should exit! (error) """
+		
+		# Enable only next button
+		self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
+		self.idle_add(self.objects["parent"].back_button.set_sensitive, False)
+		self.idle_add(self.objects["parent"].cancel_button.set_sensitive, False)
+		
+		self.should_exit = 1
 	
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
@@ -191,6 +205,19 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		self.idle_add(self.objects["parent"].set_header, icon, title, subtitle)
 	
+	def progress_wait_for_quota(self):
+		""" Waits until progress_quota is set. """
+
+		while self.progress_quota == None:
+			# We should wait until quota has been set.
+			time.sleep(0.1)
+	
+	@property
+	def progress_quota(self):
+		""" Returns the progress quota. """
+		
+		return self.objects["parent"].progress_get_quota()
+	
 	def progress_set_text(self, text=_("Please wait...")):
 		""" Sets the current progress text (via service) """
 		
@@ -221,6 +248,8 @@ class Frontend(linstaller.core.frontend.Frontend):
 		""" Executed when the module has other pages (and the frontend needs to map appropiately the next button).
 		If it returns None, the service will switch to the next module as normal.
 		If it doesn't return None, the service will stop after this method. """
+		
+		if self.should_exit: sys.exit(self.should_exit)
 		
 		return None
 
