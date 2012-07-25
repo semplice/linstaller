@@ -106,7 +106,7 @@ class Module(module.Module):
 		
 		self.install = Install(self)
 		
-		verbose("Configuring fstab...")
+		m.verbose("Configuring fstab...")
 		
 		try:
 			# FSTAB: set.

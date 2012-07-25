@@ -4,6 +4,7 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
+import linstaller.core.main as m
 import linstaller.core.module as module
 import shutil
 
@@ -41,7 +42,7 @@ class Module(module.Module):
 		
 		self.install = Install(self)
 		
-		verbose("Configuring networking...")
+		m.verbose("Configuring networking...")
 		
 		try:
 			# NETWORKING: set.
