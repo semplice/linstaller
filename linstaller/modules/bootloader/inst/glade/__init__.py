@@ -36,7 +36,7 @@ class BootloaderInstall(glade.Progress):
 			self.parent.moduleclass.install.close()
 
 
-class Frontend(cli.Frontend):
+class Frontend(glade.Frontend):
 	def ready(self):
 		""" Start the frontend """
 		

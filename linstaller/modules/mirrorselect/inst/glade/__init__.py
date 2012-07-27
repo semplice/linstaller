@@ -47,8 +47,8 @@ class Select(glade.Progress):
 			self.parent.moduleclass.install.close()	
 		
 
-class Frontend(cli.Frontend):
-	def start(self):
+class Frontend(glade.Frontend):
+	def ready(self):
 		""" Start the frontend """
 	
 		self.sets = self.moduleclass.modules_settings["mirrorselect"]["sets"].split(" ")
