@@ -40,6 +40,8 @@ class Frontend(cli.Frontend):
 	def ready(self):
 		""" Start the frontend """
 		
+		self.set_header("hold", _("Installing bootloader..."), _("Please wait during the installer is installing the bootloader..."))
+		
 		self.progress_set_quota(2)
 	
 	def process(self):
