@@ -49,3 +49,21 @@ class Frontend(glade.Frontend):
 		if self.settings["enable_sources"] != None:
 			debsrc.hide()
 
+	def on_next_button_click(self):
+		""" Proper set settings["check"] and settings["enable_sources"] when Next button has been clicked. """
+		
+		check = self.mirrorselect.get_active()
+		sources = self.debsrc.get_active()
+
+		if check:
+			self.settings["check"] = True
+		else:
+			self.settings["check"] = None
+		
+		if self.settings["enable_souorces"] == None:
+			if sources:
+				self.settings["enable_sources"] = True
+			else:
+				self.settings["enable_sources"] = False
+		
+		return None
