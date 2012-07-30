@@ -41,7 +41,7 @@ class Frontend(cli.Frontend):
 						
 			# Keyboard
 			if not self.settings["layout"]:
-				self.settings["layout"] = self.entry(_("Please insert your keyboard layout (e.g: it)"))
+				self.settings["layout"] = self.entry(_("Please insert your keyboard layout (e.g: it; it us)")).split(" ")
 				# FIXME: laiv-setup: should verify
 			
 			if not self.settings["model"]:
