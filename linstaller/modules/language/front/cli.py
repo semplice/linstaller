@@ -24,8 +24,8 @@ class Frontend(cli.Frontend):
 			if not self.settings["language"]:
 				locale = self.entry(_("Please insert your locale here (e.g. it, or it_IT, or it_IT.UTF-8)"))
 				# Check if the locale is good...
-				result = self.moduleclass.la.detect_best_locale(locale)
-				if result == 1:
+				result = self.moduleclass.la.get_best_locale(locale)
+				if not result:
 					# Something wrong... restart
 					_null = self.entry(_("Unknown locale. [press ENTER to continue]"), blank=True)
 					return "restart"
@@ -33,35 +33,34 @@ class Frontend(cli.Frontend):
 				# Preseed.
 				self.settings["language"] = result
 			else:
-				best = self.moduleclass.la.detect_best_locale(self.settings["language"])
-				if best == 1:
+				best = self.moduleclass.la.get_best_locale(self.settings["language"])
+				if not best:
 					# Wrong locale. fallback to en_us.UTF8
 					best = "en_US.UTF-8"
 				self.settings["language"] = best
 						
 			# Keyboard
-			if not self.settings["keyboard"]:
-				keyboard = self.entry(_("Please insert your keyboard layout (e.g: it; or it,pc105)"))
+			if not self.settings["layout"]:
+				self.settings["layout"] = self.entry(_("Please insert your keyboard layout (e.g: it)"))
 				# FIXME: laiv-setup: should verify
-			else:
-				keyboard = self.settings["keyboard"] # Get keyboard from preseed.
-				
-			# Split.
-			if len(keyboard.split(",")) == 1:
-				# Only keyboard specified.
-				self.settings["_model"] = False
-				self.settings["keyboard"] = keyboard
-			else:
-				# Keyboard and model.
-				keyboard = keyboard.split(",")
-				self.settings["keyboard"] = keyboard[0]
-				self.settings["_model"] = keyboard[1]
+			
+			if not self.settings["model"]:
+				self.settings["model"] = self.entry(_("Please insert your keyboard model (e.g: pc105, default is pc105)"), blank=True)
+				if not self.settings["model"]: self.settings["model"] = "pc105"
+				# FIXME: laiv-setup: should verify
+
+
+			if not self.settings["variant"]:
+				self.settings["variant"] = self.entry(_("Please insert your keyboard variant (press ENTER to skip)"), blank=True)
+				if not self.settings["variant"]: self.settings["variant"] = None
+				# FIXME: laiv-setup: should verify
+
 		else:
 			# Do not ask; instead using host's language and keyboard layout.
-			self.settings["language"] = self.moduleclass.la.get_current_locale()
-			layout, model = self.moduleclass.ke.get_current_layout_and_model()
-			self.settings["keyboard"] = layout
-			self.settings["_model"] = model
+			self.settings["language"] = self.moduleclass.la.default
+			self.settings["layout"] = self.moduleclass.ke.default_layout
+			self.settings["model"] = self.moduleclass.ke.default_model
+			self.settings["variant"] = self.moduleclass.ke.default_variant
 
 		verbose("Selected language: %s" % self.settings["language"])
-		verbose("Selected keyboard: %s (model %s)" % (self.settings["keyboard"], self.settings["_model"]))
+		verbose("Selected keyboard: %s (model %s, variant %s)" % (self.settings["layout"], self.settings["model"], self.settings["variant"]))

@@ -22,8 +22,9 @@ class Frontend(cli.Frontend):
 
 		# Get.
 		language = self.moduleclass.modules_settings["language"]["language"]
-		keyboard = self.moduleclass.modules_settings["language"]["keyboard"]
-		model = self.moduleclass.modules_settings["language"]["_model"]
+		layout = self.moduleclass.modules_settings["language"]["layout"]
+		model = self.moduleclass.modules_settings["language"]["model"]
+		variant = self.moduleclass.modules_settings["language"]["variant"]
 
 		# Start progressbar
 		progress.start()
@@ -34,7 +35,7 @@ class Frontend(cli.Frontend):
 			progress.update(1)
 			
 			# Set keyboard and model
-			self.moduleclass.install.keyboard(keyboard, model)
+			self.moduleclass.install.keyboard(layout=layout, model=model, variant=variant)
 			progress.update(2)
 		finally:
 			# Exit from chroot

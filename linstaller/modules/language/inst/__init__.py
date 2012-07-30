@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# linstaller unsquash module install - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# linstaller language module install - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import linstaller.core.module as module
-from liblaiv_setup import Language, Keyboard
+from keeptalking import Locale, Keyboard
 
 class Install(module.Install):
 	def language(self, language):
@@ -13,17 +13,17 @@ class Install(module.Install):
 		
 		self.moduleclass.la.set(language)
 	
-	def keyboard(self, keyboard, model):
+	def keyboard(self, layout=None, model=None, variant=None):
 		""" Set keyboard. """
 		
-		self.moduleclass.ke.set(keyboard, model)
+		self.moduleclass.ke.set(layout=layout, model=model, variant=variant)
 
 class Module(module.Module):
 	def start(self):
 		""" Start module. """
 		
-		self.la = Language()
-		self.ke = Keyboard()
+		self.la = Locale.Locale()
+		self.ke = Keyboard.Keyboard()
 		
 		self.install = Install(self)
 		

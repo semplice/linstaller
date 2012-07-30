@@ -67,14 +67,21 @@ class Frontend(linstaller.core.frontend.Frontend):
 			sys.stdout.write("-")
 		sys.stdout.write("\n\n")
 	
-	def entry(self, text, password=False, blank=False):
+	def entry(self, text, password=False, blank=False, onlyint=False):
 		""" Displays and entry prompt (normal or password) """
 		
 		if password == True:
 			choice = getpass.getpass(text + ": ")
 		else:
 			choice = raw_input(text + ": ")
-		
+
+		if onlyint:
+			# We should check if it is an integer
+			try:
+				choice = int(choice)
+			except:
+				print "E: %s" % (_("You need to insert a number!"))
+
 		if not choice and blank == False:
 			warn(_("You must insert something!"))
 			return self.entry(text, password=password, blank=blank)

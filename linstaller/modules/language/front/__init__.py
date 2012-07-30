@@ -5,14 +5,14 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import linstaller.core.module as module
-from liblaiv_setup import Language, Keyboard
+from keeptalking import Locale, Keyboard
 
 class Module(module.Module):
 	def start(self):
 		""" Start module. """
 		
-		self.la = Language()
-		self.ke = Keyboard()
+		self.la = Locale.Locale()
+		self.ke = Keyboard.Keyboard()
 		
 		return module.Module.start(self)
 	
@@ -21,7 +21,6 @@ class Module(module.Module):
 		
 		self.cache("ask")
 		self.cache("language")
-		self.cache("keyboard")
-		
-		## INTERNAL
-		self.cache("_model")
+		self.cache("layout")
+		self.cache("model")
+		self.cache("variant")

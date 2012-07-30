@@ -5,15 +5,15 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 import linstaller.core.module as module
-from liblaiv_setup import TimeZone
+from keeptalking import TimeZone
 
 class Module(module.Module):
 	def start(self):
 		""" Start module. """
 		
-		self.tz = TimeZone()
+		self.tz = TimeZone.TimeZone()
 		
-		module.Module.start(self)
+		return module.Module.start(self)
 
 	def seedpre(self):
 		""" Caches variables used by this module. """
