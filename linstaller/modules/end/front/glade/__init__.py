@@ -16,3 +16,6 @@ class Frontend(glade.Frontend):
 		""" Ready! (to wait...) """
 
 		self.set_header("ok", _("Already finished?"), _("It seems so."))
+
+		main_notebook = self.objects["builder"].get_object("main_notebook")
+		main_notebook.set_current_page(1)
