@@ -16,8 +16,10 @@ from keeptalking import TimeZone as timezone
 class Frontend(glade.Frontend):
 	def ready(self):
 		
-		self.set_header("info", _("Timezone selection"), _("Select your timezone here."))
-		self.has_keyboard_header_shown = False
+		if self.is_module_virgin:
+			self.set_header("info", _("Timezone selection"), _("Select your timezone here."))
+		else:
+			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 
 		self.notebook = self.objects["builder"].get_object("notebook")
 
@@ -47,14 +49,17 @@ class Frontend(glade.Frontend):
 		
 		self.timezone_treeview.set_model(self.timezone_model)
 		# Create cell
-		self.timezone_treeview.append_column(Gtk.TreeViewColumn("Timezone", Gtk.CellRendererText(), text=0))
+		if self.is_module_virgin:
+			self.timezone_treeview.append_column(Gtk.TreeViewColumn("Timezone", Gtk.CellRendererText(), text=0))
 		# Populate
-		if "language" in self.moduleclass.modules_settings and "timezone_auto" in self.moduleclass.modules_settings["language"]:
+		if self.settings["timezone"]:
+			tzone = self.settings["timezone"]
+		elif "language" in self.moduleclass.modules_settings and "timezone_auto" in self.moduleclass.modules_settings["language"]:
 			tzone = self.moduleclass.modules_settings["language"]["timezone_auto"]
 		else:
 			tzone = None
 		self.populate_timezone_model(tzone=tzone)
-
+		
 	def get_selected_timezone(self):
 		""" Gets the selected timezone. """
 		
@@ -64,30 +69,6 @@ class Frontend(glade.Frontend):
 		model, itr = selection.get_selected()
 		
 		return self.timezone_model.get_value(itr, 0)
-
-	def on_locale_changed(self, obj):
-		""" Fired when the locale is changed on the first view. """
-		
-		if self.is_building: return
-		
-		loc = self.get_selected_locale()
-		if not loc: return
-		
-		# We need to set the keyboard layout!
-		lay = loc.split(".")[0].split("@")[0].split("_")[1].lower()
-		# We will use idle_add otherwise GUI will freeze for a few seconds (it should rebuild all layouts).
-		GObject.idle_add(self.populate_layout_model, lay)
-		
-		# Set the variant too, if any
-		var = loc.split(".")[0].split("@")[0].split("_")[0].lower()
-		# We will use idle_add otherwise GUI will freeze for a few seconds (it should rebuild all layouts).
-		GObject.idle_add(self.populate_variant_model, None, var)
-
-		# We need to set the timezone!
-		tzone = loc.split(".")[0].split("@")[0].split("_")[1].upper()
-		if tzone in tzone_countries:
-			# Save for later
-			self.settings["timezone_auto"] = tzone_countries[tzone]
 
 
 	def populate_timezone_model(self, tzone=None):
@@ -134,7 +115,7 @@ class Frontend(glade.Frontend):
 		
 		self.is_building = False
 
-	def on_next_button_click(self):
+	def on_module_change(self):
 		""" Preseed changes """
 		
 		# Preseed changes
@@ -142,4 +123,3 @@ class Frontend(glade.Frontend):
 		
 		verbose("Selected timezone %s" % self.settings["timezone"])
 		
-		return None

@@ -260,6 +260,11 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		return None
 	
+	def on_module_change(self):
+		""" Executed when going back/forward (but only if actually changing module. """
+		
+		pass
+	
 	def pre_ready(self):
 		""" Override this function to do something before the ready() invocation. """
 		

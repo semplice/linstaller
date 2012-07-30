@@ -15,9 +15,15 @@ from keeptalking import TimeZone as timezone
 
 class Frontend(glade.Frontend):
 	def ready(self):
-		
-		self.set_header("info", _("Language selection"), _("Select your language here."))
-		self.has_keyboard_header_shown = False
+				
+		if self.is_module_virgin:
+			self.set_header("info", _("Language selection"), _("Select your language here."))
+			self.has_keyboard_header_shown = False
+			self.is_rerun = None
+		else:
+			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
+			self.has_keyboard_header_shown = True
+			self.is_rerun = True
 
 		self.notebook = self.objects["builder"].get_object("notebook")
 
@@ -51,19 +57,24 @@ class Frontend(glade.Frontend):
 		
 		self.locale_treeview.set_model(self.locale_model)
 		# Create cell
-		self.locale_treeview.append_column(Gtk.TreeViewColumn("Locale", Gtk.CellRendererText(), text=1))
-		self.locale_treeview.append_column(Gtk.TreeViewColumn("Codepage", Gtk.CellRendererText(), text=2))
+		if self.is_module_virgin:
+			self.locale_treeview.append_column(Gtk.TreeViewColumn("Locale", Gtk.CellRendererText(), text=1))
+			self.locale_treeview.append_column(Gtk.TreeViewColumn("Codepage", Gtk.CellRendererText(), text=2))
 		#self.locale_frame.add(self.locale_treeview)
 		
 		## Get the checkbox.
 		self.locale_checkbox = self.builder.get_object("all_locales_checkbutton")
 		
 		# Populate
-		if self.is_utf8(locale.default):
-			self.populate_locale_model(all=False)
+		if self.settings["language"]:
+			defa = self.settings["language"]
+		else:
+			defa = locale.default
+		if self.is_utf8(defa):
+			self.populate_locale_model(all=False, toselect=defa)
 			self.locale_checkbox.set_active(False)
 		else:
-			self.populate_locale_model(all=True)
+			self.populate_locale_model(all=True, toselect=defa)
 			self.locale_checkbox.set_active(True)
 
 		self.locale_checkbox.connect("toggled", self.on_locale_checkbox_toggled)
@@ -76,11 +87,16 @@ class Frontend(glade.Frontend):
 		
 		self.layout_treeview.set_model(self.layout_model)
 		# Create cell
-		self.layout_treeview.append_column(Gtk.TreeViewColumn("Layout", Gtk.CellRendererText(), text=1))
+		if self.is_module_virgin:
+			self.layout_treeview.append_column(Gtk.TreeViewColumn("Layout", Gtk.CellRendererText(), text=1))
 		#self.layout_treeview.append_column(Gtk.TreeViewColumn("Type", Gtk.CellRendererText(), text=1))
 				
 		# Populate
-		self.populate_layout_model()
+		if self.settings["layout"]:
+			laydef = self.settings["layout"][0]
+		else:
+			laydef = None
+		self.populate_layout_model(lay=laydef)
 		
 		## Create the variants treeview
 		self.variant_treeview = self.builder.get_object("variant_treeview")
@@ -89,11 +105,12 @@ class Frontend(glade.Frontend):
 		
 		self.variant_treeview.set_model(self.variant_model)
 		# Create cell
-		self.variant_treeview.append_column(Gtk.TreeViewColumn("Variant", Gtk.CellRendererText(), text=1))
+		if self.is_module_virgin:
+			self.variant_treeview.append_column(Gtk.TreeViewColumn("Variant", Gtk.CellRendererText(), text=1))
 		#self.layout_treeview.append_column(Gtk.TreeViewColumn("Type", Gtk.CellRendererText(), text=1))
 				
 		# Populate
-		self.populate_variant_model()
+		self.populate_variant_model(var=self.settings["variant"])
 		
 		## Create the model combobox
 		self.model_combo = self.builder.get_object("model_combo")
@@ -101,14 +118,23 @@ class Frontend(glade.Frontend):
 		
 		self.model_combo.set_model(self.model_model)
 		# Create cell
-		renderer_text = Gtk.CellRendererText()
-		self.model_combo.pack_start(renderer_text, True)
-		self.model_combo.add_attribute(renderer_text, "text", 1)
+		if self.is_module_virgin:
+			renderer_text = Gtk.CellRendererText()
+			self.model_combo.pack_start(renderer_text, True)
+			self.model_combo.add_attribute(renderer_text, "text", 1)
         #renderer_text = Gtk.CellRendererText()
         #country_combo.pack_start(renderer_text, True)
         #country_combo.add_attribute(renderer_text, "text", 0)
 		
-		self.populate_model_combo()
+		self.populate_model_combo(toselect=self.settings["model"])
+		
+		# Clear settings (do not worry, they are reobtained later)
+		#self.settings["language"] = False
+		#self.settings["layout"] = False
+		#self.settings["model"] = False
+		#self.settings["variant"] = False
+		
+		self.is_rerun = None
 
 	def get_selected_layouts(self):
 		""" Gets the selected keyboard layouts. """
@@ -176,12 +202,12 @@ class Frontend(glade.Frontend):
 		# We need to set the keyboard layout!
 		lay = loc.split(".")[0].split("@")[0].split("_")[1].lower()
 		# We will use idle_add otherwise GUI will freeze for a few seconds (it should rebuild all layouts).
-		GObject.idle_add(self.populate_layout_model, lay)
+		if not self.is_rerun: GObject.idle_add(self.populate_layout_model, lay)
 		
 		# Set the variant too, if any
 		var = loc.split(".")[0].split("@")[0].split("_")[0].lower()
 		# We will use idle_add otherwise GUI will freeze for a few seconds (it should rebuild all layouts).
-		GObject.idle_add(self.populate_variant_model, None, var)
+		if not self.is_rerun: GObject.idle_add(self.populate_variant_model, None, var)
 
 		# We need to set the timezone!
 		tzone = loc.split(".")[0].split("@")[0].split("_")[1].upper()
@@ -295,7 +321,7 @@ class Frontend(glade.Frontend):
 		
 		self.is_building = False
 	
-	def populate_locale_model(self, all=False):
+	def populate_locale_model(self, all=False, toselect=None):
 		""" Populates self.locale_model. """
 		
 		if self.is_building: return
@@ -304,6 +330,7 @@ class Frontend(glade.Frontend):
 		print "REBUILDING LOCALE MODEL"
 		
 		default = None
+		toselectitr = None
 		
 		self.locale_model.clear()
 		
@@ -316,10 +343,16 @@ class Frontend(glade.Frontend):
 			if item == locale.default:
 				# save the iter! ;)
 				default = itr
+			elif item == toselect:
+				toselectitr = itr
 		self.locale_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		
 		# Set default
-		if default:
+		if toselectitr:
+			sel = self.locale_treeview.get_selection()
+			sel.select_iter(toselectitr)
+			self.locale_treeview.scroll_to_cell(sel.get_selected_rows()[1][0])
+		elif default:
 			sel = self.locale_treeview.get_selection()
 			sel.select_iter(default)
 			self.locale_treeview.scroll_to_cell(sel.get_selected_rows()[1][0])
@@ -327,11 +360,12 @@ class Frontend(glade.Frontend):
 		
 		self.is_building = False
 
-	def populate_model_combo(self):
+	def populate_model_combo(self, toselect=None):
 		""" Populates self.model_combo """
 		
 		default = None
 		pc105 = None
+		toselectitr = None
 		
 		self.model_model.clear()
 		
@@ -345,9 +379,13 @@ class Frontend(glade.Frontend):
 			elif item == "pc105":
 				# Save, fallback if no default
 				pc105 = itr
+			elif item == toselect:
+				toselectitr = itr
 		self.model_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		
-		if default:
+		if toselectitr:
+			self.model_combo.set_active_iter(toselectitr)
+		elif default:
 			self.model_combo.set_active_iter(default)
 		else:
 			self.model_combo.set_active_iter(pc105) # Do not check, pc105 MUST be there.
@@ -366,18 +404,19 @@ class Frontend(glade.Frontend):
 				self.has_keyboard_header_shown = True
 			
 			return True
-		else:
+	
+	def on_module_change(self):
+		""" Seeds items when we change module. """
+						
+		# Preseed changes
+		self.settings["language"] = self.get_selected_locale()
+		self.settings["layout"] = self.get_selected_layouts()
+		self.settings["model"] = self.get_selected_model()
+		self.settings["variant"] = self.get_selected_variant()
 			
-			# Preseed changes
-			self.settings["language"] = self.get_selected_locale()
-			self.settings["layout"] = self.get_selected_layouts()
-			self.settings["model"] = self.get_selected_model()
-			self.settings["variant"] = self.get_selected_variant()
-			
-			verbose("Selected language: %s" % self.settings["language"])
-			verbose("Selected keyboard: %s (model %s, variant %s)" % (self.settings["layout"], self.settings["model"], self.settings["variant"]))
-			
-			return None
+		verbose("Selected language: %s" % self.settings["language"])
+		verbose("Selected keyboard: %s (model %s, variant %s)" % (self.settings["layout"], self.settings["model"], self.settings["variant"]))
+		
 	
 	def on_back_button_click(self):
 		""" Ensure we show the locale page if we should. """

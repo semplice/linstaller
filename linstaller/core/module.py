@@ -39,6 +39,12 @@ class Module:
 		self.seedpre()
 		self.preseed()
 
+		# Add settings from a previous execution, if any
+		pkg = package.replace("linstaller.modules.","").replace(".front","")
+		if pkg in self.modules_settings:
+			for item, key in self.modules_settings[pkg].items():
+				self.settings[item] = key
+
 		# Associate
 		self._associate_()
 
@@ -112,4 +118,8 @@ class Module:
 	def return_settings(self):
 		""" Returns modules's settings. """
 		
-		return self.settings
+		# This may raise an exception if frontend-less module... handle accordingly
+		try:
+			return self.frnt.settings
+		except:
+			return self.settings

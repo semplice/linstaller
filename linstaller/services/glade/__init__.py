@@ -75,7 +75,7 @@ class Service(linstaller.core.service.Service):
 				self.current = 0.0
 				
 				self.on_inst = True
-			elif moduletype == "front":
+			elif self.on_inst and moduletype == "front":
 				# hmm... new module is frontend, need to restore some things...
 				
 				GObject.idle_add(self.cancel_button.set_sensitive, True)
@@ -233,7 +233,8 @@ class Service(linstaller.core.service.Service):
 		self.buttons_area = self.builder.get_object("buttons_area")
 		
 		### HEADER
-		self.header_eventbox = Gtk.EventBox()
+		#self.header_eventbox = Gtk.EventBox()
+		self.header_eventbox = self.builder.get_object("header_eventbox")
 		
 		#self.header = Gtk.HBox()
 		#self.header.set_homogeneous(False)
@@ -255,7 +256,7 @@ class Service(linstaller.core.service.Service):
 		self.header_message_container = self.builder.get_object("header_message_container")
 		self.header_message_title = self.builder.get_object("header_message_title")
 		self.header_message_subtitle = self.builder.get_object("header_message_subtitle")
-		self.header_alignment.reparent(self.header_eventbox)
+		#self.header_alignment.reparent(self.header_eventbox)
 		#self.header_eventbox.add(self.header)
 		
 		self.box.pack_start(self.header_eventbox, True, True, 0)
@@ -330,9 +331,13 @@ class Service(linstaller.core.service.Service):
 
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
-		
+
 		if self.current_frontend.on_next_button_click() != None:
 			return
+		
+		# Do on_module_change
+		print "ON NEXT BUTTON CLICK!"
+		self.current_frontend.on_module_change()
 		
 		# Make sure everything is not sensitive until the frontend is up and running
 		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
@@ -348,6 +353,10 @@ class Service(linstaller.core.service.Service):
 
 		if self.current_frontend.on_back_button_click() != None:
 			return
+
+		# Do on_module_change
+		print "ON BACK BUTTON CLICK!"
+		self.current_frontend.on_module_change()
 
 		# Make sure everything is not sensitive until the frontend is up and running
 		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
