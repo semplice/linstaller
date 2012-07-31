@@ -24,7 +24,7 @@ Description: Modular GNU/Linux distribution installer
 Package: linstaller-frontend-cli
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, python-progressbar
-Description: Modular GNU/Linux distribution installer
+Description: Modular GNU/Linux distribution installer -- command line frontend
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
  .
@@ -32,10 +32,22 @@ Description: Modular GNU/Linux distribution installer
  system, can be adapted to many Live distributions.
  .
  This package contains the command-line frontend.
+
+Package: linstaller-frontend-glade
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, keeptalking, python-gi, gir1.2-gtk-3.0
+Description: Modular GNU/Linux distribution installer -- gtk3 frontend
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the GTK+3 frontend.
  
 Package: linstaller-modules-base
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, debconf, python-laiv-setup, python-t9n, python-parted, python-apt,
+Depends: ${misc:Depends}, ${python:Depends}, debconf, python-keeptalking, python-t9n, python-parted, python-apt,
  squashfs-tools,
  user-setup,
  dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted,
