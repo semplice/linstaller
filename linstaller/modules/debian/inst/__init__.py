@@ -27,6 +27,11 @@ class Install(module.Install):
 		""" Removes pkg. """
 		
 		m.sexec("apt-get remove --yes --force-yes --purge %s -o DPkg::NoTriggers=true" % pkg)
+	
+	def remove_with_triggers(self, pkgs):
+		""" Removes a list declared in pkgs with triggers. """
+		
+		m.sexec("apt-get remove --yes --force-yes --purge %s" % " ".join(pkgs))
 
 class Module(module.Module):
 	def start(self):

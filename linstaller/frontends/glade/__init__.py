@@ -12,14 +12,40 @@ from linstaller.core.main import warn,info,verbose
 import linstaller.core.frontend
 
 import time
+import threading
+
+import sys
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
+
+class Progress(threading.Thread):
+	""" Thread that will make something :) Override the progress function and put there commands to execute!
+	Calling Frontend() class is available at self.parent. """
+	
+	def __init__(self, parent, quit=True):
+		
+		self.parent = parent
+		self.quit = quit
+		
+		threading.Thread.__init__(self)
+	
+	def progress(self):
+		pass
+	
+	def run(self):
+		# Run progress()
+		self.progress()
+		
+		# Switch over! 
+		if self.quit: self.parent.objects["parent"].on_next_button_click()
 
 class Frontend(linstaller.core.frontend.Frontend):
 	def __init__(self, moduleclass):
 
 		linstaller.core.frontend.Frontend.__init__(self, moduleclass)
+
+		self.should_exit = None
 
 		self.is_module_virgin = True
 
@@ -39,6 +65,16 @@ class Frontend(linstaller.core.frontend.Frontend):
 		if _mod in moduleclass.modules_settings and not "_preexecuted" in moduleclass.modules_settings[_mod]:
 			self.settings = moduleclass.modules_settings[_mod]
 			self.is_module_virgin = False
+	
+	def prepare_for_exit(self):
+		""" Should exit! (error) """
+		
+		# Enable only next button
+		self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
+		self.idle_add(self.objects["parent"].back_button.set_sensitive, False)
+		self.idle_add(self.objects["parent"].cancel_button.set_sensitive, False)
+		
+		self.should_exit = 1
 	
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
@@ -150,7 +186,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 		""" Called when the module objects are ready. """
 				
 		# Set next button sensitivity to True
-		self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
+		if not self.objects["parent"].on_inst: self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
 
 	def start(self):
 		""" This function, the one that other frontends normally override, will only wait.
@@ -169,6 +205,34 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		self.idle_add(self.objects["parent"].set_header, icon, title, subtitle)
 	
+	def progress_wait_for_quota(self):
+		""" Waits until progress_quota is set. """
+
+		while self.progress_quota == None:
+			# We should wait until quota has been set.
+			time.sleep(0.1)
+	
+	@property
+	def progress_quota(self):
+		""" Returns the progress quota. """
+		
+		return self.objects["parent"].progress_get_quota()
+	
+	def progress_set_text(self, text=_("Please wait...")):
+		""" Sets the current progress text (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_text, text)
+	
+	def progress_set_quota(self, quota=100):
+		""" Sets the current progressbar's quota (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_quota, quota)
+	
+	def progress_set_percentage(self, final):
+		""" Sets the current progressbar's percentage (via service) """
+		
+		self.idle_add(self.objects["parent"].progress_set_percentage, final)
+	
 	def hide(self, obj):
 		""" Hides the selected object.
 		Use this method instead of the stock hide on the object to avoid hangs and freezes. """
@@ -180,7 +244,38 @@ class Frontend(linstaller.core.frontend.Frontend):
 	#	
 	#	
 	
+	def on_next_button_click(self):
+		""" Executed when the module has other pages (and the frontend needs to map appropiately the next button).
+		If it returns None, the service will switch to the next module as normal.
+		If it doesn't return None, the service will stop after this method. """
+		
+		if self.should_exit: sys.exit(self.should_exit)
+		
+		return None
+
+	def on_back_button_click(self):
+		""" Executed when the module has other pages (and the frontend needs to map appropiately the back button).
+		If it returns None, the service will switch to the back module as normal.
+		If it doesn't return None, the service will stop after this method. """
+		
+		return None
+	
+	def on_module_change(self):
+		""" Executed when going back/forward (but only if actually changing module. """
+		
+		pass
+	
+	def pre_ready(self):
+		""" Override this function to do something before the ready() invocation. """
+		
+		pass
+	
 	def ready(self):
 		""" Ovveride this function to manage frontend objects (declared onto the self.objects dictionary). """
+		
+		pass
+	
+	def process(self):
+		""" Override this function to process things. """
 		
 		pass

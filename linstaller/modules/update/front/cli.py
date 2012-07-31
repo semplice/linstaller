@@ -42,16 +42,16 @@ class Frontend(cli.Frontend):
 				info(_("No updates found."))
 				return
 			
-			info("Upgrading packages... this may take a while.")
+			info(_("Upgrading packages... this may take a while."))
 
 			try:
 				self.moduleclass.install.upgrade()
 			except:
 				print
-				warn("Something went wrong while updating packages.")
-				info("A reboot is recommended in order to start a safe linstaller version.\n")
+				warn(_("Something went wrong while updating packages."))
+				info(_("A reboot is recommended in order to start a safe linstaller version.\n"))
 				
-				result = self.question("Would you like to reboot now?", default=True)
+				result = self.question(_("Would you like to reboot now?"), default=True)
 				if result:
 					return "kthxbye"
 				else:

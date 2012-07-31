@@ -42,10 +42,28 @@ class Frontend(glade.Frontend):
 		text.set_markup("\n".join(label))
 		
 		# Get the checkboxes
-		mirrorselect = self.objects["builder"].get_object("mirrorselect")
-		debsrc = self.objects["builder"].get_object("debsrc")
+		self.mirrorselect = self.objects["builder"].get_object("mirrorselect")
+		self.debsrc = self.objects["builder"].get_object("debsrc")
 		
 		# Hide the debsrc box if we need to
 		if self.settings["enable_sources"] != None:
-			debsrc.hide()
+			self.debsrc.hide()
 
+	def on_module_change(self):
+		""" Proper set settings["check"] and settings["enable_sources"] when Next button has been clicked. """
+		
+		check = self.mirrorselect.get_active()
+		sources = self.debsrc.get_active()
+
+		if check:
+			self.settings["check"] = True
+		else:
+			self.settings["check"] = None
+		
+		if self.settings["enable_sources"] == None:
+			if sources:
+				self.settings["enable_sources"] = True
+			else:
+				self.settings["enable_sources"] = False
+		
+		return None

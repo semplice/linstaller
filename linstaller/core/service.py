@@ -57,6 +57,16 @@ class Service(threading.Thread):
 		
 		self.current_module.module_prev()
 	
+	def kthxbye(self, obj=None):
+		""" Tells the module to reboot. """
+		
+		self.current_module.module_reboot()
+	
+	def fullrestart(self, obj=None):
+		""" Tells the module to do fullrestart. """
+		
+		self.current_module.module_fullrestart()
+	
 	def on_close(self):
 		""" Executed when the user closes the service. """
 		

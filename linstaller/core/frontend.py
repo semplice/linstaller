@@ -27,13 +27,23 @@ class Frontend:
 	def module_prev(self):
 		""" Tells the frontend to exit with res == back.
 		The frontend must listen to res status. """
-		
-		print("Going back....")
-		
+				
 		self.on_switching_module()
 		self.res = "back"
+			
+	def module_reboot(self):
+		""" Tells the frontend to exit with res == KTHXBYE.
+		The frontend must listen to res status. """
 		
-		print("res should be... " + self.res)
+		self.on_switching_module()
+		self.res = "KTHXBYE"
+	
+	def module_fullrestart(self):
+		""" Tells the frontend to exit with res == fullrestart.
+		The frontend must listen to res status. """
+		
+		self.on_switching_module()
+		self.res = "fullrestart"
 	
 	def module_casper(self):
 		""" Tells the frontend to exit with res == casper.

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# linstaller network module install - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# linstaller inst_test module install - (C) 2012 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
 #
 # This is a module of linstaller, should not be executed as a standalone application.
@@ -11,29 +11,27 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose
 
+import time
+
 class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 
-		verbose("Configuring networking...")
+		verbose("Testing install...")
+		
+		target = 50
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Configuring networking:"), 2)
+		progress = self.progressbar(_("Testing:"), target)
 
 		# Start progressbar
 		progress.start()
 
-		verbose("Configuring networking")
-		try:
-			# NETWORKING: set.
-			self.moduleclass.install.configure()
-			progress.update(1)
-		finally:
-			# Exit
-			self.moduleclass.install.close()
-			# Copy resolv.conf
-			self.moduleclass.install.copy_resolvconf()
-			progress.update(2)
+		done = 0
+		while done != target:
+			time.sleep(0.1)
+			progress.update(done)
+			done += 1
 		
 		progress.finish()
 

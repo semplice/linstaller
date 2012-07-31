@@ -35,7 +35,12 @@ class Frontend(cli.Frontend):
 			num = 0
 			for set in sets:
 				num += 1
-				self.moduleclass.install.select(set)
+				if num == len(sets):
+					# We are on the last set!
+					isLast = True
+				else:
+					isLast = False
+				self.moduleclass.install.select(set, isLast=isLast)
 				progress.update(num)
 		except:
 			warn(_("Mirrorselect crashed. Please check sources.list(.d) later."))

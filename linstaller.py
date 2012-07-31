@@ -179,7 +179,7 @@ for arg in sys.argv:
 	elif arg[0] in ("--services","-s"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--services requires an argument!")
-		_services = arg[1]
+		_services = arg[1].split(" ")
 	elif arg[0] in ("--remove","-r"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--remove requires an argument!")
@@ -231,8 +231,7 @@ if _action == "help":
 """)
 
 	sys.exit(0)
-elif _action == "start":
-	
+elif _action == "start":	
 	if not os.path.join(config.configpath, _config):
 		raise m.UserError(_("%s does not exist! Adjust --config accordingly." % _config))
 	else:
@@ -258,14 +257,23 @@ elif _action == "start":
 		main_settings["modules"] = _modules
 	if not _services:
 		main_settings["services"] = cfg.printv("services")
+		if main_settings["services"]:
+			main_settings["services"].split(" ")
+		else:
+			main_settings["services"] = []
 	else:
 		# Modules specified via --modules option
-		main_settings["services"] = _services
+		main_settings["services"] = _services # _services are already splitted.
 	main_settings["special"] = cfg.printv("special")
+	
+	# If the frontend is glade, autostart the glade service.
+	if main_settings["frontend"] == "glade" and "glade" not in main_settings["services"]:
+		main_settings["services"].append("glade")
 	
 	verbose("Frontend: %s" % main_settings["frontend"])
 	verbose("Distro: %s" % main_settings["distro"])
 	verbose("Modules: %s" % main_settings["modules"])
+	verbose("Services: %s" % " ".join(main_settings["services"]))
 	
 	# Create modules_settings
 	modules_settings = {}
@@ -289,7 +297,7 @@ elif _action == "start":
 	service_started = {} # started services
 	service_space = {} # services share space
 	if main_settings["services"]:
-		for service in main_settings["services"].split(" "):
+		for service in main_settings["services"]:
 			srv = sh.Service(service)
 			srvclass = srv.load(main_settings, service_space, cfg)
 			
@@ -311,7 +319,7 @@ elif _action == "start":
 	for modu in executed_special:
 		verbose("Reverting %s" % modu)
 		_revert = mh.Module(modu)
-		_revertc = _revert.load(main_settings, modules_settings, cfg)
+		_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
 		
 		# Revert
 		_revertc.revert()
@@ -325,7 +333,15 @@ elif _action == "start":
 		m.sexec("reboot")
 	elif res == "fullrestart":
 		verbose("Doing full linstaller restart, as requested.")
-		sys.exit(os.system(" ".join(sys.argv)))
+		
+		# Parse args
+		args = []
+		for arg in sys.argv:
+			if " " in arg:
+				arg = arg.replace(" ","\ ")
+			args.append(arg)
+		
+		sys.exit(os.system(" ".join(args)))
 	
 	sys.exit(0)
 

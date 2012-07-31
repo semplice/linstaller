@@ -96,9 +96,22 @@ proc   /proc   proc   defaults   0   0
 
 
 class Module(module.Module):
+	def _associate_(self):
+		""" Shut up associate as we do not have any frontend. """
+		
+		pass
+
 	def start(self):
 		""" Start module """
 		
 		self.install = Install(self)
 		
-		module.Module.start(self)
+		m.verbose("Configuring fstab...")
+		
+		try:
+			# FSTAB: set.
+			self.install.generate()
+		finally:
+			# Exit
+			self.install.close()
+		

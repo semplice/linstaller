@@ -39,6 +39,12 @@ class Module:
 		self.seedpre()
 		self.preseed()
 
+		# Add settings from a previous execution, if any
+		pkg = package.replace("linstaller.modules.","").replace(".front","")
+		if pkg in self.modules_settings:
+			for item, key in self.modules_settings[pkg].items():
+				self.settings[item] = key
+
 		# Associate
 		self._associate_()
 
@@ -81,13 +87,24 @@ class Module:
 	def module_prev(self):
 		""" Tells the frontend to close the module with "back" result. """
 		
-		print "GOING BACK"
-		self.frnt.module_prev()
-		
-		return
-		
 		try:
 			self.frnt.module_prev()
+		except:
+			pass
+	
+	def module_reboot(self):
+		""" Tells the frontend to close the module with "KTHXBYE" result. """
+		
+		try:
+			self.frnt.module_reboot()
+		except:
+			pass
+
+	def module_fullrestart(self):
+		""" Tells the frontend to close the module with "fullrestart" result. """
+		
+		try:
+			self.frnt.module_fullrestart()
 		except:
 			pass
 	
@@ -112,4 +129,8 @@ class Module:
 	def return_settings(self):
 		""" Returns modules's settings. """
 		
-		return self.settings
+		# This may raise an exception if frontend-less module... handle accordingly
+		try:
+			return self.frnt.settings
+		except:
+			return self.settings

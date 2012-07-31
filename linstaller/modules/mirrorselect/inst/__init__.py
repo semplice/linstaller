@@ -27,7 +27,7 @@ class Install(module.Install):
 		
 		return True
 	
-	def select(self, set):
+	def select(self, set, isLast=False):
 		""" Selects the fastest mirror using mirrorselect. """
 		
 		verbose("Running mirrorselect with set %s..." % set)
@@ -37,6 +37,7 @@ class Install(module.Install):
 		args.append("-s %s" % set) # Set
 		args.append("-n") # Non-interactive
 		if self.moduleclass.modules_settings["mirrorselect"]["enable_sources"]: args.append("-o") # Enable sources
+		if not isLast: args.append("-u") # Do not apt-get update
 		
 		m.sexec("/usr/bin/mirrorselect %s" % " ".join(args))
 
