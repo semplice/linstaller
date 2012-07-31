@@ -333,7 +333,15 @@ elif _action == "start":
 		m.sexec("reboot")
 	elif res == "fullrestart":
 		verbose("Doing full linstaller restart, as requested.")
-		sys.exit(os.system(" ".join(sys.argv)))
+		
+		# Parse args
+		args = []
+		for arg in sys.argv:
+			if " " in arg:
+				arg = arg.replace(" ","\ ")
+			args.append(arg)
+		
+		sys.exit(os.system(" ".join(args)))
 	
 	sys.exit(0)
 

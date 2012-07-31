@@ -45,7 +45,7 @@ class Frontend(glade.Frontend):
 		# Get the checkbox
 		self.onmbr = self.objects["builder"].get_object("onmbr")
 	
-	def on_next_button_click(self):
+	def on_module_change(self):
 		""" Proper set settings["device"] when Next button has been clicked. """
 		
 		value = self.onmbr.get_active()

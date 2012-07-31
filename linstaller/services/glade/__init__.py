@@ -273,9 +273,9 @@ class Service(linstaller.core.service.Service):
 		self.next_button = self.builder.get_object("next_button")
 		self.back_button = self.builder.get_object("back_button")
 		self.cancel_button = self.builder.get_object("cancel_button")
-		self.next_button.connect("clicked", self.on_next_button_click)
-		self.back_button.connect("clicked", self.on_back_button_click)
-		self.cancel_button.connect("clicked", self.on_cancel_button_click)
+		self.next_handler = self.next_button.connect("clicked", self.on_next_button_click)
+		self.back_handler = self.back_button.connect("clicked", self.on_back_button_click)
+		self.cancel_handler = self.cancel_button.connect("clicked", self.on_cancel_button_click)
 		
 		
 		# Set back button as unsensitive, as we're in the first page
@@ -368,6 +368,20 @@ class Service(linstaller.core.service.Service):
 		if not self.on_inst and self.pages.get_current_page() in (0, -1):
 			GObject.idle_add(self.back_button.set_sensitive, False)
 
+	def change_next_button_to_reboot_button(self):
+		""" Changes the next button to a reboot button. """
+		
+		GObject.idle_add(self.next_button.set_label, _("Reboot"))
+		GObject.idle_add(self.next_button.disconnect, self.next_handler)
+		GObject.idle_add(self.next_button.connect, "clicked", self.kthxbye)
+
+	def change_next_button_to_fullrestart_button(self):
+		""" Changes the next button to a fullrestart button. """
+		
+		GObject.idle_add(self.next_button.set_label, _("Restart installer"))
+		GObject.idle_add(self.next_button.disconnect, self.next_handler)
+		GObject.idle_add(self.next_button.connect, "clicked", self.fullrestart)
+
 	def on_caspered(self, status):
 		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
 		
@@ -408,4 +422,5 @@ this easter egg!
 
 		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
 		if "glade" in self.main_settings["frontend"]:
+			self.main.hide()
 			Gtk.main_quit()

@@ -62,7 +62,7 @@ class Module(module.Module):
 		
 		self.install = Install(self, onchroot=False)
 		
-		module.Module.start(self)
+		return module.Module.start(self)
 	
 	def seedpre(self):
 		""" Caches variables used by this module. """

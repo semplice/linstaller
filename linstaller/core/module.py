@@ -87,13 +87,24 @@ class Module:
 	def module_prev(self):
 		""" Tells the frontend to close the module with "back" result. """
 		
-		print "GOING BACK"
-		self.frnt.module_prev()
-		
-		return
-		
 		try:
 			self.frnt.module_prev()
+		except:
+			pass
+	
+	def module_reboot(self):
+		""" Tells the frontend to close the module with "KTHXBYE" result. """
+		
+		try:
+			self.frnt.module_reboot()
+		except:
+			pass
+
+	def module_fullrestart(self):
+		""" Tells the frontend to close the module with "fullrestart" result. """
+		
+		try:
+			self.frnt.module_fullrestart()
 		except:
 			pass
 	
