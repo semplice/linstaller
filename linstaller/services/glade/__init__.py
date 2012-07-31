@@ -88,6 +88,8 @@ class Service(linstaller.core.service.Service):
 			elif self.on_inst:
 				# Finish older module's percentage
 				if self.old_module in self.inst_modules: self.progress_finish_percentage()
+				# Ensure we have the next button insensitive
+				GObject.idle_add(self.next_button.set_sensitive, False)
 			
 			
 			self.old_module = self.current_module.package.replace("linstaller.modules.","")

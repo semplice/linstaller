@@ -19,3 +19,5 @@ class Frontend(glade.Frontend):
 
 		main_notebook = self.objects["builder"].get_object("main_notebook")
 		main_notebook.set_current_page(1)
+
+		self.objects["parent"].change_next_button_to_reboot_button()
