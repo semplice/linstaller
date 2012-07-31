@@ -1,3 +1,35 @@
+linstaller (2.70.0-1) pulse; urgency=low
+
+  * Start always the glade service if the frontend is glade. The module can now override the Back/Forward buttons: if they do not return None, the module is not changed.
+  * partdisks: front/glade: added edit, remove and delete windows. Fixes here and there. Added TODO.
+  * partdisks: front/glade: check if a mountpoint is already used.
+  * partdisks: front/glade: Skip too small partitions; Reset header on refreshes; ensure the button are made unsensitive when populating.
+  * partdisks: front/glade: implemented apply.
+  * glade frontend: increased use of idle_add, thus reducing GUI crashes ;), added progressbar (and support for .inst modules)
+  * modules/userhost: inst: added glade frontend.
+  * modules/partdisks: library: added swap sample mountpoint
+  * front/glade: moved the apply() function to a Progress-derivative class.
+  * modules/welcome: front/glade: center the info box
+  * linstaller.py: fixed revert.
+  * modules/network: now is frontend-indep.
+  * modules/fstab: made frontend-indep.
+  * modules/clean: made frontend-indep.
+  * modules/bootloader: ported to the glade frontend.
+  * modules/mirrorselect: front/glade: properly set settings.
+  * modules/mirroselect: do not update APT database if we aren't on the last set.
+  * modules/mirrorselect: inst/glade: added.
+  * some fixes
+  * modules/language and modules/timezone: switched to keeptalking.
+  * modules/language and modules/timezone: Added glade frontends for front, basing on keeptalking (I <3 KEEPTALKING)
+  * core/module.py: ensure we properly save and reload module's settings when reopening an already opened module.
+  * modules/language and modules/timezone: added inst.
+  * linstaller.py: handle arguments with spaces when doing fullrestart.
+  * frontends/glade and services/glade: ensure the next button is insensitive on inst.
+  * setup.py: changed to install glade frontend/services; now at 2.70.0!
+  * added glade frontend.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 31 Jul 2012 23:15:19 +0200
+
 linstaller (2.14.1-1) pulse; urgency=low
 
   * linstaller.py: added arguments to pass services via command-line; added services support in config file; fixed revert.
