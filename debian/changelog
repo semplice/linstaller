@@ -1,3 +1,9 @@
+linstaller (2.70.1.1-2) pulse; urgency=low
+
+  * setup.py: search (and include) for glade files.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 15:39:34 +0200
+
 linstaller (2.70.1-1) pulse; urgency=low
 
   * setup.py: ship base_ui.glade
