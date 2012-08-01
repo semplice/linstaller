@@ -6,7 +6,7 @@
 from distutils.core import setup
 
 setup(name='linstaller',
-      version='2.70.0',
+      version='2.70.1',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -115,6 +115,7 @@ setup(name='linstaller',
       data_files=[("/usr/bin", ["linstaller_wrapper.sh", "mount_nolive.sh"]),
       ("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi"]),
       ("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
+      ("/usr/share/linstaller/linstaller/services/glade", ["linstaller/services/glade/base_ui.glade"]), # UGLYYYYYYYYYYYYYYYYYYY
       ],
       requires=['gi.repository.Gtk', 'gi.repository.GObject', 'gi.repository.Gdk', 'apt.cache', 'ConfigParser', 'commands', 'copy', 'getpass', 'os', 'progressbar', 'subprocess', 'threading', 'traceback', 'debconf', 'exceptions', 'keeptalking', 'operator', 'parted', 'sys', 't9n.library', 'time'],
      )
