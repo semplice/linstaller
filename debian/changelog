@@ -1,3 +1,9 @@
+linstaller (2.70.1.3-1) pulse; urgency=low
+
+  * modules/partdisks: inst: fallback to self.settings if frontend has not been executed to obtain root partition.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 22:34:56 +0200
+
 linstaller (2.70.1.2-1) pulse; urgency=low
 
   * setup.py: recreate symlinks if any on the glade files
