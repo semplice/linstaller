@@ -3,7 +3,39 @@
 # Copyright (C) 2011 Eugenio "g7" Paolantonio. All rights reserved.
 # Work released under the GNU GPL license, version 3.
 
+import os
+import sys
 from distutils.core import setup
+
+## FIXME: Need to properly get the install-lib variable from setup.cfg or command line
+install_to = "/usr/share/linstaller"
+
+def search_for_glade():
+	""" Searches for glade files, and creates a properly-syntaxed list object to be added to data_files. """
+	
+	data_files = []
+	
+	for directory, dirnames, filenames in os.walk("linstaller/"):
+		this_dir = [os.path.join(install_to, directory), []]
+		this_dir_changed = False
+		for file in filenames:
+			if ".glade" in file:
+				# We got it!
+				this_dir[1].append(os.path.join(directory, file))
+				this_dir_changed = True
+		
+		if this_dir_changed: data_files.append(tuple(this_dir))
+	
+	return data_files
+		
+
+data = search_for_glade()
+data_files = [
+	("/usr/bin", ["linstaller_wrapper.sh", "mount_nolive.sh"]),
+	("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi"]),
+	("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
+]
+data_files += data
 
 setup(name='linstaller',
       version='2.70.1',
@@ -112,10 +144,6 @@ setup(name='linstaller',
       "linstaller.modules.echo.partusb.front",
       "linstaller.modules.echo.partusb.inst",
       ],
-      data_files=[("/usr/bin", ["linstaller_wrapper.sh", "mount_nolive.sh"]),
-      ("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi"]),
-      ("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
-      ("/usr/share/linstaller/linstaller/services/glade", ["linstaller/services/glade/base_ui.glade"]), # UGLYYYYYYYYYYYYYYYYYYY
-      ],
+      data_files=data_files,
       requires=['gi.repository.Gtk', 'gi.repository.GObject', 'gi.repository.Gdk', 'apt.cache', 'ConfigParser', 'commands', 'copy', 'getpass', 'os', 'progressbar', 'subprocess', 'threading', 'traceback', 'debconf', 'exceptions', 'keeptalking', 'operator', 'parted', 'sys', 't9n.library', 'time'],
      )
