@@ -1,3 +1,9 @@
+linstaller (2.70.1-1) pulse; urgency=low
+
+  * setup.py: ship base_ui.glade
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 13:26:15 +0200
+
 linstaller (2.70.0-1) pulse; urgency=low
 
   * Start always the glade service if the frontend is glade. The module can now override the Back/Forward buttons: if they do not return None, the module is not changed.
