@@ -20,8 +20,13 @@ class Module(module.Module):
 	def start(self):
 		""" Start override to unsquash. """
 		
+		if "partdisks" in self.modules_settings:
+			settings = self.modules_settings["partdisks"]
+		else:
+			settings = self.settings
+		
 		# Mount root partition.
-		root = self.modules_settings["partdisks"]["root"]
+		root = settings["root"]
 		
 		# Ensure that is unmounted
 		if os.path.ismount("/linstaller/target"):
