@@ -168,12 +168,13 @@ clss = what_I_should_do_to_get_an_heck_of_a_configuration_variable(distrib)
 install_lib = clss.run()
 
 # Recreate symlinks
-for path, linktarget in symlinks.items():
-	path = os.path.join(install_lib, path)
-	
-	if not os.path.exists(os.path.dirname(path)): os.makedirs(os.path.dirname(path))
-	
-	print("symlinking %s -> %s..." % (linktarget, path))
+if "install" in sys.argv:
+	for path, linktarget in symlinks.items():
+		path = os.path.join(install_lib, path)
+		
+		if not os.path.exists(os.path.dirname(path)): os.makedirs(os.path.dirname(path))
+		
+		print("symlinking %s -> %s..." % (linktarget, path))
 
-	os.symlink(linktarget, path)
+		os.symlink(linktarget, path)
 	
