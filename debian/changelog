@@ -1,3 +1,9 @@
+linstaller (2.70.1.2-1) pulse; urgency=low
+
+  * setup.py: recreate symlinks if any on the glade files
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 19:45:15 +0200
+
 linstaller (2.70.1.1-2) pulse; urgency=low
 
   * setup.py: search (and include) for glade files.
