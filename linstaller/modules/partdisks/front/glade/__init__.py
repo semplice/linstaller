@@ -107,6 +107,7 @@ class Frontend(glade.Frontend):
 	def ready(self):
 				
 		self.onlyusb = False
+		self.has_manual_touched = False
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
 
@@ -391,6 +392,7 @@ class Frontend(glade.Frontend):
 		""" Called when the apply button has been clicked. """
 
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		self.idle_add(self.objects["parent"].header_eventbox.set_sensitive, True)
 		self.idle_add(self.apply_window.show)
 
 	def on_add_button_clicked(self, obj):
@@ -983,9 +985,10 @@ class Frontend(glade.Frontend):
 			self.fs_table_inverse[fs_num] = item
 			list_store.append((item,))
 		self.filesystem_combo.set_model(list_store)
-		cell = Gtk.CellRendererText()
-		self.filesystem_combo.pack_start(cell, True)
-		self.filesystem_combo.add_attribute(cell, "text", 0)
+		if self.is_module_virgin and not self.has_manual_touched:
+			cell = Gtk.CellRendererText()
+			self.filesystem_combo.pack_start(cell, True)
+			self.filesystem_combo.add_attribute(cell, "text", 0)
 		
 		# Build a list of mountpoints to append to self.mountpoint_combo
 		self.mountp_table = {}
@@ -1049,9 +1052,14 @@ class Frontend(glade.Frontend):
 		# Get the harddisk_container and populate it
 		self.harddisk_container = self.objects["builder"].get_object("harddisk_container")
 		self.manual_populate()
+		
+		self.has_manual_touched = True
 
 	def on_automatic_button_clicked(self, obj):
 		""" Called when automatic_button is clicked. """
+
+		# Ensure we can go back...
+		self.idle_add(self.objects["parent"].back_button.set_sensitive, True)
 		
 		# Switch to page 1
 		self.pages_notebook.set_current_page(1)
@@ -1060,6 +1068,9 @@ class Frontend(glade.Frontend):
 	
 	def on_manual_button_clicked(self, obj):
 		""" Called when manual_button is clicked. """
+
+		# Ensure we can go back...
+		self.idle_add(self.objects["parent"].back_button.set_sensitive, True)
 		
 		# Switch to page 2
 		self.pages_notebook.set_current_page(2)

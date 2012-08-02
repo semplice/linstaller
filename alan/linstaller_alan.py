@@ -35,15 +35,28 @@ class Extension(alan.core.extension.Extension):
 		config_persistent = self.cfg.printv("config_persistent")
 		if not config_persistent:
 			config_persistent = "semplice-persistent"
+		
+		frontend = self.cfg.printv("frontend")
+		if not frontend:
+			frontend = "glade"
+
+		if frontend == "cli":
+			# Proper set executables
+			install_ex = "roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config
+			persistent_ex = "roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config_persistent
+		else:
+			# Default to glade
+			install_ex = "/usr/bin/linstaller -c=%s -f=glade start" % config
+			persistent_ex = "roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config_persistent
 
 		# Alias self.menu.insert() to i()
 		i = self.menu.insert
 
 		### Begin!
 
-		install = core.item(_("Start installer"), ga.execute("roxterm --hide-menubar -T \"Install Semplice\" -n \"Semplice Live Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config))
+		install = core.item(_("Start installer"), ga.execute(install_ex))
 		
-		persistent = core.item(_("Start USB persistent installer"), ga.execute("roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s start" % config_persistent))
+		persistent = core.item(_("Start USB persistent installer"), ga.execute(persistent_ex))
 
 		i(install)
 		if not persistent_disabled:
