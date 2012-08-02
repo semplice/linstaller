@@ -83,6 +83,7 @@ class Frontend(glade.Frontend):
 			self.change_entry_status(self.userpassword_confirm, "hold")
 			self.change_entry_status(self.hostname, "hold")
 			# Root is handled by the callbacks
+			self.idle_add(self.objects["parent"].next_button.set_sensitive, False)
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		#if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:
