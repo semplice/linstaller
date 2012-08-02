@@ -1,3 +1,11 @@
+linstaller (2.71.0-1) pulse; urgency=low
+
+  * modules/summary: added glade frontend (not the best, but hey.)
+  * modules/userhost: front/glade: ensure the first time the next button is insensitive.
+  * modules/partdisks: front/glade: ensure we can go back; do not show duplicate filesystem cells.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 02 Aug 2012 18:00:54 +0200
+
 linstaller (2.70.1.3-1) pulse; urgency=low
 
   * modules/partdisks: inst: fallback to self.settings if frontend has not been executed to obtain root partition.
