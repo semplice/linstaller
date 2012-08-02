@@ -2,7 +2,7 @@
 
 [linstaller]
 distribution = Semplice on Raspberry Pi
-modules = welcome.front language.front timezone.front userhost.front partdisks.inst language.inst timezone.inst raspberrypi.inst userhost.inst debian.inst
+modules = welcome.front language.front timezone.front userhost.front partdisks.inst language.inst timezone.inst raspberrypi.inst userhost.inst debian.inst end.front
 special = partdisks.inst
 
 [module:language]

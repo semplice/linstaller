@@ -29,6 +29,8 @@ linstalleralan ()
 			live-config.linstalleralan=*|linstalleralan=*)
 				LIVE_ENABLE="${_PARAMETER#*linstalleralan=}"
 				;;
+			live-config.linstallerfrontend=*|linstallerfrontend=*)
+				LIVE_FRONTEND="${_PARAMETER#*linstallerfrontend=}"
 		esac
 	done
 	
@@ -60,8 +62,14 @@ extensions = linstalleralan
 ext = linstaller_alan
 name = STOCK_INSTALL_SEMPLICE
 icon = document-save
-### END ADDED ###
 EOF
+
+		if [ "$LIVE_FRONTEND" ]; then
+			cat >> /home/$LIVE_USERNAME/.config/alan/tree.conf <<EOF
+frontend = $LIVE_FRONTEND
+EOF
+		fi
+		echo "### END ADDED ###" >> /home/$LIVE_USERNAME/.config/alan/tree.conf
 
 		# We should enable new category by add it to the categories list in [Alan].
 		categories="`grep \"categories =\"  /home/$LIVE_USERNAME/.config/alan/tree.conf`"

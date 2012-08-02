@@ -51,7 +51,7 @@ class Frontend(cli.Frontend):
 		except:
 			pass
 		try:
-			print(_("The default keyboard layout will be %(layout)s.") % {"layout":self.moduleclass.modules_settings["language"]["keyboard"]})
+			print(_("The default keyboard layout will be %(layout)s.") % {"layout":",".join(self.moduleclass.modules_settings["language"]["layout"])})
 		except:
 			pass
 		print
