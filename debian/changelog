@@ -1,3 +1,9 @@
+linstaller (2.71.1-1) pulse; urgency=low
+
+  * modules/{update,mirrorselect,bootloader}: ensure we get the proper checkboxes BEFORE checking if it is a fresh start or not.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 04 Aug 2012 00:45:18 +0200
+
 linstaller (2.71.0-1) pulse; urgency=low
 
   * modules/summary: added glade frontend (not the best, but hey.)
