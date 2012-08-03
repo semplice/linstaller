@@ -21,7 +21,10 @@ class Frontend(glade.Frontend):
 				# Ensure we say that on the virgin state casper has been executed
 				self.settings["caspered"] = True
 			self.module_casper()
-				
+
+		# Get the checkbox
+		self.onmbr = self.objects["builder"].get_object("onmbr")
+
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return
@@ -42,8 +45,6 @@ class Frontend(glade.Frontend):
 		# Properly set it
 		text.set_markup("\n".join(label))
 		
-		# Get the checkbox
-		self.onmbr = self.objects["builder"].get_object("onmbr")
 	
 	def on_module_change(self):
 		""" Proper set settings["device"] when Next button has been clicked. """

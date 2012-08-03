@@ -78,7 +78,10 @@ class Frontend(glade.Frontend):
 		verbose("packages are: %s" % self.settings["packages"])
 		
 		self.set_header("info", _("Installer updates"), _("Ensure you have the installer up-to-date."))
-				
+
+		# Get the checkbox
+		self.check = self.objects["builder"].get_object("check")
+
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return
@@ -97,9 +100,6 @@ class Frontend(glade.Frontend):
 
 		# Properly set it
 		text.set_markup("\n".join(label))
-		
-		# Get the checkbox
-		self.check = self.objects["builder"].get_object("check")
 	
 	def on_next_button_click(self):
 		""" Do things ;-). """
