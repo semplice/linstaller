@@ -21,7 +21,11 @@ class Frontend(glade.Frontend):
 				# Ensure we say that on the virgin state casper has been executed
 				self.settings["caspered"] = True
 			self.module_casper()
-				
+
+		# Get the checkboxes
+		self.mirrorselect = self.objects["builder"].get_object("mirrorselect")
+		self.debsrc = self.objects["builder"].get_object("debsrc")
+
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return
@@ -40,10 +44,6 @@ class Frontend(glade.Frontend):
 
 		# Properly set it
 		text.set_markup("\n".join(label))
-		
-		# Get the checkboxes
-		self.mirrorselect = self.objects["builder"].get_object("mirrorselect")
-		self.debsrc = self.objects["builder"].get_object("debsrc")
 		
 		# Hide the debsrc box if we need to
 		if self.settings["enable_sources"] != None:
