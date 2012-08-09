@@ -170,7 +170,7 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;Do you really want to create an MBR table on this disk?&lt;/b&gt;&lt;/big&gt;</property>
+    <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;Do you really want to create a table on this disk?&lt;/b&gt;&lt;/big&gt;</property>
     <property name="use_markup">True</property>
     <property name="secondary_text" translatable="yes">A table is needed to create partitions on this drive.</property>
     <child internal-child="vbox">

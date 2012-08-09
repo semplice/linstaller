@@ -6,6 +6,7 @@
 
 import time
 import threading
+import os
 
 import linstaller.frontends.glade as glade
 import t9n.library
@@ -29,7 +30,11 @@ class Apply(glade.Progress):
 			except:
 				verbose("Unable to get a correct object/changes from %s." % key)
 				continue # Skip.
-							
+			
+			# Check if device still exists...
+			if not os.path.exists(key):
+				continue
+					
 			verbose("Committing changes in %s" % key)
 			
 			# If working in a Virtual freespace partition, pyparted will segfault.
@@ -330,17 +335,18 @@ class Frontend(glade.Frontend):
 			else:
 				is_extended = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
-			if "-" in self.current_selected["value"]:
-				self.add_button.set_sensitive(True)
-				self.remove_button.set_sensitive(False)
-				self.edit_button.set_sensitive(False)
-			else:
-				self.add_button.set_sensitive(False)
-				self.remove_button.set_sensitive(True)
-				self.edit_button.set_sensitive(True)
-			if is_extended:
-				self.remove_button.set_sensitive(False)
-				self.edit_button.set_sensitive(False)
+			if not description == "notable":
+				if "-" in self.current_selected["value"]:
+					self.add_button.set_sensitive(True)
+					self.remove_button.set_sensitive(False)
+					self.edit_button.set_sensitive(False)
+				else:
+					self.add_button.set_sensitive(False)
+					self.remove_button.set_sensitive(True)
+					self.edit_button.set_sensitive(True)
+				if is_extended:
+					self.remove_button.set_sensitive(False)
+					self.edit_button.set_sensitive(False)
 	
 	def get_device_from_selected(self):
 		""" Returns a device object from self.current_selected. """
@@ -673,7 +679,10 @@ class Frontend(glade.Frontend):
 		if obj == self.newtable_yes:
 			# Yes.
 			# Create the new table
-			progress = lib.new_table(dev, "mbr")
+			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+				progress = lib.new_table(dev, "gpt")
+			else:
+				progress = lib.new_table(dev, "mbr")
 			status = progress.wait()
 			if status != 0:
 				# Failed ...
@@ -778,7 +787,7 @@ class Frontend(glade.Frontend):
 		if disk != "notable" and len(partitions) > 0:	
 			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
 		else:
-			container["model"] = Gtk.ListStore(str, str, str)
+			container["model"] = Gtk.ListStore(str, str)
 		container["treeview"] = Gtk.TreeView(container["model"])
 		container["treeview"].connect("cursor-changed", self.on_manual_treeview_changed)
 
@@ -1051,6 +1060,12 @@ class Frontend(glade.Frontend):
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)
 		self.refresh_button.connect("clicked", self.refresh_manual)
 		self.apply_button.connect("clicked", self.on_apply_button_clicked)
+		
+		# Change text of newtable_button
+		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+			self.newtable_button.set_label(_("Add GPT partition table"))
+		else:
+			self.newtable_button.set_label(_("Add MBR partition table"))
 
 		# Get the harddisk_container and populate it
 		self.harddisk_container = self.objects["builder"].get_object("harddisk_container")

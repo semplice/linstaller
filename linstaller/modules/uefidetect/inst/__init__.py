@@ -17,12 +17,17 @@ class Module(module.Module):
 	def start(self):
 		""" Start module """
 		
-		# FIXME: We need to detect UEFI even when booting in BIOS emulation (is it possible?)
-		if os.path.exists("/sys/firmware/efi"):
-			m.verbose("UEFI Detected.")
-			self.settings["uefi"] = True
+		print self.settings
+		
+		if self.settings["uefi"] == None:
+			# FIXME: We need to detect UEFI even when booting in BIOS emulation (is it possible?)
+			if os.path.exists("/sys/firmware/efi"):
+				m.verbose("UEFI Detected.")
+				self.settings["uefi"] = True
+			else:
+				self.settings["uefi"] = False
 		
 	def seedpre(self):
 		""" Cache settings. """
 		
-		self.cache("uefi", False)
+		self.cache("uefi", None)
