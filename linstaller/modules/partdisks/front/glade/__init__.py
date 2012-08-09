@@ -1110,6 +1110,12 @@ class Frontend(glade.Frontend):
 				# Set root.
 				self.settings["root"] = self.mountpoints_added["/"]
 			
+			# If in UEFI mode, ensure /boot/efi is selected
+			if "uefidetect" in self.modules_settings and self.modules_settings["uefidetect"]["uefi"] == True:
+				if not "/boot/efi" in self.mountpoints_added:
+					# Error!
+					self.set_header("error", _("You can't continue!"), _("You need to specify the EFI System Partition (/boot/efi)."))
+			
 			# Check for swap too...
 			if not "swap" in self.mountpoints_added:
 				# Warning!

@@ -115,8 +115,6 @@ def loop_modules(startfrom=1):
 	If startfrom is used, the loop will start at that specific module. (int)
 	"""
 
-	global lastres
-
 	if startfrom < 1:
 		startfrom = 1
 
@@ -135,6 +133,7 @@ def loop_modules(startfrom=1):
 				res = lastres
 			else:
 				lastres = res
+				global lastres
 			
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.

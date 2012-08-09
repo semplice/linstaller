@@ -18,6 +18,10 @@ class Install(module.Install):
 
 		verbose("Selected location: %s" % target)
 
+		if "uefidetect" in self.modules_settings and self.modules_settings["uefidetect"]["uefi"] == True:
+			# UEFI (need blank grub-install)
+			location = ""
+			args = ""
 		if target == "root":
 			# Root.
 			location = self.moduleclass.modules_settings["partdisks"]["root"]

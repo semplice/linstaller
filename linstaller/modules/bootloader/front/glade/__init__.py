@@ -15,8 +15,8 @@ class Frontend(glade.Frontend):
 		
 		self.set_header("info", _("Bootloader"), _("Bootloader settings"))
 		
-		if (self.is_module_virgin and self.settings["device"] != False) or self.settings["caspered"] == True:
-			# Selected device, do not prompt.
+		if (self.is_module_virgin and self.settings["device"] != False) or ("uefidetect" in self.modules_settings and self.modules_settings["uefidetect"]["uefi"] == True) or self.settings["caspered"] == True:
+			# Selected device, do not prompt or UEFI.
 			if self.is_module_virgin:
 				# Ensure we say that on the virgin state casper has been executed
 				self.settings["caspered"] = True
