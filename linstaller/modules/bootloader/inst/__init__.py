@@ -18,7 +18,7 @@ class Install(module.Install):
 
 		verbose("Selected location: %s" % target)
 
-		if "uefidetect" in self.modules_settings and self.modules_settings["uefidetect"]["uefi"] == True:
+		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
 			# UEFI (need blank grub-install)
 			location = ""
 			args = ""

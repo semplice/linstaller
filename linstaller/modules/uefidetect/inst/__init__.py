@@ -19,6 +19,7 @@ class Module(module.Module):
 		
 		# FIXME: We need to detect UEFI even when booting in BIOS emulation (is it possible?)
 		if os.path.exists("/sys/firmware/efi"):
+			m.verbose("UEFI Detected.")
 			self.settings["uefi"] = True
 		
 	def seedpre(self):

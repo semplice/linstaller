@@ -655,9 +655,12 @@ class Frontend(glade.Frontend):
 			# Make it unsensitive
 			self.filesystem_combo.set_sensitive(False)
 			# ...and restore the filesystem
-			if self.current_fs:
-				self.filesystem_combo.set_active(self.fs_table[self.current_fs])
-			else:
+			try:
+				if self.current_fs:
+					self.filesystem_combo.set_active(self.fs_table[self.current_fs])
+				else:
+					self.filesystem_combo.set_active(-1)
+			except:
 				self.filesystem_combo.set_active(-1)
 		
 	def on_newtable_window_button_clicked(self, obj):
@@ -979,7 +982,7 @@ class Frontend(glade.Frontend):
 		
 		list_store = Gtk.ListStore(GObject.TYPE_STRING)
 		fs_num = -1
-		for item, cmd in lib.supported.items():
+		for item, cmd in lib.get_supported_filesystems().items():
 			fs_num += 1
 			self.fs_table[item] = fs_num
 			self.fs_table_inverse[fs_num] = item
@@ -1089,6 +1092,11 @@ class Frontend(glade.Frontend):
 			# Hide the automatic_container if we are in automatic:
 			if current == 1:
 				self.automatic_container.hide()
+			else:
+				# We are on manual, destroy all items in the harddisk_container:
+				for child in self.harddisk_container.get_children():
+					self.idle_add(child.destroy)
+
 			
 			# Disable next button
 			self.on_steps_hold()
@@ -1111,10 +1119,11 @@ class Frontend(glade.Frontend):
 				self.settings["root"] = self.mountpoints_added["/"]
 			
 			# If in UEFI mode, ensure /boot/efi is selected
-			if "uefidetect" in self.modules_settings and self.modules_settings["uefidetect"]["uefi"] == True:
+			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
 				if not "/boot/efi" in self.mountpoints_added:
 					# Error!
 					self.set_header("error", _("You can't continue!"), _("You need to specify the EFI System Partition (/boot/efi)."))
+					return True
 			
 			# Check for swap too...
 			if not "swap" in self.mountpoints_added:

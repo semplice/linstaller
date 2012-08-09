@@ -132,8 +132,8 @@ def loop_modules(startfrom=1):
 				
 				res = lastres
 			else:
-				lastres = res
 				global lastres
+				lastres = res
 			
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.

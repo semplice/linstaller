@@ -71,7 +71,10 @@ class Service(linstaller.core.service.Service):
 				GObject.idle_add(self.inst.show_all)
 				
 				## Calculate how many steps are possible by every module (100.0 / len(inst_modules))
-				self.possible = 1.0 / len(self.inst_modules)
+				try:
+					self.possible = 1.0 / len(self.inst_modules)
+				except ZeroDivisionError:
+					self.possible = 0.0
 				self.current = 0.0
 				
 				self.on_inst = True
