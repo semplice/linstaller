@@ -52,6 +52,7 @@ proc   /proc   proc   defaults   0   0
 				# Write to fstab
 				mountpoint = value["changes"]["useas"]
 				filesystem = value["obj"].fileSystem.type
+				if filesystem in ("fat32","fat16"): filesystem = "vfat"
 				if mountpoint == "/":
 					# root partition.
 					opts = "relatime,errors=remount-ro"
