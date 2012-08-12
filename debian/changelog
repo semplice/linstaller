@@ -1,3 +1,9 @@
+linstaller (2.0.4-1) emily; urgency=low
+
+  * modules/fstab: if filesystem is fat32 or fat16, use 'vfat' in fstab.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 12 Aug 2012 16:43:03 +0200
+
 linstaller (2.0.3-1) emily; urgency=low
 
   * partdisks: library: do not crash if we reach partition limit in automatic.
