@@ -1,3 +1,21 @@
+linstaller (2.71.2-1) pulse; urgency=low
+
+  * linstaller: added UEFI detection (modules/uefidetect); adjusted modules to properly handle UEFI.
+  * config/semplice-base: execute uefidetect.
+  * modules/partdisks: library: added support for gpt
+  * modules/partdisks: front/glade: ensure we get the SUPPORTED (in system) filesystems.
+  * services/glade: handle ZeroDivisionError when calculating inst modules.
+  * linstaller.py: ensure we properly parse value before setting the seeds in modules_settings.
+  * modules/fstab: if filesystem is fat32 or fat16, use 'vfat' in fstab.
+  * alan: launch installer with sudo.
+  * modules/welcome: always disable the back button in glade frontend.
+  * core/service.py: send the module change signal to the frontend.
+  * services/glade: ensure we ONLY change the page (thus not sending the entire on_*_button_click() signal)
+  * modules/language: front/glade: added caspered support.
+  * config/semplice-base: ensure the various asks are = True
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 00:29:01 +0200
+
 linstaller (2.71.1-1) pulse; urgency=low
 
   * modules/{update,mirrorselect,bootloader}: ensure we get the proper checkboxes BEFORE checking if it is a fresh start or not.
