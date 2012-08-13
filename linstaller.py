@@ -115,8 +115,6 @@ def loop_modules(startfrom=1):
 	If startfrom is used, the loop will start at that specific module. (int)
 	"""
 
-	global lastres
-
 	if startfrom < 1:
 		startfrom = 1
 
@@ -134,6 +132,7 @@ def loop_modules(startfrom=1):
 				
 				res = lastres
 			else:
+				global lastres
 				lastres = res
 			
 			if res in ("exit", "kthxbye", "fullrestart"):
@@ -290,7 +289,20 @@ elif _action == "start":
 			cfg.set("module:%s" % module, option, value)
 			
 		# Fill modules settings too, will be overriden by the frontend if the module runs.
-		modules_settings[module] = seeds
+		
+		# We should convert the various true, false, none to their objects
+		seeds1 = {}
+		for option, value in seeds.items():
+			if value.lower() == "true":
+				value = True
+			elif value.lower() == "false":
+				value = False
+			elif value.lower() == "none":
+				value = None
+			
+			seeds1[option] = value
+		
+		modules_settings[module] = seeds1
 		modules_settings[module]["_preexecuted"] = True # The module has only been PREexecuted, not executed. It will be removed when the module runs.
 
 	# Start services

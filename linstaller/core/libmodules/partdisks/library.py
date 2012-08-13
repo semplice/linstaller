@@ -46,6 +46,7 @@ supported = {
 
 supported_tables = {
 	"mbr" : "msdos",
+	"gpt" : "gpt",
 }
 
 flags = {
@@ -58,6 +59,7 @@ sample_mountpoints = {
 	"/" : _("Root (/)"),
 	"/home" : _("Home Partition (/home)"),
 	"/usr" : _("Global applications (/usr)"),
+	"/boot/efi" : _("EFI boot partition (/boot/efi)")
 }
 
 

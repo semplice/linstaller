@@ -46,7 +46,7 @@ class Extension(alan.core.extension.Extension):
 			persistent_ex = "roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config_persistent
 		else:
 			# Default to glade
-			install_ex = "/usr/bin/linstaller -c=%s -f=glade start" % config
+			install_ex = "sudo /usr/bin/linstaller -c=%s -f=glade start" % config
 			persistent_ex = "roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config_persistent
 
 		# Alias self.menu.insert() to i()

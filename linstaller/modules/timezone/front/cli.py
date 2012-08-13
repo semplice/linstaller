@@ -17,6 +17,10 @@ class Frontend(cli.Frontend):
 		
 		self.header(_("Timezone selection"))
 		
+		if not self.settings["ask"]:
+			# Use current timezone
+			self.settings["timezone"] = self.moduleclass.tz.default
+		
 		# Get the current timezone...
 		if not self.settings["timezone"]:
 			timezone = self.moduleclass.tz.default

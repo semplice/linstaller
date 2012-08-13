@@ -71,7 +71,10 @@ class Service(linstaller.core.service.Service):
 				GObject.idle_add(self.inst.show_all)
 				
 				## Calculate how many steps are possible by every module (100.0 / len(inst_modules))
-				self.possible = 1.0 / len(self.inst_modules)
+				try:
+					self.possible = 1.0 / len(self.inst_modules)
+				except ZeroDivisionError:
+					self.possible = 0.0
 				self.current = 0.0
 				
 				self.on_inst = True
@@ -389,10 +392,23 @@ class Service(linstaller.core.service.Service):
 		
 		if status == None:
 			# Forward
-			self.on_next_button_click() # Trigger on_next_button_click
+			# Make sure everything is not sensitive until the frontend is up and running
+			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+			
+			if not self.on_inst: GObject.idle_add(self.pages.next_page)
+			
+			# Ensure the back button is clickable
+			if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
 		elif status == "back":
 			# Back
-			self.on_back_button_click() # Trigger on_back_button_click
+			# Make sure everything is not sensitive until the frontend is up and running
+			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+
+			if not self.on_inst: GObject.idle_add(self.pages.prev_page)
+			
+			# If this is the first page, make unsensitive the button.
+			if not self.on_inst and self.pages.get_current_page() in (0, -1):
+				GObject.idle_add(self.back_button.set_sensitive, False)
 
 	def ready(self):
 		

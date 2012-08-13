@@ -15,7 +15,13 @@ from keeptalking import TimeZone as timezone
 
 class Frontend(glade.Frontend):
 	def ready(self):
-		
+
+		if not self.settings["ask"]:
+			# Do not ask; instead using host's language and keyboard layout.
+			self.settings["timezone"] = self.moduleclass.tz.default
+			
+			self.module_casper()
+
 		if self.is_module_virgin:
 			self.set_header("info", _("Timezone selection"), _("Select your timezone here."))
 		else:

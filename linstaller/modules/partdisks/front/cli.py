@@ -479,7 +479,8 @@ class Frontend(cli.Frontend):
 			actions = {}
 			# Populate actions
 			actions[1] = (_("Create MBR partition table"), self.edit_partitions_newmbr)
-			actions[2] = (_("<- Back"), self.edit_partitions)
+			actions[2] = (_("Create GPT partition table"), self.edit_partitions_newgpt)
+			actions[3] = (_("<- Back"), self.edit_partitions)
 		
 		# Print actions
 		for num, act in actions.iteritems():
@@ -776,7 +777,14 @@ class Frontend(cli.Frontend):
 		device_changes["newtable"] = "mbr"
 		self.touched[device.path] = True
 		return self.edit_partitions(information=_("Changes marked succesfully. Please save changes."))
-	
+
+	def edit_partitions_newgpt(self, device, device_changes):
+		""" Marks a device to be erased with a new MBR partition table. """
+				
+		device_changes["newtable"] = "gpt"
+		self.touched[device.path] = True
+		return self.edit_partitions(information=_("Changes marked succesfully. Please save changes."))
+
 	def edit_partitions_format(self, device, device_changes, _return="edit"):
 		""" Marks a partition to be formatted. """
 		

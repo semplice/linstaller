@@ -35,7 +35,7 @@ class Frontend(cli.Frontend):
 			print
 		
 		## DEVICE SELECTION
-		if not self.settings["device"]:
+		if not self.settings["device"] and not ("uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True):
 			print(_("You can choose to install the bootloader into the Master Boot Record of your hard disk. This is recommended."))
 			print(_("If you choose 'No', it will be installed on your root partition.") + "\n")
 			
