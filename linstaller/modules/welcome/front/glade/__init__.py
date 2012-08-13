@@ -17,6 +17,9 @@ class Frontend(glade.Frontend):
 		# Set header
 		self.set_header("info", _("Welcome!"), _("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"])
 		
+		# Disable back button, this MUST be the first page
+		self.idle_add(self.objects["parent"].back_button.set_sensitive, False)
+		
 		if not self.is_module_virgin:
 			return
 		
