@@ -1,3 +1,9 @@
+linstaller (2.71.3-2) pulse; urgency=low
+
+  * debian/linstaller-modules-base.install: properly install uefidetect
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 18:18:13 +0200
+
 linstaller (2.71.3-1) pulse; urgency=low
 
   * config/semplice: ask = False for timezone too, moved grub seed to -base.
