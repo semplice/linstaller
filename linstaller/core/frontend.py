@@ -36,7 +36,7 @@ class Frontend:
 		The frontend must listen to res status. """
 		
 		self.on_switching_module()
-		self.res = "KTHXBYE"
+		self.res = "kthxbye"
 	
 	def module_fullrestart(self):
 		""" Tells the frontend to exit with res == fullrestart.

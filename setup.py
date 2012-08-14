@@ -54,7 +54,7 @@ data_files = [
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='2.71.2',
+      version='2.71.3',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -127,6 +127,9 @@ distrib = setup(name='linstaller',
       "linstaller.modules.timezone.front.glade",
       "linstaller.modules.timezone.inst",
       "linstaller.modules.timezone.inst.glade",
+
+      "linstaller.modules.uefidetect",
+      "linstaller.modules.uefidetect.inst",
       
       "linstaller.modules.unsquash",
       "linstaller.modules.unsquash.inst",
