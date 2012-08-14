@@ -1,3 +1,13 @@
+linstaller (2.71.3-1) pulse; urgency=low
+
+  * config/semplice: ask = False for timezone too, moved grub seed to -base.
+  * core/frontend.py: KTHXBYE -> kthxbye
+  * core/service.py: do not trigger on_module_change()
+  * modules/language and modules/timezone: front: ask by default is True   
+  * setup.py: ship uefidetect
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 18:04:38 +0200
+
 linstaller (2.71.2-1) pulse; urgency=low
 
   * linstaller: added UEFI detection (modules/uefidetect); adjusted modules to properly handle UEFI.
