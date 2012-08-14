@@ -26,3 +26,8 @@ packages = linstaller linstaller-frontend-cli linstaller-modules-base linstaller
 [module:mirrorselect]
 enable_sources = False
 sets = debian semplice
+
+# We support only grub currently
+[module:bootloader]
+bootloader = grub
+

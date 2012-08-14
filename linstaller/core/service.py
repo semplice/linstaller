@@ -97,7 +97,7 @@ class Service(threading.Thread):
 	def do_caspered(self, status):
 		""" Executed when a casper status has been done. """
 		
-		self.current_frontend.on_module_change()
+		#self.current_frontend.on_module_change()
 		self.on_caspered(status)
 	
 	def on_caspered(self, status):

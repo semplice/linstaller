@@ -18,5 +18,5 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Caches variables used by this module. """
 		
-		self.cache("ask")
+		self.cache("ask", True)
 		self.cache("timezone")

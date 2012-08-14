@@ -7,10 +7,10 @@ source = semplice-base
 [module:language]
 ask = False
 
+# Do not ask for timezone, use the system's one instead.
+[module:timezone]
+ask = False
+
 # Disable root
 [module:userhost]
 root = None
-
-# We support only grub currently
-[module:bootloader]
-bootloader = grub
