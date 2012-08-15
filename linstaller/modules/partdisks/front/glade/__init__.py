@@ -1009,6 +1009,8 @@ class Frontend(glade.Frontend):
 		point_store = Gtk.ListStore(GObject.TYPE_STRING, GObject.TYPE_STRING)
 		mp_num = -1
 		for item, desc in lib.sample_mountpoints.items():
+			if item == "/boot/efi" and not ("uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True):
+				continue
 			mp_num += 1
 			point_store.append((item, desc))
 			self.mountp_table[item] = mp_num
