@@ -21,7 +21,7 @@ image = /live/image/live/filesystem.squashfs
 remove = /live/image/live/filesystem.packages-remove
 
 [module:update]
-packages = linstaller linstaller-frontend-cli linstaller-modules-base linstaller-config-semplice alan-ext-linstaller
+packages = linstaller linstaller-frontend-cli linstaller-frontend-glade linstaller-modules-base linstaller-config-semplice alan-ext-linstaller
 
 [module:mirrorselect]
 enable_sources = False
