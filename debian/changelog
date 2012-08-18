@@ -1,3 +1,14 @@
+linstaller (2.71.4-1) pulse; urgency=low
+
+  * modules/partdisks: front/glade: hide /boot/efi when not in UEFI mode.
+  * config/semplice-base: update linstaller-frontend-glade, too.
+  * modules/partdisks: library: properly return the resize action.
+  * modules/partdisks: front/glade: Add partition is (re)working, some minor changes.
+  * removed some debug code.
+  * glade frontend: ensure the status box is sensitive (does not work, damn!)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 18 Aug 2012 11:58:16 +0200
+
 linstaller (2.71.3-2) pulse; urgency=low
 
   * debian/linstaller-modules-base.install: properly install uefidetect
