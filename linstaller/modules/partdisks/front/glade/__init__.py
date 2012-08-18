@@ -30,10 +30,6 @@ class Apply(glade.Progress):
 			except:
 				verbose("Unable to get a correct object/changes from %s." % key)
 				continue # Skip.
-			
-			# Check if device still exists...
-			if not os.path.exists(key):
-				continue
 					
 			verbose("Committing changes in %s" % key)
 			
@@ -48,20 +44,29 @@ class Apply(glade.Progress):
 			# ------------------------------------------
 			# Figure 1: A FIXME big like an house.
 			if "-1" in key:
-				continue				
+				continue
 
 			# Commit on the disk.
 			self.parent.set_header("hold", _("Committing changes to %s...") % key, _("This may take a while."))
+			#try:
+			#	lib.commit(obj, self.parent.touched)
+			#except:
+			#	self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+			#
+			#	# Restore sensitivity
+			#	self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+			#	self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+			#
+			#	return False
 			try:
 				lib.commit(obj, self.parent.touched)
 			except:
-				self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+				continue
+				
+				# Why we are continuing? Simple: some device which doesn't exist anymore may have still been on the list.
+				# We *can't* check for it exists as it prevents the creation of new partitions.
+				# So we use this.
 
-				# Restore sensitivity
-				self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
-				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
-
-				return False
 							
 			# Should format?
 			if "format" in cng:
@@ -580,7 +585,12 @@ class Frontend(glade.Frontend):
 			
 			part = self.get_partition_from_selected()
 			
-			res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=None)
+			try:
+				res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=None)
+			except:
+				# Failed! Ouch!
+				self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
+				return
 			
 			# Add the new partition to changed
 			self.changed[res.path] = {"obj":res, "changes":{}}
@@ -788,6 +798,7 @@ class Frontend(glade.Frontend):
 			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
 		else:
 			container["model"] = Gtk.ListStore(str, str)
+		container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
 		container["treeview"] = Gtk.TreeView(container["model"])
 		container["treeview"].connect("cursor-changed", self.on_manual_treeview_changed)
 
@@ -868,7 +879,7 @@ class Frontend(glade.Frontend):
 				else:
 					_mpoint = ""
 
-				if part.path in self.previously_changed:
+				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"])):
 					# This was changed previously, "ok" color.
 					_bg = self.objects["parent"].return_color("ok")
 				elif self.changed[part.path]["changes"] != {}:
