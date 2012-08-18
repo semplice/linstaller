@@ -352,7 +352,7 @@ def resize_partition(obj, newLength):
 	cons = p.Constraint(exactGeom=obj.geometry)
 	
 	# maximize the partition at the given constraint.
-	obj.disk.maximizePartition(obj, cons)
+	return obj.disk.maximizePartition(obj, cons)
 
 def delete_all(obj):
 	""" Deletes all partitions on obj (a Disk object). """

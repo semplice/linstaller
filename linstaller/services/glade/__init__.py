@@ -137,9 +137,7 @@ class Service(linstaller.core.service.Service):
 	
 	def on_frontend_change(self):
 		""" Focus on the frontend of the current module. """
-		
-		print("Inizio frontend change")
-		
+				
 		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
 		if "glade" in self.main_settings["frontend"]:
 			if not self.pages_built:
@@ -147,22 +145,16 @@ class Service(linstaller.core.service.Service):
 				while not self.pages_built:
 					time.sleep(0.3)
 						
-			print("Objects...")
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
 			GObject.idle_add(self.current_frontend.on_objects_ready)
-			print("Ready...")
 			GObject.idle_add(self.current_frontend.pre_ready)
-			print("Ready ready")
 			GObject.idle_add(self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
 			GObject.idle_add(self.main.set_sensitive, True)
 			
-			print("Process")
 			GObject.idle_add(self.current_frontend.process)
 						
-			print("Tutto ok!")
-			
 			
 	def build_pages(self):
 		""" Searches for support glade files and adds them to the pages object. """
@@ -299,7 +291,13 @@ class Service(linstaller.core.service.Service):
 	
 	def set_header(self, icon, title, subtitle):
 		""" Sets the header with the delcared icon, title and subtitle. """
-				
+		
+		# Ensure the eventbox is sensitive
+		GObject.idle_add(self.header_eventbox.set_sensitive, True)
+		GObject.idle_add(self.header_icon.set_sensitive, True)
+		GObject.idle_add(self.header_message_title.set_sensitive, True)
+		GObject.idle_add(self.header_message_subtitle.set_sensitive, True)
+		
 		# Get color
 		color_s = head_col[icon]
 		color = Gdk.RGBA()
