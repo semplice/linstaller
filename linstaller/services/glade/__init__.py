@@ -137,7 +137,7 @@ class Service(linstaller.core.service.Service):
 	
 	def on_frontend_change(self):
 		""" Focus on the frontend of the current module. """
-		
+				
 		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
 		if "glade" in self.main_settings["frontend"]:
 			if not self.pages_built:
@@ -154,21 +154,14 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.main.set_sensitive, True)
 			
 			GObject.idle_add(self.current_frontend.process)
-	
-	def build_pages(self, single=None, replacepage=None, onsuccess=None):
-		""" Searches for support glade files and adds them to the pages object.
-		
-		If single is a string, only the module matching that string will be builded.
-		If replacepage is an int, the single page will be positioned to the argument's value, removing the old page.
-		If onsuccess is True (and in single mode), the passed method will be called when the pages have been built.
-		
-		Note that the single mode does work ONLY on the passed module, other modules are not touched."""
-		
-		if not single:
-			self.modules_objects = {}
-			self.inst_modules = []
-
+						
 			
+	def build_pages(self):
+		""" Searches for support glade files and adds them to the pages object. """
+				
+		self.modules_objects = {}
+		self.inst_modules = []
+		
 		# Get modules
 		modules = self.main_settings["modules"]
 		
@@ -178,7 +171,6 @@ class Service(linstaller.core.service.Service):
 		# GLADE FRONTEND WILL BE SEARCHED IN welcome/front/glade/ AND NOT in welcome/front/glade.py!
 		
 		for module in modules.split(" "):
-			if single and single != module: continue
 			if module.split(".")[-1] == "inst":
 				is_inst = True
 			else:
@@ -212,28 +204,13 @@ class Service(linstaller.core.service.Service):
 			objects_list["main"].show_all()
 			
 			# Add to pages
-			if single and replacepage:
-				# Due to some Gtk.Notebook wierdness, the calling module MUST destroy the old main container.
-				
-				self.pages.insert_page(objects_list["main"], None, replacepage)
-				
-				# Also enter into the new page
-				self.pages.set_current_page(replacepage)
-			else:
-				self.pages.append_page(objects_list["main"], None)
+			self.pages.append_page(objects_list["main"], None)
 			#self.pages.next_page()
 			#self.pages.get_current_page()
 			
 			# Add to modules_objects
 			self.modules_objects[module] = objects_list
-			
-			if single and onsuccess:
-				onsuccess(objects_list)
-
-	def get_module_object(self, module):
-		""" Returns a module object for 'module'. """
 		
-		return self.modules_objects[module]
 	
 	def GUI_init(self):
 		""" Get objects, show things... """

@@ -59,13 +59,7 @@ class Apply(glade.Progress):
 			#
 			#	return False
 			try:
-				res = lib.commit(obj, self.parent.touched)
-				if res == False:
-					self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
-				
-					# Restore sensitivity
-					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
-					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+				lib.commit(obj, self.parent.touched)
 			except:
 				continue
 				
@@ -121,33 +115,7 @@ class Apply(glade.Progress):
 
 class Frontend(glade.Frontend):	
 	def ready(self):
-		""" partdisks is a really complex module which needs a fresh start every time.
-		Thus, we can't rely on the virgin state, but we need to destroy and recreate the entire interface.
-		
-		We do so using service's build_pages() function, and then getting the new objects (to avoid restarting
-		the module).
-		"""
-		
-
-		
-		self.objects["main"].destroy() # We need to destroy the old container
 				
-		# Re-initialize builder, a complex module like this needs a virgin state everytime.
-		current = self.objects["parent"].pages.get_current_page()
-		self.idle_add(self.objects["parent"].build_pages, "partdisks.front", current, self.can_continue)
-		
-	def can_continue(self, objects):
-		""" Called by service's build page during ready call.
-		
-		This method retrieves the new objects and also unblocks the ready function and thus permits it to continue. """
-		
-		# Get new objects
-		self.objects = self.objects["parent"].get_module_object("partdisks.front")
-		
-		self.idle_add(self.real_ready)
-		
-	def real_ready(self):
-
 		self.onlyusb = False
 		self.has_manual_touched = False
 		
@@ -616,10 +584,9 @@ class Frontend(glade.Frontend):
 			self.set_header("hold", _("Creating the partition..."), _("Please wait."))
 			
 			part = self.get_partition_from_selected()
-			targetfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
 			
 			try:
-				res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
+				res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=None)
 			except:
 				# Failed! Ouch!
 				self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
@@ -628,7 +595,7 @@ class Frontend(glade.Frontend):
 			# Add the new partition to changed
 			self.changed[res.path] = {"obj":res, "changes":{}}
 			
-			self.queue_for_format(res.path, targetfs)
+			self.queue_for_format(res.path, self.fs_table_inverse[self.filesystem_combo.get_active()])
 			self.change_mountpoint(res.path, self.get_mountpoint())
 			
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
@@ -990,24 +957,10 @@ class Frontend(glade.Frontend):
 		self.manual_devices = {}
 		self.treeview_description = {}
 
-		# Presed changed if this is not the first time...
-		if not self.is_module_virgin:
-			if "changed" in self.settings:
-				self.changed = self.settings["changed"]
-				# Also every changed partition should be on previously_changed...
-				for part, value in self.changed.items():
-					if value["changes"] != {}:
-						self.previously_changed.append(part)
-						if "useas" in value["changes"]:
-							self.mountpoints_added[value["changes"]["useas"]] = part
-
 		self.partition_ok_id = None
 		self.partition_cancel_id = None
 
-		if self.is_module_virgin:
-			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
-		else:
-			self.set_header("ok", _("You can continue!"), _("Press the Apply button and then the Forward one to continue."))
+		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
 		
 		# Get windows
 		self.partition_window = self.objects["builder"].get_object("partition_window")
@@ -1055,7 +1008,7 @@ class Frontend(glade.Frontend):
 			self.fs_table_inverse[fs_num] = item
 			list_store.append((item,))
 		self.filesystem_combo.set_model(list_store)
-		if not self.has_manual_touched:
+		if self.is_module_virgin and not self.has_manual_touched:
 			cell = Gtk.CellRendererText()
 			self.filesystem_combo.pack_start(cell, True)
 			self.filesystem_combo.add_attribute(cell, "text", 0)
