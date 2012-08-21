@@ -277,8 +277,11 @@ def commit(obj, touched):
 			return
 		
 		# Umount...
-		if is_mounted(obj.path):
-			umount(parted_part=obj)
+		try:
+			if is_mounted(obj.path):
+				umount(parted_part=obj)
+		except:
+			return False
 		
 		# If obj is a partition, use disk.
 		obj = obj.disk
