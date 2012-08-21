@@ -1,9 +1,9 @@
 linstaller (2.72.0-1) pulse; urgency=low
 
- * modules/partdisks: handle failed umount.
- * modules/partdisks: front/glade: rebuild graphical module at every launch.
- * modules/partdisks: front/glade: ensure we pass the right filesystem during partition creation    
- * glade frontend: build_pages() improvements to rebuild a single module; added get_module_object() which returns the objects of a passed module.
+  * modules/partdisks: handle failed umount.
+  * modules/partdisks: front/glade: rebuild graphical module at every launch.
+  * modules/partdisks: front/glade: ensure we pass the right filesystem during partition creation    
+  * glade frontend: build_pages() improvements to rebuild a single module; added get_module_object() which returns the objects of a passed module.
 
  -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 21 Aug 2012 23:54:55 +0200
 
