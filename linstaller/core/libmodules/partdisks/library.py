@@ -39,7 +39,7 @@ supported = {
 	"hfs+" : ("/sbin/mkfs.hfsplus",""),
 	"jfs" : ("/sbin/mkfs.jfs",""),
 	"btrfs" : ("/sbin/mkfs.btrfs",""),
-	"reiserfs" : ("/sbin/mkfs.reiser4",""),
+	"reiserfs" : ("/sbin/mkfs.reiser4","-f"),
 	"xfs" : ("/sbin/mkfs.xfs",""),
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
 }

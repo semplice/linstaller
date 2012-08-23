@@ -15,6 +15,8 @@ from keeptalking import TimeZone as timezone
 
 class Frontend(glade.Frontend):
 	def ready(self):
+
+		self.is_building = False
 		
 		if not self.settings["ask"]:
 			# Do not ask; instead using host's language and keyboard layout.
@@ -48,7 +50,6 @@ class Frontend(glade.Frontend):
 		##### NOTE: Much of the code below is from the keeptalking project ;) Which as it seems is from the same author :P So we are in fact reusing our own code.
 		## We need to make some alias to not change the code too much.
 		self.builder = self.objects["builder"]
-		self.is_building = False
 		global locale
 		global keyboard
 		global tzone_countries
@@ -203,7 +204,10 @@ class Frontend(glade.Frontend):
 	def on_locale_changed(self, obj):
 		""" Fired when the locale is changed on the first view. """
 		
-		if self.is_building: return
+		try:
+			if self.is_building: return
+		except:
+			return # FIXME
 		
 		loc = self.get_selected_locale()
 		if not loc: return
@@ -235,7 +239,10 @@ class Frontend(glade.Frontend):
 	def populate_variant_model(self, caller=None, var=None):
 		""" Populates self.variants_model. """
 
-		if self.is_building: return
+		try:
+			if self.is_building: return
+		except:
+			return # FIXME
 		self.is_building = True
 		
 		if caller:
@@ -288,7 +295,10 @@ class Frontend(glade.Frontend):
 	def populate_layout_model(self, lay=None):
 		""" Populates self.layout_model. """
 
-		if self.is_building: return
+		try:
+			if self.is_building: return
+		except:
+			return # FIXME
 		self.is_building = True
 
 		# Make the tab label normal.
@@ -333,7 +343,10 @@ class Frontend(glade.Frontend):
 	def populate_locale_model(self, all=False, toselect=None):
 		""" Populates self.locale_model. """
 		
-		if self.is_building: return
+		try:
+			if self.is_building: return
+		except:
+			return # FIXME
 		self.is_building = True
 				
 		print "REBUILDING LOCALE MODEL"

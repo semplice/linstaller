@@ -138,7 +138,6 @@ def loop_modules(startfrom=1):
 			if res in ("exit", "kthxbye", "fullrestart"):
 				return res # Exit.
 			elif res == "back":
-				print "going back"
 				return loop_modules(startfrom=count-1)
 
 ## Welcome to linstaller :)

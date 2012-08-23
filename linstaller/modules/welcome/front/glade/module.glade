@@ -319,7 +319,7 @@ Hover on the items with this symbol to get the error message.</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="relief">none</property>
-                                <property name="uri">http://semplice-linux.org/doku/semplice:users:linstaller:preseeds</property>
+                                <property name="uri">http://semplice-linux.org/doku/semplice:users:linstaller:preseeds#enabling_root</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

@@ -100,6 +100,14 @@ class Module:
 		except:
 			pass
 
+	def module_restart(self):
+		""" Tells the frontend to close the module with "restart" result. """
+		
+		try:
+			self.frnt.module_restart()
+		except:
+			pass
+
 	def module_fullrestart(self):
 		""" Tells the frontend to close the module with "fullrestart" result. """
 		

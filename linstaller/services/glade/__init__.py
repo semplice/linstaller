@@ -362,7 +362,6 @@ class Service(linstaller.core.service.Service):
 			return
 		
 		# Do on_module_change
-		print "ON NEXT BUTTON CLICK!"
 		self.current_frontend.on_module_change()
 		
 		# Make sure everything is not sensitive until the frontend is up and running
@@ -381,7 +380,6 @@ class Service(linstaller.core.service.Service):
 			return
 
 		# Do on_module_change
-		print "ON BACK BUTTON CLICK!"
 		self.current_frontend.on_module_change()
 
 		# Make sure everything is not sensitive until the frontend is up and running

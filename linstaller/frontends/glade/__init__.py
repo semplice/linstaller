@@ -197,7 +197,6 @@ class Frontend(linstaller.core.frontend.Frontend):
 		while self.res == False:
 			time.sleep(0.3)
 		
-		print("res changed! it's now %s" % self.res)
 		return self.res
 	
 	def set_header(self, icon, title, subtitle):
