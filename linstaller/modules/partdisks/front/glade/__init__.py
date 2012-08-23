@@ -673,8 +673,9 @@ class Frontend(glade.Frontend):
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+				lib.format_partition(part, newfs) # Ensure we change part.fileSystem
 				self.queue_for_format(part.path, newfs)
-			
+							
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
 			if newmountpoint != self.current_mountpoint:
@@ -852,7 +853,7 @@ class Frontend(glade.Frontend):
 			container["description"] = "notable" # description.
 		elif len(partitions) > 0:
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Partition"), Gtk.CellRendererText(), text=0, cell_background=6))
-			container["treeview"].append_column(Gtk.TreeViewColumn(_("Label"), Gtk.CellRendererText(), text=1, cell_background=6))
+			container["treeview"].append_column(Gtk.TreeViewColumn(_("Type"), Gtk.CellRendererText(), text=1, cell_background=6))
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Filesystem"), Gtk.CellRendererText(), text=2, cell_background=6))
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Mountpoint"), Gtk.CellRendererText(), text=3, cell_background=6))
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Format?"), Gtk.CellRendererToggle(), active=4, cell_background=6))
@@ -867,7 +868,7 @@ class Frontend(glade.Frontend):
 				if part.name:
 					name.append(part.name)
 				elif not part.path in self.distribs:
-					name.append("Untitled")
+					name.append("Normal partition")
 
 				if int(part.getLength("GiB")) > 0:
 					# We can use GigaBytes to represent partition size.
@@ -992,7 +993,7 @@ class Frontend(glade.Frontend):
 
 		# Presed changed if this is not the first time...
 		if not self.is_module_virgin:
-			if "changed" in self.settings:
+			if "changed" in self.settings and self.settings["changed"]:
 				self.changed = self.settings["changed"]
 				# Also every changed partition should be on previously_changed...
 				for part, value in self.changed.items():
@@ -1004,10 +1005,10 @@ class Frontend(glade.Frontend):
 		self.partition_ok_id = None
 		self.partition_cancel_id = None
 
-		if self.is_module_virgin:
+		if self.is_module_virgin or not ("changed" in self.settings and self.settings["changed"]):
 			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
 		else:
-			self.set_header("ok", _("You can continue!"), _("Press the Apply button and then the Forward one to continue."))
+			self.set_header("ok", _("You can continue!"), _("Press the Apply button and then Forward to continue."))
 		
 		# Get windows
 		self.partition_window = self.objects["builder"].get_object("partition_window")
@@ -1164,19 +1165,22 @@ class Frontend(glade.Frontend):
 		current = self.pages_notebook.get_current_page()
 		if not current == 0:
 			
+			# Restart
+			self.module_restart()
+			
 			# Hide the automatic_container if we are in automatic:
-			if current == 1:
-				self.automatic_container.hide()
-			else:
-				# We are on manual, destroy all items in the harddisk_container:
-				for child in self.harddisk_container.get_children():
-					self.idle_add(child.destroy)
+			#if current == 1:
+			#	self.automatic_container.hide()
+			#else:
+			#	# We are on manual, destroy all items in the harddisk_container:
+			#	for child in self.harddisk_container.get_children():
+			#		self.idle_add(child.destroy)
 
 			
 			# Disable next button
-			self.on_steps_hold()
+			#self.on_steps_hold()
 			
-			self.pages_notebook.set_current_page(0)
+			#self.pages_notebook.set_current_page(0)
 			return True
 	
 	def on_next_button_click(self):
