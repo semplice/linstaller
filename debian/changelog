@@ -1,3 +1,15 @@
+linstaller (2.72.1-1) pulse; urgency=low
+
+  * removed some debug code.
+  * added module_restart() function in frontend.py and module.py
+  * tweaked some glade files
+  * modules/partdisks: library: fixed (?) reiserfs partition creation
+  * some bug fixes in keeptalking-related modules
+  * modules/partdisks: front/glade: properly set a new fileSystem object when we should format.
+  * modules/partdisks: front/glade: instead of going to main page, restart the entire module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 23 Aug 2012 22:52:14 +0200
+
 linstaller (2.72.0-1) pulse; urgency=low
 
   * modules/partdisks: handle failed umount.
