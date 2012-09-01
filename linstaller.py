@@ -10,7 +10,7 @@ import linstaller.core.modulehelper as mh
 import linstaller.core.servicehelper as sh
 from linstaller.core.main import warn, info, verbose
 
-import exceptions
+import exceptions, traceback
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
@@ -82,7 +82,9 @@ def launch_module(module, special):
 		close_services()
 		
 		# Now raise the original exception	
-		print sys.exc_info()[0]
+		excp = sys.exc_info()
+		verbose("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
+		print excp[0]
 		raise
 		
 	# Update modules_settings
