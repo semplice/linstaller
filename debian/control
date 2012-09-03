@@ -35,7 +35,7 @@ Description: Modular GNU/Linux distribution installer -- command line frontend
 
 Package: linstaller-frontend-glade
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, keeptalking, python-gi, gir1.2-gtk-3.0
+Depends: ${misc:Depends}, ${python:Depends}, keeptalking, pastebinit, python-gi, gir1.2-gtk-3.0
 Description: Modular GNU/Linux distribution installer -- gtk3 frontend
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
