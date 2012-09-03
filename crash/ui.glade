@@ -8,9 +8,10 @@
     <property name="title" translatable="yes">:-(</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
+    <property name="default_width">400</property>
     <property name="icon_name">gtk-save</property>
     <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <property name="message_type">other</property>
     <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;Drunk people should not write software.&lt;/b&gt;&lt;/big&gt;</property>
     <property name="use_markup">True</property>
@@ -82,7 +83,7 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
     <property name="window_position">center</property>
     <property name="icon_name">gtk-save</property>
     <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox1">
         <property name="can_focus">False</property>
@@ -128,7 +129,7 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
     <property name="window_position">center</property>
     <property name="icon_name">gtk-save</property>
     <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
+    <property name="urgency_hint">True</property>
     <property name="message_type">error</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox3">

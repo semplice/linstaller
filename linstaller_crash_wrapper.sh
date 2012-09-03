@@ -7,7 +7,7 @@ res="$?"
 
 if [ "$res" != "0" ]; then
 	# Something wrong happened
-	/usr/share/linstaller/crash/crash_window.py
+	python /usr/share/linstaller/crash/crash_window.py
 fi
 
 exit $res
