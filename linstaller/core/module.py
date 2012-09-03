@@ -73,8 +73,16 @@ class Module:
 		# Start frnt.
 		res = self.frnt.start()
 		
-		if res in ("restart", "kthxbye", "fullrestart","back","casper"):
+		if res in ("restart", "exit1", "kthxbye", "fullrestart","back","casper"):
 			return res
+	
+	def module_exit1(self):
+		""" Tells the frontend to force exit installation with status 1 """
+		
+		try:
+			self.front.module_exit1()
+		except:
+			pass
 	
 	def module_next(self):
 		""" Tells the frontend to close the module (thus let linstaller go on the next one) """

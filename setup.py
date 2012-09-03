@@ -28,7 +28,7 @@ def search_for_glade():
 	data_files = []
 	symlinks = {}
 	
-	for directory, dirnames, filenames in os.walk("linstaller/"):
+	for directory, dirnames, filenames in os.walk("."):
 		this_dir = [os.path.join(install_to, directory), []]
 		this_dir_changed = False
 		for file in filenames:
@@ -60,7 +60,7 @@ distrib = setup(name='linstaller',
       author_email='me@medesimo.eu',
       url='http://launchpad.net/linstaller',
       scripts=['linstaller.py'],
-      packages=["linstaller", "linstaller.core", "linstaller.frontends", "linstaller.core.libmodules",
+      packages=["crash", "linstaller", "linstaller.core", "linstaller.frontends", "linstaller.core.libmodules",
       "linstaller.core.libmodules.chroot",
       "linstaller.core.libmodules.partdisks",
       "linstaller.core.libmodules.unsquash",

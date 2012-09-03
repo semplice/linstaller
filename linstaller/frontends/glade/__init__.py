@@ -30,12 +30,18 @@ class Progress(threading.Thread):
 		
 		threading.Thread.__init__(self)
 	
+	def _progress(self):
+		try:
+			m.handle_exception(self.progress)
+		except:
+			self.parent.module_exit1()
+	
 	def progress(self):
 		pass
 	
 	def run(self):
 		# Run progress()
-		self.progress()
+		self._progress()
 		
 		# Switch over! 
 		if self.quit: self.parent.objects["parent"].on_next_button_click()

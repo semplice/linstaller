@@ -35,6 +35,6 @@ class Frontend(glade.Frontend):
 	
 	def process(self):
 		""" Actually do things! """
-		
+
 		lol = DoThings(self)
 		lol.start()

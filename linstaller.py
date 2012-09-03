@@ -10,7 +10,7 @@ import linstaller.core.modulehelper as mh
 import linstaller.core.servicehelper as sh
 from linstaller.core.main import warn, info, verbose
 
-import exceptions
+import exceptions, traceback
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
@@ -60,7 +60,7 @@ def launch_module(module, special):
 			executed_special.append(module)
 
 		modulechange_services(modclass)
-		res = modclass.start()		
+		res = modclass.start()
 	except exceptions.SystemExit:
 		return "exit"
 	except:
@@ -82,7 +82,9 @@ def launch_module(module, special):
 		close_services()
 		
 		# Now raise the original exception	
-		print sys.exc_info()[0]
+		excp = sys.exc_info()
+		verbose("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
+		print excp[0]
 		raise
 		
 	# Update modules_settings
@@ -108,6 +110,9 @@ def launch_module(module, special):
 	elif res == "casper":
 		# execute last res
 		return "casper"
+	elif res == "exit1":
+		# Exit with status 1
+		return "exit1"
 
 def loop_modules(startfrom=1):
 	""" Loop modules.
@@ -135,7 +140,7 @@ def loop_modules(startfrom=1):
 				global lastres
 				lastres = res
 			
-			if res in ("exit", "kthxbye", "fullrestart"):
+			if res in ("exit", "exit1", "kthxbye", "fullrestart"):
 				return res # Exit.
 			elif res == "back":
 				return loop_modules(startfrom=count-1)
@@ -342,6 +347,8 @@ elif _action == "start":
 		# We should reboot?
 		verbose("KTHXBYE")
 		m.sexec("reboot")
+	elif res == "exit1":
+		sys.exit(1)
 	elif res == "fullrestart":
 		verbose("Doing full linstaller restart, as requested.")
 		
