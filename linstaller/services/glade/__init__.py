@@ -146,9 +146,9 @@ class Service(linstaller.core.service.Service):
 					time.sleep(0.3)
 						
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
-			GObject.idle_add(self.current_frontend.on_objects_ready)
-			GObject.idle_add(self.current_frontend.pre_ready)
-			GObject.idle_add(self.current_frontend.ready)
+			GObject.idle_add(m.handle_exception, self.current_frontend.on_objects_ready)
+			GObject.idle_add(m.handle_exception, self.current_frontend.pre_ready)
+			GObject.idle_add(m.handle_exception, self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
 			GObject.idle_add(self.main.set_sensitive, True)

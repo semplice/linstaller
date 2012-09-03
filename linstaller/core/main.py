@@ -8,7 +8,7 @@
 VERSION = "2.72.0"
 ####
 
-import os, sys
+import os, sys, traceback
 import subprocess, threading, traceback
 
 # User name
@@ -154,3 +154,15 @@ def root_check():
 	
 	if os.getuid() is not 0:
 		raise UserError("You must be root to use this module.")
+
+def handle_exception(function):
+	""" Launches function and logs every exception caught.
+	When an exception is caught, sys.exit(1) is invoked. """
+	
+	try:
+		function()
+	except:
+		excp = sys.exc_info()
+		print("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
+		verbose("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
+		sys.exit(1)

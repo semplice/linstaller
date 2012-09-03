@@ -17,45 +17,73 @@ class Frontend:
 		self.settings = moduleclass.settings
 		self.changed = moduleclass.changed
 
+	def module_exit1(self):
+		""" Tells the frontend to exit with res == exit1.
+		Useful only if you are into a thread. If you aren't into a thread, just use sys.exit.
+		"""
+		
+		# Prevent overwriting the result
+		if not self.res == False: return
+		
+		self.res = "exit1"
+
 	def module_next(self):
 		""" Tells the frontend to exit with res == None.
 		The frontend must listen to res status. """
-		
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = None
 	
 	def module_prev(self):
 		""" Tells the frontend to exit with res == back.
 		The frontend must listen to res status. """
-				
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = "back"
 			
 	def module_reboot(self):
 		""" Tells the frontend to exit with res == KTHXBYE.
 		The frontend must listen to res status. """
-		
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = "kthxbye"
 
 	def module_restart(self):
 		""" Tells the frontend to exit with res == restart.
 		The frontend must listen to res status. """
-		
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = "restart"
 
 	def module_fullrestart(self):
 		""" Tells the frontend to exit with res == fullrestart.
 		The frontend must listen to res status. """
-		
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = "fullrestart"
 	
 	def module_casper(self):
 		""" Tells the frontend to exit with res == casper.
 		The frontend must listen to res status. """
-		
+
+		# Prevent overwriting the result
+		if not self.res == False: return
+
 		self.on_switching_module()
 		self.res = "casper"
 	
