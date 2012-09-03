@@ -1,3 +1,15 @@
+linstaller (2.72.2-1) pulse; urgency=low
+
+  * alan: use the new crash_wrapper to launch the graphical frontend.
+  * crash/: added GTK+ crash window
+  * linstaller.py: ensure we log the final exception before raising it.
+  * linstaller_crash_wrapper.sh: added.
+  * Handle exceptions on Threads and Glade frontend: now when an exception
+    is raised the installer does not hang anymore but it writes the traceback
+    on the log and then exit with status 1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Sep 2012 15:33:26 +0200
+
 linstaller (2.72.1-1) pulse; urgency=low
 
   * removed some debug code.
