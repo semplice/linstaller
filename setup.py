@@ -47,7 +47,7 @@ def search_for_glade():
 
 data, symlinks = search_for_glade()
 data_files = [
-	("/usr/bin", ["linstaller_wrapper.sh", "mount_nolive.sh"]),
+	("/usr/bin", ["linstaller_wrapper.sh", "linstaller_crash_wrapper.sh", "mount_nolive.sh"]),
 	("/etc/linstaller", ["config/semplice", "config/semplice-base", "config/semplice-nolive", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi"]),
 	("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
 ]
