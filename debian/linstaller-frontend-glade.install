@@ -1,3 +1,4 @@
 /usr/share/linstaller/linstaller/frontends/glade
 /usr/share/linstaller/linstaller/services/glade
-
+/usr/share/linstaller/crash
+/usr/bin/linstaller_crash_wrapper.sh
