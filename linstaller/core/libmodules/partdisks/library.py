@@ -649,7 +649,37 @@ def automatic_precheck(by="freespace", distribs=None):
 
 				
 	return None, None
+
+def automatic_do(part, swap, by="freespace"):
+	""" Does the magic. """
+	
+	warnings = []
+	
+	if by == "freespace":
+		# We have a defined freespace partition, so we will do everything there.
+		
+		# We should create a swap partition?
+		if not swap:
+			# Yes.
 			
+			# First, see if we *can*.
+			mem = return_memory()
+			if mem < 1023:
+				# We should multiply by 2 mem.
+				mem *= 2
+			else:
+				# 2 GB.
+				mem = 2048
+				mem = round(mem, 2)
+
+			if size > mem:
+				# First check. mem is small than size. That's good.
+				if (size - mem) < rec_size:
+					# If we create a new swap partition, the distribution-oriented partition will be less than the recommended size.
+					# So we should display _min_warning.
+					_min_warning = True
+					# Otherwise, it's all good.
+	
 
 def automatic_check(obj, by="freespace", swap_created=False):
 	""" Performs a check on obj (a Disk object) to see if the user can install the distribution in that disk. """

@@ -16,7 +16,7 @@ from linstaller.core.main import warn,info,verbose,root_check
 
 import linstaller.core.libmodules.partdisks.library as lib
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, Gdk, GObject
 
 class Apply(glade.Progress):
 	def progress(self):
@@ -267,13 +267,23 @@ class Frontend(glade.Frontend):
 		container["vbox"].pack_end(container["text"], True, True, True)
 		
 		container["button"].add(container["hbox"])
+		container["button"].connect("clicked", self.automatic_calc)
 		container["button"].show_all()
 		return container
+
+	def automatic_calc(self, obj):
+		""" Adds/Removes/etc partitions. """
+		
+		# Get part, swap
+		part, swap, by = self.automatic_buttons_reverse[obj]
+		
+		lib.automatic_do(part, swap, by=by)
 
 	def automatic_ready(self):
 		""" Called when the automatic window is ready. """
 		
 		self.automatic_buttons = {}
+		self.automatic_buttons_reverse = {}
 		
 		self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
 		
@@ -286,7 +296,10 @@ class Frontend(glade.Frontend):
 		# Check by freespace
 		part, swap = lib.automatic_precheck(by="freespace")
 		if part:
-			self.automatic_buttons[part.path] = self.automatic_buttons_creator(by="freespace", info={"drive":part.disk.device.path})
+			cont = self.automatic_buttons_creator(by="freespace", info={"drive":part.disk.device.path})
+			self.automatic_buttons[part.path] = cont
+			self.automatic_buttons_reverse[cont] = (part, swap, "freespace")
+
 
 		# Check by delete
 		delete, swap = lib.automatic_precheck(by="delete", distribs=self.distribs)
@@ -298,7 +311,9 @@ class Frontend(glade.Frontend):
 						if "(" in word or ")" in word:
 							name.remove(word)
 					name = " ".join(name)
-					self.automatic_buttons[part.path] = self.automatic_buttons_creator(by="delete", info={"drive":part.path, "system":name})
+					cont = self.automatic_buttons_creator(by="delete", info={"drive":part.path, "system":name})
+					self.automatic_buttons[part.path] = cont
+					self.automatic_buttons_reverse[cont] = (part, swap, "delete")
 		
 		for button, obj in self.automatic_buttons.items():
 			self.automatic_container.pack_start(obj["button"], True, True, True)
@@ -408,6 +423,16 @@ class Frontend(glade.Frontend):
 					break
 		
 		return result
+
+	def change_button_bg(self, button, color=None):
+		""" Changes the background of the specified button. """
+		
+		# Get color
+		color1 = Gdk.RGBA()
+		color1.parse(color)
+		print color1
+		
+		self.idle_add(button.override_background_color, Gtk.StateFlags.NORMAL, color1)
 	
 	def on_newtable_button_clicked(self, obj):
 		""" Called when the newtable button has been clicked. """
@@ -632,6 +657,7 @@ class Frontend(glade.Frontend):
 			self.change_mountpoint(res.path, self.get_mountpoint())
 			
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+			self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
 			
 			if not res.path in self.touched: self.touched.append(res.path)
 			
@@ -1214,6 +1240,8 @@ class Frontend(glade.Frontend):
 					return True
 				else:
 					self.has_swap_warning_showed = False
+					self.settings["swap"] = None
+					warn(_("No swap selected."))
 			else:
 				self.settings["swap"] = self.mountpoints_added["swap"]
 			
