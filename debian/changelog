@@ -1,4 +1,4 @@
-linstaller (2.72.4-1) pulse; urgency=low
+linstaller (2.72.5-1) pulse; urgency=low
 
   * modules/partdisks: properly seed swap to None if no swap has been selected.
   * modules/partdisks: some bits of automatic partitioning.
