@@ -1,5 +1,12 @@
 linstaller (2.72.4-1) pulse; urgency=low
 
+  * modules/partdisks: properly seed swap to None if no swap has been selected.
+  * modules/partdisks: some bits of automatic partitioning.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Sep 2012 00:53:27 +0200
+
+linstaller (2.72.4-1) pulse; urgency=low
+
   * Some changes to the crash dialog.
   * linstaller-frontend-glade: depend on pastebinit.
 
