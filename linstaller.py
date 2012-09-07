@@ -247,7 +247,7 @@ elif _action == "start":
 		os.makedirs("/linstaller/target")
 	
 	# Load configuration file
-	cfg = config.ConfigRead(_config, "linstaller")
+	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend)
 		
 	# Populate main_settings
 	main_settings = {}
