@@ -21,31 +21,34 @@ class Config:
 		self.configpath = configpath
 		
 		self.is_fork = False # at least for now.
-        self.is_frontend = False # at least for now.
+		self.is_frontend = False # at least for now.
 		
 		self.path = os.path.join(self.configpath,file)
+		if os.path.islink(self.path):
+			# Is a link, read it.
+			self.path = os.readlink(self.path)
 		self.initial = initial
 		if not os.path.exists(self.path):
 			raise m.UserError(self.path + " does not exist!")
-        
-        if os.path.exists("%s.%s" % (self.path, frontend)):
-            # Handle configuration file per-frontend, if it exist.
-            # It is basically a fork config without the linstaller:extends section, which we will add.
-            self.path = "%s.%s" % (self.path, frontend)
-            self.is_frontend = True
+		
+		if os.path.exists("%s.%s" % (self.path, frontend)):
+			# Handle configuration file per-frontend, if it exist.
+			# It is basically a fork config without the linstaller:extends section, which we will add.
+			self.path = "%s.%s" % (self.path, frontend)
+			self.is_frontend = True
 		
 		# Open the file, if it is initial just open it in ram...
 		self.config = cparser.SafeConfigParser()
 		if not initial: self.config.read(self.path)
 		
-        if self.is_frontend:
-            # it is frontend ;) Add the linstaller:extends
-            if not self.has_section("linstaller:extends"):
-                self.add_section("linstaller:extends")
-            self.set("linstaller:extends", "source", file)
-            
-            # For now on, treat it as a normal fork :)
-        
+		if self.is_frontend:
+			# it is frontend ;) Add the linstaller:extends
+			if not self.has_section("linstaller:extends"):
+				self.add("linstaller:extends")
+			self.set("linstaller:extends", "source", file)
+			
+			# For now on, treat it as a normal fork :)
+		
 		# Should check if it is a fork
 		if self.has_section("linstaller:extends"):
 			# The fork section is there...
@@ -143,9 +146,9 @@ class Config:
 
 class ConfigRead(Config):
 	""" Simple class to read config files. """
-	def __init__(self, file, module=False, initial=False):
+	def __init__(self, file, module=False, initial=False, frontend=None):
 		
-		Config.__init__(self, file, initial)
+		Config.__init__(self, file, initial, frontend)
 		self.module = module # Module ("section") name.
 	
 	def printv(self, opt, section=False):
