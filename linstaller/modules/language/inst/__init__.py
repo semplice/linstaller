@@ -8,10 +8,20 @@ import linstaller.core.module as module
 from keeptalking import Locale, Keyboard
 
 class Install(module.Install):
-	def language(self, language):
+	def language(self, locale):
 		""" Set language. """
 		
-		self.moduleclass.la.set(language)
+		self.moduleclass.la.set(locale)
+	
+	def savespace(self, locale):
+		""" Set savespace. """
+		
+		self.moduleclass.la.savespace_enable(locale)
+	
+	def purge(self, locale):
+		""" Purges superflous locales. """
+		
+		self.moduleclass.la.savespace_purge(locale)
 	
 	def keyboard(self, layout=None, model=None, variant=None):
 		""" Set keyboard. """

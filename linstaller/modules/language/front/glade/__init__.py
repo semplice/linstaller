@@ -57,6 +57,12 @@ class Frontend(glade.Frontend):
 		keyboard = self.moduleclass.ke
 		tzone_countries = timezone.TimeZone().associate_timezones_to_countries()
 		
+		self.savespace_dialog = self.builder.get_object("savespace_dialog")
+		self.savespace_yes = self.builder.get_object("savespace_yes")
+		self.savespace_yes.connect("clicked", self.on_savespace_yes)
+		self.savespace_no = self.builder.get_object("savespace_no")
+		self.savespace_no.connect("clicked", self.on_savespace_no)
+		
 		## LOCALE PAGE
 		self.locale_frame = self.builder.get_object("locale_frame")
 		
@@ -74,7 +80,11 @@ class Frontend(glade.Frontend):
 		
 		## Get the checkbox.
 		self.locale_checkbox = self.builder.get_object("all_locales_checkbutton")
-		
+
+		## Tweaks
+		self.tweaks_frame = self.builder.get_object("tweaks_frame")
+		self.savespace_checkbox = self.builder.get_object("savespace_checkbox")
+
 		# Populate
 		if self.settings["language"]:
 			defa = self.settings["language"]
@@ -88,6 +98,10 @@ class Frontend(glade.Frontend):
 			self.locale_checkbox.set_active(True)
 
 		self.locale_checkbox.connect("toggled", self.on_locale_checkbox_toggled)
+
+		if self.settings["savespace"]:
+			self.savespace_checkbox.set_active(True)
+		self.savespace_checkbox.connect("toggled", self.on_savespace_checkbox_toggled)
 
 		## KEYBOARD PAGE
 		self.keyboard_label = self.builder.get_object("keyblabel")
@@ -190,6 +204,38 @@ class Frontend(glade.Frontend):
 		itr = self.model_combo.get_active_iter()
 		
 		return self.model_model.get_value(itr, 0)
+
+	def on_savespace_checkbox_toggled(self, obj):
+		""" Triggered when the savespace checkbox has been toggled. """
+		
+		if obj.get_active():
+			# Enabled. Display savespace_dialog
+			
+			self.settings["savespace"] = True
+			
+			GObject.idle_add(self.objects["parent"].main.set_sensitive, False)
+			GObject.idle_add(self.savespace_dialog.show)
+		else:
+			# Disabled.
+			
+			self.settings["savespace"] = False
+
+	def on_savespace_yes(self, obj):
+		""" Triggered when the Yes button has been pressed on the savespace dialog. """
+		
+		self.settings["savespace_purge"] = True
+
+		GObject.idle_add(self.objects["parent"].main.set_sensitive, True)
+		GObject.idle_add(self.savespace_dialog.hide)
+
+	def on_savespace_no(self, obj):
+		""" Triggered when the No button has been pressed on the savespace dialog. """
+		
+		self.settings["savespace_purge"] = False
+
+		GObject.idle_add(self.objects["parent"].main.set_sensitive, True)
+		GObject.idle_add(self.savespace_dialog.hide)
+
 
 	def on_locale_checkbox_toggled(self, obj):
 		""" Triggered when the locale checkbox has been toggled. """
@@ -367,7 +413,7 @@ class Frontend(glade.Frontend):
 				default = itr
 			elif item == toselect:
 				toselectitr = itr
-		self.locale_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+			self.locale_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 		
 		# Set default
 		if toselectitr:

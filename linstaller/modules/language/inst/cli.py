@@ -16,7 +16,7 @@ class Frontend(cli.Frontend):
 		""" Start the frontend """
 
 		# Get a progressbar
-		progress = self.progressbar(_("Setting Language & Keyboard:"), 2)
+		progress = self.progressbar(_("Setting Language & Keyboard:"), 4)
 		
 		verbose("Setting language and keyboard")
 
@@ -26,6 +26,9 @@ class Frontend(cli.Frontend):
 		model = self.moduleclass.modules_settings["language"]["model"]
 		variant = self.moduleclass.modules_settings["language"]["variant"]
 
+		savespace = self.moduleclass.modules_settings["language"]["savespace"]
+		savespace_purge = self.moduleclass.modules_settings["language"]["savespace_purge"]
+
 		# Start progressbar
 		progress.start()
 		
@@ -34,9 +37,17 @@ class Frontend(cli.Frontend):
 			self.moduleclass.install.language(language)
 			progress.update(1)
 			
+			# Set savespace, if any...
+			if savespace:
+				self.moduleclass.install.savespace(language)
+				progress.update(2)
+				if savespace_purge:
+					self.moduleclass.install.purge(language)
+					progress.update(3)
+			
 			# Set keyboard and model
 			self.moduleclass.install.keyboard(layout=layout, model=model, variant=variant)
-			progress.update(2)
+			progress.update(4)
 		finally:
 			# Exit from chroot
 			self.moduleclass.install.close()	
