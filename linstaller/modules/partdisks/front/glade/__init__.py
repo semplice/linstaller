@@ -158,7 +158,7 @@ class Frontend(glade.Frontend):
 		the module).
 		"""
 		
-
+		self.on_steps_hold() # Disable now the next button.
 		
 		self.objects["main"].destroy() # We need to destroy the old container
 				
@@ -191,8 +191,7 @@ class Frontend(glade.Frontend):
 
 		# Get pages
 		self.main_page = self.objects["builder"].get_object("main_page")
-		
-		
+				
 		### SOME TIME-CONSUMING THINGS
 		if True:
 			# Cache distribs
