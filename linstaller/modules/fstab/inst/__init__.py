@@ -51,6 +51,7 @@ proc   /proc   proc   defaults   0   0
 
 				# Write to fstab
 				mountpoint = value["changes"]["useas"]
+				if not value["obj"].fileSystem: continue # Skip if fileSystem is None.
 				filesystem = value["obj"].fileSystem.type
 				if filesystem in ("fat32","fat16"): filesystem = "vfat"
 				if mountpoint == "/":
