@@ -22,14 +22,28 @@ class Set(glade.Progress):
 		model = self.parent.moduleclass.modules_settings["language"]["model"]
 		variant = self.parent.moduleclass.modules_settings["language"]["variant"]
 
+		savespace = self.moduleclass.modules_settings["language"]["savespace"]
+		savespace_purge = self.moduleclass.modules_settings["language"]["savespace_purge"]
+
 		try:
 			self.parent.progress_set_text(_("Setting language..."))
 			self.parent.moduleclass.install.language(language)
 			self.parent.progress_set_percentage(1)
-			
+
+			# Set savespace, if any...
+			if savespace:
+				self.parent.progress_set_text(_("Enabling 'Save space' feature..."))
+				self.parent.moduleclass.install.savespace(language)
+				self.parent.progress_set_percentage(2)
+				
+				if savespace_purge:
+					self.parent.progress_set_text(_("Removing older translations... This may take a while."))
+					self.parent.moduleclass.install.purge(language)
+					self.parent.progress_set_percentage(3)
+
 			self.parent.progress_set_text(_("Setting keyboard..."))
 			self.parent.moduleclass.install.keyboard(layout=layout, model=model, variant=variant)
-			self.parent.progress_set_percentage(2)
+			self.parent.progress_set_percentage(4)
 		finally:
 			# Exit
 			self.parent.moduleclass.install.close()
@@ -42,7 +56,7 @@ class Frontend(glade.Frontend):
 		verbose("Setting language and keyboard")
 		self.set_header("hold", _("Setting language and keyboard..."), _("This may take a while."))
 		
-		self.progress_set_quota(2)
+		self.progress_set_quota(4)
 	
 	def process(self):
 		

@@ -80,12 +80,14 @@ def MbToSector(mbs):
 
     return ( mbs * 1024 * 1024 ) / 512
 
-def swap_available(deep=False):
+def swap_available(deep=False, disksd=None):
 	""" check if there is a swap partition available (True/False) """
+	
+	if not disksd: disksd = disks
 	
 	swaps = []
 	
-	for disk, obj in disks.iteritems():
+	for disk, obj in disksd.iteritems():
 		try:
 			for part in obj._partitions:
 				if part.fileSystem:
@@ -181,6 +183,8 @@ def device_sort(dct):
 				if not return_device(key) in lst:
 					lst.append(return_device(key)) # Append the disk if it is not already listed
 				lst.append(key)
+	
+	lst.sort()
 	
 	return lst, dct
 
@@ -301,7 +305,10 @@ def commit(obj, touched):
 			# Nothing to commit
 			return
 	
-	obj.commit()
+	try:
+		obj.commit()
+	except:
+		return False
 
 def format_partition_for_real(obj, fs):
 	""" Uses mkfs.* to format partition. """	
@@ -581,10 +588,17 @@ def check_distributions(obj=False):
 
 		distribs[line[0]] = line[1] # Add.
 	
+	#distribs = {"/dev/sdb1": "Inter Linux"}
+	
 	return distribs
 
 def automatic_precheck(by="freespace", distribs=None):
-	""" Performs a check on obj (a Disk object) to see if the user can install the distribution in that disk. """
+	""" Performs a check on obj (a Disk object) to see if the user can install the distribution in that disk.
+	
+	distribs is a distribution dictionary as returned by check_distributions(). Default is None.
+	
+	Returns a modified Disk object with the change applied (if by="freespace") or a list of modified Disk objects (if by="delete").
+	"""
 	
 	if swap_available():
 		swap = swap_available()
@@ -628,7 +642,6 @@ def automatic_precheck(by="freespace", distribs=None):
 				if not return_device(device.path) in path:
 					continue
 				part = obj.getPartitionByPath(path)
-				print obj, part
 				if not part:
 					# We should never get here
 					continue
@@ -649,6 +662,358 @@ def automatic_precheck(by="freespace", distribs=None):
 
 				
 	return None, None
+
+class automatic_check_ng:
+	""" Automatic check class. """
+	
+	def __init__(self, distribs={}, efi=None):
+		""" Set required variables. """
+		
+		self.dev, self.dis = return_devices()
+		
+		self.distribs = distribs
+		
+		self.efi = efi
+		
+		# Check for swap
+		if swap_available():
+			self.swap = swap_available()
+		else:
+			self.swap = None
+	
+		#self.swap = None
+	
+	def swap_calc(self):
+		""" Calculates the amount of swap to create.
+		Returns the result in MB.
+		"""
+		
+		mem = return_memory()
+		if mem < 1023:
+			# We should multiply by 2 mem.
+			mem *= 2
+		else:
+			# 2 GB.
+			mem = 2048
+		return round(mem, 2)
+
+	def __common_create_part(self, obj, part, starts=None, length=None):
+		""" Creates partition. """
+		
+		# Get were we start
+		if not starts: starts = part.geometry.start
+						
+		# Get length.
+		if not length: length = part.geometry.length
+				
+		# Create.
+		#part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+		#return part
+		try:
+			part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+		except:
+			return None
+		
+		return part
+	
+	def __common_create_efip(self, obj, part):
+		""" Creates EFI system partition. """
+		
+		if obj.type == "msdos": return None, None, None # Skip if this disk is MBR.
+		
+		# Get were we start
+		starts = part.geometry.start
+						
+		# Get length (40 MB)
+		length = MbToSector(40)
+		
+		# calculate start and length for the swap/"/" partition to be created later...
+		startsn = starts + length
+		lengthn = part.geometry.length - length
+		
+		# Ok, we can now make a new efi partition.
+		try:
+			efi = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="fat32")
+			efi.setFlag(p.PARTITION_BOOT)
+		except:
+			return False, None, None
+		
+		return efi, startsn, lengthn
+	
+	def __common_create_swap(self, obj, part, starts=None, length=None):
+		""" Creates swap partition. """
+
+		# Get were we start
+		if not starts: starts = part.geometry.start
+						
+		# Get length.
+		if not length: length = part.geometry.length
+		
+		# See if we *can*
+		mem = MbToSector(self.swap_calc())
+				
+		# calculate start and length for the / partition to be created later...
+		startsn = starts + mem
+		lengthn = length - mem
+
+		# Ok, we can now make a new swap partition.
+		try:
+			swap = add_partition(obj, start=starts, size=mem, type=p.PARTITION_NORMAL, filesystem="linux-swap(v1)")
+		except:
+			return False, None, None
+		
+		return swap, startsn, lengthn
+	
+	def __common_delete_partition(self, part):
+		""" Deletes partition. """
+		
+		return delete_partition(part)
+
+
+	def __common(self, obj, part, size, noswap=False):
+		""" Common routines to create required partitions. """
+				
+		if not part.number < 0:
+			# A real partition. We need to delete it...
+			start = part.geometry.start
+			res = self.__common_delete_partition(part)
+			part = obj.getPartitionBySector(start)
+		
+		if self.swap or noswap:
+			# Swap is available and we will use that.
+			
+			# EFI?
+			if self.efi:
+				efi, startsn, lengthn = self.__common_create_efip(obj, part)
+				part = self.__common_create_part(obj, part, starts=startsn, length=lengthn)
+			else:
+				efi = None
+				part = self.__common_create_part(obj, part)
+						
+			if noswap:
+				return {"swap": False, "part":part, "efi": efi}
+			else:
+				return {"swap": None, "part":part, "efi": efi}
+		else:
+			# Swap is not available, we need to create one, then add the part
+
+			# EFI?
+			if self.efi:
+				efi, startsn, lengthn = self.__common_create_efip(obj, part)
+				swap, startsn, lengthn = self.__common_create_swap(obj, part, starts=startsn, length=lengthn)
+				part = self.__common_create_part(obj, part, starts=startsn, length=lengthn)
+			else:
+				efi = None
+				swap, startsn, lengthn = self.__common_create_swap(obj, part)
+				part = self.__common_create_part(obj, part, starts=startsn, length=lengthn)
+
+			#part = self.__common_create_part(obj, part, starts=startsn, length=lengthn) # add part
+			
+			return {"swap":swap, "part":part, "efi": efi}
+
+	def by_freespace(self):
+		""" Returns possible solutions by looking only at freespace partitions. """
+		
+		result_dict = {} # "freespaceX" : (dev, dis)
+		order = []
+		
+		current = 0
+		
+		for name, obj in self.dis.items():
+
+			# We need to retrieve fresh devices/disks lists and work on them
+			dev, dis = return_devices()
+
+			obj = dis[obj.device.path.replace("/dev/","")] # Get the proper disk object
+			#device = obj.device
+			# See if there are freespace partitions out there...
+			parts = obj.getFreeSpacePartitions()
+			if parts:
+				# Yes!
+				
+				# Check the size of the partitions...
+				part_sizes = {}
+				for part in parts:
+					size = round(part.getLength("MB"), 2)
+					# Add part object and size in part_sizes
+					part_sizes[part] = size
+				
+				# Now sort them by value...
+				part_sizes = sorted(part_sizes.iteritems(), key=operator.itemgetter(1), reverse=True)
+				# We are now looking at then from bigger to smaller.
+
+				for tupl in part_sizes:
+					part, size = tupl
+					result = None
+					swapwarning = False
+					
+					if self.swap:
+						# Swap already in, go straight check of required space
+						swapwarning = "exist"
+						if (size == rec_size or size > rec_size):
+							# ok!
+							result = self.__common(obj, part, size)
+					else:
+						# We need to keep in mind the swap, too.
+						swapsize = self.swap_calc()
+						size1 = size - swapsize
+						if (size1 == rec_size or size > rec_size):
+							# ok!
+							result = self.__common(obj, part, size)
+						elif (size == rec_size or size > rec_size):
+							# need to set a warning of some sort due to swap not being available
+							swapwarning = True
+							result = self.__common(obj, part, size, noswap=True)
+					
+					# Finally add to result_dict
+					if result:
+						current += 1
+						order.append("freespace%s" % current)
+						result_dict["freespace%s" % current] = {"result":result, "swapwarning":swapwarning, "freesize":size, "disk":obj, "device":obj.device}
+							
+		return result_dict, order
+
+	def by_delete(self):
+		""" Returns possible solutions by looking only at systems to delete. """
+
+		result_dict = {} # "deleteX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			for path, name in self.distribs.iteritems():
+				
+				result = None
+				swapwarning = False
+				
+				# Assume that we are happy with swap
+				# Get a partition object
+				if not return_device(obj.device.path) in path:
+					continue
+				
+				# We need to retrieve fresh devices/disks lists and work on them
+				dev, dis = return_devices()
+				
+				obj = dis[obj.device.path.replace("/dev/","")] # Get the proper disk object
+				
+				part = obj.getPartitionByPath(path)
+				if not part:
+					# wait?! o_O
+					continue
+				
+				# Check size
+				size = round(part.getLength("MB"), 2)
+
+				if self.swap:
+					# Swap already in, go straight check of required space
+					swapwarning = "exist"
+					if (size == rec_size or size > rec_size):
+						# ok!
+						result = self.__common(obj, part, size)
+				else:
+					# We need to keep in mind the swap, too.
+					swapsize = self.swap_calc()
+					size1 = size - swapsize
+					if (size1 == rec_size or size > rec_size):
+						# ok!
+						result = self.__common(obj, part, size)
+					elif (size == rec_size or size > rec_size):
+						# need to set a warning of some sort due to swap not being available
+						swapwarning = True
+						result = self.__common(obj, part, size, noswap=True)
+				
+				# Finally add to result_dict
+				if result:
+					current += 1
+					order.append("delete%s" % current)
+					result_dict["delete%s" % current] = {"result":result, "system":name, "swapwarning":swapwarning, "disk":obj, "device":obj.device}
+							
+		return result_dict, order
+
+
+	def by_clear(self):
+		""" Returns possible solutions by looking only at hard disks to clear. """
+
+		result_dict = {} # "zclearX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			
+			# We need to retrieve fresh devices/disks lists and work on them
+			dev, dis = return_devices()
+			
+			obj = dis[obj.device.path.replace("/dev/","")] # Get the proper disk object
+			
+			if len(obj.partitions) == 0:
+				continue # Skip empty hard disks
+			
+			# Remove all partitions
+			obj.deleteAllPartitions()
+
+			part = obj.getFreeSpacePartitions()[0]
+			size = round(part.getLength("MB"), 2)
+			
+			result = None
+			swapwarning = False
+			
+			# Redetect swap
+			## Due to some issues, swap_available() will redetect a swap partition that MAY have been deleted.
+			## We need to use deep.
+			self.swaps = swap_available(deep=True)
+			self.swap = None
+			for swap in self.swaps:
+				if not swap.path.startswith(obj.device.path):
+					self.swap = swap
+					break
+			
+			if self.swap:
+				# Swap already in, go straight check of required space
+				swapwarning = "exist"
+				if (size == rec_size or size > rec_size):
+					# ok!
+					result = self.__common(obj, part, size)
+			else:
+				# We need to keep in mind the swap, too.
+				swapsize = self.swap_calc()
+				size1 = size - swapsize
+				if (size1 == rec_size or size > rec_size):
+					# ok!
+					result = self.__common(obj, part, size)
+				elif (size == rec_size or size > rec_size):
+					# need to set a warning of some sort due to swap not being available
+					swapwarning = True
+					result = self.__common(obj, part, size, noswap=True)
+					
+			# Finally add to result_dict
+			if result:
+				current += 1
+				order.append("clear%s" % current)
+				result_dict["clear%s" % current] = {"result":result, "swapwarning":swapwarning, "model":obj.device.model, "disk":obj, "device":obj.device}
+							
+		return result_dict, order
+
+	def main(self):
+		""" Checks for solutions for the automatic partitioner.
+		Every solution is applied on a virtual Disk object.
+		"""
+		
+		# Check by freespace
+		free, freeord = self.by_freespace()
+		
+		# Check by delete
+		dele, deleord = self.by_delete()
+		
+		# Check by clear
+		clea, cleaord = self.by_clear()
+		
+		results = dict(free.items() + dele.items() + clea.items())
+		order = freeord + deleord + cleaord
+		
+		return results, order
+	
 
 def automatic_do(part, swap, by="freespace"):
 	""" Does the magic. """
@@ -747,9 +1112,6 @@ def automatic_check(obj, by="freespace", swap_created=False):
 							# 2 GB.
 							mem = 2048
 						mem = round(mem, 2)
-						
-						print mem
-						print size
 						
 						if size > mem:
 							# First check. mem is small than size. That's good.

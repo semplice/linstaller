@@ -19,9 +19,22 @@ import linstaller.core.libmodules.partdisks.library as lib
 from gi.repository import Gtk, Gdk, GObject
 
 class Apply(glade.Progress):
+	def __init__(self, parent, quit=True):
+		
+		self.parent = parent
+		self.quit = quit
+		
+		threading.Thread.__init__(self)
+
 	def progress(self):
 		""" Applies the changes to the devices. """
-				
+		
+		# Disable next button
+		self.parent.on_steps_hold()
+		
+		# Make window unsensitive
+		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, False)
+		
 		lst, dct = lib.device_sort(self.parent.changed)
 		for key in lst:
 			try:
@@ -45,6 +58,13 @@ class Apply(glade.Progress):
 			# Figure 1: A FIXME big like an house.
 			if "-1" in key:
 				continue
+			
+			# A below try statement should handle non existent nodes, but in somecases the installer may crash.
+			# To avoid this, we need to check for the node to be existent. This should not be an issue as the
+			# commit list is properly sorted by the device_sort call above.
+			# This is an huge FIXME, btw.
+			#if not os.path.exists(key):
+			#	continue
 
 			# Commit on the disk.
 			self.parent.set_header("hold", _("Committing changes to %s...") % key, _("This may take a while."))
@@ -63,6 +83,10 @@ class Apply(glade.Progress):
 				if res == False:
 					self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 				
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+										
 					# Restore sensitivity
 					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
 					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
@@ -83,6 +107,10 @@ class Apply(glade.Progress):
 					# Failed ...
 					self.parent.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+					
 					# Restore sensitivity
 					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
 					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
@@ -107,7 +135,7 @@ class Apply(glade.Progress):
 		for item in self.parent.touched:
 			if not item in self.parent.previously_changed: self.parent.previously_changed.append(item)
 
-		self.parent.refresh_manual(complete=False)
+		if not self.parent.is_automatic: self.parent.refresh_manual(complete=False)
 		
 		# If we're here, ok!	
 		self.parent.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
@@ -118,6 +146,8 @@ class Apply(glade.Progress):
 		# Restore sensitivity
 		self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
 		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+		
+		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
 class Frontend(glade.Frontend):	
 	def ready(self):
@@ -128,7 +158,7 @@ class Frontend(glade.Frontend):
 		the module).
 		"""
 		
-
+		self.on_steps_hold() # Disable now the next button.
 		
 		self.objects["main"].destroy() # We need to destroy the old container
 				
@@ -150,17 +180,18 @@ class Frontend(glade.Frontend):
 
 		self.onlyusb = False
 		self.has_manual_touched = False
+		self.is_automatic = None
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
 
 		# Get the notebook
 		self.pages_notebook = self.objects["builder"].get_object("pages_notebook")
 		# Ensure we are on the first page
-		self.pages_notebook.set_current_page(0)
+		self.pages_notebook.set_current_page(1)
 
 		# Get pages
 		self.main_page = self.objects["builder"].get_object("main_page")
-		
+				
 		### SOME TIME-CONSUMING THINGS
 		if True:
 			# Cache distribs
@@ -179,7 +210,7 @@ class Frontend(glade.Frontend):
 		self.automatic_button = self.objects["builder"].get_object("automatic_button")
 		self.automatic_button.connect("clicked", self.on_automatic_button_clicked)
 		
-		self.automatic_button.set_sensitive(False) # Set insensitive, automatic not ready for Beta1
+		#self.automatic_button.set_sensitive(False) # Set insensitive, automatic not ready for Beta1
 		
 		self.manual_button = self.objects["builder"].get_object("manual_button")
 		self.manual_button.connect("clicked", self.on_manual_button_clicked)
@@ -222,7 +253,11 @@ class Frontend(glade.Frontend):
 		""" Applies the changes to the devices. """
 		
 		# Apply!
-		clss = Apply(self, quit=False)
+		if self.is_automatic == True:
+			quit = True
+		else:
+			quit = False
+		clss = Apply(self, quit=quit)
 		clss.start()
 		
 		return
@@ -234,37 +269,75 @@ class Frontend(glade.Frontend):
 		# Create the button
 		container["button"] = Gtk.Button()
 		container["hbox"] = Gtk.HBox()
+		container["hbox"].set_homogeneous(False)
 		container["hbox"].set_spacing(8)
 		container["vbox"] = Gtk.VBox()
+		container["vbox"].set_homogeneous(False)
 		
 		# Create the button objects
 		if by == "freespace":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to the free space on %s") % (self.moduleclass.main_settings["distro"], info["drive"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to the %s GB of free space in %s") % (self.moduleclass.main_settings["distro"], round(info["freesize"] / 1024, 2), info["drive"])))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This installs the distribution on the free space on the drive."))
-			
+
+			container["text2"] = Gtk.Label()
+			if info["swapwarning"] == "exist":
+				container["text2"].set_markup(_("<b>Note:</b> an existing virtual memory (swap) partition will be used."))
+			elif info["swapwarning"]:
+				container["text2"].set_markup(_("<b>Note:</b> due to the few space, it's not possible to create a virtual memory (swap) partition."))
+			else:
+				container["text2"].set_markup(_("<b>Note:</b> a virtual memory (swap) partition will be created."))
+						
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_stock("gtk-add", 6)
 		elif by == "delete":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Remove %s and install %s") % (info["system"], self.moduleclass.main_settings["distro"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Replace %s with %s") % (info["system"], self.moduleclass.main_settings["distro"])))
 			
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This removes %s from %s\nand installs on the freed space %s.") % (info["system"], info["drive"], self.moduleclass.main_settings["distro"]))
-			
+			container["text"].set_markup(_("This replaces %(system)s with %(distro)s. <b>All data on %(system)s will be deleted.</b>") % {"system":info["system"], "distro":self.moduleclass.main_settings["distro"]})
+
+			container["text2"] = Gtk.Label()
+			if info["swapwarning"] == "exist":
+				container["text2"].set_markup(_("<b>Note:</b> an existing virtual memory (swap) partition will be used."))
+			elif info["swapwarning"]:
+				container["text2"].set_markup(_("<b>Note:</b> due to the few space, it's not possible to create a virtual memory (swap) partition."))
+			else:
+				container["text2"].set_markup(_("<b>Note:</b> a virtual memory (swap) partition will be created."))
+
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_stock("gtk-remove", 6)
+		elif by == "clear":
+			container["title"] = Gtk.Label()
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (info["model"])))
+			
+			container["text"] = Gtk.Label()
+			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":info["drive"], "model":info["model"], "distro": self.moduleclass.main_settings["distro"]})
+
+			container["text2"] = Gtk.Label()
+			if info["swapwarning"] == "exist":
+				container["text2"].set_markup(_("<b>Note:</b> an existing virtual memory (swap) partition will be used."))
+			elif info["swapwarning"]:
+				container["text2"].set_markup(_("<b>Note:</b> due to the few space, it's not possible to create a virtual memory (swap) partition."))
+			else:
+				container["text2"].set_markup(_("<b>Note:</b> a virtual memory (swap) partition will be created."))
+
+			container["icon"] = Gtk.Image()
+			container["icon"].set_from_stock("gtk-delete", 6)
 			
 		# Add to the box
 		container["title"].set_alignment(0.0,0.50)
 		container["text"].set_alignment(0.0,0.50)
+		if container["text2"]: container["text2"].set_alignment(0.0,0.50)
 		
-		container["hbox"].pack_start(container["icon"], True, True, True)
+		container["hbox"].pack_start(container["icon"], False, False, True)
 		container["hbox"].pack_end(container["vbox"], True, True, True)
 		container["vbox"].pack_start(container["title"], True, True, True)
-		container["vbox"].pack_end(container["text"], True, True, True)
+		container["vbox"].pack_start(container["text"], True, True, True)
+		if container["text2"]:
+			container["vbox"].pack_start(container["text2"], True, True, True)
 		
 		container["button"].add(container["hbox"])
 		container["button"].connect("clicked", self.automatic_calc)
@@ -274,16 +347,86 @@ class Frontend(glade.Frontend):
 	def automatic_calc(self, obj):
 		""" Adds/Removes/etc partitions. """
 		
-		# Get part, swap
-		part, swap, by = self.automatic_buttons_reverse[obj]
+		# Get item
+		item = self.automatic_buttons_reverse[obj]
 		
-		lib.automatic_do(part, swap, by=by)
+		res = self.automatic_res[item]
+		
+		# Everything has been already done virtually (we <3 pyparted).
+		# Just replace the old disk and devices objects with the new ones.
+		
+		dev = res["device"]
+		dis = res["disk"]
+		
+		lib.devices[dev.path.replace("/dev/","")] = dev
+		lib.disks[dev.path.replace("/dev/","")] = dis
+		
+		# Prepare for entering in manual page...
+		self.changed = {}
+		self.touched = []
+		self.previously_changed = []
+		self.mountpoints_added = {}
+		
+		partpath = res["result"]["part"].path
+		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
+		self.change_mountpoint(partpath, "/")
+		self.queue_for_format(partpath, "ext4")
+		self.touched.append(partpath)
+		self.previously_changed.append(partpath)
+		
+		if res["result"]["swap"]:
+			swappath = res["result"]["swap"].path
+			self.changed[swappath] = {"changes": {}, "obj":res["result"]["swap"]}
+			self.change_mountpoint(swappath, "swap")
+			self.queue_for_format(swappath, "linux-swap(v1)")
+			self.touched.append(swappath)
+			self.previously_changed.append(swappath)
+		elif res["result"]["swap"] == None:
+			# We should pick the right one
+			righto = lib.swap_available()
+			right = righto.path
+			self.changed[right] = {"changes": {}, "obj":righto}
+			self.change_mountpoint(right, "swap")
+			self.touched.append(right)
+			self.previously_changed.append(right)
+		
+		if res["result"]["efi"]:
+			efipath = res["result"]["efi"].path
+			self.changed[efipath] = {"changes": {}, "obj":res["result"]["efi"]}
+			self.change_mountpoint(efipath, "/boot/efi")
+			self.queue_for_format(efipath, "fat32")
+			self.touched.append(efipath)
+			self.previously_changed.append(efipath)
+		
+		#self.changed[part.path]["changes"]["useas"]
+		
+		# Enter on manual page
+		self.pages_notebook.set_current_page(3)
+		self.manual_ready(clean=False)
+		
+		# Hide the toolbar
+		#self.idle_add(self.manual_toolbar.hide)
+		
+		# Hide the apply and the refresh buttons
+		self.idle_add(self.apply_button.hide)
+		self.idle_add(self.refresh_button.hide)
+		
+		# Set proper header...
+		self.set_header("ok", _("Please review your changes."), _("When done this, press the Next button to permanently write them to the disk."))
+		
+		# Enable next button
+		self.on_steps_ok()
+		
 
 	def automatic_ready(self):
 		""" Called when the automatic window is ready. """
 		
+		# Refresh, some automatic solutions may be in place even after restarting the module
+		self.refresh()
+		
 		self.automatic_buttons = {}
 		self.automatic_buttons_reverse = {}
+		self.is_automatic = True
 		
 		self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
 		
@@ -292,30 +435,66 @@ class Frontend(glade.Frontend):
 		for child in self.automatic_container.get_children():
 			child.destroy()
 		self.automatic_container.show()
+
+		### COSMETIC HIDES
+		self.automatic_scroller = self.objects["builder"].get_object("automatic_scroller")
+		self.automatic_nosolutions = self.objects["builder"].get_object("automatic_nosolutions")
+		self.automatic_scroller.show()
+		self.automatic_nosolutions.show()
+		
+		# Create automatic_check_ng object
+		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+			efi = True
+		else:
+			efi = False
+		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi)
 		
 		# Check by freespace
-		part, swap = lib.automatic_precheck(by="freespace")
-		if part:
-			cont = self.automatic_buttons_creator(by="freespace", info={"drive":part.disk.device.path})
-			self.automatic_buttons[part.path] = cont
-			self.automatic_buttons_reverse[cont] = (part, swap, "freespace")
+		self.automatic_res, self.automatic_order = automatic.main()
+		if not self.automatic_order == []:
+			for item in self.automatic_order:
+				if item.startswith("freespace"):
+					cont = self.automatic_buttons_creator(by="freespace", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "freesize":self.automatic_res[item]["freesize"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+				elif item.startswith("delete"):
+					cont = self.automatic_buttons_creator(by="delete", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "system":self.automatic_res[item]["system"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+				elif item.startswith("clear"):
+					cont = self.automatic_buttons_creator(by="clear", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "model":self.automatic_res[item]["model"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+			
+			# Ensure we hide nosolutions as we have indeeed some solution
+			self.automatic_nosolutions.hide()
+		else:
+			# Hide the solution scroller
+			self.automatic_scroller.hide()
+		
+		#part, swap = lib.automatic_precheck(by="freespace")
+		#if part:
+		#	cont = self.automatic_buttons_creator(by="freespace", info={"drive":part.disk.device.path})
+		#	self.automatic_buttons[part.path] = cont
+		#	self.automatic_buttons_reverse[cont] = (part, swap, "freespace")
 
 
 		# Check by delete
-		delete, swap = lib.automatic_precheck(by="delete", distribs=self.distribs)
-		if delete:
-			for part, _name in delete:
-				if part:
-					name = _name.split(" ")
-					for word in _name.split(" "):
-						if "(" in word or ")" in word:
-							name.remove(word)
-					name = " ".join(name)
-					cont = self.automatic_buttons_creator(by="delete", info={"drive":part.path, "system":name})
-					self.automatic_buttons[part.path] = cont
-					self.automatic_buttons_reverse[cont] = (part, swap, "delete")
+		#delete, swap = lib.automatic_precheck(by="delete", distribs=self.distribs)
+		#if delete:
+		#	for part, _name in delete:
+		#		if part:
+		#			name = _name.split(" ")
+		#			for word in _name.split(" "):
+		#				if "(" in word or ")" in word:
+		#					name.remove(word)
+		#			name = " ".join(name)
+		#			cont = self.automatic_buttons_creator(by="delete", info={"drive":part.path, "system":name})
+		#			self.automatic_buttons[part.path] = cont
+		#			self.automatic_buttons_reverse[cont] = (part, swap, "delete")
 		
-		for button, obj in self.automatic_buttons.items():
+		for button in self.automatic_order:
+			obj = self.automatic_buttons[button]
 			self.automatic_container.pack_start(obj["button"], True, True, True)
 	
 	def on_manual_treeview_changed(self, obj):
@@ -939,7 +1118,7 @@ class Frontend(glade.Frontend):
 				else:
 					_mpoint = ""
 
-				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"])):
+				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]) or self.is_automatic):
 					# This was changed previously, "ok" color.
 					_bg = self.objects["parent"].return_color("ok")
 				elif self.changed[part.path]["changes"] != {}:
@@ -948,7 +1127,7 @@ class Frontend(glade.Frontend):
 					_bg = self.objects["parent"].return_color("hold")
 					
 					# Also, there are some changes, so disable the next button.
-					self.on_steps_hold()
+					if not self.is_automatic: self.on_steps_hold()
 				else:
 					# No change
 					_bg = None
@@ -1001,25 +1180,29 @@ class Frontend(glade.Frontend):
 			self.size_manual_entry.set_sensitive(False)
 			self.size_scale_scale.set_sensitive(True)
 	
-	def manual_ready(self):
+	def manual_ready(self, clean=True):
 		""" Called when the manual window is ready. """
 		
 		self.has_swap_warning_showed = False
 		
 		self.current_selected = None
 		
-		self.changed = {}
-		self.touched = []
-		self.previously_changed = []
-		
-		self.mountpoints_added = {}
-		
+		if clean:			
+			self.changed = {}
+			self.touched = []
+			self.previously_changed = []
+			self.is_automatic = False
+
+			self.mountpoints_added = {}
+
+			self.refresh()
+					
 		self.manual_devices = {}
 		self.treeview_description = {}
 
 		# Presed changed if this is not the first time...
 		if not self.is_module_virgin:
-			if "changed" in self.settings and self.settings["changed"]:
+			if not self.is_automatic == True and ("changed" in self.settings and self.settings["changed"]):
 				self.changed = self.settings["changed"]
 				# Also every changed partition should be on previously_changed...
 				for part, value in self.changed.items():
@@ -1131,6 +1314,7 @@ class Frontend(glade.Frontend):
 		self.apply_yes.connect("clicked", self.on_apply_window_button_clicked)
 
 		# Get toolbar buttons
+		self.manual_toolbar = self.objects["builder"].get_object("manual_toolbar")
 		self.add_button = self.objects["builder"].get_object("add_button")
 		self.remove_button = self.objects["builder"].get_object("remove_button")
 		self.edit_button = self.objects["builder"].get_object("edit_button")
@@ -1166,8 +1350,8 @@ class Frontend(glade.Frontend):
 		# Ensure we can go back...
 		self.idle_add(self.objects["parent"].back_button.set_sensitive, True)
 		
-		# Switch to page 1
-		self.pages_notebook.set_current_page(1)
+		# Switch to page 2
+		self.pages_notebook.set_current_page(2)
 		
 		self.automatic_ready()
 	
@@ -1177,8 +1361,8 @@ class Frontend(glade.Frontend):
 		# Ensure we can go back...
 		self.idle_add(self.objects["parent"].back_button.set_sensitive, True)
 		
-		# Switch to page 2
-		self.pages_notebook.set_current_page(2)
+		# Switch to page 3
+		self.pages_notebook.set_current_page(3)
 		
 		self.manual_ready()
 
@@ -1187,9 +1371,9 @@ class Frontend(glade.Frontend):
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
 		
-		# Return always to page 0, if we aren't already there
+		# Return always to page 1, if we aren't already there
 		current = self.pages_notebook.get_current_page()
-		if not current == 0:
+		if not current == 1:
 			
 			# Restart
 			self.module_restart()
@@ -1212,8 +1396,12 @@ class Frontend(glade.Frontend):
 	def on_next_button_click(self):
 		""" Override on_next_button_click. """
 		
-		if self.pages_notebook.get_current_page() == 2:
+		if self.pages_notebook.get_current_page() == 3:
 			# We are in manual, and we need to check if the / partition is selected...
+			
+			if self.is_automatic == "fail":
+				self.is_automatic = True
+				return True
 			
 			if not "/" in self.mountpoints_added:
 				# Error!
@@ -1224,7 +1412,7 @@ class Frontend(glade.Frontend):
 				self.settings["root"] = self.mountpoints_added["/"]
 			
 			# If in UEFI mode, ensure /boot/efi is selected
-			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True and not lib.return_partition(self.mountpoints_added["/"]).disk.type == "msdos":
 				if not "/boot/efi" in self.mountpoints_added:
 					# Error!
 					self.set_header("error", _("You can't continue!"), _("You need to specify the EFI System Partition (/boot/efi)."))
@@ -1233,7 +1421,7 @@ class Frontend(glade.Frontend):
 			# Check for swap too...
 			if not "swap" in self.mountpoints_added:
 				# Warning!
-				if not self.has_swap_warning_showed:
+				if not self.has_swap_warning_showed and not self.is_automatic:
 					# Show it
 					self.set_header("hold", _("Are you sure?"), _("It seems you haven't selected a swap partition.\nSelect one now, or press Forward to continue without one."))
 					self.has_swap_warning_showed = True
@@ -1245,6 +1433,15 @@ class Frontend(glade.Frontend):
 			else:
 				self.settings["swap"] = self.mountpoints_added["swap"]
 			
+			# if self.is_automatic, apply now changes.
+			if self.is_automatic == True:
+				self.on_apply_button_clicked(obj="automatic")
+				#clss = Apply(self, quit=True)
+				#clss.start()
+				
+				return True
+			
 			# Seed changed
+			self.refresh_manual(complete=False)
 			self.settings["changed"] = self.changed
 		

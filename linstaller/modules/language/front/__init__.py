@@ -24,3 +24,5 @@ class Module(module.Module):
 		self.cache("layout")
 		self.cache("model")
 		self.cache("variant")
+		self.cache("savespace", None)
+		self.cache("savespace_purge", None)
