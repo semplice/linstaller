@@ -1,3 +1,19 @@
+linstaller (2.73.0-1) pulse; urgency=low
+
+  * modules/echo: partdisks.inst: ported to glade frontend.
+  * modules/echo: copy.inst: ported to glade frontend.
+  * modules/echo: bootloader.inst: ported to glade frontend (by Luca)
+  * core/config.py: per-frontend configuration file support.
+  * config/: added semplice.glade configuration file. core/config.py: some fixes, if the configuration file is a link, use the target.
+  * modules/language: ported the keeptalking savespace feature.
+    config/semplice-nolive.glade: the same as config/semplice.glade
+  * modules/partdisks: library: added new-generation automatic partitioner, some bug fixes.
+    modules/partdisks: front/glade: some cosmetic changes, added automatic partitioner support. New waiting page.
+    modules/fstab: inst: skip entry creation if fileSystem is None.
+  * modules/partdisks: front/glade: disable the next button before showing the please wait tab
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 07 Oct 2012 16:30:11 +0200
+
 linstaller (2.72.5-1) pulse; urgency=low
 
   * modules/partdisks: properly seed swap to None if no swap has been selected.
