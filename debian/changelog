@@ -1,3 +1,10 @@
+linstaller (2.73.1-1) pulse; urgency=low
+
+  * modules/language: inst/glade: fixed savespace retrieving
+  * Ship glade frontend configuratons and make -frontend-glade depend on keeptalking >= 2.21.0
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 11 Oct 2012 22:01:45 +0200
+
 linstaller (2.73.0-1) pulse; urgency=low
 
   * modules/echo: partdisks.inst: ported to glade frontend.
