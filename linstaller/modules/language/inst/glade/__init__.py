@@ -22,8 +22,8 @@ class Set(glade.Progress):
 		model = self.parent.moduleclass.modules_settings["language"]["model"]
 		variant = self.parent.moduleclass.modules_settings["language"]["variant"]
 
-		savespace = self.moduleclass.modules_settings["language"]["savespace"]
-		savespace_purge = self.moduleclass.modules_settings["language"]["savespace_purge"]
+		savespace = self.parent.moduleclass.modules_settings["language"]["savespace"]
+		savespace_purge = self.parent.moduleclass.modules_settings["language"]["savespace_purge"]
 
 		try:
 			self.parent.progress_set_text(_("Setting language..."))
