@@ -1,5 +1,7 @@
 /etc/linstaller/semplice
+/etc/linstaller/semplice.glade
 /etc/linstaller/semplice-base
 /etc/linstaller/semplice-nolive
+/etc/linstaller/semplice-nolive.glade
 /etc/linstaller/semplice-persistent
 /etc/linstaller/semplice-persistent-nolive
