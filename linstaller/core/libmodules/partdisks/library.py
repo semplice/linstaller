@@ -666,10 +666,11 @@ def automatic_precheck(by="freespace", distribs=None):
 class automatic_check_ng:
 	""" Automatic check class. """
 	
-	def __init__(self, distribs={}, efi=None, onlyusb=False):
+	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False):
 		""" Set required variables. """
 		
 		self.onlyusb = onlyusb
+		self.is_echo = is_echo
 		
 		self.dev, self.dis = return_devices(onlyusb=self.onlyusb)
 		
@@ -815,7 +816,11 @@ class automatic_check_ng:
 
 	def by_freespace(self):
 		""" Returns possible solutions by looking only at freespace partitions. """
-		
+
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+
 		result_dict = {} # "freespaceX" : (dev, dis)
 		order = []
 		
@@ -878,6 +883,10 @@ class automatic_check_ng:
 	def by_delete(self):
 		""" Returns possible solutions by looking only at systems to delete. """
 
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+
 		result_dict = {} # "deleteX" : (dev, dis)
 		order = []
 		
@@ -936,6 +945,10 @@ class automatic_check_ng:
 
 	def by_clear(self):
 		""" Returns possible solutions by looking only at hard disks to clear. """
+
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
 
 		result_dict = {} # "zclearX" : (dev, dis)
 		order = []
@@ -997,6 +1010,31 @@ class automatic_check_ng:
 							
 		return result_dict, order
 
+	def by_echo(self):
+		""" Returns possible root partitions, without touching them.
+		
+		Used by "echo". """
+		
+		if not self.is_echo:
+			# Enable only on echo
+			return {}, []
+		
+		result_dict = {} # "echoX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			for part in obj.partitions:
+				# Skip non-ext* and non-fat32 partitions
+				if part.fileSystem and part.fileSystem.type not in ("fat32", "ext2", "ext3", "ext4"): continue
+				
+				current += 1
+				order.append("echo%s" % current)
+				result_dict["echo%s" % current] = {"result":{"part":part, "swap":None, "efi":None}, "disk":obj, "device":obj.device}
+
+		return result_dict, order
+	
 	def main(self):
 		""" Checks for solutions for the automatic partitioner.
 		Every solution is applied on a virtual Disk object.
@@ -1011,8 +1049,11 @@ class automatic_check_ng:
 		# Check by clear
 		clea, cleaord = self.by_clear()
 		
-		results = dict(free.items() + dele.items() + clea.items())
-		order = freeord + deleord + cleaord
+		# Check by echo
+		echo, echoord = self.by_echo()
+		
+		results = dict(free.items() + dele.items() + clea.items() + echo.items())
+		order = freeord + deleord + cleaord + echoord
 		
 		return results, order
 	

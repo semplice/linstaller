@@ -217,6 +217,10 @@ class Frontend(glade.Frontend):
 
 		# Disable next button
 		self.on_steps_hold()
+		
+		# If is_echo, we need to deploy the automatic page... automatically.
+		if self.settings["is_echo"]:
+			self.on_automatic_button_clicked(obj=None)
 	
 	def refresh(self):
 		""" Refreshes the devices and disks list. """
@@ -326,6 +330,17 @@ class Frontend(glade.Frontend):
 
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_stock("gtk-delete", 6)
+		elif by == "echo":
+			container["title"] = Gtk.Label()
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s") % (self.moduleclass.main_settings["distro"], info["path"])))
+			
+			container["text"] = Gtk.Label()
+			container["text"].set_markup(_("No data will be deleted."))
+
+			container["text2"] = None
+
+			container["icon"] = Gtk.Image()
+			container["icon"].set_from_icon_name("drive-removable-media", 6)
 			
 		# Add to the box
 		container["title"].set_alignment(0.0,0.50)
@@ -370,7 +385,9 @@ class Frontend(glade.Frontend):
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
 		self.change_mountpoint(partpath, "/")
-		self.queue_for_format(partpath, "ext4")
+		if not self.settings["is_echo"]:
+			# if is_echo, we do not want to format partition.
+			self.queue_for_format(partpath, "ext4")
 		self.touched.append(partpath)
 		self.previously_changed.append(partpath)
 		
@@ -384,11 +401,12 @@ class Frontend(glade.Frontend):
 		elif res["result"]["swap"] == None:
 			# We should pick the right one
 			righto = lib.swap_available()
-			right = righto.path
-			self.changed[right] = {"changes": {}, "obj":righto}
-			self.change_mountpoint(right, "swap")
-			self.touched.append(right)
-			self.previously_changed.append(right)
+			if righto:
+				right = righto.path
+				self.changed[right] = {"changes": {}, "obj":righto}
+				self.change_mountpoint(right, "swap")
+				self.touched.append(right)
+				self.previously_changed.append(right)
 		
 		if res["result"]["efi"]:
 			efipath = res["result"]["efi"].path
@@ -416,6 +434,10 @@ class Frontend(glade.Frontend):
 		
 		# Enable next button
 		self.on_steps_ok()
+		
+		# If is_echo, trigger next button.
+		if self.settings["is_echo"]:
+			self.on_next_button_click()
 		
 
 	def automatic_ready(self):
@@ -447,7 +469,7 @@ class Frontend(glade.Frontend):
 			efi = True
 		else:
 			efi = False
-		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb)
+		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb, is_echo=self.settings["is_echo"])
 		
 		# Check by freespace
 		self.automatic_res, self.automatic_order = automatic.main()
@@ -465,7 +487,11 @@ class Frontend(glade.Frontend):
 					cont = self.automatic_buttons_creator(by="clear", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
-			
+				elif item.startswith("echo"):
+					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+							
 			# Ensure we hide nosolutions as we have indeeed some solution
 			self.automatic_nosolutions.hide()
 		else:
@@ -1434,7 +1460,12 @@ class Frontend(glade.Frontend):
 				self.settings["swap"] = self.mountpoints_added["swap"]
 			
 			# if self.is_automatic, apply now changes.
-			if self.is_automatic == True:
+			if self.settings["is_echo"] and self.is_automatic == True:
+				# Apply and go ahead
+				self.idle_add(self.apply)
+				
+				return True
+			elif self.is_automatic == True:
 				self.on_apply_button_clicked(obj="automatic")
 				#clss = Apply(self, quit=True)
 				#clss.start()
