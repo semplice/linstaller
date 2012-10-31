@@ -666,10 +666,12 @@ def automatic_precheck(by="freespace", distribs=None):
 class automatic_check_ng:
 	""" Automatic check class. """
 	
-	def __init__(self, distribs={}, efi=None):
+	def __init__(self, distribs={}, efi=None, onlyusb=False):
 		""" Set required variables. """
 		
-		self.dev, self.dis = return_devices()
+		self.onlyusb = onlyusb
+		
+		self.dev, self.dis = return_devices(onlyusb=self.onlyusb)
 		
 		self.distribs = distribs
 		

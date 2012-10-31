@@ -447,7 +447,7 @@ class Frontend(glade.Frontend):
 			efi = True
 		else:
 			efi = False
-		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi)
+		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb)
 		
 		# Check by freespace
 		self.automatic_res, self.automatic_order = automatic.main()
