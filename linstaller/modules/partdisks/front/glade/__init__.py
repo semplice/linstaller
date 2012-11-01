@@ -1397,6 +1397,10 @@ class Frontend(glade.Frontend):
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
 		
+		# If is_echo, we need exclusively to go to the module before...
+		if self.settings["is_echo"]:
+			return None
+		
 		# Return always to page 1, if we aren't already there
 		current = self.pages_notebook.get_current_page()
 		if not current == 1:
