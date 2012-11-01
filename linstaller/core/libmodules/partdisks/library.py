@@ -35,6 +35,7 @@ supported = {
 	"ext3" : ("/sbin/mkfs.ext3",""),
 	"ext4" : ("/sbin/mkfs.ext4",""),
 	"fat32" : ("/sbin/mkfs.vfat","-F 32"),
+	"fat16" : ("/sbin/mkfs.vfat","-F 16"),
 	"ntfs" : ("/sbin/mkfs.ntfs","-Q"), # lol
 	"hfs+" : ("/sbin/mkfs.hfsplus",""),
 	"jfs" : ("/sbin/mkfs.jfs",""),
@@ -126,7 +127,7 @@ def return_device(dev):
 	
 	return dev
 
-def return_devices(onlyusb=False):
+def return_devices(onlyusb=False, withorder=False):
 	""" Returns a list of devices. """
 	
 	# We will check /proc/partitions.
@@ -196,6 +197,25 @@ def restore_devices(onlyusb=False):
 	
 	devices, disks = return_devices(onlyusb=onlyusb)
 
+def disk_partitions(disk):
+	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
+
+	partitions = []
+	partition = disk.getFirstPartition()
+	
+	while partition:		
+		if partition.type & p.PARTITION_FREESPACE or \
+			not partition.type & p.PARTITION_METADATA or \
+			not partition.type & p.PARTITION_PROTECTED:
+		
+			partitions.append(partition)
+		
+		pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
+		if not pednxt: break
+		partition = p.Partition(disk=partition.disk, PedPartition=pednxt)
+
+	return partitions
+
 def return_partition(partition):
 	""" Returns a partition object which matches 'partition' """
 	
@@ -224,6 +244,20 @@ def unsetFlag(partition, flag):
 	""" Unsets the specified flag into the partition (which must be a parted.Partition object) """
 	
 	return partition.unsetFlag(flags[flag])
+
+def maxGrow(partition):
+	""" Given a partition, it calculates the maximum it can grow, by looking at the subsequent partition. """
+	
+	current = partition.getLength("MiB")
+	
+	#nxt = partition.nextPartition()
+	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
+	if not pednxt: return current
+	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
+	if nxt.type & p.PARTITION_FREESPACE:
+		current += nxt.getLength("MiB")
+	
+	return current	
 
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """

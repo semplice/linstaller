@@ -736,7 +736,8 @@ class Frontend(glade.Frontend):
 		
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		#self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		self.size_adjustment.set_upper(lib.maxGrow(device)) #round(device.getMaxAvailableSize("MB"), 3))
 
 		# Populate the size
 		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
@@ -1060,13 +1061,14 @@ class Frontend(glade.Frontend):
 		## Create the TreeView 
 		# ListStore: /dev/part - system/label - filesystem - format? - size
 
-		if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
+		#if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
+		if disk != "notable": partitions = lib.disk_partitions(disk)
 
 		if disk != "notable" and len(partitions) > 0:	
 			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
 		else:
 			container["model"] = Gtk.ListStore(str, str)
-		container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
+		#container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
 		container["treeview"] = Gtk.TreeView(container["model"])
 		container["treeview"].connect("cursor-changed", self.on_manual_treeview_changed)
 
