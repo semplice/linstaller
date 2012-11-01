@@ -450,7 +450,10 @@ class Frontend(glade.Frontend):
 		self.automatic_buttons_reverse = {}
 		self.is_automatic = True
 		
-		self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
+		if self.settings["is_echo"]:
+			self.set_header("info", _("Select the partition where install the distribution"), _("No data will be touched."))
+		else:
+			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
 		
 		# get objects
 		self.automatic_container = self.objects["builder"].get_object("automatic_container")
