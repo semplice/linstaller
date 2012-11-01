@@ -689,10 +689,10 @@ class Frontend(glade.Frontend):
 				
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
+		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
 		
 		# Ensure the format checkbox is set to True and unsensitive...
 		self.format_box.set_active(True)
@@ -732,15 +732,15 @@ class Frontend(glade.Frontend):
 		# Get the device
 		device = self.get_partition_from_selected()
 		
-		self.current_length = round(device.getLength("MiB"), 3)
+		self.current_length = round(device.getSize("MB"), 3)
 		
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		#self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		#self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
 		self.size_adjustment.set_upper(lib.maxGrow(device)) #round(device.getMaxAvailableSize("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
+		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
 		
 		# Unset the format checkbox if we should.
 		self.format_box.set_sensitive(True) # Ensure is sensitive
@@ -1106,17 +1106,17 @@ class Frontend(glade.Frontend):
 				elif not part.path in self.distribs:
 					name.append("Normal partition")
 
-				if int(part.getLength("GiB")) > 0:
+				if int(part.getSize("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
-					_size = round(part.getLength("GiB"), 2)
-					_unit = "GiB"
-				elif int(part.getLength("MiB")) > 0:
+					_size = round(part.getSize("GB"), 2)
+					_unit = "GB"
+				elif int(part.getSize("MB")) > 0:
 					# Partition is too small to be represented with gigabytes. Use megabytes instead.
-					_size = round(part.getLength("MiB"), 2)
-					_unit = "MiB"
+					_size = round(part.getSize("MB"), 2)
+					_unit = "MB"
 				else:
 					## Last try.. using kilobytes
-					#_size = round(part.getLength("kB"), 2)
+					#_size = round(part.getSize("kB"), 2)
 					#_unit = "kB"
 					
 					# Partition is too small and can be confusing. Simply do not show it.

@@ -248,14 +248,14 @@ def unsetFlag(partition, flag):
 def maxGrow(partition):
 	""" Given a partition, it calculates the maximum it can grow, by looking at the subsequent partition. """
 	
-	current = partition.getLength("MiB")
+	current = partition.getSize("MB")
 	
 	#nxt = partition.nextPartition()
 	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 	if not pednxt: return current
 	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
 	if nxt.type & p.PARTITION_FREESPACE:
-		current += nxt.getLength("MiB")
+		current += nxt.getSize("MB")
 	
 	return current	
 
@@ -647,7 +647,7 @@ def automatic_precheck(by="freespace", distribs=None):
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in obj.getFreeSpacePartitions():
-					size = round(part.getLength("MB"), 2)
+					size = round(part.getSize("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -681,7 +681,7 @@ def automatic_precheck(by="freespace", distribs=None):
 					continue
 				
 				# Check size
-				if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
+				if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
 					# We can.
 					delete[part] = name
 			
@@ -875,7 +875,7 @@ class automatic_check_ng:
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in parts:
-					size = round(part.getLength("MB"), 2)
+					size = round(part.getSize("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -948,7 +948,7 @@ class automatic_check_ng:
 					continue
 				
 				# Check size
-				size = round(part.getLength("MB"), 2)
+				size = round(part.getSize("MB"), 2)
 
 				if self.swap:
 					# Swap already in, go straight check of required space
@@ -1003,7 +1003,7 @@ class automatic_check_ng:
 			obj.deleteAllPartitions()
 
 			part = obj.getFreeSpacePartitions()[0]
-			size = round(part.getLength("MB"), 2)
+			size = round(part.getSize("MB"), 2)
 			
 			result = None
 			swapwarning = False
@@ -1144,7 +1144,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 			# Check the size of the partitions...
 			part_sizes = {}
 			for part in obj.getFreeSpacePartitions():
-				size = round(part.getLength("MB"), 2)
+				size = round(part.getSize("MB"), 2)
 				# Add part object and size in part_sizes
 				part_sizes[part] = size
 			
@@ -1279,7 +1279,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 				raise main.CodeError("An error! o_O")
 			
 			# Check size
-			if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
+			if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
 				# We can.
 				delete[part] = name
 		
