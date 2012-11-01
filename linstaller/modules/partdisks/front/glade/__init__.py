@@ -332,7 +332,7 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-delete", 6)
 		elif by == "echo":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s") % (self.moduleclass.main_settings["distro"], info["path"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s (%s)") % (self.moduleclass.main_settings["distro"], info["path"], info["model"])))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("No data will be deleted."))
@@ -451,7 +451,7 @@ class Frontend(glade.Frontend):
 		self.is_automatic = True
 		
 		if self.settings["is_echo"]:
-			self.set_header("info", _("Select the partition where install the distribution"), _("No data will be touched."))
+			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."))
 		else:
 			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
 		
@@ -491,7 +491,7 @@ class Frontend(glade.Frontend):
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 				elif item.startswith("echo"):
-					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path})
+					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path, "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 							

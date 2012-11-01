@@ -1031,7 +1031,7 @@ class automatic_check_ng:
 				
 				current += 1
 				order.append("echo%s" % current)
-				result_dict["echo%s" % current] = {"result":{"part":part, "swap":None, "efi":None}, "disk":obj, "device":obj.device}
+				result_dict["echo%s" % current] = {"result":{"part":part, "swap":None, "efi":None}, "model":obj.device.model, "disk":obj, "device":obj.device}
 
 		return result_dict, order
 	
