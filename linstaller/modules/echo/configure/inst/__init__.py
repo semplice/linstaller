@@ -33,19 +33,20 @@ class Module(module.Module):
 			args.append("user-fullname=%s" % self.modules_settings["userhost"]["userfullname"]) # Userfullname
 			
 			args.append("locales=%s" % self.modules_settings["language"]["language"]) # Language
-			args.append("keyboard-layouts=%s" % self.modules_settings["language"]["keyboard"]) # Language
+			args.append("keyboard-layouts=%s" % self.modules_settings["language"]["layout"]) # Language
 			
 			args.append("timezone=%s" % self.modules_settings["timezone"]["timezone"]) # Timezone
 		except:
 			# Failed to add arguments, do not worry: nothing important.
 			pass
 		
+		args.append("quickreboot") # reboot without prompting
 		args.append("quiet") # let's stay quiet
 		
 		# Here is where the magic happens:
-		args.append("persistent") # tell live-boot to use persistence
-		if not self.path == "/": args.append("persistent-path=%s" % self.path) # Directory where the image is stored, if any
-		args.append("persistent-subtext=%s" % self.part_suffix) # subtext of the persistent image
+		args.append("persistence") # tell live-boot to use persistence
+		if not self.path == "/": args.append("persistence-path=%s" % self.path) # Directory where the image is stored, if any
+		args.append("persistence-subtext=%s" % self.part_suffix) # subtext of the persistent image
 		
 		args.append("live-media-path=%s" % self.image_path) # path for the image
 		

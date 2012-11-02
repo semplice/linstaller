@@ -10,6 +10,7 @@ import linstaller.core.main as m
 import operator
 import os
 import commands
+import time
 
 from linstaller.core.main import info,warn,verbose
 
@@ -35,6 +36,7 @@ supported = {
 	"ext3" : ("/sbin/mkfs.ext3",""),
 	"ext4" : ("/sbin/mkfs.ext4",""),
 	"fat32" : ("/sbin/mkfs.vfat","-F 32"),
+	"fat16" : ("/sbin/mkfs.vfat","-F 16"),
 	"ntfs" : ("/sbin/mkfs.ntfs","-Q"), # lol
 	"hfs+" : ("/sbin/mkfs.hfsplus",""),
 	"jfs" : ("/sbin/mkfs.jfs",""),
@@ -126,7 +128,7 @@ def return_device(dev):
 	
 	return dev
 
-def return_devices(onlyusb=False):
+def return_devices(onlyusb=False, withorder=False):
 	""" Returns a list of devices. """
 	
 	# We will check /proc/partitions.
@@ -196,6 +198,25 @@ def restore_devices(onlyusb=False):
 	
 	devices, disks = return_devices(onlyusb=onlyusb)
 
+def disk_partitions(disk):
+	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
+
+	partitions = []
+	partition = disk.getFirstPartition()
+	
+	while partition:		
+		if partition.type & p.PARTITION_FREESPACE or \
+			not partition.type & p.PARTITION_METADATA or \
+			not partition.type & p.PARTITION_PROTECTED:
+		
+			partitions.append(partition)
+		
+		pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
+		if not pednxt: break
+		partition = p.Partition(disk=partition.disk, PedPartition=pednxt)
+
+	return partitions
+
 def return_partition(partition):
 	""" Returns a partition object which matches 'partition' """
 	
@@ -224,6 +245,20 @@ def unsetFlag(partition, flag):
 	""" Unsets the specified flag into the partition (which must be a parted.Partition object) """
 	
 	return partition.unsetFlag(flags[flag])
+
+def maxGrow(partition):
+	""" Given a partition, it calculates the maximum it can grow, by looking at the subsequent partition. """
+	
+	current = partition.getSize("MB")
+	
+	#nxt = partition.nextPartition()
+	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
+	if not pednxt: return current
+	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
+	if nxt.type & p.PARTITION_FREESPACE:
+		current += nxt.getSize("MB")
+	
+	return current	
 
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """
@@ -471,7 +506,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 	# Return mountpoint
 	return _mountpoint
 
-def umount(parted_part=None, path=None):
+def umount(parted_part=None, path=None, tries=0):
 	""" Unmounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -488,7 +523,17 @@ def umount(parted_part=None, path=None):
 	if not is_mounted(path): raise m.UserError("%s is not mounted!" % path)
 	
 	# Unmount.
-	m.sexec("umount %s" % path)
+	try:
+		m.sexec("umount %s" % path)
+	except m.CmdError, e:
+		# Failed, retry after two seconds
+		time.sleep(2)
+		if tries < 5:
+			# max 5 tries
+			return umount(parted_part=parted_part, path=path, tries=tries+1)
+		else:
+			raise e
+		
 
 def umount_bulk(basepath):
 	""" Umounts all partitions that begins with basepath.
@@ -613,7 +658,7 @@ def automatic_precheck(by="freespace", distribs=None):
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in obj.getFreeSpacePartitions():
-					size = round(part.getLength("MB"), 2)
+					size = round(part.getSize("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -647,7 +692,7 @@ def automatic_precheck(by="freespace", distribs=None):
 					continue
 				
 				# Check size
-				if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
+				if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
 					# We can.
 					delete[part] = name
 			
@@ -666,10 +711,13 @@ def automatic_precheck(by="freespace", distribs=None):
 class automatic_check_ng:
 	""" Automatic check class. """
 	
-	def __init__(self, distribs={}, efi=None):
+	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False):
 		""" Set required variables. """
 		
-		self.dev, self.dis = return_devices()
+		self.onlyusb = onlyusb
+		self.is_echo = is_echo
+		
+		self.dev, self.dis = return_devices(onlyusb=self.onlyusb)
 		
 		self.distribs = distribs
 		
@@ -697,7 +745,7 @@ class automatic_check_ng:
 			mem = 2048
 		return round(mem, 2)
 
-	def __common_create_part(self, obj, part, starts=None, length=None):
+	def __common_create_part(self, obj, part, starts=None, length=None, filesystem="ext4"):
 		""" Creates partition. """
 		
 		# Get were we start
@@ -710,7 +758,7 @@ class automatic_check_ng:
 		#part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
 		#return part
 		try:
-			part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+			part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem=filesystem)
 		except:
 			return None
 		
@@ -813,7 +861,11 @@ class automatic_check_ng:
 
 	def by_freespace(self):
 		""" Returns possible solutions by looking only at freespace partitions. """
-		
+
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+
 		result_dict = {} # "freespaceX" : (dev, dis)
 		order = []
 		
@@ -834,7 +886,7 @@ class automatic_check_ng:
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in parts:
-					size = round(part.getLength("MB"), 2)
+					size = round(part.getSize("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -876,6 +928,10 @@ class automatic_check_ng:
 	def by_delete(self):
 		""" Returns possible solutions by looking only at systems to delete. """
 
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+
 		result_dict = {} # "deleteX" : (dev, dis)
 		order = []
 		
@@ -903,7 +959,7 @@ class automatic_check_ng:
 					continue
 				
 				# Check size
-				size = round(part.getLength("MB"), 2)
+				size = round(part.getSize("MB"), 2)
 
 				if self.swap:
 					# Swap already in, go straight check of required space
@@ -935,6 +991,10 @@ class automatic_check_ng:
 	def by_clear(self):
 		""" Returns possible solutions by looking only at hard disks to clear. """
 
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+
 		result_dict = {} # "zclearX" : (dev, dis)
 		order = []
 		
@@ -954,7 +1014,7 @@ class automatic_check_ng:
 			obj.deleteAllPartitions()
 
 			part = obj.getFreeSpacePartitions()[0]
-			size = round(part.getLength("MB"), 2)
+			size = round(part.getSize("MB"), 2)
 			
 			result = None
 			swapwarning = False
@@ -995,6 +1055,43 @@ class automatic_check_ng:
 							
 		return result_dict, order
 
+	def by_echo(self):
+		""" Returns possible root partitions, without touching them.
+		
+		Used by "echo". """
+		
+		if not self.is_echo:
+			# Enable only on echo
+			return {}, []
+		
+		result_dict = {} # "echoX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			if len(obj.partitions) == 0:
+				# No partitions, we need to create one!
+				freespacepart = obj.getFreeSpacePartitions()[0]
+				
+				result = self.__common_create_part(obj, freespacepart, filesystem="ext2")
+				
+				current += 1
+				order.append("echo%s" % current)
+				result_dict["echo%s" % current] = {"result":{"part":result, "swap":False, "efi":False, "format":"ext2"}, "model":obj.device.model, "disk":obj, "device":obj.device}
+
+				continue
+				
+			for part in obj.partitions:
+				# Skip non-ext* and non-fat32 partitions
+				if part.fileSystem and part.fileSystem.type not in ("fat32", "ext2", "ext3", "ext4"): continue
+				
+				current += 1
+				order.append("echo%s" % current)
+				result_dict["echo%s" % current] = {"result":{"part":part, "swap":False, "efi":False, "format":None}, "model":obj.device.model, "disk":obj, "device":obj.device}
+
+		return result_dict, order
+	
 	def main(self):
 		""" Checks for solutions for the automatic partitioner.
 		Every solution is applied on a virtual Disk object.
@@ -1009,8 +1106,11 @@ class automatic_check_ng:
 		# Check by clear
 		clea, cleaord = self.by_clear()
 		
-		results = dict(free.items() + dele.items() + clea.items())
-		order = freeord + deleord + cleaord
+		# Check by echo
+		echo, echoord = self.by_echo()
+		
+		results = dict(free.items() + dele.items() + clea.items() + echo.items())
+		order = freeord + deleord + cleaord + echoord
 		
 		return results, order
 	
@@ -1067,7 +1167,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 			# Check the size of the partitions...
 			part_sizes = {}
 			for part in obj.getFreeSpacePartitions():
-				size = round(part.getLength("MB"), 2)
+				size = round(part.getSize("MB"), 2)
 				# Add part object and size in part_sizes
 				part_sizes[part] = size
 			
@@ -1202,7 +1302,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 				raise main.CodeError("An error! o_O")
 			
 			# Check size
-			if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
+			if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
 				# We can.
 				delete[part] = name
 		

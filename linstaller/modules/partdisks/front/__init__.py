@@ -17,6 +17,7 @@ class Module(module.Module):
 		self.cache("swap_noformat")
 		self.cache("skip_to_selection")
 		self.cache("onlyusb")
+		self.cache("is_echo", False)
 		
 		# Internal
 		self.cache("changed")

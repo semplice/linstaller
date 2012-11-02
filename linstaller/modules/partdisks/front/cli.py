@@ -427,17 +427,17 @@ class Frontend(cli.Frontend):
 			else:
 				_moarspace = ""
 			
-			if int(obj.getLength("GiB")) > 0:
+			if int(obj.getSize("GB")) > 0:
 				# We can use GigaBytes to represent partition size.
-				_size = round(obj.getLength("GiB"), 2)
-				_unit = "GiB"
-			elif int(obj.getLength("MiB")) > 0:
+				_size = round(obj.getSize("GB"), 2)
+				_unit = "GB"
+			elif int(obj.getSize("MB")) > 0:
 				# Partition is too small to be represented with gigabytes. Use megabytes instead.
-				_size = round(obj.getLength("MiB"), 2)
-				_unit = "MiB"
+				_size = round(obj.getSize("MB"), 2)
+				_unit = "MB"
 			else:
 				# Last try.. using kilobytes
-				_size = round(obj.getLength("kB"), 2)
+				_size = round(obj.getSize("kB"), 2)
 				_unit = "kB"
 
 			print(bold("   %s%s (%s) - %s (%s %s)\n" % (_moarspace, _name, obj.path, _fs, _size, _unit)))
@@ -578,20 +578,20 @@ class Frontend(cli.Frontend):
 				
 				if swap:
 					# Get swap size.
-					if int(swap.getLength("GB")) == 0:
+					if int(swap.getSize("GB")) == 0:
 						# GB is too big, use MB instead.
 						_swap_unit = "MB"
-						_swap_size = round(swap.getLength("MB"))
+						_swap_size = round(swap.getSize("MB"))
 					else:
 						# We can use GB.
 						_swap_unit = "GB"
-						_swap_size = round(swap.getLength("GB"))
+						_swap_size = round(swap.getSize("GB"))
 				
 				# Set-up touched...
 				self.touched[part.path] = True
 				if swap: self.touched[swap.path] = True
 				
-				print("   / - %s (%s - %s GB)" % (part.path, part.fileSystem.type, round(part.getLength("GB"), 2)))
+				print("   / - %s (%s - %s GB)" % (part.path, part.fileSystem.type, round(part.getSize("GB"), 2)))
 				if swap: print("   swap - %s (%s %s)" % (swap.path, _swap_size, _swap_unit))
 		elif by == "delete":
 			delete, swap = lib.automatic_check(obj, by=by)
@@ -608,20 +608,20 @@ class Frontend(cli.Frontend):
 				
 				if swap:
 					# Get swap size.
-					if int(swap.getLength("GB")) == 0:
+					if int(swap.getSize("GB")) == 0:
 						# GB is too big, use MB instead.
 						_swap_unit = "MB"
-						_swap_size = round(swap.getLength("MB"))
+						_swap_size = round(swap.getSize("MB"))
 					else:
 						# We can use GB.
 						_swap_unit = "GB"
-						_swap_size = round(swap.getLength("GB"))
+						_swap_size = round(swap.getSize("GB"))
 				
 				actions = {}
 				num = 0
 				for part, distrib in delete:
 					actions[num] = part
-					print("   %s) (%s) / - %s (%s - %s GB)" % (num, bold(distrib), part.path, part.fileSystem.type, round(part.getLength("GB"), 2)))
+					print("   %s) (%s) / - %s (%s - %s GB)" % (num, bold(distrib), part.path, part.fileSystem.type, round(part.getSize("GB"), 2)))
 					num += 1
 				print
 				print("   %s) " % num + _("<- Back"))
@@ -700,7 +700,7 @@ class Frontend(cli.Frontend):
 		
 		self.header(_("Add a partition"))
 		
-		print(_("Current free space size: %s") % round(device.getLength("MiB"), 3))
+		print(_("Current free space size: %s") % round(device.getSize("MB"), 3))
 		print(_("You can insert the percentage of the partition (e.g: 50%) or the full size of the new partition, in MB.") + "\n")
 
 		res = self.entry(_("Insert the value here [press ENTER to go back]"), blank=True)
@@ -716,13 +716,13 @@ class Frontend(cli.Frontend):
 			except:
 				# Not a number
 				return self.edit_partitions(warning=_("Wrong percentage specified!"))
-			res = (res * device.getLength()) / 100.0
+			res = (res * device.getSize()) / 100.0
 		elif res == "100%":
 			res = device.geometry.length
 		else:
-			if float(res) == round(device.getLength("MiB"), 3):
+			if float(res) == round(device.getSize("MB"), 3):
 				# Full partition.
-				res = device.getLength()
+				res = device.getSize()
 			else:
 				try:
 					res = lib.MbToSector(float(res))
@@ -731,7 +731,7 @@ class Frontend(cli.Frontend):
 					return self.edit_partitions(warning=_("Wrong value specified!"))
 
 		# Check if we can grow the partition at the given size...
-		if device.getLength() < res:
+		if device.getSize() < res:
 			# No!
 			return self.edit_partitions(warning=_("Not enough space!"))
 
@@ -878,7 +878,7 @@ class Frontend(cli.Frontend):
 		if device.number == -1 or device.type == 2:
 			return self.edit_partitions(warning=_("You can't resize freespace or an extended partition!"))
 		
-		print(_("Current partition size: %s") % round(device.getLength("MiB"), 3))
+		print(_("Current partition size: %s") % round(device.getSize("MB"), 3))
 		print(_("You can insert the percentage of the resize (e.g: 50%) or the full size for the resized partition, in MB."))
 		print(_("In order to make change to the free space that the resize operation will make, you will need to write in memory the changes.") + "\n")
 		res = self.entry(_("Insert the value here [press ENTER to go back]"), blank=True)
@@ -894,11 +894,11 @@ class Frontend(cli.Frontend):
 			except:
 				# Not a number
 				return self.edit_partitions(warning=_("Wrong percentage specified!"))
-			res = (res * device.getLength()) / 100.0
+			res = (res * device.getSize()) / 100.0
 		elif res == "100%":
 			return self.edit_partitions(warning=_("Partition is already at the given value!"))
 		else:
-			if float(res) == round(device.getLength("MiB"), 3):
+			if float(res) == round(device.getSize("MB"), 3):
 				# Full partition.
 				return self.edit_partitions(warning=_("Partition is already at the given value!"))
 			else:
@@ -1059,17 +1059,17 @@ class Frontend(cli.Frontend):
 					else:
 						_name = "Untitled"
 									
-					if int(part.getLength("GiB")) > 0:
+					if int(part.getSize("GB")) > 0:
 						# We can use GigaBytes to represent partition size.
-						_size = round(part.getLength("GiB"), 2)
-						_unit = "GiB"
-					elif int(part.getLength("MiB")) > 0:
+						_size = round(part.getSize("GB"), 2)
+						_unit = "GB"
+					elif int(part.getSize("MB")) > 0:
 						# Partition is too small to be represented with gigabytes. Use megabytes instead.
-						_size = round(part.getLength("MiB"), 2)
-						_unit = "MiB"
+						_size = round(part.getSize("MB"), 2)
+						_unit = "MB"
 					else:
 						# Last try.. using kilobytes
-						_size = round(part.getLength("kB"), 2)
+						_size = round(part.getSize("kB"), 2)
 						_unit = "kB"
 
 					# Cache part in self.changed

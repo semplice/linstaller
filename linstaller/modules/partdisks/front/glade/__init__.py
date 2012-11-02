@@ -217,6 +217,10 @@ class Frontend(glade.Frontend):
 
 		# Disable next button
 		self.on_steps_hold()
+		
+		# If is_echo, we need to deploy the automatic page... automatically.
+		if self.settings["is_echo"]:
+			self.on_automatic_button_clicked(obj=None)
 	
 	def refresh(self):
 		""" Refreshes the devices and disks list. """
@@ -326,6 +330,21 @@ class Frontend(glade.Frontend):
 
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_stock("gtk-delete", 6)
+		elif by == "echo":
+			container["title"] = Gtk.Label()
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s (%s)") % (self.moduleclass.main_settings["distro"], info["path"], info["model"])))
+			
+			container["text"] = Gtk.Label()
+			if info["shouldformat"]:
+				# Disk is empty, a partition will be created, no data is lost (as there aren't), but is nice to tell the user about that...
+				container["text"].set_markup(_("As the Disk is currently empty, this partition will be created."))
+			else:
+				container["text"].set_markup(_("No data will be deleted."))
+
+			container["text2"] = None
+
+			container["icon"] = Gtk.Image()
+			container["icon"].set_from_icon_name("drive-removable-media", 6)
 			
 		# Add to the box
 		container["title"].set_alignment(0.0,0.50)
@@ -370,7 +389,13 @@ class Frontend(glade.Frontend):
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
 		self.change_mountpoint(partpath, "/")
-		self.queue_for_format(partpath, "ext4")
+		if self.settings["is_echo"]:
+			# by_echo() as an handy item into the return dict, which says if we need to format the partition.
+			if res["result"]["format"]:
+				self.queue_for_format(partpath, res["result"]["format"])
+		else:
+			# if not is_echo, we do not want to format partition.
+			self.queue_for_format(partpath, "ext4")
 		self.touched.append(partpath)
 		self.previously_changed.append(partpath)
 		
@@ -384,11 +409,12 @@ class Frontend(glade.Frontend):
 		elif res["result"]["swap"] == None:
 			# We should pick the right one
 			righto = lib.swap_available()
-			right = righto.path
-			self.changed[right] = {"changes": {}, "obj":righto}
-			self.change_mountpoint(right, "swap")
-			self.touched.append(right)
-			self.previously_changed.append(right)
+			if righto:
+				right = righto.path
+				self.changed[right] = {"changes": {}, "obj":righto}
+				self.change_mountpoint(right, "swap")
+				self.touched.append(right)
+				self.previously_changed.append(right)
 		
 		if res["result"]["efi"]:
 			efipath = res["result"]["efi"].path
@@ -417,6 +443,10 @@ class Frontend(glade.Frontend):
 		# Enable next button
 		self.on_steps_ok()
 		
+		# If is_echo, trigger next button.
+		if self.settings["is_echo"]:
+			self.on_next_button_click()
+		
 
 	def automatic_ready(self):
 		""" Called when the automatic window is ready. """
@@ -428,7 +458,10 @@ class Frontend(glade.Frontend):
 		self.automatic_buttons_reverse = {}
 		self.is_automatic = True
 		
-		self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
+		if self.settings["is_echo"]:
+			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."))
+		else:
+			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
 		
 		# get objects
 		self.automatic_container = self.objects["builder"].get_object("automatic_container")
@@ -447,7 +480,7 @@ class Frontend(glade.Frontend):
 			efi = True
 		else:
 			efi = False
-		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi)
+		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb, is_echo=self.settings["is_echo"])
 		
 		# Check by freespace
 		self.automatic_res, self.automatic_order = automatic.main()
@@ -465,7 +498,11 @@ class Frontend(glade.Frontend):
 					cont = self.automatic_buttons_creator(by="clear", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
-			
+				elif item.startswith("echo"):
+					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path, "model":self.automatic_res[item]["model"], "shouldformat":self.automatic_res[item]["result"]["format"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+							
 			# Ensure we hide nosolutions as we have indeeed some solution
 			self.automatic_nosolutions.hide()
 		else:
@@ -660,10 +697,10 @@ class Frontend(glade.Frontend):
 				
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
+		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
 		
 		# Ensure the format checkbox is set to True and unsensitive...
 		self.format_box.set_active(True)
@@ -703,14 +740,15 @@ class Frontend(glade.Frontend):
 		# Get the device
 		device = self.get_partition_from_selected()
 		
-		self.current_length = round(device.getLength("MiB"), 3)
+		self.current_length = round(device.getSize("MB"), 3)
 		
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		self.size_adjustment.set_upper(round(device.getLength("MiB"), 3))
+		#self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
+		self.size_adjustment.set_upper(lib.maxGrow(device)) #round(device.getMaxAvailableSize("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getLength("MiB"), 3))
+		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
 		
 		# Unset the format checkbox if we should.
 		self.format_box.set_sensitive(True) # Ensure is sensitive
@@ -1031,13 +1069,14 @@ class Frontend(glade.Frontend):
 		## Create the TreeView 
 		# ListStore: /dev/part - system/label - filesystem - format? - size
 
-		if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
+		#if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
+		if disk != "notable": partitions = lib.disk_partitions(disk)
 
 		if disk != "notable" and len(partitions) > 0:	
 			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
 		else:
 			container["model"] = Gtk.ListStore(str, str)
-		container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
+		#container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
 		container["treeview"] = Gtk.TreeView(container["model"])
 		container["treeview"].connect("cursor-changed", self.on_manual_treeview_changed)
 
@@ -1075,17 +1114,17 @@ class Frontend(glade.Frontend):
 				elif not part.path in self.distribs:
 					name.append("Normal partition")
 
-				if int(part.getLength("GiB")) > 0:
+				if int(part.getSize("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
-					_size = round(part.getLength("GiB"), 2)
-					_unit = "GiB"
-				elif int(part.getLength("MiB")) > 0:
+					_size = round(part.getSize("GB"), 2)
+					_unit = "GB"
+				elif int(part.getSize("MB")) > 0:
 					# Partition is too small to be represented with gigabytes. Use megabytes instead.
-					_size = round(part.getLength("MiB"), 2)
-					_unit = "MiB"
+					_size = round(part.getSize("MB"), 2)
+					_unit = "MB"
 				else:
 					## Last try.. using kilobytes
-					#_size = round(part.getLength("kB"), 2)
+					#_size = round(part.getSize("kB"), 2)
 					#_unit = "kB"
 					
 					# Partition is too small and can be confusing. Simply do not show it.
@@ -1371,6 +1410,10 @@ class Frontend(glade.Frontend):
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
 		
+		# If is_echo, we need exclusively to go to the module before...
+		if self.settings["is_echo"]:
+			return None
+		
 		# Return always to page 1, if we aren't already there
 		current = self.pages_notebook.get_current_page()
 		if not current == 1:
@@ -1434,7 +1477,12 @@ class Frontend(glade.Frontend):
 				self.settings["swap"] = self.mountpoints_added["swap"]
 			
 			# if self.is_automatic, apply now changes.
-			if self.is_automatic == True:
+			if self.settings["is_echo"] and self.is_automatic == True:
+				# Apply and go ahead
+				self.idle_add(self.apply)
+				
+				return True
+			elif self.is_automatic == True:
 				self.on_apply_button_clicked(obj="automatic")
 				#clss = Apply(self, quit=True)
 				#clss.start()

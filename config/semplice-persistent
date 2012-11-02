@@ -13,6 +13,7 @@ root_noformat = True
 skip_to_selection = True
 onlyusb = True
 no_virtual_partitions = True
+is_echo = True
 
 [module:userhost]
 # Seed password, as we are not using it
