@@ -1,3 +1,24 @@
+linstaller (2.74.0-1) pulse; urgency=low
+
+  * Ensure we pass onlyusb at the automatic partitioner, too.
+  * modules/partdisks: front: added is_echo seed.
+    modules/partdisks: front/glade: added echo "support".
+    config/semplice-persistent: seed is_echo to True.
+  * modules/partdisks: front/glade: if is_echo, ensure we handle well the back button.
+  * modules/partdisks: front/glade: properly set header if is_echo.
+  * modules/partdisks: frontend/glade: some cosmetic changes to echo mode.
+  * modules/partdisks (front/glade and library): check for freespace partitions in order to grow a partition before to it modules/partdisks: front/glade: partitions are now ordered by looking at the partition table.
+  * modules/partdisks: changed all calls to pyparted's getLength() with getSize().
+  * modules/partusb: frontend/glade: added.
+  * modules/partdisks: library: if an umount fails, retry. (maximum 5 times)
+    modules/partdisks: front/glade and library: if USB key is empty, create an ext2 partition.
+    modules/userhost: front/glade: properly set step statuses if items are preseeded.
+  * modules/echo: configure/inst: added quickreboot, fixed keyboard layout, added support for newer live-boot versions.
+    modules/echo: partusb/inst: added support for newer live-boot versions.
+  * modules/echo: partusb/inst: handle full-ov type
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 02 Nov 2012 14:53:44 +0100
+
 linstaller (2.73.1-1) pulse; urgency=low
 
   * modules/language: inst/glade: fixed savespace retrieving
