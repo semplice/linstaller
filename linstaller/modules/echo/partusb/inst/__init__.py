@@ -17,7 +17,7 @@ class Module(module.Module):
 	def create(self):
 		""" Creates the persistent filesystem at /linstaller/target/PATH/TYP-SUFFIX. """
 		
-		if not self.settings["type"] or self.settings["type"] == "live-rw":
+		if not self.settings["type"] or self.settings["type"] in ("live-rw", "full-ov"):
 			self.settings["type"] = "full-ov"
 		else:
 			## FIXME: Implement persistence.
@@ -44,7 +44,7 @@ class Module(module.Module):
 	def format(self):
 		""" Formats the previously created persistent filesystem. """
 
-		if not self.settings["type"] or self.settings["type"] == "live-rw":
+		if not self.settings["type"] or self.settings["type"] in ("live-rw", "full-ov"):
 			self.settings["type"] = "full-ov"
 		else:
 			self.settings["type"] = "persistence"
