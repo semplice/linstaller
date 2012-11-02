@@ -335,7 +335,11 @@ class Frontend(glade.Frontend):
 			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s (%s)") % (self.moduleclass.main_settings["distro"], info["path"], info["model"])))
 			
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("No data will be deleted."))
+			if info["shouldformat"]:
+				# Disk is empty, a partition will be created, no data is lost (as there aren't), but is nice to tell the user about that...
+				container["text"].set_markup(_("As the Disk is currently empty, this partition will be created."))
+			else:
+				container["text"].set_markup(_("No data will be deleted."))
 
 			container["text2"] = None
 
@@ -385,8 +389,12 @@ class Frontend(glade.Frontend):
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
 		self.change_mountpoint(partpath, "/")
-		if not self.settings["is_echo"]:
-			# if is_echo, we do not want to format partition.
+		if self.settings["is_echo"]:
+			# by_echo() as an handy item into the return dict, which says if we need to format the partition.
+			if res["result"]["format"]:
+				self.queue_for_format(partpath, res["result"]["format"])
+		else:
+			# if not is_echo, we do not want to format partition.
 			self.queue_for_format(partpath, "ext4")
 		self.touched.append(partpath)
 		self.previously_changed.append(partpath)
@@ -491,7 +499,7 @@ class Frontend(glade.Frontend):
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 				elif item.startswith("echo"):
-					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path, "model":self.automatic_res[item]["model"]})
+					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path, "model":self.automatic_res[item]["model"], "shouldformat":self.automatic_res[item]["result"]["format"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 							

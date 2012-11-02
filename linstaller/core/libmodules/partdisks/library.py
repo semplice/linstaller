@@ -10,6 +10,7 @@ import linstaller.core.main as m
 import operator
 import os
 import commands
+import time
 
 from linstaller.core.main import info,warn,verbose
 
@@ -505,7 +506,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 	# Return mountpoint
 	return _mountpoint
 
-def umount(parted_part=None, path=None):
+def umount(parted_part=None, path=None, tries=0):
 	""" Unmounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -522,7 +523,17 @@ def umount(parted_part=None, path=None):
 	if not is_mounted(path): raise m.UserError("%s is not mounted!" % path)
 	
 	# Unmount.
-	m.sexec("umount %s" % path)
+	try:
+		m.sexec("umount %s" % path)
+	except m.CmdError, e:
+		# Failed, retry after two seconds
+		time.sleep(2)
+		if tries < 5:
+			# max 5 tries
+			return umount(parted_part=parted_part, path=path, tries=tries+1)
+		else:
+			raise e
+		
 
 def umount_bulk(basepath):
 	""" Umounts all partitions that begins with basepath.
@@ -734,7 +745,7 @@ class automatic_check_ng:
 			mem = 2048
 		return round(mem, 2)
 
-	def __common_create_part(self, obj, part, starts=None, length=None):
+	def __common_create_part(self, obj, part, starts=None, length=None, filesystem="ext4"):
 		""" Creates partition. """
 		
 		# Get were we start
@@ -747,7 +758,7 @@ class automatic_check_ng:
 		#part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
 		#return part
 		try:
-			part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem="ext4")
+			part = add_partition(obj, start=starts, size=length, type=p.PARTITION_NORMAL, filesystem=filesystem)
 		except:
 			return None
 		
@@ -1059,13 +1070,25 @@ class automatic_check_ng:
 		current = 0
 
 		for name, obj in self.dis.items():
+			if len(obj.partitions) == 0:
+				# No partitions, we need to create one!
+				freespacepart = obj.getFreeSpacePartitions()[0]
+				
+				result = self.__common_create_part(obj, freespacepart, filesystem="ext2")
+				
+				current += 1
+				order.append("echo%s" % current)
+				result_dict["echo%s" % current] = {"result":{"part":result, "swap":False, "efi":False, "format":"ext2"}, "model":obj.device.model, "disk":obj, "device":obj.device}
+
+				continue
+				
 			for part in obj.partitions:
 				# Skip non-ext* and non-fat32 partitions
 				if part.fileSystem and part.fileSystem.type not in ("fat32", "ext2", "ext3", "ext4"): continue
 				
 				current += 1
 				order.append("echo%s" % current)
-				result_dict["echo%s" % current] = {"result":{"part":part, "swap":None, "efi":None}, "model":obj.device.model, "disk":obj, "device":obj.device}
+				result_dict["echo%s" % current] = {"result":{"part":part, "swap":False, "efi":False, "format":None}, "model":obj.device.model, "disk":obj, "device":obj.device}
 
 		return result_dict, order
 	

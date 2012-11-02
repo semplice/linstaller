@@ -97,10 +97,12 @@ class Frontend(glade.Frontend):
 			# Hide userfullname
 			self.idle_add(self.userfullname_t.hide)
 			self.idle_add(self.userfullname.hide)
+			self.steps_completed("userfullname")
 		if self.settings["username"]:
 			# Hide username
 			self.idle_add(self.username_t.hide)
 			self.idle_add(self.username.hide)
+			self.steps_completed("username")
 				
 		# Passwords
 		if  self.settings["password"]:
@@ -109,11 +111,13 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.userpassword.hide)
 			self.idle_add(self.userpassword_confirm_t.hide)
 			self.idle_add(self.userpassword_confirm.hide)
+			self.steps_completed("userpassword")
 	
 		# Hostname
 		if self.settings["hostname"]:
 			self.idle_add(self.hostname_t.hide)
 			self.idle_add(self.hostname.hide)
+			self.steps_completed("hostname")
 				
 		# Root
 		if self.settings["root"] == None:
@@ -135,6 +139,7 @@ class Frontend(glade.Frontend):
 			if self.settings["rootpassword"]:
 				# Hide password frame
 				self.idle_add(self.rootpassword_frame.hide)
+				self.steps_completed("rootpassword")
 				
 				# Make the root switch unsensitive
 				self.idle_add(self.enableroot.set_sensitive, False)
