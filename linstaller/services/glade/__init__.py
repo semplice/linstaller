@@ -243,9 +243,18 @@ class Service(linstaller.core.service.Service):
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file(uipath)
 		
+		### EXIT WINDOW
+		self.exitw = self.builder.get_object("exit")
+		self.exitw.connect("delete_event", self.exitw_hide)
+		
+		self.exitw_yes = self.builder.get_object("exit_yes")
+		self.exitw_yes.connect("clicked", self.please_exit)
+		self.exitw_no = self.builder.get_object("exit_no")
+		self.exitw_no.connect("clicked", self.exitw_hide)
+				
 		### MAIN WINDOW
 		self.main = self.builder.get_object("main_window")
-		self.main.connect("destroy", self.please_exit)
+		self.main.connect("delete_event", self.exitw_show)
 		
 		self.box = self.builder.get_object("box")
 		self.inst = self.builder.get_object("inst")
@@ -345,6 +354,22 @@ class Service(linstaller.core.service.Service):
 		GObject.idle_add(obj.set_icon_from_stock, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
 		GObject.idle_add(obj.set_icon_tooltip_text, Gtk.EntryIconPosition.SECONDARY, tooltip)
 
+	def exitw_show(self, obj=None, thing=None):
+		""" Shows the exit dialog. """
+		
+		self.main.set_sensitive(False)
+		self.exitw.show()
+		
+		return True
+	
+	def exitw_hide(self, obj=None, thing=None):
+		""" Hides the exit dialog. """
+		
+		self.main.set_sensitive(True)
+		self.exitw.hide()
+		
+		return True
+
 	def please_exit(self, obj):
 		""" Executed when the main window is destroyed. """
 		
@@ -353,7 +378,7 @@ class Service(linstaller.core.service.Service):
 	def on_cancel_button_click(self, obj):
 		""" Executed when the Cancel button is clicked. """
 		
-		self.main.destroy()
+		self.exitw_show()
 
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
