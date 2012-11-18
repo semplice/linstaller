@@ -177,7 +177,7 @@ class Service(linstaller.core.service.Service):
 		
 		# GLADE FRONTEND WILL BE SEARCHED IN welcome/front/glade/ AND NOT in welcome/front/glade.py!
 		
-		for module in modules.split(" "):
+		for module in modules:
 			if single and single != module: continue
 			if module.split(".")[-1] == "inst":
 				is_inst = True
