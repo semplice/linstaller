@@ -125,8 +125,8 @@ def loop_modules(startfrom=1):
 
 	count = 0
 	
-	for module in main_settings["modules"].split(" "):
-		if module and module not in _removemodules:
+	for module in main_settings["modules"]:
+		if module:
 			count += 1
 			if count < startfrom: continue
 			res = launch_module(module, main_settings["special"].split(" "))
@@ -254,10 +254,15 @@ elif _action == "start":
 	main_settings["frontend"] = _frontend
 	main_settings["distro"] = cfg.printv("distribution")
 	if not _modules:
-		main_settings["modules"] = cfg.printv("modules")
+		main_settings["modules"] = cfg.printv("modules").split(" ")
 	else:
 		# Modules specified via --modules option
-		main_settings["modules"] = _modules
+		main_settings["modules"] = _modules.split(" ")
+	
+	# Remove modules, if we should
+	for mod in _removemodules:
+		main_settings["modules"].remove(mod)
+	
 	if not _services:
 		main_settings["services"] = cfg.printv("services")
 		if main_settings["services"]:
@@ -275,7 +280,7 @@ elif _action == "start":
 	
 	verbose("Frontend: %s" % main_settings["frontend"])
 	verbose("Distro: %s" % main_settings["distro"])
-	verbose("Modules: %s" % main_settings["modules"])
+	verbose("Modules: %s" % " ".join(main_settings["modules"]))
 	verbose("Services: %s" % " ".join(main_settings["services"]))
 	
 	# Create modules_settings

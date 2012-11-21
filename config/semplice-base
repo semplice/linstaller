@@ -15,10 +15,10 @@ ask = True
 swap_noformat = True
 
 [module:unsquash]
-image = /live/image/live/filesystem.squashfs
+image = /lib/live/mount/medium/live/filesystem.squashfs
 
 [module:debian]
-remove = /live/image/live/filesystem.packages-remove
+remove = /lib/live/mount/medium/live/filesystem.packages-remove
 
 [module:update]
 packages = linstaller linstaller-frontend-cli linstaller-frontend-glade linstaller-modules-base linstaller-config-semplice alan-ext-linstaller
