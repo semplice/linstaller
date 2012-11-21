@@ -1,3 +1,14 @@
+linstaller (2.90.0-1) pulse; urgency=low
+
+  * modules/ubuntu: inst/glade: added.
+  * Split main_settings["modules"] at the origin. Physically remove from list the modules the user asked us to remove.
+  * services/glade: implemented Quit dialog.
+  * config/semplice-base: updated image and remove file paths.
+    This breaks the installation on images built with the old live-build (Semplice 3.0 Beta1 and lower).
+  * live-config/linstallerdefault: symlink instead to make an extended configuration.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 21 Nov 2012 18:03:43 +0100
+
 linstaller (2.74.0-1) pulse; urgency=low
 
   * Ensure we pass onlyusb at the automatic partitioner, too.
