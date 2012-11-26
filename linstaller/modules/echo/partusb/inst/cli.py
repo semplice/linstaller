@@ -15,7 +15,7 @@ class Frontend(cli.Frontend):
 		""" Start the frontend """
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Creating persistent filesystem:"), 2)
+		progress = self.progressbar(_("Creating persistent filesystem:"), 3)
 
 		# Start progressbar
 		progress.start()
@@ -33,6 +33,13 @@ class Frontend(cli.Frontend):
 
 		# Update
 		progress.update(2)
+		
+		# Configure filesystem...
+		verbose("Configuring filesystem...")
+		self.moduleclass.configure()
+		
+		# Update
+		progress.update(3)
 
 		# Close progressbar
 		progress.finish()
