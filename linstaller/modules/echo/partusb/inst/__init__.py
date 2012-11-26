@@ -37,11 +37,6 @@ class Module(module.Module):
 
 	def format(self):
 		""" Formats the previously created persistent filesystem. """
-
-		if not self.settings["type"] or self.settings["type"] in ("live-rw", "full-ov"):
-			self.settings["type"] = "full-ov"
-		else:
-			self.settings["type"] = "persistence"
 			
 		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
 		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
