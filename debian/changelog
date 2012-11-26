@@ -1,3 +1,9 @@
+linstaller (2.90.2.1-1) pulse; urgency=low
+
+  * setup.py: do not actually ship echo.configure.inst.glade, as configure.inst is a frontend-less module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 26 Nov 2012 18:54:10 +0100
+
 linstaller (2.90.2-1) pulse; urgency=low
 
   * modules/echo: partusb/inst: ensure we do not overwrite self.settings["type"].
