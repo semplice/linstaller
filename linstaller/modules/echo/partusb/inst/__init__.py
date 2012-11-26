@@ -16,18 +16,12 @@ import os
 class Module(module.Module):
 	def create(self):
 		""" Creates the persistent filesystem at /linstaller/target/PATH/TYP-SUFFIX. """
-		
-		if not self.settings["type"] or self.settings["type"] in ("live-rw", "full-ov"):
-			self.settings["type"] = "full-ov"
-		else:
-			## FIXME: Implement persistence.
-			self.settings["type"] = "persistence"
 				
 		if not self.settings["size"]:
 			self.settings["size"] = self.modules_settings["echo.partusb"]["size"]
 		
 		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
-		image = os.path.join(path, "%s-%s.ext2" % (self.settings["type"], self.settings["suffix"]))
+		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
 		
 		# Create path if it doesn't exist
 		if not os.path.exists(path): os.makedirs(path)
@@ -50,10 +44,35 @@ class Module(module.Module):
 			self.settings["type"] = "persistence"
 			
 		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
-		image = os.path.join(path, "%s-%s.ext2" % (self.settings["type"], self.settings["suffix"]))
+		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
 		
 		# Format
 		m.sexec("mkfs.ext2 -F %s" % image)
+	
+	def configure(self):
+		""" Configures the previously formatted persistent filesystem. """
+		
+		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
+		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
+		
+		# Mount
+		mpoint = lib.mount_partition(path=image, opts="loop")
+		
+		if self.settings["type"] in ("root", "home"):
+			# Write
+			with open(os.path.join(mpoint, "persistence.conf"), "w") as f:
+				if self.settings["type"] == "root":
+					# root persistence
+					f.write("/ union\n")
+				elif self.settings["type"] == "home":
+					# home persistence
+					f.write("/ bind\n")
+		else:
+			# We need to copy the path specified in type as the persistence.conf in the mountpoint
+			shutil.copy2(self.settings["type"], os.path.join(mpoint, "persistence.conf"))
+		
+		# Umount!
+		lib.umount(path=mpoint)
 			
 		
 	def seedpre(self):

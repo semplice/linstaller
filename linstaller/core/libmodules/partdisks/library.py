@@ -919,6 +919,10 @@ class automatic_check_ng:
 					
 					# Finally add to result_dict
 					if result:
+						if "part" in result and result["part"] == None:
+							# Skip if part is None... something wrong happened ;)
+							continue
+						
 						current += 1
 						order.append("freespace%s" % current)
 						result_dict["freespace%s" % current] = {"result":result, "swapwarning":swapwarning, "freesize":size, "disk":obj, "device":obj.device}
@@ -981,6 +985,10 @@ class automatic_check_ng:
 				
 				# Finally add to result_dict
 				if result:
+					if "part" in result and result["part"] == None:
+						# Skip if part is None... something wrong happened ;)
+						continue
+							
 					current += 1
 					order.append("delete%s" % current)
 					result_dict["delete%s" % current] = {"result":result, "system":name, "swapwarning":swapwarning, "disk":obj, "device":obj.device}
@@ -1049,6 +1057,10 @@ class automatic_check_ng:
 					
 			# Finally add to result_dict
 			if result:
+				if "part" in result and result["part"] == None:
+					# Skip if part is None... something wrong happened ;)
+					continue
+
 				current += 1
 				order.append("clear%s" % current)
 				result_dict["clear%s" % current] = {"result":result, "swapwarning":swapwarning, "model":obj.device.model, "disk":obj, "device":obj.device}

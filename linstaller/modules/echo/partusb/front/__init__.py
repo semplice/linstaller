@@ -51,4 +51,4 @@ class Module(module.Module):
 		
 		self.cache("size")
 		self.cache("allfreespace")
-		self.cache("type","live-rw")
+		self.cache("type","root") # root = root persistence, home = home persistence, * = path to persistent.conf to be included

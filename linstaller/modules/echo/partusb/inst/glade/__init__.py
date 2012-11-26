@@ -26,6 +26,11 @@ class Create(glade.Progress):
 		self.parent.progress_set_text(_("Formatting filesystem..."))
 		self.parent.moduleclass.format()
 		self.parent.progress_set_percentage(2)
+		
+		# Configure filesystem...
+		self.parent.progress_set_text(_("Configuring filesystem..."))
+		self.parent.moduleclass.configure()
+		self.parent.progress_set_percentage(3)
 
 
 class Frontend(glade.Frontend):
@@ -35,7 +40,7 @@ class Frontend(glade.Frontend):
 		# Get a progressbar
 		self.set_header("hold", _("Creating persistent filesystem..."), _("This may take a while."))
 
-		self.progress_set_quota(2)
+		self.progress_set_quota(3)
 	
 	def process(self):
 		

@@ -357,6 +357,10 @@ class Service(linstaller.core.service.Service):
 	def exitw_show(self, obj=None, thing=None):
 		""" Shows the exit dialog. """
 		
+		# If on_inst, do not show anything ;)
+		if self.on_inst:
+			return True
+		
 		self.main.set_sensitive(False)
 		self.exitw.show()
 		
@@ -472,7 +476,7 @@ This episode is about Services. Oh yes, this service is running on a separate th
 requires it. The frontend, in fact, is %s and not glade.
 
 Therefore, is advised to disable the "glade" service. The Gtk main loop will not be started and
-nothing bad will happen. This message is just for let you know.
+nothing bad will happen. This message is just to let you know.
 
 If you are a normal user and not a developer, do not worry. You should be happy that you found
 this easter egg!
