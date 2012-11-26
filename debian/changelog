@@ -1,3 +1,14 @@
+linstaller (2.90.1-1) pulse; urgency=low
+
+  * modules/echo: partusb/front: adapted to latest live-boot versions.
+    It still doesn't work, because of [0].
+    [0] http://lists.debian.org/debian-live/2012/11/msg00141.html
+  * setup.py: ship echo's glade frontends.
+  * services/glade: do not display the Quit dialog if an installation is running, just do not do anything.
+  * modules/partdisks: library: automatic_check_ng: do not return solution if partition is None.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 26 Nov 2012 13:03:12 +0100
+
 linstaller (2.90.0-1) pulse; urgency=low
 
   * modules/ubuntu: inst/glade: added.
