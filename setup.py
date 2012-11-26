@@ -54,7 +54,7 @@ data_files = [
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='2.90.2',
+      version='2.90.2.1',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -158,7 +158,6 @@ distrib = setup(name='linstaller',
       "linstaller.modules.echo.bootloader.inst.glade",
       "linstaller.modules.echo.configure",
       "linstaller.modules.echo.configure.inst",
-      "linstaller.modules.echo.configure.inst.glade",
       "linstaller.modules.echo.copy",
       "linstaller.modules.echo.copy.inst",
       "linstaller.modules.echo.copy.inst.glade",
