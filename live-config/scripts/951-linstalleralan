@@ -62,6 +62,7 @@ extensions = linstalleralan
 ext = linstaller_alan
 name = STOCK_INSTALL_SEMPLICE
 icon = document-save
+persistent_disabled = True # Disable persistent in RC1
 EOF
 
 		if [ "$LIVE_FRONTEND" ]; then

@@ -11,7 +11,7 @@ from linstaller.core.main import verbose
 
 import linstaller.core.libmodules.partdisks.library as lib
 
-import os
+import os, shutil
 
 class Module(module.Module):
 	def create(self):
@@ -76,4 +76,4 @@ class Module(module.Module):
 		self.cache("path", "/persistent")
 		self.cache("size")
 		self.cache("suffix","live")
-		self.cache("type")
+		self.cache("type","root") # FIXME: something wrong here... should use the type set on the front...

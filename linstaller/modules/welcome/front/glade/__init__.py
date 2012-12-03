@@ -41,3 +41,7 @@ class Frontend(glade.Frontend):
 		# Properly set it
 		text.set_markup("\n".join(label))
 		
+		# FIXME: Disable "Need the root account?" link
+		rootlink = self.objects["builder"].get_object("rootlink")
+		rootlink.hide()
+		
