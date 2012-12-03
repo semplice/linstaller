@@ -345,6 +345,18 @@ class Frontend(glade.Frontend):
 
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_icon_name("drive-removable-media", 6)
+		elif by == "notable":
+			container["title"] = Gtk.Label()
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Initialize %s") % (info["model"])))
+			
+			container["text"] = Gtk.Label()
+			container["text"].set_markup(_("This initializes the drive (<b>%s</b>) for usage by creating a partition table.") % info["drive"])
+			
+			container["text2"] = None
+			
+			container["icon"] = Gtk.Image()
+			container["icon"].set_from_stock("gtk-new", 6)
+			
 			
 		# Add to the box
 		container["title"].set_alignment(0.0,0.50)
@@ -376,9 +388,31 @@ class Frontend(glade.Frontend):
 		
 		dev = res["device"]
 		dis = res["disk"]
-		
+				
+		# Special case for notable: create the partition table and return.
+		if dis == "notable":
+			# Go ahead and create the table: is harmless.
+			
+			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+				progress = lib.new_table(dev, "gpt")
+			else:
+				progress = lib.new_table(dev, "mbr")
+			status = progress.wait()
+			
+			self.refresh()
+			
+			if status != 0:
+				# Failed ...
+				self.set_header("error", _("Unable to create a new partition table."), _("See /var/log/linstaller/linstaller_latest.log for details."))
+			else:
+				# Ok! Regenerate solutions...
+				self.on_automatic_button_clicked(obj=None)
+			
+			return
+
 		lib.devices[dev.path.replace("/dev/","")] = dev
 		lib.disks[dev.path.replace("/dev/","")] = dis
+
 		
 		# Prepare for entering in manual page...
 		self.changed = {}
@@ -500,6 +534,10 @@ class Frontend(glade.Frontend):
 					self.automatic_buttons_reverse[cont["button"]] = item
 				elif item.startswith("echo"):
 					cont = self.automatic_buttons_creator(by="echo", info={"drive":self.automatic_res[item]["device"].path, "path":self.automatic_res[item]["result"]["part"].path, "model":self.automatic_res[item]["model"], "shouldformat":self.automatic_res[item]["result"]["format"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+				elif item.startswith("notable"):
+					cont = self.automatic_buttons_creator(by="notable",info={"drive":self.automatic_res[item]["device"].path, "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 							

@@ -873,6 +873,8 @@ class automatic_check_ng:
 		
 		for name, obj in self.dis.items():
 
+			if obj == "notable": continue
+
 			# We need to retrieve fresh devices/disks lists and work on them
 			dev, dis = return_devices()
 
@@ -942,6 +944,8 @@ class automatic_check_ng:
 		current = 0
 
 		for name, obj in self.dis.items():
+			if obj == "notable": continue
+			
 			for path, name in self.distribs.iteritems():
 				
 				result = None
@@ -1009,7 +1013,8 @@ class automatic_check_ng:
 		current = 0
 
 		for name, obj in self.dis.items():
-			
+			if obj == "notable": continue
+
 			# We need to retrieve fresh devices/disks lists and work on them
 			dev, dis = return_devices()
 			
@@ -1082,6 +1087,8 @@ class automatic_check_ng:
 		current = 0
 
 		for name, obj in self.dis.items():
+			if obj == "notable": continue
+			
 			if len(obj.partitions) == 0:
 				# No partitions, we need to create one!
 				freespacepart = obj.getFreeSpacePartitions()[0]
@@ -1104,11 +1111,35 @@ class automatic_check_ng:
 
 		return result_dict, order
 	
+	def by_notable(self):
+		""" Handle table-less disks. """
+		
+		#if self.is_echo:
+		#	# Disable on echo
+		#	return {}, []
+
+		result_dict = {} # "notableX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			if obj != "notable": continue
+			
+			current += 1
+			order.append("notable%s" % current)
+			result_dict["notable%s" % current] = {"result":{"part":None, "swap":None, "efi":None, "format":None}, "disk":"notable", "device":self.dev[name], "model":self.dev[name].model}
+		
+		return result_dict, order
+	
 	def main(self):
 		""" Checks for solutions for the automatic partitioner.
 		Every solution is applied on a virtual Disk object.
 		"""
-		
+
+		# Check by notable
+		notable, notableord = self.by_notable()
+
 		# Check by freespace
 		free, freeord = self.by_freespace()
 		
@@ -1121,8 +1152,8 @@ class automatic_check_ng:
 		# Check by echo
 		echo, echoord = self.by_echo()
 		
-		results = dict(free.items() + dele.items() + clea.items() + echo.items())
-		order = freeord + deleord + cleaord + echoord
+		results = dict(notable.items() + free.items() + dele.items() + clea.items() + echo.items())
+		order = notableord + freeord + deleord + cleaord + echoord
 		
 		return results, order
 	
