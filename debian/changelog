@@ -1,3 +1,13 @@
+linstaller (2.92.0-1) pulse; urgency=low
+
+  * modules/bootloader: inst: configure GRUB for hibernation. modules/summary: front/glade: do not show bootloader informations if UEFI.
+  * config/semplice: commented the root preseed, the user will be asked if he wants the root account.
+    modules/userhost: front/glade: do not scary the user with error messages when inserting for the first time the password
+  * modules/userhost: front/glade: added short description for the root account dropdown.
+  * linstaller_*wrapper.sh: ensure we umount target.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Dec 2012 18:46:49 +0100
+
 linstaller (2.91.0-1) pulse; urgency=low
 
   * modules/echo: partusb/inst: import shutil; currently force 'root' as the only type possible.
