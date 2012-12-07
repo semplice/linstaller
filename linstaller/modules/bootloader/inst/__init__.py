@@ -9,6 +9,8 @@ import linstaller.core.main as m
 
 from linstaller.core.main import warn,info,verbose
 
+import sys, fileinput
+
 class Install(module.Install):
 	def grub_install(self):
 		""" Installs grub. """
@@ -32,6 +34,25 @@ class Install(module.Install):
 			args = "--no-floppy"
 			
 		m.sexec("grub-install %(args)s '%(location)s'" % {"args":args,"location":location})
+		
+		# Adjust config in order to enable hibernate...
+		if "partdisks.front" in self.moduleclass.modules_settings and "swap" in self.moduleclass.modules_settings["partdisks.front"]:
+			swap = self.moduleclass.modules_settings["partdisks.front"]["swap"]
+			#UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (swap))
+			
+			# Edit grub config
+			for line in fileinput.input("/etc/default/grub",inplace=1):
+				# WARNING: Ugly-ness excess in this for
+				if line[0] != "#":
+					splitted = line.split("=")
+					if splitted[0] == "GRUB_CMDLINE_LINUX_DEFAULT":
+						sys.stdout.write("GRUB_CMDLINE_LINUX_DEFAULT=\"quiet resume=%s\"" % swap)
+						# FIXME: The above line overwrites the entire CMDLINE_DEFAULT. Also, 'swap' is used.
+						# We should decide if use it or its UUID.
+					else:
+						sys.stdout.write(line)
+				else:
+					sys.stdout.write(line)
 	
 	def grub_update(self):
 		""" Updates grub menu list """

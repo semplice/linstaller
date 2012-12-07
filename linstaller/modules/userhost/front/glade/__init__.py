@@ -13,6 +13,9 @@ from linstaller.core.main import warn,info,verbose,root_check
 class Frontend(glade.Frontend):
 	def ready(self):
 		
+		self.password_initial = True
+		self.rpassword_initial = True
+		
 		# Initiate steps
 		self.steps_init()
 		self.steps_set_index(index={"userfullname":_("The user full name"), "username":_("The username"), "userpassword":_("The user password"), "hostname":_("The computer name")})
@@ -200,7 +203,14 @@ class Frontend(glade.Frontend):
 		# Get the passwords
 		passw1 = self.userpassword.get_text()
 		passw2 = self.userpassword_confirm.get_text()
-				
+
+		if obj == self.userpassword and self.password_initial:
+			return
+		elif obj == self.userpassword_confirm and self.password_initial and len(passw2) < len(passw1):
+			return
+		
+		self.password_initial = False
+
 		# Check
 		if passw1:
 			if len(passw1) < int(self.settings["password_min_chars"]):
@@ -237,7 +247,14 @@ class Frontend(glade.Frontend):
 		# Get the passwords
 		passw1 = self.rootpassword.get_text()
 		passw2 = self.rootpassword_confirm.get_text()
+
+		if obj == self.rootpassword and self.rpassword_initial:
+			return
+		elif obj == self.rootpassword_confirm and self.rpassword_initial and len(passw2) < len(passw1):
+			return
 		
+		self.rpassword_initial = False
+
 		# Check
 		if passw1:
 			if len(passw1) < int(self.settings["password_min_chars"]):
@@ -291,9 +308,7 @@ class Frontend(glade.Frontend):
 
 	def on_enableroot_change(self, obj, state=None):
 		""" Called when enableroot widget is changed. """
-		
-		print("setting root to... %s" % str(obj.get_active()))
-		
+				
 		if obj.get_active() == True:
 			# Set seed
 			self.settings["root"] = True

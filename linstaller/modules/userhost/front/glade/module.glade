@@ -214,6 +214,22 @@
                             <property name="orientation">vertical</property>
                             <property name="spacing">10</property>
                             <child>
+                              <object class="GtkLabel" id="label3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">The switch below can be used to enable the root account.
+Administration privilegies will only be given to it: 'sudo' will be disabled.
+&lt;i&gt;It is recommended to keep this option &lt;b&gt;OFF&lt;/b&gt;.&lt;/i&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkBox" id="box3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -222,7 +238,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Enable root account</property>
+                                    <property name="label" translatable="yes">Root account</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -248,7 +264,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
@@ -342,7 +358,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>

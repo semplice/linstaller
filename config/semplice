@@ -12,5 +12,5 @@ ask = False
 ask = False
 
 # Disable root
-[module:userhost]
-root = None
+#[module:userhost]
+#root = None
