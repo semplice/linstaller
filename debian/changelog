@@ -1,3 +1,9 @@
+linstaller (2.92.1-1) pulse; urgency=low
+
+  * modules/bootloader: inst: hopefully fixed grub config changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Dec 2012 21:57:49 +0100
+
 linstaller (2.92.0-1) pulse; urgency=low
 
   * modules/bootloader: inst: configure GRUB for hibernation. modules/summary: front/glade: do not show bootloader informations if UEFI.
