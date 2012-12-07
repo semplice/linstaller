@@ -10,4 +10,8 @@ if [ "$res" != "0" ]; then
 	python /usr/share/linstaller/crash/crash_window.py
 fi
 
+## FIXME: This should be handled by stock linstaller, but sometimes target
+## remains mounted and we clearly do not want it
+sudo umount /linstaller/target/{proc,dev,sys,} &> /dev/null
+
 exit $res

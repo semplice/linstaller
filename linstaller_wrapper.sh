@@ -11,4 +11,8 @@ if [ "$res" != "0" ]; then
 	read -p "Press ENTER to close."
 fi
 
+## FIXME: This should be handled by stock linstaller, but sometimes target
+## remains mounted and we clearly do not want it
+sudo umount /linstaller/target/{proc,dev,sys,} &> /dev/null
+
 exit $res
