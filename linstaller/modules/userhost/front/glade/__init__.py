@@ -308,9 +308,7 @@ class Frontend(glade.Frontend):
 
 	def on_enableroot_change(self, obj, state=None):
 		""" Called when enableroot widget is changed. """
-		
-		print("setting root to... %s" % str(obj.get_active()))
-		
+				
 		if obj.get_active() == True:
 			# Set seed
 			self.settings["root"] = True
