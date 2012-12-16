@@ -948,7 +948,7 @@ option for your system.</property>
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Unfortunately, we didn't find solutions for this system. Please use the automatic partitioner.</property>
+                            <property name="label" translatable="yes">Unfortunately, we didn't find solutions for this system. Please use the manual partitioner.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

@@ -281,7 +281,7 @@ class Frontend(glade.Frontend):
 		# Create the button objects
 		if by == "freespace":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to the %s GB of free space in %s") % (self.moduleclass.main_settings["distro"], round(info["freesize"] / 1024, 2), info["drive"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1024, 2), "drive":info["drive"]}))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This installs the distribution on the free space on the drive."))
@@ -298,7 +298,7 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-add", 6)
 		elif by == "delete":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Replace %s with %s") % (info["system"], self.moduleclass.main_settings["distro"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Replace %(system)s with %(distro)s") % {"system":info["system"], "distro":self.moduleclass.main_settings["distro"]}))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This replaces %(system)s with %(distro)s. <b>All data on %(system)s will be deleted.</b>") % {"system":info["system"], "distro":self.moduleclass.main_settings["distro"]})
@@ -332,7 +332,7 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-delete", 6)
 		elif by == "echo":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %s to %s (%s)") % (self.moduleclass.main_settings["distro"], info["path"], info["model"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":info["path"], "model":info["model"]}))
 			
 			container["text"] = Gtk.Label()
 			if info["shouldformat"]:

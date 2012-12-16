@@ -87,7 +87,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		self.idle_add(self.objects["parent"].change_entry_status, obj, status, tooltip)
 	
-	def steps_init(self, okmessage={"title":_("You can continue!"), "message":_("Press forward to continue.")}, holdmessage={"title":_("Please complete all forms."), "message":_("You need to complete the following forms:")}, errormessage={"title":_("Please fix these errors before continuing."), "message":"You need to fix these errors before continuing:"}):
+	def steps_init(self, okmessage={"title":_("You can continue!"), "message":_("Press forward to continue.")}, holdmessage={"title":_("Please complete all forms."), "message":_("You need to complete the following forms:")}, errormessage={"title":_("Please fix these errors before continuing."), "message":_("You need to fix these errors before continuing:")}):
 		""" Initiate steps. """
 		
 		self.steps = []
