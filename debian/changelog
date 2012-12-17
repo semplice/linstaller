@@ -1,3 +1,11 @@
+linstaller (2.99.0-1) pulse; urgency=low
+
+  * Synced translations.
+    services/glade: added translation support.
+    modules/userhost: ensure we disable *password_initial if module is not virgin
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 17 Dec 2012 11:20:05 +0100
+
 linstaller (2.92.1-1) pulse; urgency=low
 
   * modules/bootloader: inst: hopefully fixed grub config changes.
