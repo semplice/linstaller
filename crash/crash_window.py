@@ -8,6 +8,12 @@ from gi.repository import Gtk, GObject
 import threading
 import subprocess
 
+import locale, t9n.library
+
+locale.setlocale(locale.LC_ALL, '')
+locale.bindtextdomain("linstaller", "/usr/share/locale")
+_ = t9n.library.translation_init("linstaller")
+
 GObject.threads_init()
 
 UIPATH = "/usr/share/linstaller/crash/ui.glade"
@@ -70,6 +76,7 @@ class Window:
 	def __init__(self):
 		
 		self.builder = Gtk.Builder()
+		self.builder.set_translation_domain("linstaller")
 		self.builder.add_from_file(UIPATH)
 		
 		self.crashwindow = self.builder.get_object("crash")

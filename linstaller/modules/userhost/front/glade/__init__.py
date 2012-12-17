@@ -13,8 +13,9 @@ from linstaller.core.main import warn,info,verbose,root_check
 class Frontend(glade.Frontend):
 	def ready(self):
 		
-		self.password_initial = True
-		self.rpassword_initial = True
+#		if not self.is_module_virgin:
+#			self.password_initial = True
+#			self.rpassword_initial = True
 		
 		# Initiate steps
 		self.steps_init()
@@ -62,6 +63,10 @@ class Frontend(glade.Frontend):
 		if not self.is_module_virgin:
 			# Update the header with the checks, but then return
 			# Do *ALL* checks (if we're not caspered)
+
+			self.password_initial = False
+			self.rpassword_initial = False
+
 			if not self.settings["caspered"]:
 				self.on_userfullname_change(self.userfullname)
 				self.on_username_change(self.username)
@@ -87,6 +92,9 @@ class Frontend(glade.Frontend):
 			self.change_entry_status(self.hostname, "hold")
 			# Root is handled by the callbacks
 			self.idle_add(self.objects["parent"].next_button.set_sensitive, False)
+
+			self.password_initial = True
+			self.rpassword_initial = True
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		#if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:

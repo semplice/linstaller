@@ -12,7 +12,13 @@ import time
 
 import threading
 
-import t9n.library
+import locale, t9n.library
+locale.setlocale(locale.LC_ALL, '')
+locale.bindtextdomain("linstaller", "/usr/share/locale")
+#gettext.bindtextdomain("linstaller", "/usr/share/locale")
+#gettext.textdomain("linstaller")
+#_ = gettext.gettext
+
 _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import info, warn, verbose
@@ -204,6 +210,7 @@ class Service(linstaller.core.service.Service):
 			
 			# New builder
 			objects_list["builder"] = Gtk.Builder()
+			objects_list["builder"].set_translation_domain("linstaller")
 			objects_list["builder"].add_from_file(module_new)
 			
 			# Get main object
@@ -241,6 +248,7 @@ class Service(linstaller.core.service.Service):
 		self.pages_built = False
 		
 		self.builder = Gtk.Builder()
+		self.builder.set_translation_domain("linstaller")
 		self.builder.add_from_file(uipath)
 		
 		### EXIT WINDOW

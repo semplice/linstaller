@@ -9,3 +9,12 @@
 APP_NAME="linstaller"
 
 find . -name "*.py" | xgettext --language=Python --keyword=_ --output=lang/$APP_NAME/$APP_NAME.pot -f -
+
+# Find and extract from glade files
+files=$(find . -name "*.glade")
+for glade in $files; do
+	if [ `dirname $glade` = "./config" ]; then continue; fi
+	intltool-extract --type=gettext/glade $glade
+	xgettext --language="C" --keyword=N_ -j --output=lang/$APP_NAME/$APP_NAME.pot -j ${glade}.h
+	rm ${glade}.h
+done

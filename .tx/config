@@ -1,5 +1,5 @@
 [main]
-host = https://www.transifex.net
+host = https://www.transifex.com
 
 [linstaller.master]
 file_filter = lang/linstaller/<lang>.po
