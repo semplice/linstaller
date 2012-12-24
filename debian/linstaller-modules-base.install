@@ -1,5 +1,6 @@
 /usr/share/linstaller/linstaller/modules/bootloader
 /usr/share/linstaller/linstaller/modules/debian
+/usr/share/linstaller/linstaller/modules/virtualclean
 /usr/share/linstaller/linstaller/modules/mirrorselect
 /usr/share/linstaller/linstaller/modules/clean
 /usr/share/linstaller/linstaller/modules/semplice

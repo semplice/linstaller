@@ -50,6 +50,7 @@ Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, debconf, python-keeptalking, python-t9n, python-parted, python-apt,
  squashfs-tools,
  user-setup,
+ imvirt,
  dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted,
  grub-pc | firmware-raspberrypi
 Description: Modular GNU/Linux distribution installer -- base modules
