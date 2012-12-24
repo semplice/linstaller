@@ -81,6 +81,10 @@ distrib = setup(name='linstaller',
       "linstaller.modules.debian",
       "linstaller.modules.debian.inst",
       "linstaller.modules.debian.inst.glade",
+
+      "linstaller.modules.virtualclean",
+      "linstaller.modules.virtualclean.inst",
+      "linstaller.modules.virtualclean.inst.glade",
       
       "linstaller.modules.mirrorselect",
       "linstaller.modules.mirrorselect.front",
