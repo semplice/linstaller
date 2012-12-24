@@ -2,7 +2,7 @@
 
 # Loads linstaller and if something wrong happened, does close window only on ENTER.
 
-sudo linstaller $@
+sudo linstaller "$@"
 res="$?"
 
 if [ "$res" != "0" ]; then
