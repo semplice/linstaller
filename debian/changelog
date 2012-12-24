@@ -1,3 +1,13 @@
+linstaller (3.0.0.1-1) pulse; urgency=low
+
+  * modules/virtualclean: added.
+    config/semplice-base: added virtualclean to the module list.
+    setup.py: ship virtualclean.
+  * debian/control: linstaller-modules-base: depend on imvirt.
+    debian/linstaller-modules-base.install: ship virtualclean.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 24 Dec 2012 17:55:19 +0100
+
 linstaller (3.0.0-1) pulse; urgency=low
 
   * 3.0.0 'The End Of The World' release :)
