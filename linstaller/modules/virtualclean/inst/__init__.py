@@ -27,7 +27,7 @@ class Install(module.Install):
 		# FIXME: New releases of linstaller should handle better the package checking.
 		
 		try:
-			for pkg in self.settings["remove-virtualbox"].split(" "):
+			for pkg in self.settings["remove-virtualbox.inst"].split(" "):
 				m.sexec("dpkg -l %s &> /dev/null" % pkg, shell=True)
 		except:
 			return

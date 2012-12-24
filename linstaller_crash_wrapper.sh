@@ -2,7 +2,7 @@
 
 # Loads linstaller and if something wrong happened, displays the crash dialog.
 
-sudo linstaller $@
+sudo linstaller "$@"
 res="$?"
 
 if [ "$res" != "0" ]; then
