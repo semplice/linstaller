@@ -1,0 +1,7 @@
+[linstaller]
+distribution = thewall
+modules = welcome.front end.front
+special = 
+
+[frontend:cli]
+follow = True

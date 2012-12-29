@@ -155,6 +155,7 @@ verbose("started linstaller - version %s" % m.VERSION)
 
 _action = False
 _config = "default"
+_configpath = "/etc/linstaller"
 _frontend = "cli"
 _modules = False
 #_services = ["sample", "glade"]
@@ -171,6 +172,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--config requires an argument!")
 		_config = arg[1]
+	elif arg[0] in ("--configpath","-p"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--configpath requires an argument!")
+		_configpath = arg[1]
 	elif arg[0] in ("--frontend","-f"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--frontend requires an argument!")
@@ -211,6 +216,7 @@ if _action == "help":
 	print
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
+	print _(" -p|--configpath	- Selects the directory to look for configuration files")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print _(" -m|--modules		- Overrides the modules to be executed")
 	print _(" -s|--services		- Overrides the services to be executed")
@@ -235,7 +241,7 @@ if _action == "help":
 
 	sys.exit(0)
 elif _action == "start":	
-	if not os.path.join(config.configpath, _config):
+	if not os.path.join(_configpath, _config):
 		raise m.UserError(_("%s does not exist! Adjust --config accordingly." % _config))
 	else:
 		verbose("Selected configuration file: %s" % _config)
@@ -247,7 +253,7 @@ elif _action == "start":
 		os.makedirs("/linstaller/target")
 	
 	# Load configuration file
-	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend)
+	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend, configpath=_configpath)
 		
 	# Populate main_settings
 	main_settings = {}
@@ -313,6 +319,17 @@ elif _action == "start":
 		
 		modules_settings[module] = seeds1
 		modules_settings[module]["_preexecuted"] = True # The module has only been PREexecuted, not executed. It will be removed when the module runs.
+
+	# Create frontend settngs
+	main_settings["frontend_settings"] = {}
+	
+	# Cache frontend settings now
+	sect = "frontend:%s" % main_settings["frontend"]
+	if cfg.has_section(sect):
+		options = cfg.config.options(sect)
+		
+		for opt in options:
+			main_settings["frontend_settings"][opt] = cfg.get(sect, opt)
 
 	# Start services
 	service_started = {} # started services
