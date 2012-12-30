@@ -18,7 +18,7 @@ class Install:
 		
 		if self.onchroot:
 			# Enter in chroot
-			self.ch = chlib.Chroot()
+			self.ch = chlib.Chroot(target=self.moduleclass.main_settings["target"])
 			self.ch.open()
 
 	def close(self):

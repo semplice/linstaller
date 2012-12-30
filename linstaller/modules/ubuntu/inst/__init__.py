@@ -17,7 +17,7 @@ from linstaller.core.main import warn,info,verbose
 # NOTE: This is a ubuntu-specific module.
 
 # FIXME (SORTA OF): We are getting cache outside of chroot, using rootdir. We really should do something inside chroot.
-cache = Cache(rootdir="/linstaller/target")
+cache = Cache(rootdir="/linstaller/target") ## HUGE FIXME!!! Needs to take setting from main_settings["target"]!!
 
 class Install(module.Install):
 	def run_hooks(self, path, *args):
@@ -142,7 +142,7 @@ class Module(module.Module):
 		""" Copies the ubuntu kernel from the image to /boot.
 		Needs to be executed outside chroot (that's why it's not in Install). """
 		
-		shutil.copy2(self.settings["kernel"], "/linstaller/target/boot/vmlinuz")
+		shutil.copy2(self.settings["kernel"], os.path.join(self.main_settings["target"], "boot/vmlinuz"))
 	
 	def seedpre(self):
 		""" Caches variables used in this module. """

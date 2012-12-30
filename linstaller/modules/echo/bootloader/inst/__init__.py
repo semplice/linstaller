@@ -30,7 +30,7 @@ class Module(module.Module):
 		if part == None:
 			raise m.UserError("Target device %s not found." % target)
 		
-		directory = "/linstaller/target/syslinux"
+		directory = os.path.join(self.main_settings["target"], "syslinux")
 		
 		bootloader = self.settings["bootloader"]
 		if not bootloader:

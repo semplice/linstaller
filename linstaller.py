@@ -190,6 +190,7 @@ verbose("started linstaller - version %s" % m.VERSION)
 _action = False
 _config = "default"
 _configpath = "/etc/linstaller"
+_target = "/linstaller/target"
 _frontend = "cli"
 _modules = False
 #_services = ["sample", "glade"]
@@ -210,6 +211,10 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--configpath requires an argument!")
 		_configpath = arg[1]
+	elif arg[0] in ("--target","-t"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--target requires an argument!")
+		_target = arg[1]
 	elif arg[0] in ("--frontend","-f"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--frontend requires an argument!")
@@ -251,6 +256,7 @@ if _action == "help":
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
 	print _(" -p|--configpath	- Selects the directory to look for configuration files")
+	print _(" -t|--target		- Selects the target directory (def: /linstaller/target)")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print _(" -m|--modules		- Overrides the modules to be executed")
 	print _(" -s|--services		- Overrides the services to be executed")
@@ -282,15 +288,12 @@ elif _action == "start":
 	
 	# Ohhh yay :) This action that will actually start the installer and its appropriate frontend.
 	
-	# Create target directory
-	if not os.path.exists("/linstaller/target"):
-		os.makedirs("/linstaller/target")
-	
 	# Load configuration file
 	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend, configpath=_configpath)
 		
 	# Populate main_settings
 	main_settings = {}
+	main_settings["target"] = _target
 	main_settings["frontend"] = _frontend
 	main_settings["distro"] = cfg.printv("distribution")
 	if not _modules:
@@ -298,7 +301,11 @@ elif _action == "start":
 	else:
 		# Modules specified via --modules option
 		main_settings["modules"] = _modules.split(" ")
-	
+
+	# Create target directory
+	if not os.path.exists(main_settings["target"]):
+		os.makedirs(main_settings["target"])
+
 	# Parse supermodules
 	main_settings["supermodules"] = {}
 	sects = cfg.config.sections()
