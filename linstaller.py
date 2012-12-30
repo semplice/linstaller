@@ -129,7 +129,41 @@ def loop_modules(startfrom=1):
 		if module:
 			count += 1
 			if count < startfrom: continue
-			res = launch_module(module, main_settings["special"].split(" "))
+			if module.startswith("!") and lastres != "back":
+				# This is a revert action for the supermodule!
+				smod = module[1:]
+				
+				revertlist = main_settings["supermodules"][smod]["special"]
+				
+				revertlist.reverse() # Reverse.
+				for modu in revertlist:
+					verbose("Reverting %s" % modu)
+					_revert = mh.Module(modu)
+					_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
+					
+					# Revert
+					_revertc.revert()
+					
+					# Also remove from executed_special.
+					executed_special.remove(modu)
+					
+					del _revert
+				
+				verbose("\n- Successfully exited from supermodule %s.\n" % smod)
+				
+				continue
+			elif module.startswith("+") and lastres != "back":
+				smod = module[1:]
+				
+				# Entering in the supermodule...
+				verbose("\n\n- Now at supermodule %s." % smod)
+				
+				# we need to clear the special_workspace
+				main_settings["special_workspace"] = main_settings["supermodules"][smod]["special"]
+				
+				continue
+				
+			res = launch_module(module, main_settings["special"].split(" ") + main_settings["special_workspace"])
 			if res == "casper":
 				
 				# We should trigger the on_caspered signal to services, just in case..
@@ -265,9 +299,40 @@ elif _action == "start":
 		# Modules specified via --modules option
 		main_settings["modules"] = _modules.split(" ")
 	
+	# Parse supermodules
+	main_settings["supermodules"] = {}
+	sects = cfg.config.sections()
+	for sect in sects:
+		if not sect.startswith("supermodule:"): continue
+		
+		# Strip the "supermodule:"
+		smod = sect.replace("supermodule:","")
+
+		main_settings["supermodules"][smod] = {}
+
+		try:
+			# Get the modules
+			main_settings["supermodules"][smod]["modules"] = cfg.printv("modules", sect).split(" ")
+			
+			# Get the special
+			main_settings["supermodules"][smod]["special"] = cfg.printv("special", sect).split(" ")
+		except:
+			raise m.UserError("Unable to get configuration for supermodule %s. Please double-check the configuration file." % smod)
+	
+	# We need to adjust the modules list by merging the supermodules there.
+	for smod, values in main_settings["supermodules"].items():
+		while smod in main_settings["modules"]:
+			index = main_settings["modules"].index(smod)
+			main_settings["modules"].pop(index)
+			main_settings["modules"][index:index] = ["+%s" % smod] + values["modules"] + ["!%s" % smod]
+	
 	# Remove modules, if we should
 	for mod in _removemodules:
 		main_settings["modules"].remove(mod)
+	
+	# Create the special workspace, used to ensure a revert layer in supermodules if a module crashes.
+	# In normal operation, it is blank.
+	main_settings["special_workspace"] = []
 	
 	if not _services:
 		main_settings["services"] = cfg.printv("services")

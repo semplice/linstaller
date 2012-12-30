@@ -189,10 +189,14 @@ class Service(linstaller.core.service.Service):
 				is_inst = True
 			else:
 				is_inst = False
-				
+			
+			if module.startswith("!") or module.startswith("+"):
+				# supermodule revert, skipping
+				continue
+			
 			module_new = module.replace(".","/")
 			module_new = os.path.join(MODULESDIR, module_new + "/glade/module.glade")
-						
+			
 			if not os.path.exists(module_new) and not is_inst:
 				warn(_("Module path %s does not exist! Skipping...") % module_new)
 				continue
