@@ -36,6 +36,8 @@ class Module:
 		self.settings = {"caspered":False}
 		self.changed = {} # Convienent dict to store changed items. Useful mainly for partdisks.
 		
+		self.seed_setup()
+		
 		self.seedpre()
 		self.preseed()
 
@@ -141,6 +143,13 @@ class Module:
 			for opt in options:
 				# Insert in self.settings
 				self.settings[opt] = cfg.printv(opt)
+
+	def seed_setup(self):
+		""" Override this to execute things before the seeding occours.
+		
+		Mainly useful to change cfg.module to a foreign module. """
+		
+		pass
 
 	def return_settings(self):
 		""" Returns modules's settings. """
