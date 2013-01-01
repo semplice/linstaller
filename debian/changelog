@@ -1,3 +1,9 @@
+linstaller (3.0.0.3-1) pulse; urgency=low
+
+  * Disable virtualclean in semplice-base.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 01 Jan 2013 23:36:41 +0100
+
 linstaller (3.0.0.2-1) pulse; urgency=low
 
   * linstaller*wrapper.sh: fixed argument handling
