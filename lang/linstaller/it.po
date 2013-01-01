@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-16 17:59+0100\n"
-"PO-Revision-Date: 2012-12-16 17:20+0000\n"
+"POT-Creation-Date: 2012-12-25 13:00+0100\n"
+"PO-Revision-Date: 2012-12-25 12:34+0000\n"
 "Last-Translator: g7 <me@medesimo.eu>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/semplice/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr " help\t\t\t- Visualizza il messaggio d'aiuto, quindi esce."
 
 #: linstaller.py:221
 msgid " start\t\t\t- Starts the installer."
-msgstr " start\t\t\t- Avvia l'installatore."
+msgstr " start\t\t\t- Avvia il programma di installazione."
 
 #: linstaller.py:223
 msgid "Preseeding:"
@@ -89,11 +89,11 @@ msgstr "%s non esiste! Regolare --config di conseguenza."
 
 #: alan/linstaller_alan.py:57
 msgid "Start installer"
-msgstr "Avvia l'installer"
+msgstr "Avvia il programma di installazione"
 
 #: alan/linstaller_alan.py:59
 msgid "Start USB persistent installer"
-msgstr "Avvia l'installer per chiavette USB persistenti"
+msgstr "Avvia il programma di installazione per chiavette USB persistenti"
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/gtk3.py:391
 #: linstaller/frontends/cli.py:86
@@ -195,8 +195,9 @@ msgstr "Copia in corso del sistema nel disco..."
 #: linstaller/modules/unsquash/inst/glade/__init__.py:24
 #: linstaller/modules/language/inst/glade/__init__.py:57
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:38
 msgid "This may take a while."
-msgstr "L'operazione può richiedere del tempo."
+msgstr "L'operazione potrebbe richiedere del tempo."
 
 #: linstaller/modules/echo/copy/inst/cli.py:18
 #: linstaller/modules/unsquash/inst/cli.py:22
@@ -340,7 +341,7 @@ msgstr "Già fatto?"
 
 #: linstaller/modules/end/front/glade/__init__.py:18
 msgid "It seems so."
-msgstr "Così sembra."
+msgstr "Così pare."
 
 #: linstaller/modules/end/front/cli.py:15
 msgid "Enjoy"
@@ -415,11 +416,11 @@ msgstr "Specificare il timezone"
 
 #: linstaller/modules/timezone/front/cli.py:88
 msgid "Invalid zone!"
-msgstr "Zona invalida!"
+msgstr "Zona non corretta!"
 
 #: linstaller/modules/timezone/front/cli.py:97
 msgid "Invalid zone or city!"
-msgstr "Zona o città invalida!"
+msgstr "Zona o città non corretta!"
 
 #: linstaller/modules/timezone/front/cli.py:130
 msgid "Please specify the city"
@@ -427,12 +428,12 @@ msgstr "Specificare la città"
 
 #: linstaller/modules/timezone/front/cli.py:134
 msgid "Invalid city!"
-msgstr "Città invalida!"
+msgstr "Città non corretta!"
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:38
 #, python-format
 msgid "Searching for the best %s mirror..."
-msgstr "Ricerca del miglior mirror %s..."
+msgstr "Ricerca del miglior mirror di %s..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Mirrorselect crashed."
@@ -444,11 +445,11 @@ msgstr "Controllare sources.list(.d)."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "Selecting the fastest mirrors..."
-msgstr "Selezionando i mirror più veloci..."
+msgstr "Selezione dei mirror più veloci..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "The installer is checking for the fastest mirror for your zone."
-msgstr "L'installatore sta cercando i mirror più veloci per la vostra zona."
+msgstr "Il programma di installazione sta cercando i mirror più veloci per la vostra zona."
 
 #: linstaller/modules/mirrorselect/inst/cli.py:23
 msgid "Selecting mirrors:"
@@ -471,7 +472,7 @@ msgstr "Selezione del miglior mirror"
 #: linstaller/modules/mirrorselect/front/cli.py:22
 #, python-format
 msgid "%(distroname)s has many mirrors worldwide."
-msgstr "%(distroname)s ha molti mirror in tutto il mondo."
+msgstr "%(distroname)s ha diversi mirror in tutto il mondo."
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:39
 #: linstaller/modules/mirrorselect/front/cli.py:23
@@ -499,7 +500,7 @@ msgstr "Generazione della configurazione del bootloader..."
 
 #: linstaller/modules/bootloader/inst/glade/__init__.py:43
 msgid "Please wait during the installer is installing the bootloader..."
-msgstr "Si prega di attendere mentre l'installatore sta installando il bootloader..."
+msgstr "Si prega di attendere mentre il programma di installazione sta installando il bootloader..."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:16
 #: linstaller/modules/bootloader/front/cli.py:17
@@ -535,7 +536,7 @@ msgstr "È possibile installare il bootloader nel 'Master Boot Record' del disco
 msgid ""
 "If you do not want to install the bootloader into the MBR, it will be "
 "installed on your root partition."
-msgstr "Se non si vuole installare il bootloader nell'MBR, sarà installato nella partizione root."
+msgstr "Se non si vuole installare il bootloader nell'MBR, verrà installato nella partizione root."
 
 #: linstaller/modules/bootloader/front/cli.py:26
 msgid "Which bootloader do you want to install? [press ENTER for 'grub']"
@@ -551,7 +552,7 @@ msgstr "Se viene selezionato 'No', verrà installato nella partizione di root."
 
 #: linstaller/modules/bootloader/front/cli.py:42
 msgid "Do you want to install the bootloader into the MBR?"
-msgstr "Installer il bootloader nell'MBR?"
+msgstr "Installare il bootloader nell'MBR?"
 
 #: linstaller/modules/fstab/inst/__init__.py:85
 #, python-format
@@ -563,7 +564,7 @@ msgstr "il mountpoint %s esiste e non è una cartella. Cambiare il percorso del 
 #: linstaller/modules/update/front/gtk3.py:24
 #: linstaller/modules/update/front/glade/__init__.py:80
 msgid "Installer updates"
-msgstr "Aggiornamenti dell'installatore"
+msgstr "Aggiornamenti del programma di installazione"
 
 #: linstaller/modules/update/front/gtk3.py:24
 msgid "Update the installer"
@@ -586,7 +587,7 @@ msgstr "È buona norma avere l'ultima versione prima di installare la distribuzi
 
 #: linstaller/modules/update/front/gtk3.py:29
 msgid "The installer should check for updates."
-msgstr "L'installatore dovrebbe cercare gli aggiornamenti."
+msgstr "Il programma di installazione dovrebbe cercare gli aggiornamenti."
 
 #: linstaller/modules/update/front/gtk3.py:38
 #: linstaller/modules/update/front/glade/__init__.py:29
@@ -622,7 +623,7 @@ msgstr "Premere INVIO per avviare l'installer aggiornato"
 
 #: linstaller/modules/update/front/glade/__init__.py:38
 msgid "It seems you are already up-to-date. Yay!"
-msgstr "Sembra che è tutto aggiornato! Yay!"
+msgstr "Sembra che tutto sia aggiornato! Yay!"
 
 #: linstaller/modules/update/front/glade/__init__.py:42
 msgid "Upgrading packages..."
@@ -639,17 +640,17 @@ msgstr "Un riavvio è necessario per permettere di avviare una versione di linst
 
 #: linstaller/modules/update/front/glade/__init__.py:52
 msgid "Press forward to start the updated installer."
-msgstr "Premere avanti per avviare l'installatore aggiornato."
+msgstr "Premere avanti per avviare il programma di installazione aggiornato."
 
 #: linstaller/modules/update/front/glade/__init__.py:80
 msgid "Ensure you have the installer up-to-date."
-msgstr "Assicurarsi di avere l'installatore aggiornato."
+msgstr "Assicurarsi di avere il programma di installazione aggiornato."
 
 #: linstaller/modules/update/front/glade/__init__.py:97
 msgid ""
 "You can choose to check for installer updates before continuing the "
 "installation."
-msgstr "È possibile scegliere di controllare gli aggiornamenti dell'installatore prima di continuare l'installazione."
+msgstr "È possibile scegliere di controllare gli aggiornamenti del programma di installazione prima di continuare l'installazione."
 
 #: linstaller/modules/update/front/__init__.py:41
 #, python-format
@@ -666,11 +667,11 @@ msgstr "Si vogliono controllare gli aggiornamenti?"
 
 #: linstaller/modules/update/front/cli.py:45
 msgid "Upgrading packages... this may take a while."
-msgstr "Aggiornamento dei pacchetti... può durare diverso tempo."
+msgstr "Aggiornamento dei pacchetti... questa operazione potrebbe durare diverso tempo."
 
 #: linstaller/modules/update/front/cli.py:52
 msgid "A reboot is recommended in order to start a safe linstaller version.\n"
-msgstr "Un riavvio è raccomandato in modo da avviare una versione sicura di linstaller.\n"
+msgstr "Un riavvio è consigliato in modo da avviare una versione sicura di linstaller.\n"
 
 #: linstaller/modules/update/front/cli.py:54
 msgid "Would you like to reboot now?"
@@ -781,7 +782,7 @@ msgstr "Impossibile scrivere i cambiamenti su %s..."
 #: linstaller/modules/partdisks/front/glade/__init__.py:84
 #: linstaller/modules/partdisks/front/glade/__init__.py:108
 msgid "See /var/log/linstaller/linstaller_latest.log for more details."
-msgstr "Guardare /var/log/linstaller/linstaller_latest.log per più dettagli."
+msgstr "Guardare /var/log/linstaller/linstaller_latest.log per dettagli."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:104
 #: linstaller/modules/partdisks/front/cli.py:346
@@ -791,7 +792,7 @@ msgstr "Formattazione di %s..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:104
 msgid "Let's hope everything goes well! :)"
-msgstr "Si spera che tutto finirà bene :)"
+msgstr "Si spera che tutto finisca bene :)"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:108
 #, python-format
@@ -834,13 +835,13 @@ msgstr "Installare %(distro)s sullo spazio libero (%(size)s GB) in %(drive)s"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:287
 msgid "This installs the distribution on the free space on the drive."
-msgstr "La distribuzione verrà installata nello spazio libero della memoria di massa."
+msgstr "La distribuzione verrà installata nello spazio libero del disco."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:291
 #: linstaller/modules/partdisks/front/glade/__init__.py:308
 #: linstaller/modules/partdisks/front/glade/__init__.py:325
 msgid "<b>Note:</b> an existing virtual memory (swap) partition will be used."
-msgstr "<b>Nota:</b> una partizione di memoria virtuale (swap) già esistente verrà usata."
+msgstr "<b>Nota:</b> una partizione di memoria virtuale (swap) già esistente sarà usata."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:293
 #: linstaller/modules/partdisks/front/glade/__init__.py:310
@@ -903,7 +904,7 @@ msgstr "Inizializza %s"
 msgid ""
 "This initializes the drive (<b>%s</b>) for usage by creating a partition "
 "table."
-msgstr "La memoria di massa (<b>%s</b>) verrà inizializzata creando una tabella delle partizioni."
+msgstr "Il disco (<b>%s</b>) verrà inizializzato creando una tabella delle partizioni."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:406
 #: linstaller/modules/partdisks/front/glade/__init__.py:1014
@@ -945,7 +946,7 @@ msgstr "Si vuole veramente rimuovere %s?"
 #: linstaller/modules/partdisks/front/glade/__init__.py:708
 #, python-format
 msgid "Do you really want to delete all partitions on %s?"
-msgstr "Si vuole veramente cancellare tutte le partizioni su %s?"
+msgstr "Si vuole veramente cancellare tutte le partizioni in %s?"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:880
 msgid "Mountpoint already used!"
@@ -1098,7 +1099,7 @@ msgstr "Si è sicuri di continuare?"
 msgid ""
 "It seems you haven't selected a swap partition.\n"
 "Select one now, or press Forward to continue without one."
-msgstr "Sembrerebbe che nessuna partizione swap non è stata selezionata.\nSelezionarla una adesso o premere Avanti per continuare senza."
+msgstr "Sembrerebbe che nessuna partizione swap è stata selezionata.\nSelezionarla adesso o premere Avanti per continuare senza."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1513
 #: linstaller/modules/partdisks/front/cli.py:180
@@ -1520,11 +1521,11 @@ msgstr "Scrivi i cambiamenti in memoria"
 
 #: linstaller/modules/partdisks/front/cli.py:985
 msgid "Do you want to write to memory your changes?"
-msgstr "Si vuole veramente scrivere i cambiamenti in memoria?"
+msgstr "Si vogliono veramente scrivere i cambiamenti in memoria?"
 
 #: linstaller/modules/partdisks/front/cli.py:986
 msgid "This will let you continue to manage the partitioning scheme."
-msgstr "Questo vi permetterà di continuare a gestire lo schema delle partizioni."
+msgstr "Questo permetterà di continuare a gestire lo schema delle partizioni."
 
 #: linstaller/modules/partdisks/front/cli.py:987
 #, python-format
@@ -1590,13 +1591,13 @@ msgid "Creating user:"
 msgstr "Creazione dell'utente:"
 
 #: linstaller/modules/userhost/front/gtk3.py:21
-#: linstaller/modules/userhost/front/glade/__init__.py:154
+#: linstaller/modules/userhost/front/glade/__init__.py:161
 #: linstaller/modules/userhost/front/cli.py:18
 msgid "Users & Hostname"
 msgstr "Utenti e Hostname"
 
 #: linstaller/modules/userhost/front/gtk3.py:21
-#: linstaller/modules/userhost/front/glade/__init__.py:154
+#: linstaller/modules/userhost/front/glade/__init__.py:161
 msgid "Set users and hostname"
 msgstr "Configurazione degli utenti e del nome della macchina"
 
@@ -1678,31 +1679,31 @@ msgstr "Password dell'utente"
 msgid "The computer name"
 msgstr "Nome del computer"
 
-#: linstaller/modules/userhost/front/glade/__init__.py:197
+#: linstaller/modules/userhost/front/glade/__init__.py:204
 #, python-format
 msgid "The username must not contain these characters: %s"
-msgstr "L'username non deve contenere questi caratteri: %s"
+msgstr "L'username non deve contenere i seguenti caratteri: %s"
 
-#: linstaller/modules/userhost/front/glade/__init__.py:218
-#: linstaller/modules/userhost/front/glade/__init__.py:262
+#: linstaller/modules/userhost/front/glade/__init__.py:225
+#: linstaller/modules/userhost/front/glade/__init__.py:269
 #, python-format
 msgid "The password should be composed of at least %s characters."
 msgstr "La password dovrebbe essere composta da almeno %s caratteri."
 
-#: linstaller/modules/userhost/front/glade/__init__.py:235
+#: linstaller/modules/userhost/front/glade/__init__.py:242
 msgid "The user passwords doesn't match!"
 msgstr "Le password dell'utente non coincidono!"
 
-#: linstaller/modules/userhost/front/glade/__init__.py:279
+#: linstaller/modules/userhost/front/glade/__init__.py:286
 msgid "The root passwords doesn't match!"
 msgstr "Le password dell'utente root non coincidono!"
 
-#: linstaller/modules/userhost/front/glade/__init__.py:306
+#: linstaller/modules/userhost/front/glade/__init__.py:313
 #, python-format
 msgid "The hostname must not contain these characters: %s"
-msgstr "L'hostname non deve contenere questi caratteri: %s"
+msgstr "L'hostname non deve contenere i seguenti caratteri: %s"
 
-#: linstaller/modules/userhost/front/glade/__init__.py:320
+#: linstaller/modules/userhost/front/glade/__init__.py:327
 msgid "The root password"
 msgstr "La password dell'utente root"
 
@@ -1762,7 +1763,7 @@ msgstr "No"
 
 #: linstaller/modules/summary/front/cli.py:20
 msgid "These partitions will be used:"
-msgstr "Le seguenti partizioni saranno usate:"
+msgstr "Le seguenti partizioni verranno usate:"
 
 #: linstaller/modules/summary/front/cli.py:44
 #, python-format
@@ -1834,7 +1835,7 @@ msgstr "Questa applicazione vi aiuterà nell'installazione della distribuzione n
 #: linstaller/modules/welcome/front/glade/__init__.py:36
 #: linstaller/modules/welcome/front/cli.py:25
 msgid "Keep in mind that this installer it's still in testing phase."
-msgstr "Si tenga a mente che questo installatore è ancora in una fase di test."
+msgstr "Si tenga a mente che questo programma di installazione è ancora in una fase di test."
 
 #: linstaller/modules/welcome/front/gtk3.py:27
 #: linstaller/modules/welcome/front/cli.py:26
@@ -1865,6 +1866,15 @@ msgstr "Configurazione del sistema finale..."
 msgid "Configuring the final system:"
 msgstr "Configurazione del sistema:"
 
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:19
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:38
+msgid "Removing virtual machine specific packages..."
+msgstr "Rimozione dei pacchetti specifici delle macchine virtuali..."
+
+#: linstaller/modules/virtualclean/inst/cli.py:20
+msgid "Removing virtual machine specific packages:"
+msgstr "Rimozione dei pacchetti specifici delle macchine virtuali:"
+
 #: linstaller/frontends/gtk3.py:323 linstaller/frontends/gtk3.py:328
 msgid "You can't continue."
 msgstr "Non è possibile continuare."
@@ -1883,11 +1893,11 @@ msgstr ""
 
 #: linstaller/frontends/glade/__init__.py:90
 msgid "Please complete all forms."
-msgstr "Completare tutti i form."
+msgstr "Completare tutti i campi."
 
 #: linstaller/frontends/glade/__init__.py:90
 msgid "You need to complete the following forms:"
-msgstr "È necessario completare i seguenti form:"
+msgstr "È necessario completare i seguenti campi:"
 
 #: linstaller/frontends/glade/__init__.py:90
 msgid "Please fix these errors before continuing."
@@ -1895,7 +1905,7 @@ msgstr "È necessario risolvere questi errori prima di continuare."
 
 #: linstaller/frontends/glade/__init__.py:90
 msgid "You need to fix these errors before continuing:"
-msgstr "Bisogna risolvere i seguenti errori prima di continuare:"
+msgstr "È necessario risolvere i seguenti errori prima di continuare:"
 
 #: linstaller/frontends/glade/__init__.py:226
 #: linstaller/modules/timezone/front/glade/module.glade.h:22
@@ -1923,7 +1933,7 @@ msgstr "Riavvia"
 
 #: linstaller/services/glade/__init__.py:442
 msgid "Restart installer"
-msgstr "Riavvia installatore"
+msgstr "Riavvia il programma di installazione"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:1
 #: linstaller/modules/partdisks/front/glade/module.glade.h:13
@@ -2050,7 +2060,7 @@ msgstr "Tastiera"
 msgid ""
 "<i><b>TIP</b>: Type your city in the keyboard (in English) and we'll search "
 "it for you.</i>"
-msgstr "<i><b>SUGGERIMENTO</b>: Scrivere la propria città (in Inglese) sulla tastiera e la cercheremo noi.</i>"
+msgstr "<i><b>SUGGERIMENTO</b>: Scrivere la propria città (in Inglese) sulla tastiera per cercarla.</i>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:18
 #: linstaller/modules/language/front/glade/module.glade.h:18
@@ -2087,7 +2097,7 @@ msgid ""
 "Keep in mind that this may be dangerous.\n"
 "\n"
 "If you wish to begin excluding translations only from now on, you can safely press \"<b>No</b>\"."
-msgstr "Le traduzioni dei pacchetti già installate non sono toccate da questa funzionalità finchè non si aggiornano.\nÈ possibile cancellarle premendo il pulsante \"<b>Sì</b>\".\nTenere a mente che ciò potrebbe essere dannoso.\n\nSe si vuole cominciare ad escludere le traduzioni solo da adesso, scegliere \"<b>No</b>\"."
+msgstr "Le traduzioni dei pacchetti già installati non sono toccate da questa funzionalità finchè quest'ultimi non vengono aggiornati.\nÈ possibile cancellarle premendo il pulsante \"<b>Sì</b>\".\nTenere a mente che ciò potrebbe essere dannoso.\n\nSe si vuole cominciare ad escludere le traduzioni solo da adesso, scegliere \"<b>No</b>\"."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:30
 #: linstaller/modules/language/front/glade/module.glade.h:30
@@ -2112,7 +2122,7 @@ msgstr "Sì, selezionare il mirror più veloce."
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:2
 msgid "Enable deb-src entries"
-msgstr "Abilitare le entry deb-src"
+msgstr "Abilitare i campi deb-src"
 
 #: linstaller/modules/bootloader/front/glade/module.glade.h:1
 msgid "Yes, install the bootloader into the Master Boot Record (MBR)."
@@ -2120,7 +2130,7 @@ msgstr "Sì, installare il bootloader nel Master Boot Record (MBR)"
 
 #: linstaller/modules/update/front/glade/module.glade.h:1
 msgid "Yes, check for installer updates"
-msgstr "Sì, cercare gli aggiornamenti dell'installatore"
+msgstr "Sì, cercare gli aggiornamenti del programma di installazione"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:1
 msgid "Apply changes"
@@ -2128,7 +2138,7 @@ msgstr "Applica cambiamenti"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:2
 msgid "<big><b>Do you really want to apply the changes?</b></big>"
-msgstr "<big><b>Si vuole veramente applicare i cambiamenti?</b></big>"
+msgstr "<big><b>Si vogliono veramente applicare i cambiamenti?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:3
 msgid ""
@@ -2154,7 +2164,7 @@ msgstr "<big><b>Si vuole veramente creare una tabella delle partizioni su questo
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:10
 msgid "A table is needed to create partitions on this drive."
-msgstr "La tabella è necessaria per creare partizioni su questo disco."
+msgstr "La tabella è necessaria per creare partizioni in questa memoria di massa."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:11
 msgid "Edit partition"
@@ -2205,7 +2215,7 @@ msgstr "<big><b>Partizionamento automatico</b></big>"
 msgid ""
 "Press this button to make the installer search the best\n"
 "option for your system."
-msgstr "Premere questo pulsante per far cercare all'installatore\nla migliore opzione per il proprio sistema."
+msgstr "Premere questo pulsante per far cercare al programma di installazione\nla migliore opzione per il proprio sistema."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:26
 msgid "<big><b>Manual partitioning</b></big>"
@@ -2250,27 +2260,27 @@ msgstr "Lo switch sottostante permette di abilitare l'account root.\nI privilegi
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:10
 msgid "Root account"
-msgstr "Account root"
+msgstr "Utente root"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:11
 msgid "Root password"
-msgstr "Password dell'account root"
+msgstr "Password dell'utente root"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:12
 msgid "Root password (confirm)"
-msgstr "Password dell'account root (conferma)"
+msgstr "Password dell'utente root (conferma)"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:13
 msgid "<b>Root password</b>"
-msgstr "<b>Password dell'account root</b>"
+msgstr "<b>Password dell'utente root</b>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:14
 msgid "<b>Root account</b>"
-msgstr "<b>Account root</b>"
+msgstr "<b>Utente root</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:1
 msgid "<b>These partitions will be used:</b>"
-msgstr "<b>Queste partizioni saranno usate:</b>"
+msgstr "<b>Queste partizioni verranno usate:</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:2
 msgid "Locale:"
@@ -2335,7 +2345,7 @@ msgstr "<big><b>Blocco</b></big>"
 #: linstaller/modules/welcome/front/glade/module.glade.h:5
 msgid ""
 "You need to complete the form or you should wait for a process to finish."
-msgstr "È necessario completare il form o aspettare la fine di un processo."
+msgstr "È necessario completare i campi o aspettare la fine di un processo."
 
 #: linstaller/modules/welcome/front/glade/module.glade.h:6
 msgid "<big><b>Error</b></big>"
