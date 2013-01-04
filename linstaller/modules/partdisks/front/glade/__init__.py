@@ -1271,6 +1271,25 @@ class Frontend(glade.Frontend):
 			self.is_automatic = False
 
 			self.mountpoints_added = {}
+			## FIXME: The following is a workaround to get the root overriden via
+			## a seed. This is extremly useful for those who need to install the
+			## distribution to a partition not recognized by the installer, such
+			## as a crypted partition.
+			##
+			## USAGE:
+			##  - "root" seed to the path of the device
+			##  - "root_override" seed to True
+			##
+			## This *may* break some partdisks functions, so we are currently
+			## using the "root_override" seed to see if this is something wanted
+			## by the user or not.
+			## Usage of the CLI frontend of partdisks should not be affected.
+			##
+			## NOTE: The target root SHOULD BE ALREADY FORMATTED, and no other
+			## root should be selected. Also, doing a refresh *may* break out
+			## things, so the module may need a restart.
+			if self.settings["root_override"] and self.settings["root"]:
+				self.mountpoints_added["/"] = self.settings["root"]
 
 			self.refresh()
 					
