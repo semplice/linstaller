@@ -1,3 +1,9 @@
+linstaller (3.0.0.4-1) pulse; urgency=low
+
+  * modules/partdisks: Added "support"(workaround) for the "root" seed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 04 Jan 2013 14:10:28 +0100
+
 linstaller (3.0.0.3-1) pulse; urgency=low
 
   * Disable virtualclean in semplice-base.
