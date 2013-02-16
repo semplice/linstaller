@@ -1,3 +1,10 @@
+linstaller (3.70.0-1) pulse; urgency=low
+
+  * Switched to upstream-branch master and debian-branch debian.
+  * 3.70.0 (initial current release)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 16 Feb 2013 18:13:31 +0100
+
 linstaller (3.0.0.4-1) pulse; urgency=low
 
   * modules/partdisks: Added "support"(workaround) for the "root" seed.
