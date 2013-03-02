@@ -1,3 +1,10 @@
+linstaller (3.70.0-3) unstable; urgency=low
+
+  * linstaller-modules-echo: depend on syslinux-themes-semplice-atom
+    instead of syslinux-themes-semplice-pulse.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 02 Mar 2013 21:42:31 +0100
+
 linstaller (3.70.0-2) unstable; urgency=low
 
   * Target to unstable.
