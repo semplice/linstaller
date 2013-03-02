@@ -78,7 +78,7 @@ Description: Modular GNU/Linux distribution installer -- ubuntu support modules
 
 Package: linstaller-modules-echo
 Architecture: all
-Depends: linstaller (= ${binary:Version}), syslinux, extlinux, syslinux-themes-semplice-pulse
+Depends: linstaller (= ${binary:Version}), syslinux, extlinux, syslinux-themes-semplice-atom
 Description: Modular GNU/Linux distribution installer -- persistent usb creator
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
