@@ -71,6 +71,7 @@ def launch_module(module, special):
 		
 		executed_special.reverse() # Reverse.
 		for modu in executed_special:
+			if not modu: continue
 			verbose("Reverting %s" % modu)
 			_revert = mh.Module(modu)
 			_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
@@ -137,6 +138,7 @@ def loop_modules(startfrom=1):
 				
 				revertlist.reverse() # Reverse.
 				for modu in revertlist:
+					if not modu: continue
 					verbose("Reverting %s" % modu)
 					_revert = mh.Module(modu)
 					_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
@@ -427,6 +429,7 @@ elif _action == "start":
 	# Finished installation. Revert changes made to the system.
 	executed_special.reverse() # Reverse.
 	for modu in executed_special:
+		if not modu: continue
 		verbose("Reverting %s" % modu)
 		_revert = mh.Module(modu)
 		_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
