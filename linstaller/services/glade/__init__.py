@@ -352,7 +352,7 @@ class Service(linstaller.core.service.Service):
 		# Set icon
 		#GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
 		# Set header message and window title
-		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title)
+		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title.replace("& ","&amp; "))
 		GObject.idle_add(self.header_message_subtitle.set_text, subtitle)
 		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
