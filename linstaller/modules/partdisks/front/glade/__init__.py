@@ -182,7 +182,7 @@ class Frontend(glade.Frontend):
 		self.has_manual_touched = False
 		self.is_automatic = None
 		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
+		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 
 		# Get the notebook
 		self.pages_notebook = self.objects["builder"].get_object("pages_notebook")
@@ -231,7 +231,7 @@ class Frontend(glade.Frontend):
 	def refresh_manual(self, obj=None, complete=True):
 		""" Refreshes the manual partitioning page. """
 
-		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
+		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
 
 		self.has_swap_warning_showed = False
 
@@ -493,9 +493,9 @@ class Frontend(glade.Frontend):
 		self.is_automatic = True
 		
 		if self.settings["is_echo"]:
-			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."))
+			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."), appicon="drive-harddisk-usb")
 		else:
-			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
+			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"), appicon="drive-harddisk")
 		
 		# get objects
 		self.automatic_container = self.objects["builder"].get_object("automatic_container")
@@ -1352,7 +1352,7 @@ class Frontend(glade.Frontend):
 		self.partition_cancel_id = None
 
 		if self.is_module_virgin or not ("changed" in self.settings and self.settings["changed"]):
-			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
+			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
 		else:
 			self.set_header("ok", _("You can continue!"), _("Press the Apply button and then Forward to continue."))
 		
@@ -1517,7 +1517,7 @@ class Frontend(glade.Frontend):
 	def on_back_button_click(self):
 		""" Override on_back_button_click. """
 		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
+		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 		
 		# If is_echo, we need exclusively to go to the module before...
 		if self.settings["is_echo"]:

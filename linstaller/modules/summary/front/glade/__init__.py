@@ -18,7 +18,7 @@ class Frontend(glade.Frontend):
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 		else:
-			self.set_header("info", _("Summary"), _("Please review everything before continuing."))
+			self.set_header("info", _("Summary"), _("Please review everything before continuing."), appicon="emblem-default")
 
 
 		# Get labels

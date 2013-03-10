@@ -158,7 +158,7 @@ class Frontend(glade.Frontend):
 				# Ensure the expander is opened
 				self.idle_add(self.root_expander.set_expanded, True)
 
-		self.set_header("info", _("Users & Hostname"), _("Set users and hostname"))
+		self.set_header("info", _("Users & Hostname"), _("Set users and hostname"), appicon="system-users")
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:
