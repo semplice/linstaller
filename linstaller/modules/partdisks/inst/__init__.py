@@ -141,13 +141,13 @@ class Module(module.Module):
 				for part in _used:
 					if lib.is_mounted(part):
 						try:
-							lib.umount(path=part)
+							lib.umount(path=part, tries=5)
 						except:
 							pass
 		
 		# Umount target, finally.
 		try:
-			lib.umount(path="/linstaller/target")
+			lib.umount(path="/linstaller/target", tries=5)
 		except:
 			pass
 	
