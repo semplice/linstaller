@@ -23,25 +23,3 @@ class Frontend(glade.Frontend):
 		if not self.is_module_virgin:
 			return
 		
-		#self.objects["parent"].next_button.modify_bg(Gtk.STATE_NORMAL, "#000")
-		
-		# Get text label
-		text = self.objects["builder"].get_object("text")
-		
-		# Format label:
-		label = (
-			_("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"],
-			"",
-			_("This wizard will help you with the installation of the distribution into your Hard Disk or another removable media."),
-			_("Keep in mind that this installer it's still in testing phase."),
-			_("Please report any problem at http://bugs.launchpad.net/linstaller."),
-			"",
-		)
-
-		# Properly set it
-		text.set_markup("\n".join(label))
-		
-		# FIXME: Disable "Need the root account?" link
-		rootlink = self.objects["builder"].get_object("rootlink")
-		rootlink.hide()
-		

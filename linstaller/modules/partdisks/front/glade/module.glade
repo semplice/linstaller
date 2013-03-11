@@ -758,14 +758,15 @@ If you are unsure, press No.</property>
               <object class="GtkBox" id="pleasewait">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkImage" id="image2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
                     <property name="yalign">0.30000001192092896</property>
+                    <property name="ypad">3</property>
                     <property name="pixel_size">200</property>
                     <property name="icon_name">drive-harddisk</property>
                     <property name="icon-size">6</property>
@@ -777,41 +778,29 @@ If you are unsure, press No.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box11">
+                  <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="label13">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="ypad">2</property>
-                        <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Please wait.&lt;/b&gt;&lt;/big&gt;</property>
-                        <property name="use_markup">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label14">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">We are setting up things to offer an awesome partitioning experience ;)</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="ypad">2</property>
+                    <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Please wait.&lt;/b&gt;&lt;/big&gt;</property>
+                    <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label14">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">We are setting up things to offer an awesome partitioning experience ;)</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
