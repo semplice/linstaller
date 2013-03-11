@@ -34,7 +34,7 @@ MODULESDIR = os.path.join(MAINDIR, "modules/")
 uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
-head_col = {"error":"#F07568","info":"#383838","ok":"#73d216","hold":"#f57900"}
+head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
@@ -329,7 +329,7 @@ class Service(linstaller.core.service.Service):
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
 	
-	def set_header(self, icon, title, subtitle, appicon=None):
+	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 		
 		# Ensure the eventbox is sensitive
@@ -339,8 +339,15 @@ class Service(linstaller.core.service.Service):
 		GObject.idle_add(self.header_message_subtitle.set_sensitive, True)
 		
 		# Get color
-		color_s = head_col[icon]
-		color = Gdk.Color.parse(color_s)[1]
+		if icon == "info" and toolbarinfo:
+			color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
+			folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
+		else:
+			color = Gdk.RGBA()
+			color.parse(head_col[icon])
+			
+			folor = Gdk.RGBA()
+			folor.parse("#363636")
 
 		# Get and set icon
 		if not appicon:
@@ -357,13 +364,8 @@ class Service(linstaller.core.service.Service):
 		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
 		# Set color
-		GObject.idle_add(self.header_eventbox.modify_bg, 0, color)
-		if icon == "info":
-			# Dark here, put a light color on text
-			GObject.idle_add(self.header_eventbox.modify_fg, 0, Gdk.Color.parse("#FFFFFF")[1])
-		else:
-			# We can use black text
-			GObject.idle_add(self.header_eventbox.modify_fg, 0, Gdk.Color.parse("#363636")[1])
+		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
+		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
