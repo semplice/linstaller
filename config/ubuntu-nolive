@@ -17,4 +17,4 @@ remove = /linstaller/source/casper/filesystem.manifest-remove
 
 # Ubuntu live kernel
 [module:ubuntu]
-kernel = /linstaller/source/casper/vmlinuz
+kernel = /linstaller/source/casper/vmlinuz.efi
