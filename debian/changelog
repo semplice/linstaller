@@ -1,3 +1,25 @@
+linstaller (3.71.0-1) unstable; urgency=low
+
+  * Added mount_on_install support in partdisks(glade):
+    An user can now force partition mounting at partdisks.inst even if the partition is not clean.
+  * Added support for using custom icons on "info" status.
+    Added custom icons for the frontend modules.
+    New colors for the status bar. Also ensure we set text color.
+  * frontends/glade: Ensure we correctly parse &.
+  * frontend/glade: get info color from toolbar (and relative fg color)
+    frontend/glade: moved to a Gtk.Window(), with a full-width status bar.
+  * modules/welcome: refactored.
+    Other cosmetic changes.
+  * modules/partdisks: speedup reverting by trying to umount only one time.
+  * modules/ubuntu: changed to support 13.04.
+  * modules/bricks: added.
+  * modules/bricks: changed library to libbricks.
+    Ship the bricks module.
+  * debian/: ship bricks module.
+  * config/semplice: execute bricks.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 20 Mar 2013 12:25:10 +0100
+
 linstaller (3.70.0-3) unstable; urgency=low
 
   * linstaller-modules-echo: depend on syslinux-themes-semplice-atom
