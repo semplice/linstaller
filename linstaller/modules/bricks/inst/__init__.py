@@ -6,7 +6,7 @@
 
 import linstaller.core.module as module
 
-import bricks.engine as engine
+import libbricks.engine as engine
 
 class Install(module.Install):
 	def run(self, InstallProgress):

@@ -11,7 +11,7 @@ _ = t9n.library.translation_init("linstaller")
 
 from linstaller.core.main import warn,info,verbose,root_check		
 
-from bricks.features import features, features_order
+from libbricks.features import features, features_order
 
 class Frontend(glade.Frontend):
 	def build_feature_objects(self):
