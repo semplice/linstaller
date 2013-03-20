@@ -16,6 +16,7 @@
 /usr/share/linstaller/linstaller/modules/update
 /usr/share/linstaller/linstaller/modules/userhost
 /usr/share/linstaller/linstaller/modules/welcome
+/usr/share/linstaller/linstaller/modules/bricks
 
 /usr/share/linstaller/linstaller/core/libmodules/chroot
 /usr/share/linstaller/linstaller/core/libmodules/partdisks
