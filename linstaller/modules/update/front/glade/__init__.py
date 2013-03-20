@@ -77,7 +77,7 @@ class Frontend(glade.Frontend):
 		
 		verbose("packages are: %s" % self.settings["packages"])
 		
-		self.set_header("info", _("Installer updates"), _("Ensure you have the installer up-to-date."))
+		self.set_header("info", _("Installer updates"), _("Ensure you have the installer up-to-date."), appicon="system-software-update")
 
 		# Get the checkbox
 		self.check = self.objects["builder"].get_object("check")

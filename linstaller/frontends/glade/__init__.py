@@ -205,10 +205,10 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		return self.res
 	
-	def set_header(self, icon, title, subtitle):
+	def set_header(self, icon, title, subtitle, appicon=None):
 		""" Sets header. """
 		
-		self.idle_add(self.objects["parent"].set_header, icon, title, subtitle)
+		self.idle_add(self.objects["parent"].set_header, icon, title, subtitle, appicon)
 	
 	def progress_wait_for_quota(self):
 		""" Waits until progress_quota is set. """

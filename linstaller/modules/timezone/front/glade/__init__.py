@@ -23,7 +23,7 @@ class Frontend(glade.Frontend):
 			self.module_casper()
 
 		if self.is_module_virgin:
-			self.set_header("info", _("Timezone selection"), _("Select your timezone here."))
+			self.set_header("info", _("Timezone selection"), _("Select your timezone here."), appicon="time-admin")
 		else:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 

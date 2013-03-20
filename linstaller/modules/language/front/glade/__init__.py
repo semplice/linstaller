@@ -28,7 +28,7 @@ class Frontend(glade.Frontend):
 			self.module_casper()
 		
 		if self.is_module_virgin:
-			self.set_header("info", _("Language selection"), _("Select your language here."))
+			self.set_header("info", _("Language selection"), _("Select your language here."), appicon="preferences-desktop-locale")
 			self.has_keyboard_header_shown = False
 			self.is_rerun = None
 		else:
@@ -468,7 +468,7 @@ class Frontend(glade.Frontend):
 			self.notebook.set_current_page(1)
 			
 			if not self.has_keyboard_header_shown:
-				self.set_header("info", _("Keyboard selection"), _("Select your keyboard settings here."))
+				self.set_header("info", _("Keyboard selection"), _("Select your keyboard settings here."), appicon="input-keyboard")
 				self.has_keyboard_header_shown = True
 			
 			return True

@@ -329,7 +329,7 @@ class Service(linstaller.core.service.Service):
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
 	
-	def set_header(self, icon, title, subtitle):
+	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 		
 		# Ensure the eventbox is sensitive
@@ -339,22 +339,33 @@ class Service(linstaller.core.service.Service):
 		GObject.idle_add(self.header_message_subtitle.set_sensitive, True)
 		
 		# Get color
-		color_s = head_col[icon]
-		color = Gdk.RGBA()
-		color.parse(color_s)
+		if icon == "info" and toolbarinfo:
+			color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
+			folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
+		else:
+			color = Gdk.RGBA()
+			color.parse(head_col[icon])
+			
+			folor = Gdk.RGBA()
+			folor.parse("#363636")
 
-		# Get icon
-		icon = head_ico[icon]
+		# Get and set icon
+		if not appicon:
+			icon = head_ico[icon]
+			GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
+		elif icon == "info": # Show custom icon only on info status
+			GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
 			
 		# Set icon
-		GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
+		#GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
 		# Set header message and window title
-		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title)
+		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title.replace("& ","&amp; "))
 		GObject.idle_add(self.header_message_subtitle.set_text, subtitle)
 		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
 		# Set color
 		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
+		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """

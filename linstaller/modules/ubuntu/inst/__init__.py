@@ -147,4 +147,4 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Caches variables used in this module. """
 		
-		self.cache("kernel","/cdrom/casper/vmlinuz")
+		self.cache("kernel","/cdrom/casper/vmlinuz.efi")
