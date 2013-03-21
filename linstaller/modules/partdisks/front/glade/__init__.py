@@ -1009,6 +1009,11 @@ class Frontend(glade.Frontend):
 		if obj.get_active():
 			# Make the combobox sensitive
 			self.filesystem_combo.set_sensitive(True)
+			
+			# mount_on_install unsensitive and disabled
+			self.mount_on_install.set_sensitive(False)
+			self.mount_on_install.set_active(False)
+			
 		else:
 			# Make it unsensitive
 			self.filesystem_combo.set_sensitive(False)
@@ -1020,6 +1025,9 @@ class Frontend(glade.Frontend):
 					self.filesystem_combo.set_active(-1)
 			except:
 				self.filesystem_combo.set_active(-1)
+			
+			# mount_on_install sensitive
+			self.mount_on_install.set_sensitive(True)
 		
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
