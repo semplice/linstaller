@@ -1,3 +1,10 @@
+linstaller (3.71.1-1) unstable; urgency=low
+
+  * modules/partdisks: front/glade: ensure mount_on_install is not sensitive if we should format.
+  * debian/: linstaller-modules-base: depend on keeptalking and bricks.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 22 Mar 2013 00:20:27 +0100
+
 linstaller (3.71.0-1) unstable; urgency=low
 
   * Added mount_on_install support in partdisks(glade):
