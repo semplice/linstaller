@@ -37,8 +37,7 @@ class Frontend(glade.Frontend):
 			self._objects[feature]["switch"].set_halign(Gtk.Align.END)
 			self._objects[feature]["switch"].set_valign(Gtk.Align.CENTER)
 
-			self._objects[feature]["switch"].set_active(False)
-			self._objects[feature]["switch"].set_active(True)
+			self.idle_add(self._objects[feature]["switch"].set_active, True)
 
 			# Generate icon
 			self._objects[feature]["icon"] = Gtk.Image()
@@ -113,6 +112,7 @@ class Frontend(glade.Frontend):
 			self.set_header("info", _("Feature selection"), _("Select features."), appicon="preferences-desktop-default-applications")
 
 			self._objects = {}
+			self.settings["_objects"] = self._objects # workaround for non_virgin mode
 			
 			self.container = self.objects["builder"].get_object("features_container")
 			
@@ -131,5 +131,5 @@ class Frontend(glade.Frontend):
 						
 		# Preseed changes
 		self.settings["features"] = {}
-		for feature, objs in self._objects.items():
+		for feature, objs in self.settings["_objects"].items():
 			self.settings["features"][feature] = objs["switch"].get_active()
