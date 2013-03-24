@@ -25,7 +25,7 @@ packages = linstaller linstaller-frontend-cli linstaller-frontend-glade linstall
 
 [module:mirrorselect]
 enable_sources = False
-sets = debian semplice
+sets = debian semplice changes
 
 # We support only grub currently
 [module:bootloader]
