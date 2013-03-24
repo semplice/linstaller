@@ -1,3 +1,10 @@
+linstaller (3.71.2-1) unstable; urgency=low
+
+  * modules/bricks: some bug-fixing.
+  * config/semplice-base: mirrorselect: add changes to the sets.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Mar 2013 18:13:13 +0100
+
 linstaller (3.71.1-1) unstable; urgency=low
 
   * modules/partdisks: front/glade: ensure mount_on_install is not sensitive if we should format.
