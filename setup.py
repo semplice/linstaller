@@ -54,7 +54,7 @@ data_files = [
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='3.0.0.2',
+      version='3.71.0',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -156,6 +156,12 @@ distrib = setup(name='linstaller',
       "linstaller.modules.raspberrypi",
       "linstaller.modules.raspberrypi.inst",
       
+      "linstaller.modules.bricks",
+      "linstaller.modules.bricks.front",
+      "linstaller.modules.bricks.front.glade",
+      "linstaller.modules.bricks.inst",
+      "linstaller.modules.bricks.inst.glade",
+      
       "linstaller.modules.echo",
       "linstaller.modules.echo.bootloader",
       "linstaller.modules.echo.bootloader.inst",
@@ -172,7 +178,7 @@ distrib = setup(name='linstaller',
       "linstaller.modules.echo.partusb.inst.glade",
       ],
       data_files=data_files,
-      requires=['gi.repository.Gtk', 'gi.repository.GObject', 'gi.repository.Gdk', 'apt.cache', 'ConfigParser', 'commands', 'copy', 'getpass', 'os', 'progressbar', 'subprocess', 'threading', 'traceback', 'debconf', 'exceptions', 'keeptalking', 'operator', 'parted', 'sys', 't9n.library', 'time'],
+      requires=['gi.repository.Gtk', 'gi.repository.GObject', 'gi.repository.Gdk', 'apt.cache', 'ConfigParser', 'commands', 'copy', 'getpass', 'os', 'progressbar', 'subprocess', 'threading', 'traceback', 'debconf', 'exceptions', 'keeptalking', 'libbricks', 'operator', 'parted', 'sys', 't9n.library', 'time'],
      )
 
 clss = what_I_should_do_to_get_an_heck_of_a_configuration_variable(distrib)

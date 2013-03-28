@@ -110,6 +110,10 @@ class Module(module.Module):
 				# More than one file detected. We cannot use the partition at this stage.
 				drop = True
 			
+			# If we mount_on_install, simply set drop to False, as we should use it anyway
+			if "mount_on_install" in value["changes"] and value["changes"]["mount_on_install"]:
+				drop = False
+			
 			if drop:
 				# Umount partition, remove mountpoint
 				lib.umount(path=key)
@@ -137,13 +141,13 @@ class Module(module.Module):
 				for part in _used:
 					if lib.is_mounted(part):
 						try:
-							lib.umount(path=part)
+							lib.umount(path=part, tries=5)
 						except:
 							pass
 		
 		# Umount target, finally.
 		try:
-			lib.umount(path=self.main_settings["target"])
+			lib.umount(path=self.main_settings["target"], tries=5)
 		except:
 			pass
 	

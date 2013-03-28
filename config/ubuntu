@@ -1,5 +1,5 @@
 ## UBUNTU CONFIGURATION FILE FOR LINSTALLER
-## Tested: Ubuntu 12.04.
+## Tested: Ubuntu 12.04, 13.04.
 
 [linstaller]
 distribution = Ubuntu
@@ -29,4 +29,4 @@ bootloader = grub
 
 # Ubuntu live kernel
 [module:ubuntu]
-kernel = /cdrom/casper/vmlinuz
+kernel = /cdrom/casper/vmlinuz.efi

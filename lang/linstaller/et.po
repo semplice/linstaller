@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-16 17:59+0100\n"
-"PO-Revision-Date: 2012-12-16 17:00+0000\n"
+"POT-Creation-Date: 2012-12-25 13:00+0100\n"
+"PO-Revision-Date: 2012-12-25 12:01+0000\n"
 "Last-Translator: g7 <me@medesimo.eu>\n"
 "Language-Team: Estonian (http://www.transifex.com/projects/p/semplice/language/et/)\n"
 "MIME-Version: 1.0\n"
@@ -193,6 +193,7 @@ msgstr ""
 #: linstaller/modules/unsquash/inst/glade/__init__.py:24
 #: linstaller/modules/language/inst/glade/__init__.py:57
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:38
 msgid "This may take a while."
 msgstr ""
 
@@ -1588,13 +1589,13 @@ msgid "Creating user:"
 msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:21
-#: linstaller/modules/userhost/front/glade/__init__.py:154
+#: linstaller/modules/userhost/front/glade/__init__.py:161
 #: linstaller/modules/userhost/front/cli.py:18
 msgid "Users & Hostname"
 msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:21
-#: linstaller/modules/userhost/front/glade/__init__.py:154
+#: linstaller/modules/userhost/front/glade/__init__.py:161
 msgid "Set users and hostname"
 msgstr ""
 
@@ -1676,31 +1677,31 @@ msgstr ""
 msgid "The computer name"
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:197
+#: linstaller/modules/userhost/front/glade/__init__.py:204
 #, python-format
 msgid "The username must not contain these characters: %s"
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:218
-#: linstaller/modules/userhost/front/glade/__init__.py:262
+#: linstaller/modules/userhost/front/glade/__init__.py:225
+#: linstaller/modules/userhost/front/glade/__init__.py:269
 #, python-format
 msgid "The password should be composed of at least %s characters."
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:235
+#: linstaller/modules/userhost/front/glade/__init__.py:242
 msgid "The user passwords doesn't match!"
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:279
+#: linstaller/modules/userhost/front/glade/__init__.py:286
 msgid "The root passwords doesn't match!"
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:306
+#: linstaller/modules/userhost/front/glade/__init__.py:313
 #, python-format
 msgid "The hostname must not contain these characters: %s"
 msgstr ""
 
-#: linstaller/modules/userhost/front/glade/__init__.py:320
+#: linstaller/modules/userhost/front/glade/__init__.py:327
 msgid "The root password"
 msgstr ""
 
@@ -1861,6 +1862,15 @@ msgstr ""
 
 #: linstaller/modules/ubuntu/inst/cli.py:20
 msgid "Configuring the final system:"
+msgstr ""
+
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:19
+#: linstaller/modules/virtualclean/inst/glade/__init__.py:38
+msgid "Removing virtual machine specific packages..."
+msgstr ""
+
+#: linstaller/modules/virtualclean/inst/cli.py:20
+msgid "Removing virtual machine specific packages:"
 msgstr ""
 
 #: linstaller/frontends/gtk3.py:323 linstaller/frontends/gtk3.py:328

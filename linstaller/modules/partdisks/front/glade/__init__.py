@@ -182,7 +182,7 @@ class Frontend(glade.Frontend):
 		self.has_manual_touched = False
 		self.is_automatic = None
 		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
+		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 
 		# Get the notebook
 		self.pages_notebook = self.objects["builder"].get_object("pages_notebook")
@@ -231,7 +231,7 @@ class Frontend(glade.Frontend):
 	def refresh_manual(self, obj=None, complete=True):
 		""" Refreshes the manual partitioning page. """
 
-		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
+		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
 
 		self.has_swap_warning_showed = False
 
@@ -243,9 +243,9 @@ class Frontend(glade.Frontend):
 				# Clear.
 				changes["changes"].clear()
 			else:
-				# Remove all but useas
+				# Remove all but useas and mount_on_install
 				for key, value in changes["changes"].items():
-					if not key == "useas":
+					if not key in ("useas","mount_on_install"):
 						del changes["changes"][key]
 		
 		# Clear touched
@@ -493,9 +493,9 @@ class Frontend(glade.Frontend):
 		self.is_automatic = True
 		
 		if self.settings["is_echo"]:
-			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."))
+			self.set_header("info", _("Select the partition where install %s") % self.moduleclass.main_settings["distro"], _("No data will be touched."), appicon="drive-harddisk-usb")
 		else:
-			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"))
+			self.set_header("info", _("Automatic partitioning"), _("Let the magic manage your drives!"), appicon="drive-harddisk")
 		
 		# get objects
 		self.automatic_container = self.objects["builder"].get_object("automatic_container")
@@ -687,7 +687,16 @@ class Frontend(glade.Frontend):
 		print color1
 		
 		self.idle_add(button.override_background_color, Gtk.StateFlags.NORMAL, color1)
-	
+
+	def on_mount_on_install_changed(self, obj):
+		""" Called when mount_on_install is changed. """
+		
+		if self.mount_on_install_prepare: return
+		
+		if obj.get_active() == True:
+			self.idle_add(self.partition_window.set_sensitive, False)
+			self.idle_add(self.mount_on_install_window.show)
+
 	def on_newtable_button_clicked(self, obj):
 		""" Called when the newtable button has been clicked. """
 		
@@ -749,6 +758,9 @@ class Frontend(glade.Frontend):
 		
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
+		
+		# hide mount_on_install
+		self.mount_on_install.hide()
 		
 		# Clear mountpoint
 		self.mountpoint_entry.set_text("")
@@ -828,6 +840,15 @@ class Frontend(glade.Frontend):
 		
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
+		
+		# Show mount_on_install and set it if it is needed
+		self.mount_on_install.show()
+		self.mount_on_install_prepare = True
+		if "mount_on_install" in self.changed[device.path]["changes"]:
+			self.mount_on_install.set_active(self.changed[device.path]["changes"]["mount_on_install"])
+		else:
+			self.mount_on_install.set_active(False)
+		self.mount_on_install_prepare = False
 		
 		self.partition_ok.set_sensitive(True)
 		
@@ -910,6 +931,9 @@ class Frontend(glade.Frontend):
 			
 			self.queue_for_format(res.path, targetfs)
 			self.change_mountpoint(res.path, self.get_mountpoint())
+
+			# Seed mount_on_install
+			self.changed[part.path]["changes"]["mount_on_install"] = True
 			
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 			self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
@@ -965,6 +989,9 @@ class Frontend(glade.Frontend):
 				# Remove the old mountpoint from the list
 				if self.current_mountpoint:
 					del self.mountpoints_added[self.current_mountpoint]
+			
+			# Seed mount_on_install
+			self.changed[part.path]["changes"]["mount_on_install"] = self.mount_on_install.get_active()
 
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
@@ -982,6 +1009,11 @@ class Frontend(glade.Frontend):
 		if obj.get_active():
 			# Make the combobox sensitive
 			self.filesystem_combo.set_sensitive(True)
+			
+			# mount_on_install unsensitive and disabled
+			self.mount_on_install.set_sensitive(False)
+			self.mount_on_install.set_active(False)
+			
 		else:
 			# Make it unsensitive
 			self.filesystem_combo.set_sensitive(False)
@@ -993,6 +1025,9 @@ class Frontend(glade.Frontend):
 					self.filesystem_combo.set_active(-1)
 			except:
 				self.filesystem_combo.set_active(-1)
+			
+			# mount_on_install sensitive
+			self.mount_on_install.set_sensitive(True)
 		
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
@@ -1020,6 +1055,18 @@ class Frontend(glade.Frontend):
 		
 		# Restore sensitivity
 		self.objects["parent"].main.set_sensitive(True)
+
+	def on_mount_on_install_window_button_clicked(self, obj):
+		""" Called when a button on the mount_on_install window has been clicked. """
+		
+		self.idle_add(self.mount_on_install_window.hide)
+		
+		if obj == self.mount_on_install_no:
+			# Reset the checkbox
+			self.mount_on_install.set_active(False)
+		
+		# Restore sensitivity
+		self.partition_window.set_sensitive(True)
 
 	def on_remove_window_button_clicked(self, obj):
 		""" Called when a button on the remove window has been clicked. """
@@ -1195,7 +1242,7 @@ class Frontend(glade.Frontend):
 				else:
 					_mpoint = ""
 
-				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]) or self.is_automatic):
+				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]) or (len(self.changed[part.path]["changes"]) == 2 and "mount_on_install" in self.changed[part.path]["changes"]) or self.is_automatic):
 					# This was changed previously, "ok" color.
 					_bg = self.objects["parent"].return_color("ok")
 				elif self.changed[part.path]["changes"] != {}:
@@ -1260,6 +1307,8 @@ class Frontend(glade.Frontend):
 	def manual_ready(self, clean=True):
 		""" Called when the manual window is ready. """
 		
+		self.mount_on_install_prepare = False
+		
 		self.has_swap_warning_showed = False
 		
 		self.current_selected = None
@@ -1271,6 +1320,25 @@ class Frontend(glade.Frontend):
 			self.is_automatic = False
 
 			self.mountpoints_added = {}
+			## FIXME: The following is a workaround to get the root overriden via
+			## a seed. This is extremly useful for those who need to install the
+			## distribution to a partition not recognized by the installer, such
+			## as a crypted partition.
+			##
+			## USAGE:
+			##  - "root" seed to the path of the device
+			##  - "root_override" seed to True
+			##
+			## This *may* break some partdisks functions, so we are currently
+			## using the "root_override" seed to see if this is something wanted
+			## by the user or not.
+			## Usage of the CLI frontend of partdisks should not be affected.
+			##
+			## NOTE: The target root SHOULD BE ALREADY FORMATTED, and no other
+			## root should be selected. Also, doing a refresh *may* break out
+			## things, so the module may need a restart.
+			if self.settings["root_override"] and self.settings["root"]:
+				self.mountpoints_added["/"] = self.settings["root"]
 
 			self.refresh()
 					
@@ -1292,13 +1360,14 @@ class Frontend(glade.Frontend):
 		self.partition_cancel_id = None
 
 		if self.is_module_virgin or not ("changed" in self.settings and self.settings["changed"]):
-			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."))
+			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
 		else:
 			self.set_header("ok", _("You can continue!"), _("Press the Apply button and then Forward to continue."))
 		
 		# Get windows
 		self.partition_window = self.objects["builder"].get_object("partition_window")
 		self.newtable_window = self.objects["builder"].get_object("newtable_window")
+		self.mount_on_install_window = self.objects["builder"].get_object("mount_on_install_window")
 		self.remove_window = self.objects["builder"].get_object("remove_window")
 		self.delete_window = self.objects["builder"].get_object("delete_window")
 		self.apply_window = self.objects["builder"].get_object("apply_window")
@@ -1313,6 +1382,7 @@ class Frontend(glade.Frontend):
 		self.filesystem_combo = self.objects["builder"].get_object("filesystem_combo")
 		self.mountpoint_combo = self.objects["builder"].get_object("mountpoint_combo")
 		self.mountpoint_entry = self.objects["builder"].get_object("mountpoint_entry")
+		self.mount_on_install = self.objects["builder"].get_object("mount_on_install")
 		self.partition_cancel = self.objects["builder"].get_object("partition_cancel")
 		self.partition_ok = self.objects["builder"].get_object("partition_ok")
 		
@@ -1346,7 +1416,7 @@ class Frontend(glade.Frontend):
 			cell = Gtk.CellRendererText()
 			self.filesystem_combo.pack_start(cell, True)
 			self.filesystem_combo.add_attribute(cell, "text", 0)
-		
+				
 		# Build a list of mountpoints to append to self.mountpoint_combo
 		self.mountp_table = {}
 		self.mountp_table_inverse = {}
@@ -1364,6 +1434,9 @@ class Frontend(glade.Frontend):
 		#cell = Gtk.CellRendererText()
 		#self.mountpoint_combo.pack_start(cell, True)
 		#self.mountpoint_combo.add_attribute(cell, "text", 1)
+		
+		# Connect mount_on_install
+		self.mount_on_install.connect("clicked", self.on_mount_on_install_changed)
 
 				
 		## Newtable window:
@@ -1371,6 +1444,12 @@ class Frontend(glade.Frontend):
 		self.newtable_yes = self.objects["builder"].get_object("newtable_yes")
 		self.newtable_no.connect("clicked", self.on_newtable_window_button_clicked)
 		self.newtable_yes.connect("clicked", self.on_newtable_window_button_clicked)
+		
+		## Mount_on_install window
+		self.mount_on_install_no = self.objects["builder"].get_object("mount_on_install_no")
+		self.mount_on_install_yes = self.objects["builder"].get_object("mount_on_install_yes")
+		self.mount_on_install_no.connect("clicked", self.on_mount_on_install_window_button_clicked)
+		self.mount_on_install_yes.connect("clicked", self.on_mount_on_install_window_button_clicked)
 
 		## Remove window:
 		self.remove_no = self.objects["builder"].get_object("remove_no")
@@ -1446,7 +1525,7 @@ class Frontend(glade.Frontend):
 	def on_back_button_click(self):
 		""" Override on_back_button_click. """
 		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"))
+		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 		
 		# If is_echo, we need exclusively to go to the module before...
 		if self.settings["is_echo"]:

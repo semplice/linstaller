@@ -13,6 +13,7 @@ class Module(module.Module):
 		self.cache("root")
 		self.cache("root_filesystem")
 		self.cache("root_noformat")
+		self.cache("root_override")
 		self.cache("swap")
 		self.cache("swap_noformat")
 		self.cache("skip_to_selection")
