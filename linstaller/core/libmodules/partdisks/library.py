@@ -438,7 +438,7 @@ def is_mounted(obj):
 			return {"path":items[0], "mountpoint":items[2], "type":items[4], "options":items[-1].replace("(","").replace(")","").replace("\n","")}
 
 
-def mount_partition(parted_part=None, path=None, opts=False, target=False, check=True):
+def mount_partition(parted_part=None, path=None, opts=False, typ=None, target=False, check=True):
 	""" Mounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -452,7 +452,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		raise m.UserError("mount_partition called without parted_part and without path!")
 	
 	# Check if path exists...
-	if not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
+	if path.startswith("/") and not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
 	
 	# Generate a mount point
 	_directory = path.replace("/","") # Strip all /. We should have something like this: devsda1.
@@ -501,7 +501,11 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		opts = "-o %s" % opts
 	else:
 		opts = ""
-	m.sexec("mount %s %s %s" % (opts, path, _mountpoint))
+	if typ:
+		typ = "-t %s" % typ
+	else:
+		typ = ""
+	m.sexec("mount %s %s %s %s" % (typ, opts, path, _mountpoint))
 	
 	# Return mountpoint
 	return _mountpoint
