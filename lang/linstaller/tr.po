@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Batuhan Büyükgüzel <bbuyukguzel@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
@@ -10,12 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2013-04-02 11:39+0200\n"
 "PO-Revision-Date: 2013-04-02 09:39+0000\n"
 "Last-Translator: g7 <me@medesimo.eu>\n"
-"Language-Team: Estonian (http://www.transifex.com/projects/p/semplice/language/et/)\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/semplice/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: linstaller.py:206
 msgid "You have to pass at least an action!"
@@ -101,37 +102,37 @@ msgstr ""
 #: linstaller/core/cli_frontend.py:108 linstaller/frontends/gtk3.py:409
 #: linstaller/frontends/cli.py:104
 msgid "[Y/n]"
-msgstr ""
+msgstr "[E/h]"
 
 #: linstaller/core/cli_frontend.py:111 linstaller/frontends/gtk3.py:412
 #: linstaller/frontends/cli.py:107
 msgid "[y/N]"
-msgstr ""
+msgstr "[e/H]"
 
 #: linstaller/core/cli_frontend.py:114 linstaller/frontends/gtk3.py:415
 #: linstaller/frontends/cli.py:110
 msgid "[y/n]"
-msgstr ""
+msgstr "[e/h]"
 
 #: linstaller/core/cli_frontend.py:129 linstaller/frontends/gtk3.py:430
 #: linstaller/frontends/cli.py:125
 msgid "y"
-msgstr ""
+msgstr "e"
 
 #: linstaller/core/cli_frontend.py:132 linstaller/frontends/gtk3.py:433
 #: linstaller/frontends/cli.py:128
 msgid "n"
-msgstr ""
+msgstr "h"
 
 #: linstaller/core/cli_frontend.py:135 linstaller/frontends/gtk3.py:436
 #: linstaller/frontends/cli.py:131
 msgid "yes"
-msgstr ""
+msgstr "evet"
 
 #: linstaller/core/cli_frontend.py:138 linstaller/frontends/gtk3.py:439
 #: linstaller/frontends/cli.py:134
 msgid "no"
-msgstr ""
+msgstr "hayır"
 
 #: linstaller/core/cli_frontend.py:143 linstaller/frontends/gtk3.py:444
 #: linstaller/frontends/cli.py:139
@@ -617,7 +618,7 @@ msgstr ""
 #: linstaller/modules/update/front/glade/__init__.py:38
 #: linstaller/modules/update/front/cli.py:42
 msgid "No updates found."
-msgstr ""
+msgstr "Güncelleştirme bulunamadı."
 
 #: linstaller/modules/update/front/gtk3.py:66
 #: linstaller/modules/update/front/glade/__init__.py:52
@@ -1174,7 +1175,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:231
 msgid "Do you want to continue?"
-msgstr ""
+msgstr "Devam etmek istiyor musunuz?"
 
 #: linstaller/modules/partdisks/front/cli.py:260
 msgid "Go back"
@@ -1218,7 +1219,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:286
 msgid "WARNING"
-msgstr ""
+msgstr "UYARI"
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
@@ -1665,7 +1666,7 @@ msgstr ""
 #: linstaller/modules/userhost/front/gtk3.py:151
 #: linstaller/modules/userhost/front/cli.py:84
 msgid "The passwords doesn't match! Please retry."
-msgstr ""
+msgstr "Şifreler uyuşmuyor! Lütfen tekrar deneyin."
 
 #: linstaller/modules/userhost/front/gtk3.py:186
 #, python-format
