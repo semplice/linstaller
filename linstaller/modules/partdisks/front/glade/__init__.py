@@ -905,6 +905,16 @@ class Frontend(glade.Frontend):
 			self.change_entry_status(self.mountpoint_entry, "ok")
 			self.partition_ok.set_sensitive(True)
 	
+	def child_window_delete(self, obj, event):
+		""" Called when the Close button on the child window has been clicked. """
+				
+		self.idle_add(obj.hide)
+
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)
+		
+		return True
+	
 	def on_add_window_button_clicked(self, obj):
 		""" Called when a button on the add partition window has been clicked. """
 		
@@ -1373,6 +1383,7 @@ class Frontend(glade.Frontend):
 		self.apply_window = self.objects["builder"].get_object("apply_window")
 		
 		## Partition window:
+		self.partition_window.connect("delete_event", self.child_window_delete)
 		self.size_manual_radio = self.objects["builder"].get_object("size_manual_radio")
 		self.size_adjustment = self.objects["builder"].get_object("size_adjustment")
 		self.size_manual_entry = self.objects["builder"].get_object("size_manual_entry")
@@ -1440,30 +1451,35 @@ class Frontend(glade.Frontend):
 
 				
 		## Newtable window:
+		self.newtable_window.connect("delete_event", self.child_window_delete)
 		self.newtable_no = self.objects["builder"].get_object("newtable_no")
 		self.newtable_yes = self.objects["builder"].get_object("newtable_yes")
 		self.newtable_no.connect("clicked", self.on_newtable_window_button_clicked)
 		self.newtable_yes.connect("clicked", self.on_newtable_window_button_clicked)
 		
 		## Mount_on_install window
+		self.mount_on_install_window.connect("delete_event", self.child_window_delete)
 		self.mount_on_install_no = self.objects["builder"].get_object("mount_on_install_no")
 		self.mount_on_install_yes = self.objects["builder"].get_object("mount_on_install_yes")
 		self.mount_on_install_no.connect("clicked", self.on_mount_on_install_window_button_clicked)
 		self.mount_on_install_yes.connect("clicked", self.on_mount_on_install_window_button_clicked)
 
 		## Remove window:
+		self.remove_window.connect("delete_event", self.child_window_delete)
 		self.remove_no = self.objects["builder"].get_object("remove_no")
 		self.remove_yes = self.objects["builder"].get_object("remove_yes")
 		self.remove_no.connect("clicked", self.on_remove_window_button_clicked)
 		self.remove_yes.connect("clicked", self.on_remove_window_button_clicked)
 
 		## Delete window:
+		self.delete_window.connect("delete_event", self.child_window_delete)
 		self.delete_no = self.objects["builder"].get_object("delete_no")
 		self.delete_yes = self.objects["builder"].get_object("delete_yes")
 		self.delete_no.connect("clicked", self.on_delete_window_button_clicked)
 		self.delete_yes.connect("clicked", self.on_delete_window_button_clicked)
 
 		## Apply window:
+		self.apply_window.connect("delete_event", self.child_window_delete)
 		self.apply_no = self.objects["builder"].get_object("apply_no")
 		self.apply_yes = self.objects["builder"].get_object("apply_yes")
 		self.apply_no.connect("clicked", self.on_apply_window_button_clicked)
