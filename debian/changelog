@@ -1,3 +1,9 @@
+linstaller (4.0.0-1) unstable; urgency=low
+
+  * modules/partdisks: do not leave sensitivity to False when closing child windows.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 02 Apr 2013 12:16:32 +0200
+
 linstaller (3.71.2-1) unstable; urgency=low
 
   * modules/bricks: some bug-fixing.
