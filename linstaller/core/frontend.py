@@ -16,6 +16,20 @@ class Frontend:
 		self.moduleclass = moduleclass
 		self.settings = moduleclass.settings
 		self.changed = moduleclass.changed
+		self.frontend_settings = moduleclass.main_settings["frontend_settings"]
+
+		self.seedpre()
+
+	def cache(self, var, default=False):
+		""" Cache var into self.settings. """
+		
+		if not var in self.frontend_settings:
+			self.frontend_settings[var] = default
+	
+	def seedpre(self):
+		""" Executed to cache seeds. Override this and call self.cache("seed",defaultvar=False) to accomplish this. """
+		
+		pass
 
 	def module_exit1(self):
 		""" Tells the frontend to exit with res == exit1.

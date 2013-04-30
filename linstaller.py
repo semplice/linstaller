@@ -71,6 +71,7 @@ def launch_module(module, special):
 		
 		executed_special.reverse() # Reverse.
 		for modu in executed_special:
+			if not modu: continue
 			verbose("Reverting %s" % modu)
 			_revert = mh.Module(modu)
 			_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
@@ -129,7 +130,42 @@ def loop_modules(startfrom=1):
 		if module:
 			count += 1
 			if count < startfrom: continue
-			res = launch_module(module, main_settings["special"].split(" "))
+			if module.startswith("!") and lastres != "back":
+				# This is a revert action for the supermodule!
+				smod = module[1:]
+				
+				revertlist = main_settings["supermodules"][smod]["special"]
+				
+				revertlist.reverse() # Reverse.
+				for modu in revertlist:
+					if not modu: continue
+					verbose("Reverting %s" % modu)
+					_revert = mh.Module(modu)
+					_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)
+					
+					# Revert
+					_revertc.revert()
+					
+					# Also remove from executed_special.
+					executed_special.remove(modu)
+					
+					del _revert
+				
+				verbose("\n- Successfully exited from supermodule %s.\n" % smod)
+				
+				continue
+			elif module.startswith("+") and lastres != "back":
+				smod = module[1:]
+				
+				# Entering in the supermodule...
+				verbose("\n\n- Now at supermodule %s." % smod)
+				
+				# we need to clear the special_workspace
+				main_settings["special_workspace"] = main_settings["supermodules"][smod]["special"]
+				
+				continue
+				
+			res = launch_module(module, main_settings["special"].split(" ") + main_settings["special_workspace"])
 			if res == "casper":
 				
 				# We should trigger the on_caspered signal to services, just in case..
@@ -155,6 +191,8 @@ verbose("started linstaller - version %s" % m.VERSION)
 
 _action = False
 _config = "default"
+_configpath = "/etc/linstaller"
+_target = "/linstaller/target"
 _frontend = "cli"
 _modules = False
 #_services = ["sample", "glade"]
@@ -171,6 +209,14 @@ for arg in sys.argv:
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--config requires an argument!")
 		_config = arg[1]
+	elif arg[0] in ("--configpath","-p"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--configpath requires an argument!")
+		_configpath = arg[1]
+	elif arg[0] in ("--target","-t"):
+		# Require second argument
+		if len(arg) < 2: raise m.UserError("--target requires an argument!")
+		_target = arg[1]
 	elif arg[0] in ("--frontend","-f"):
 		# Require second argument
 		if len(arg) < 2: raise m.UserError("--frontend requires an argument!")
@@ -211,6 +257,8 @@ if _action == "help":
 	print
 	print _("Recognized options:")
 	print _(" -c|--config		- Selects the configuration file to read")
+	print _(" -p|--configpath	- Selects the directory to look for configuration files")
+	print _(" -t|--target		- Selects the target directory (def: /linstaller/target)")
 	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
 	print _(" -m|--modules		- Overrides the modules to be executed")
 	print _(" -s|--services		- Overrides the services to be executed")
@@ -235,22 +283,19 @@ if _action == "help":
 
 	sys.exit(0)
 elif _action == "start":	
-	if not os.path.join(config.configpath, _config):
+	if not os.path.join(_configpath, _config):
 		raise m.UserError(_("%s does not exist! Adjust --config accordingly." % _config))
 	else:
 		verbose("Selected configuration file: %s" % _config)
 	
 	# Ohhh yay :) This action that will actually start the installer and its appropriate frontend.
 	
-	# Create target directory
-	if not os.path.exists("/linstaller/target"):
-		os.makedirs("/linstaller/target")
-	
 	# Load configuration file
-	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend)
+	cfg = config.ConfigRead(_config, "linstaller", frontend=_frontend, configpath=_configpath)
 		
 	# Populate main_settings
 	main_settings = {}
+	main_settings["target"] = _target
 	main_settings["frontend"] = _frontend
 	main_settings["distro"] = cfg.printv("distribution")
 	if not _modules:
@@ -258,10 +303,45 @@ elif _action == "start":
 	else:
 		# Modules specified via --modules option
 		main_settings["modules"] = _modules.split(" ")
+
+	# Create target directory
+	if not os.path.exists(main_settings["target"]):
+		os.makedirs(main_settings["target"])
+
+	# Parse supermodules
+	main_settings["supermodules"] = {}
+	sects = cfg.config.sections()
+	for sect in sects:
+		if not sect.startswith("supermodule:"): continue
+		
+		# Strip the "supermodule:"
+		smod = sect.replace("supermodule:","")
+
+		main_settings["supermodules"][smod] = {}
+
+		try:
+			# Get the modules
+			main_settings["supermodules"][smod]["modules"] = cfg.printv("modules", sect).split(" ")
+			
+			# Get the special
+			main_settings["supermodules"][smod]["special"] = cfg.printv("special", sect).split(" ")
+		except:
+			raise m.UserError("Unable to get configuration for supermodule %s. Please double-check the configuration file." % smod)
+	
+	# We need to adjust the modules list by merging the supermodules there.
+	for smod, values in main_settings["supermodules"].items():
+		while smod in main_settings["modules"]:
+			index = main_settings["modules"].index(smod)
+			main_settings["modules"].pop(index)
+			main_settings["modules"][index:index] = ["+%s" % smod] + values["modules"] + ["!%s" % smod]
 	
 	# Remove modules, if we should
 	for mod in _removemodules:
 		main_settings["modules"].remove(mod)
+	
+	# Create the special workspace, used to ensure a revert layer in supermodules if a module crashes.
+	# In normal operation, it is blank.
+	main_settings["special_workspace"] = []
 	
 	if not _services:
 		main_settings["services"] = cfg.printv("services")
@@ -314,6 +394,17 @@ elif _action == "start":
 		modules_settings[module] = seeds1
 		modules_settings[module]["_preexecuted"] = True # The module has only been PREexecuted, not executed. It will be removed when the module runs.
 
+	# Create frontend settngs
+	main_settings["frontend_settings"] = {}
+	
+	# Cache frontend settings now
+	sect = "frontend:%s" % main_settings["frontend"]
+	if cfg.has_section(sect):
+		options = cfg.config.options(sect)
+		
+		for opt in options:
+			main_settings["frontend_settings"][opt] = cfg.get(sect, opt)
+
 	# Start services
 	service_started = {} # started services
 	service_space = {} # services share space
@@ -338,6 +429,7 @@ elif _action == "start":
 	# Finished installation. Revert changes made to the system.
 	executed_special.reverse() # Reverse.
 	for modu in executed_special:
+		if not modu: continue
 		verbose("Reverting %s" % modu)
 		_revert = mh.Module(modu)
 		_revertc = _revert.load(main_settings, modules_settings, service_started, cfg)

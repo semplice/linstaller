@@ -12,9 +12,9 @@ import shutil, os
 
 class Module(module.Module):		
 	def copy(self):
-		""" Copies image to /linstaller/target/PATH/filesystem.squashfs. """
+		""" Copies image to TARGET/PATH/filesystem.squashfs. """
 		
-		path = os.path.join("/linstaller/target", self.modules_settings["echo"]["image_path"])
+		path = os.path.join(self.main_settings["target"], self.modules_settings["echo"]["image_path"])
 		
 		# Create path if it doesn't exist
 		if not os.path.exists(path): os.makedirs(path)
@@ -34,9 +34,9 @@ class Module(module.Module):
 		shutil.copy(self.modules_settings["echo"]["initrd"], initrd)
 	
 	def copy_syslinux(self):
-		""" Copies syslinux configuration to /linstaller/target/syslinux """
+		""" Copies syslinux configuration to TARGET/syslinux """
 		
-		syslinux = "/linstaller/target/syslinux"
+		syslinux = os.path.join(self.main_settings["target"], "syslinux")
 		
 		if not os.path.exists(syslinux):
 			# Copy the directory
