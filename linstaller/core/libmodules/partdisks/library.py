@@ -715,11 +715,12 @@ def automatic_precheck(by="freespace", distribs=None):
 class automatic_check_ng:
 	""" Automatic check class. """
 	
-	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False):
+	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False, crypt_enabled=False):
 		""" Set required variables. """
 		
 		self.onlyusb = onlyusb
 		self.is_echo = is_echo
+		self.crypt_enabled = crypt_enabled
 		
 		self.dev, self.dis = return_devices(onlyusb=self.onlyusb)
 		
@@ -1136,6 +1137,27 @@ class automatic_check_ng:
 		
 		return result_dict, order
 	
+	def by_crypt_device(self):
+		""" Returns possible solutions by looking only at hard disks. """
+		
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+		
+		result_dict = {} # "crypt_deviceX" : (dev, dis)
+		order = []
+		
+		current = 0
+		
+		for name, obj in self.dis.items():
+			if obj == "notable": continue
+			
+			current += 1
+			order.append("crypt_device%s" % current)
+			result_dict["crypt_device%s" % current] = {"result":{"part":None, "swap":None, "efi":None, "format":None}, "disk":self.dis[name], "device":self.dev[name], "model":self.dev[name].model}
+		
+		return result_dict, order
+	
 	def main(self):
 		""" Checks for solutions for the automatic partitioner.
 		Every solution is applied on a virtual Disk object.
@@ -1144,20 +1166,28 @@ class automatic_check_ng:
 		# Check by notable
 		notable, notableord = self.by_notable()
 
-		# Check by freespace
-		free, freeord = self.by_freespace()
-		
-		# Check by delete
-		dele, deleord = self.by_delete()
-		
-		# Check by clear
-		clea, cleaord = self.by_clear()
-		
-		# Check by echo
-		echo, echoord = self.by_echo()
-		
-		results = dict(notable.items() + free.items() + dele.items() + clea.items() + echo.items())
-		order = notableord + freeord + deleord + cleaord + echoord
+		if not self.crypt_enabled:
+			# Check by freespace
+			free, freeord = self.by_freespace()
+			
+			# Check by delete
+			dele, deleord = self.by_delete()
+			
+			# Check by clear
+			clea, cleaord = self.by_clear()
+			
+			# Check by echo
+			echo, echoord = self.by_echo()
+			
+			results = dict(notable.items() + free.items() + dele.items() + clea.items() + echo.items())
+			order = notableord + freeord + deleord + cleaord + echoord
+		else:
+			# Check by crypt_device
+			
+			cryptd, cryptdord = self.by_crypt_device()
+			
+			results = dict(notable.items() + cryptd.items())
+			order = notableord + cryptdord
 		
 		return results, order
 	
