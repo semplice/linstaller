@@ -17,9 +17,6 @@ from linstaller.core.main import info,warn,verbose
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-global devices
-global disks
-
 # FIXME: These variables should be in distribution's configuration file.
 min_size = 0.2 # In GB.
 rec_size = 0.3 # In GB.
@@ -192,12 +189,12 @@ def device_sort(dct):
 
 def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
+
+	devices, disks = return_devices(onlyusb=onlyusb)
 	
 	global devices
 	global disks
 	
-	devices, disks = return_devices(onlyusb=onlyusb)
-
 def disk_partitions(disk):
 	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
 

@@ -6,10 +6,15 @@
 
 import linstaller.core.main as m
 import commands
-import parted
+import os
+
+import parted as pa
 
 #import lvm as lvm_library
 #lvm = lvm_library.Liblvm() # Needed to get it to work on non-GIT version of pylvm2.
+
+# FIXME?: This library may be a bit slow, but we may bear with it as it
+# is just an installation program...
 
 class PhysicalVolume:
 	def __init__(self, device_name=None, disk=None, part=None):
@@ -53,8 +58,52 @@ class VolumeGroup:
 		
 		name is the name of the group."""
 		
+		self.isLVM = True
+		
 		self.name = name
+
+		# Cache VG informations
+		self.reload_infos()
+
+	def reload_infos(self):
+		"""Reloads LogicalVolume informations"""
+		
+		self.infos = {}
+		
+		for line in commands.getoutput("vgs --noheadings %s" % self.name).split("\n"):
+			if not line.replace(" ","").startswith("Filedescriptor"):
+				# Example output:
+				# testgroup   1   1   0 wz--n- 3,73g 1,73g
+				line = line.split(" ")
+				if len(line) == 1: continue # Skip blank lines
+				# Remove blank items
+				while line.count('') > 0:
+					line.remove('')
+				if not line[0] == self.name: continue
+				
+				print line
+				
+				# size
+				self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
+				
+				# free
+				self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
+
+		if len(self.infos) == 0:
+			# The volume does not exist!
+			
+			self.infos["exists"] = False
+		else:
+			self.infos["exists"] = True
 	
+	def getSize(self, unit="MB"):
+		"""Returns the size in the unit specified."""
+		
+		if unit == "MB":
+			return self.infos["size"]
+		elif unit == "GB":
+			return self.infos["size"]/1024.0
+		
 	def create(self, devices):
 		"""Creates the Volume Group.
 		
@@ -80,6 +129,38 @@ class VolumeGroup:
 		"""Removes the Volume Group."""
 		
 		m.sexec("vgremove %s" % self.name)
+	
+	@property
+	def path(self):
+		"""Returns the path of the Volume Group"""
+		
+		return os.path.join("/dev", self.name)
+	
+	@property
+	def logicalvolumes(self):
+		"""Returns a list with every logical volume contained in this group"""
+		
+		result = []
+		
+		for line in commands.getoutput("lvs --noheadings -o lv_name %s" % self.name).split("\n"):
+			line = line.replace(" ","")
+			
+			if not line.startswith("Filedescriptor"):
+				# Ensure we skip filedescriptors
+				result.append(LogicalVolume(line, self))
+				# Ensure we do not include fake "non-existant" volumes
+				if result[-1].infos["exists"] == False: removed = result.pop()
+		
+		return result
+	
+	def getVolume(self, name):
+		"""Returns the logical volume name if it is in this volume group"""
+
+		for line in commands.getoutput("lvs --noheadings -o lv_name %s" % self.name).split("\n"):
+			line = line.replace(" ","")
+			
+			if not line.startswith("Filedescriptor") and line == name:
+				return LogicalVolume(line, self)
 
 class LogicalVolume:
 	def __init__(self, name, vgroup):
@@ -88,13 +169,56 @@ class LogicalVolume:
 		name is the name of the volume.
 		vgroup is the volume group where the LV resiedes."""
 		
+		self.isLVM = True
+		
 		self.name = name
 		self.vgroup = vgroup
+		
+		# Cache LV informations
+		self.reload_infos()
+	
+	def reload_infos(self):
+		"""Reloads LogicalVolume informations"""
+		
+		self.infos = {}
+		
+		for line in commands.getoutput("lvs --noheadings %s" % self.vgroup.name).split("\n"):
+			if not line.replace(" ","").startswith("Filedescriptor"):
+				# Example output:
+				# testvolume testgroup -wi-a---- 2,00g
+				line = line.split(" ")
+				if len(line) == 1: continue # Skip blank lines
+				# Remove blank items
+				while line.count('') > 0:
+					line.remove('')
+				if not line[0] == self.name: continue
+				
+				print line
+				
+				# size
+				self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
+
+		if len(self.infos) == 0:
+			# The volume does not exist!
+			
+			self.infos["exists"] = False
+			self.partition = None
+		else:
+			self.infos["exists"] = True
+			try:
+				## FIXME: The following does not work if the partition is empty! (no FS)
+				self.partition = pa.Disk(device=pa.Device(self.path)).getFirstPartition()
+			except:
+				# If this is the case (see FIXME), do not crash on the user but instead
+				# "disable" this LV...
+				self.infos["exists"] = False
+				self.partition = None
 	
 	def create(self, size):
 		"""Creates the logical volume on self.vgroup with size 'size'."""
 		
 		m.sexec("lvcreate --name %(name)s --size %(size)s %(vgroup)s" % {"name":self.name, "size":size, "vgroup":self.vgroup.name})
+		self.reload_infos()
 	
 	def rename(self, new):
 		"""Renames the Logical Volume.
@@ -103,11 +227,25 @@ class LogicalVolume:
 		
 		m.sexec("lvrename %(vgroup)s %(name)s %(new)s" % {"vgroup":self.vgroup.name, "name":self.name, "new":new})
 		self.name = new
+		self.reload_infos()
 	
 	def remove(self):
 		"""Removes the Logical Volume."""
 		
-		m.sexec("lvremove %s" % os.path.join("/dev", self.vgroup.name, self.name))
+		m.sexec("lvremove %s" % self.path)
+		self.reload_infos()
+	
+	@property
+	def path(self):
+		"""Returns the path of the Logical Volume."""
+		
+		return os.path.join("/dev", self.vgroup.name, self.name)
+	
+	def getSize(self, unit="GB"):
+		"""Returns the """
+		
+		pass
+
 
 def return_pv():
 	"""Returns a dictionary with every PhyicalVolume present in the system.
@@ -144,7 +282,7 @@ def return_vg():
 def return_lv():
 	"""Returns a dictionary with every LogicalVolume present in the system.
 	
-	Example output: {"testvolume":LogicalVolume("testvolume", VolumeGroup("testgroup")}"""
+	Example output: {"testgroup":{"testvolume":LogicalVolume("testvolume", VolumeGroup("testgroup")}}"""
 	
 	result = {}
 	
@@ -154,7 +292,10 @@ def return_lv():
 			line.remove("")
 			line.remove("")
 			# Ensure we skip filedescriptors
-			result[line[0]] = LogicalVolume(line[0], VolumeGroup(line[1]))
+			if not line[1] in result:
+				# add the group dictionary
+				result[line[1]] = {}
+			result[line[1]][line[0]] = LogicalVolume(line[0], VolumeGroup(line[1]))
 	
 	return result 
 

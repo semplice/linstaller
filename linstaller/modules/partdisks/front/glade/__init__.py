@@ -15,6 +15,7 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose,root_check		
 
 import linstaller.core.libmodules.partdisks.library as lib
+import linstaller.core.libmodules.partdisks.lvm as lvm
 
 from gi.repository import Gtk, Gdk, GObject
 
@@ -40,6 +41,10 @@ class Apply(glade.Progress):
 			try:
 				obj = dct[key]["obj"]
 				cng = dct[key]["changes"]
+				if "LVMcontainer" in dct[key]:
+					LVMcontainer = dct[key]["LVMcontainer"]
+				else:
+					LVMcontainer = None
 			except:
 				verbose("Unable to get a correct object/changes from %s." % key)
 				continue # Skip.
@@ -100,7 +105,12 @@ class Apply(glade.Progress):
 							
 			# Should format?
 			if "format" in cng:
-				progress = lib.format_partition_for_real(obj, cng["format"])
+				if LVMcontainer:
+					# It is a LVM logical volume, pass it instead of the parted object
+					_obj = LVMcontainer
+				else:
+					_obj = obj
+				progress = lib.format_partition_for_real(_obj, cng["format"])
 				self.parent.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
 				status = progress.wait()
 				if status != 0:
@@ -809,7 +819,19 @@ class Frontend(glade.Frontend):
 	
 	def get_partition_from_selected(self):
 		""" Returns a partition object from self.current_selected. """
-				
+		
+		# This may be a LVM Logical Volume, we should check the path
+		path = self.current_selected["value"].replace("/dev/","").split("/")
+		if len(path) > 1:
+			# We are sure it is not a normal partition...
+			# path[0] = volumegroup, path[1] = logicalvolume
+			try:
+				result = lvm.LogicalVolumes[path[0]][path[1]]
+			except KeyError:
+				result = None
+			
+			return result
+		
 		disk = self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 		result = disk.getPartitionByPath(self.current_selected["value"])
 		if result == None:
@@ -932,6 +954,14 @@ class Frontend(glade.Frontend):
 				
 		# Get the device
 		device = self.get_partition_from_selected()
+		LVMcontainer = None
+		if hasattr(device, "isLVM") and device.isLVM:
+			LVMcontainer = device
+			device = device.partition
+			
+			path = LVMcontainer.path
+		else:
+			path = device.path
 		
 		self.current_length = round(device.getSize("MB"), 3)
 		
@@ -971,8 +1001,8 @@ class Frontend(glade.Frontend):
 		self.mountpoint_combo.set_active(-1)
 
 		# Get current mountpoint (if any)...
-		if "useas" in self.changed[device.path]["changes"]:
-			self.current_mountpoint = self.changed[device.path]["changes"]["useas"]
+		if "useas" in self.changed[path]["changes"]:
+			self.current_mountpoint = self.changed[path]["changes"]["useas"]
 			if self.current_mountpoint in self.mountp_table:
 				self.mountpoint_combo.set_active(self.mountp_table[self.current_mountpoint])
 			else:
@@ -988,8 +1018,8 @@ class Frontend(glade.Frontend):
 		# Make mount_on_install sensitive and set it if it is needed
 		self.idle_add(self.mount_on_install.set_sensitive, True)
 		self.mount_on_install_prepare = True
-		if "mount_on_install" in self.changed[device.path]["changes"]:
-			self.mount_on_install.set_active(self.changed[device.path]["changes"]["mount_on_install"])
+		if "mount_on_install" in self.changed[path]["changes"]:
+			self.mount_on_install.set_active(self.changed[path]["changes"]["mount_on_install"])
 		else:
 			self.mount_on_install.set_active(False)
 		self.mount_on_install_prepare = False
@@ -1109,6 +1139,14 @@ class Frontend(glade.Frontend):
 			# Edit the partition
 			
 			part = self.get_partition_from_selected()
+			LVMcontainer = None
+			if hasattr(part, "isLVM") and part.isLVM:
+				LVMcontainer = part
+				part = part.partition
+				
+				path = LVMcontainer.path
+			else:
+				path = part.path
 			
 			# What we should do?
 			# Check if the size has been changed...
@@ -1127,30 +1165,30 @@ class Frontend(glade.Frontend):
 			newtoformat = self.format_box.get_active()
 			if newtoformat != self.current_toformat:
 				if not newtoformat:
-					if part.path in self.changed and "format" in self.changed[part.path]["changes"]:
-						del self.changed[part.path]["changes"]["format"]
+					if path in self.changed and "format" in self.changed[path]["changes"]:
+						del self.changed[path]["changes"]["format"]
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
 				lib.format_partition(part, newfs) # Ensure we change part.fileSystem
-				self.queue_for_format(part.path, newfs)
+				self.queue_for_format(path, newfs)
 							
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
 			if newmountpoint != self.current_mountpoint:
 				# Yes! We need to change mountpoint!
-				self.change_mountpoint(part.path, newmountpoint)
+				self.change_mountpoint(path, newmountpoint)
 				# Remove the old mountpoint from the list
 				if self.current_mountpoint:
 					del self.mountpoints_added[self.current_mountpoint]
 			
 			# Seed mount_on_install
-			self.changed[part.path]["changes"]["mount_on_install"] = self.mount_on_install.get_active()
+			self.changed[path]["changes"]["mount_on_install"] = self.mount_on_install.get_active()
 
 			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
-			if part.path in self.previously_changed: self.previously_changed.remove(part.path)
-			if not part.path in self.touched: self.touched.append(part.path)
+			if path in self.previously_changed: self.previously_changed.remove(path)
+			if not path in self.touched: self.touched.append(path)
 						
 			self.manual_populate()
 		
@@ -1309,21 +1347,28 @@ class Frontend(glade.Frontend):
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.apply_window.hide)
 			
-	def manual_frame_creator(self, device, disk):
+	def manual_frame_creator(self, device, disk, lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
 		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "changes":{}}
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
-		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, device.model, round(device.getSize(unit="GB"), 2)))
+		if lvm:
+			_model = _("LVM Volume Group")
+		else:
+			_model = device.model
+		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, _model, round(device.getSize(unit="GB"), 2)))
 		container["frame"] = Gtk.Frame()
 		container["frame"].set_label_widget(container["frame_label"])
 		## Create the TreeView 
 		# ListStore: /dev/part - system/label - filesystem - format? - size
 
 		#if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
-		if disk != "notable": partitions = lib.disk_partitions(disk)
+		if lvm:
+			partitions = device.logicalvolumes
+		elif disk != "notable":
+			partitions = lib.disk_partitions(disk)
 
 		if disk != "notable" and len(partitions) > 0:	
 			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
@@ -1357,14 +1402,23 @@ class Frontend(glade.Frontend):
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Size"), Gtk.CellRendererText(), text=5, cell_background=6))
 
 			for part in partitions:
-				if not part.path in self.changed: self.changed[part.path] = {"obj":part, "changes":{}}
+				LVMcontainer = None
+				if hasattr(part, "isLVM") and part.isLVM:
+					LVMcontainer = part
+					part = part.partition
+					
+					path = LVMcontainer.path
+				else:
+					path = part.path
+				
+				if not path in self.changed: self.changed[path] = {"obj":part, "changes":{}, "LVMcontainer":LVMcontainer}
 
 				name = []
-				if part.path in self.distribs:
-					name.append(self.distribs[part.path])
-				if part.name:
+				if path in self.distribs:
+					name.append(self.distribs[path])
+				if name:
 					name.append(part.name)
-				elif not part.path in self.distribs:
+				elif not path in self.distribs:
 					name.append("Normal partition")
 
 				if int(part.getSize("GB")) > 0:
@@ -1383,9 +1437,9 @@ class Frontend(glade.Frontend):
 					# Partition is too small and can be confusing. Simply do not show it.
 					continue
 
-				if part.path in self.changed and "format" in self.changed[part.path]["changes"]:
+				if path in self.changed and "format" in self.changed[path]["changes"]:
 					# We need to format the partition, so don't use the one that parted returns to us
-					_fs = self.changed[part.path]["changes"]["format"]
+					_fs = self.changed[path]["changes"]["format"]
 					_to_format = True
 				else:
 					# See what parted tells us
@@ -1402,19 +1456,19 @@ class Frontend(glade.Frontend):
 					
 					_to_format = False
 				
-				if part.path in self.changed and "useas" in self.changed[part.path]["changes"]:
+				if path in self.changed and "useas" in self.changed[path]["changes"]:
 					# Set mountpoint.
-					_mpoint = self.changed[part.path]["changes"]["useas"]
+					_mpoint = self.changed[path]["changes"]["useas"]
 					if _mpoint == None:
 						_mpoint = ""
 				else:
 					_mpoint = ""
 
-				if part.path in self.previously_changed and (self.changed[part.path]["changes"] == {} or (len(self.changed[part.path]["changes"]) == 1 and "useas" in self.changed[part.path]["changes"]) or (len(self.changed[part.path]["changes"]) == 2 and "mount_on_install" in self.changed[part.path]["changes"]) or self.is_automatic):
+				if path in self.previously_changed and (self.changed[path]["changes"] == {} or (len(self.changed[path]["changes"]) == 1 and "useas" in self.changed[path]["changes"] or "mount_on_install" in self.changed[path]["changes"]) or (len(self.changed[path]["changes"]) == 2 and "mount_on_install" in self.changed[path]["changes"]) or self.is_automatic):
 					# This was changed previously, "ok" color.
 					_bg = self.objects["parent"].return_color("ok")
-				elif self.changed[part.path]["changes"] != {}:
-					print "%s was changed" % part.path
+				elif self.changed[path]["changes"] != {}:
+					print "%s was changed" % path
 					# This was changed now, "hold" color.
 					_bg = self.objects["parent"].return_color("hold")
 					
@@ -1425,7 +1479,7 @@ class Frontend(glade.Frontend):
 					_bg = None
 				
 				
-				container[part.path] = container["model"].append((part.path, "/".join(name), _fs, _mpoint, _to_format, "%s %s" % (_size, _unit), _bg))
+				container[path] = container["model"].append((path, "/".join(name), _fs, _mpoint, _to_format, "%s %s" % (_size, _unit), _bg))
 		elif len(partitions) == 0:
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Informations"), Gtk.CellRendererText(), text=1, cell_background=2))
 			
@@ -1442,6 +1496,15 @@ class Frontend(glade.Frontend):
 
 		for child in self.harddisk_container.get_children():
 			self.idle_add(child.destroy)
+
+		# First loop create the lvm frames
+		for name, obj in lvm.VolumeGroups.items():
+			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, lvm=True)
+			if "description" in self.manual_devices[obj.path]:
+				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = self.manual_devices[obj.path]["description"]
+			else:
+				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = None
+			self.idle_add(self.harddisk_container.pack_start, self.manual_devices[obj.path]["frame"], True, True, True)
 
 		for name, obj in self.devices.items():
 			self.manual_devices[obj.path] = self.manual_frame_creator(obj, self.disks[name])
