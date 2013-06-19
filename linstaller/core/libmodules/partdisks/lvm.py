@@ -151,6 +151,10 @@ class VolumeGroup:
 				# Ensure we do not include fake "non-existant" volumes
 				if result[-1].infos["exists"] == False: removed = result.pop()
 		
+		# Add too a freespace LogicalVolume
+		if self.infos["free"] > 5: # Do not look at LVs under the 5 MB of size
+			result.append(LogicalVolume(self.name + "-1", self))
+		
 		return result
 	
 	def getVolume(self, name):
@@ -173,6 +177,10 @@ class LogicalVolume:
 		
 		self.name = name
 		self.vgroup = vgroup
+		
+		
+		# FIXME: partdisks's glade frontend compatibility
+		self.type = -1
 		
 		# Cache LV informations
 		self.reload_infos()
@@ -202,7 +210,7 @@ class LogicalVolume:
 			# The volume does not exist!
 			
 			self.infos["exists"] = False
-			self.partition = None
+			self.partition = FakePartition(self)
 		else:
 			self.infos["exists"] = True
 			try:
@@ -246,6 +254,25 @@ class LogicalVolume:
 		
 		pass
 
+class FakePartition:
+	"""FakePartition class to resemble a parted.Partition object on freespace LogicalVolumes."""
+	
+	def __init__(self, logicalvolume):
+		
+		self.logicalvolume = logicalvolume
+		
+		
+		self.useLVM = True
+		self.type = -1
+		self.fileSystem = None
+		self.number = -1 #freespace!
+	
+	def getSize(self, unit="GB"):
+		
+		if unit == "GB":
+			return self.logicalvolume.vgroup.infos["free"]/1024.0
+		elif unit == "MB":
+			return self.logicalvolume.vgroup.infos["free"]
 
 def return_pv():
 	"""Returns a dictionary with every PhyicalVolume present in the system.
@@ -289,16 +316,29 @@ def return_lv():
 	for line in commands.getoutput("lvs --noheadings -o lv_name,vg_name").split("\n"):
 		if not line.replace(" ","").startswith("Filedescriptor"):
 			line = line.split(" ")
-			line.remove("")
-			line.remove("")
+			# Remove blank items
+			while line.count('') > 0:
+				line.remove('')
 			# Ensure we skip filedescriptors
 			if not line[1] in result:
 				# add the group dictionary
 				result[line[1]] = {}
 			result[line[1]][line[0]] = LogicalVolume(line[0], VolumeGroup(line[1]))
 	
+	# Add too a freespace LogicalVolume for every group
+	for group, res in result.items():
+		if VolumeGroups[group].infos["free"] > 5: # Do not look at LVs under the 5 MB of size
+			result[group][group + "-1"] = LogicalVolume(group + "-1", VolumeGroups[group])
+	
 	return result 
 
-PhysicalVolumes = return_pv()
-VolumeGroups = return_vg()
-LogicalVolumes = return_lv()
+def refresh():
+	""" Refreshes the LVM objects lists... """
+	
+	PhysicalVolumes = return_pv()
+	VolumeGroups = return_vg()
+	LogicalVolumes = return_lv()
+	
+	global PhysicalVolumes, VolumeGroups, LogicalVolumes
+
+refresh()

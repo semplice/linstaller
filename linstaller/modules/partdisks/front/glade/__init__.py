@@ -159,6 +159,91 @@ class Apply(glade.Progress):
 		
 		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
+class LVM_apply(glade.Progress):
+	def __init__(self, parent, quit=True):
+		
+		self.parent = parent
+		self.quit = quit
+		
+		threading.Thread.__init__(self)
+
+	def progress(self):
+		""" Applies the changes to the devices. """
+		
+		share = self.parent.LVMshare
+		
+		# Disable next button
+		self.parent.on_steps_hold()
+		
+		# Make window unsensitive
+		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, False)
+		
+		verbose("Committing LVM changes to %s..." % share["obj"].path)
+		self.parent.set_header("hold", _("Committing changes to %s...") % share["obj"].path, _("This may take a while."))
+		
+		try:
+			# Unlike classic Apply(), we process only one device at time,
+			# with all informations available in self.LVMshare. Seems easy.
+			if share["type"] == "create":
+				# We need to create a new LV
+				share["obj"].name = share["name"]
+				share["obj"].create(share["size"])
+		except:
+			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+								
+			# Restore sensitivity
+			self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+			self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+			# Clear LVMshare
+			self.parent.LVMshare = {}
+			
+			return False
+		
+		# Now check if we should format the partition: queue it and format
+		# NOW.
+		if share["format"]:
+			progress = lib.format_partition_for_real(share["obj"], share["filesystem"])
+			self.parent.set_header("hold", _("Formatting %s...") % share["obj"].path, _("Let's hope everything goes well! :)"))
+			status = progress.wait()
+			if status != 0:
+				# Failed ...
+				self.parent.set_header("error", _("Failed formatting %s.") % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+				
+				# Restore sensitivity
+				self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
+				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+				# Clear LVMshare
+				self.parent.LVMshare = {}
+
+				return False
+		
+		# Add to self.previously_changed
+		if not share["obj"].path in self.parent.previously_changed:
+			self.parent.previously_changed.append(share["obj"].path)
+
+		# Add the new partition to changed
+		self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
+
+		# Seed mount_on_install
+		self.parent.changed[share["obj"].path]["changes"]["mount_on_install"] = True
+		
+		# Set mountpoint
+		if share["mountpoint"]:
+			self.parent.change_mountpoint(share["obj"].path, share["mountpoint"])
+
+		# Clear LVMshare
+		self.parent.LVMshare = {}
+
+		# FIXME?
+		self.parent.idle_add(self.parent.refresh_manual, False, True)
+
+		# Restore sensitivity
+		self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
+		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+
 class Crypt_initialize(glade.Progress):
 	def __init__(self, parent, quit=True):
 		
@@ -290,8 +375,11 @@ class Frontend(glade.Frontend):
 		
 		lib.restore_devices(onlyusb=self.onlyusb)
 		self.disks, self.devices = lib.disks, lib.devices
+		
+		# Also reload LVM devices...
+		lvm.refresh()
 	
-	def refresh_manual(self, obj=None, complete=True):
+	def refresh_manual(self, obj=None, complete=True, noclear=False):
 		""" Refreshes the manual partitioning page. """
 
 		self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
@@ -301,18 +389,19 @@ class Frontend(glade.Frontend):
 		self.refresh()
 		
 		# Also remove flags.
-		for name, changes in self.changed.items():
-			if complete:
-				# Clear.
-				changes["changes"].clear()
-			else:
-				# Remove all but useas and mount_on_install
-				for key, value in changes["changes"].items():
-					if not key in ("useas","mount_on_install"):
-						del changes["changes"][key]
+		if not noclear:
+			for name, changes in self.changed.items():
+				if complete:
+					# Clear.
+					changes["changes"].clear()
+				else:
+					# Remove all but useas and mount_on_install
+					for key, value in changes["changes"].items():
+						if not key in ("useas","mount_on_install"):
+							del changes["changes"][key]
 		
-		# Clear touched
-		self.touched = []
+			# Clear touched
+			self.touched = []
 		
 		self.manual_populate()
 
@@ -333,6 +422,15 @@ class Frontend(glade.Frontend):
 		else:
 			quit = False
 		clss = Apply(self, quit=quit)
+		clss.start()
+		
+		return
+
+	def lvm_apply(self):
+		""" Applies the LVM changes to the devices. """
+		
+		# Apply!
+		clss = LVM_apply(self, quit=False)
 		clss.start()
 		
 		return
@@ -862,6 +960,34 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.partition_window.set_sensitive, False)
 			self.idle_add(self.mount_on_install_window.show)
 
+	def on_lv_name_change(self, obj):
+		""" Called when lv_name is changed. """
+		
+		if self.LVname == False:
+			self.idle_add(self.partition_ok.set_sensitive, True)
+			return
+		
+		txt = obj.get_text()
+		
+		if txt == "":
+			# No text, no sensitiveness...
+			self.idle_add(self.partition_ok.set_sensitive, False)
+		else:
+			# There is text, check if we can use the name...
+			
+			# FIXME? Should we allow two LV of the same name if they
+			# are in different groups?
+			used = False
+			for group, items in lvm.LogicalVolumes.items():
+				if txt in items and not txt == self.LVname:
+					used = True
+			
+			if not used:
+				self.idle_add(self.partition_ok.set_sensitive, True)
+			else:
+				self.idle_add(self.partition_ok.set_sensitive, False)
+
+
 	def on_newtable_button_clicked(self, obj):
 		""" Called when the newtable button has been clicked. """
 		
@@ -906,6 +1032,28 @@ class Frontend(glade.Frontend):
 		
 		# Get the device
 		device = self.get_partition_from_selected()
+		LVMcontainer = None
+		if hasattr(device, "isLVM") and device.isLVM:
+			LVMcontainer = device
+			device = device.partition
+			
+			path = LVMcontainer.path
+
+			# Show the lv_frame
+			self.lv_frame.show()
+			
+			# Set the LV name
+			self.lv_name.set_text("")
+			self.size_manual_entry.grab_focus()
+			
+			self.LVname = ""				
+		else:
+			path = device.path
+			
+			# Hide the lv_frame
+			self.lv_frame.hide()
+			
+			self.LVname = False
 				
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
@@ -931,7 +1079,10 @@ class Frontend(glade.Frontend):
 		self.mountpoint_entry.set_text("")
 		self.mountpoint_combo.set_active(-1)
 		
-		self.partition_ok.set_sensitive(True)
+		if not LVMcontainer:
+			self.partition_ok.set_sensitive(True)
+		else:
+			self.partition_ok.set_sensitive(False)
 		
 		# Connect buttons
 		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
@@ -960,8 +1111,23 @@ class Frontend(glade.Frontend):
 			device = device.partition
 			
 			path = LVMcontainer.path
+			
+			# Show the lv_frame
+			self.lv_frame.show()
+			
+			# Set the LV name
+			self.lv_name.set_text(LVMcontainer.name)
+			self.size_manual_entry.grab_focus()
+
+			# Save the LV name
+			self.LVname = LVMcontainer.name
 		else:
 			path = device.path
+			
+			# Hide the lv_frame
+			self.lv_frame.hide()
+			
+			self.LVname = False
 		
 		self.current_length = round(device.getSize("MB"), 3)
 		
@@ -1078,6 +1244,9 @@ class Frontend(glade.Frontend):
 			# Not used! yay!
 			self.change_entry_status(self.mountpoint_entry, "ok")
 			self.partition_ok.set_sensitive(True)
+		
+		# Also check the lv_name
+		self.on_lv_name_change(self.lv_name)
 	
 	def child_window_delete(self, obj, event):
 		""" Called when the Close button on the child window has been clicked. """
@@ -1097,37 +1266,71 @@ class Frontend(glade.Frontend):
 		if obj == self.partition_ok:
 			# Yes.
 			# Create the new partition
-
-			self.set_header("hold", _("Creating the partition..."), _("Please wait."))
 			
 			part = self.get_partition_from_selected()
 			targetfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
 			
-			try:
-				res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
-			except:
-				# Failed! Ouch!
-				self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
-				return
+			# is LVM?
+			isLVM = False
+			if hasattr(part, "isLVM") and part.isLVM: isLVM = True
 			
-			# Add the new partition to changed
-			self.changed[res.path] = {"obj":res, "changes":{}}
-			
-			self.queue_for_format(res.path, targetfs)
-			self.change_mountpoint(res.path, self.get_mountpoint())
+			if isLVM:
+				# It is LVM, we need to display a confirmation dialog and
+				# wait for the user input
+				
+				# lvcreate does not like decimal numbers, so we need
+				# first to convert everything to kilobytes and then
+				# drop any decimal number that may be still there...
+				# SAFETY ALERT: IT'S UGLY.
+				size = float(self.size_adjustment.get_value())*1024
+				if "." in str(size):
+					size = str(size).split(".")[0]
+				size = str(size) + "K"
+				# Woah. It was really awful.
+				
+				# Populate LVMshare with direction on what we should do...
+				self.LVMshare = {
+					"type":"create",
+					"obj":part,
+					"name":self.lv_name.get_text(),
+					"size":size,
+					"filesystem":targetfs,
+					"format":True,
+					"mountpoint":self.get_mountpoint()
+				}
+				
+				# Show the window, the Apply process will be started by
+				# the window
+				self.idle_add(self.lvm_apply_window.show)
+			else:
+				self.set_header("hold", _("Creating the partition..."), _("Please wait."))
 
-			# Seed mount_on_install
-			self.changed[part.path]["changes"]["mount_on_install"] = True
-			
-			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
-			self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
-			
-			if not res.path in self.touched: self.touched.append(res.path)
-			
-			self.manual_populate()
+				try:
+					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
+				except:
+					# Failed! Ouch!
+					self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
+					return
+				
+				# Add the new partition to changed
+				self.changed[res.path] = {"obj":res, "changes":{}}
+				
+				self.queue_for_format(res.path, targetfs)
+				self.change_mountpoint(res.path, self.get_mountpoint())
+
+				# Seed mount_on_install
+				self.changed[part.path]["changes"]["mount_on_install"] = True
+				
+				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
+				
+				if not res.path in self.touched: self.touched.append(res.path)
+				
+				self.manual_populate()
 		
 		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
+		if obj == self.partition_cancel or not isLVM:
+			self.objects["parent"].main.set_sensitive(True)
 
 	def on_edit_window_button_clicked(self, obj):
 		""" Called when a button on the edit partition window has been clicked. """
@@ -1346,6 +1549,24 @@ class Frontend(glade.Frontend):
 		
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.apply_window.hide)
+	
+	def on_lvm_apply_window_button_clicked(self, obj):
+		""" Called when a button on the LVM apply window has been clicked. """
+				
+		if obj == self.lvm_apply_yes:
+			# Yes.
+			# APPLY! :)
+			self.lvm_apply_window.set_sensitive(False)
+			self.idle_add(self.lvm_apply)
+		else:
+			# Restore sensitivity
+			self.objects["parent"].main.set_sensitive(True)
+			
+			# Ensure we clear out the LVMshare
+			self.LVMshare = {}
+		
+		#self.apply_window.set_sensitive(True)
+		self.idle_add(self.lvm_apply_window.hide)
 			
 	def manual_frame_creator(self, device, disk, lvm=False):
 		""" Creates frames etc for the objects passed. """
@@ -1544,6 +1765,10 @@ class Frontend(glade.Frontend):
 		
 		self.current_selected = None
 		
+		self.LVMshare = {}
+		
+		self.LVname = ""
+		
 		if clean:			
 			self.changed = {}
 			self.touched = []
@@ -1602,9 +1827,12 @@ class Frontend(glade.Frontend):
 		self.remove_window = self.objects["builder"].get_object("remove_window")
 		self.delete_window = self.objects["builder"].get_object("delete_window")
 		self.apply_window = self.objects["builder"].get_object("apply_window")
+		self.lvm_apply_window = self.objects["builder"].get_object("lvm_apply_window")
 		
 		## Partition window:
 		self.partition_window.connect("delete_event", self.child_window_delete)
+		self.lv_frame = self.objects["builder"].get_object("lv_frame")
+		self.lv_name = self.objects["builder"].get_object("lv_name")
 		self.size_manual_radio = self.objects["builder"].get_object("size_manual_radio")
 		self.size_adjustment = self.objects["builder"].get_object("size_adjustment")
 		self.size_manual_entry = self.objects["builder"].get_object("size_manual_entry")
@@ -1621,6 +1849,9 @@ class Frontend(glade.Frontend):
 		self.mount_on_install = self.objects["builder"].get_object("mount_on_install")
 		self.partition_cancel = self.objects["builder"].get_object("partition_cancel")
 		self.partition_ok = self.objects["builder"].get_object("partition_ok")
+		
+		# Connect the logical volume name textbox...
+		self.lv_name.connect("changed", self.on_lv_name_change)
 		
 		# Connect the radios...
 		self.size_manual_radio.connect("toggled", self.on_manual_radio_changed)
@@ -1712,6 +1943,13 @@ class Frontend(glade.Frontend):
 		self.apply_yes = self.objects["builder"].get_object("apply_yes")
 		self.apply_no.connect("clicked", self.on_apply_window_button_clicked)
 		self.apply_yes.connect("clicked", self.on_apply_window_button_clicked)
+
+		## LVM Apply window:
+		self.lvm_apply_window.connect("delete_event", self.child_window_delete)
+		self.lvm_apply_no = self.objects["builder"].get_object("lvm_apply_no")
+		self.lvm_apply_yes = self.objects["builder"].get_object("lvm_apply_yes")
+		self.lvm_apply_no.connect("clicked", self.on_lvm_apply_window_button_clicked)
+		self.lvm_apply_yes.connect("clicked", self.on_lvm_apply_window_button_clicked)
 
 		# Get toolbar buttons
 		self.manual_toolbar = self.objects["builder"].get_object("manual_toolbar")
