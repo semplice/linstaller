@@ -1149,7 +1149,7 @@ class Frontend(glade.Frontend):
 			self.current_toformat = True
 		else:
 			# Unset the format box
-			self.format_box.set_active(False)
+			self.do_not_format_box.set_active(True)
 			# Set the filesystem
 			if device.fileSystem != None:
 				self.current_fs = device.fileSystem.type
