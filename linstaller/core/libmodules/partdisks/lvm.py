@@ -240,7 +240,7 @@ class LogicalVolume:
 	def remove(self):
 		"""Removes the Logical Volume."""
 		
-		m.sexec("lvremove %s" % self.path)
+		m.sexec("lvremove --force %s" % self.path)
 		self.reload_infos()
 	
 	@property

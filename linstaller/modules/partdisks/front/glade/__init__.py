@@ -188,6 +188,9 @@ class LVM_apply(glade.Progress):
 				# We need to create a new LV
 				share["obj"].name = share["name"]
 				share["obj"].create(share["size"])
+			elif share["type"] == "remove":
+				# We need to remove a LV
+				share["obj"].remove()
 		except:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 								
@@ -202,7 +205,7 @@ class LVM_apply(glade.Progress):
 		
 		# Now check if we should format the partition: queue it and format
 		# NOW.
-		if share["format"]:
+		if "format" in share and share["format"]:
 			progress = lib.format_partition_for_real(share["obj"], share["filesystem"])
 			self.parent.set_header("hold", _("Formatting %s...") % share["obj"].path, _("Let's hope everything goes well! :)"))
 			status = progress.wait()
@@ -223,15 +226,19 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		# Add the new partition to changed
-		self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
+		if not share["type"] == "remove":
+			# Add the new partition to changed
+			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
-		# Seed mount_on_install
-		self.parent.changed[share["obj"].path]["changes"]["mount_on_install"] = True
-		
-		# Set mountpoint
-		if share["mountpoint"]:
-			self.parent.change_mountpoint(share["obj"].path, share["mountpoint"])
+			# Seed mount_on_install
+			self.parent.changed[share["obj"].path]["changes"]["mount_on_install"] = True
+			
+			# Set mountpoint
+			if "mountpoint" in share and share["mountpoint"]:
+				self.parent.change_mountpoint(share["obj"].path, share["mountpoint"])
+		else:
+			# Remove from changed
+			del self.parent.changed[share["obj"].path]
 
 		# Clear LVMshare
 		self.parent.LVMshare = {}
@@ -997,7 +1004,17 @@ class Frontend(glade.Frontend):
 	def on_remove_button_clicked(self, obj):
 		""" Called when the remove button has been clicked. """
 		
-		self.remove_window.set_markup("<big><b>" + _("Do you really want to remove %s?") % self.get_partition_from_selected().path + "</b></big>")
+		part = self.get_partition_from_selected()
+		
+		self.remove_window.set_markup("<big><b>" + _("Do you really want to remove %s?") % part.path + "</b></big>")
+		
+		if hasattr(part, "isLVM") and part.isLVM:
+			# properly set the secondary text
+			self.remove_window.format_secondary_markup(_('You cannot <b>go back!</b>'))
+			self.remove_window.set_property("message_type", Gtk.MessageType.WARNING)
+		else:
+			self.remove_window.format_secondary_markup(_('Use the "Refresh" button to undo this change.'))
+			self.remove_window.set_property("message_type", Gtk.MessageType.QUESTION)
 		
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
 		self.idle_add(self.remove_window.show)
@@ -1483,24 +1500,42 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.remove_window.hide)
 		
 		part = self.get_partition_from_selected()
+
+		# is LVM?
+		isLVM = False
+		if hasattr(part, "isLVM") and part.isLVM: isLVM = True
 		
 		if obj == self.remove_yes:
 			# Yes.
-			# Remove the partition
-			res = lib.delete_partition(part)
-			if not res:
-				# Failed!
-				self.set_header("error", _("Unable to remove the partition."), _("Why did it happen?!"))
+			
+			if isLVM:
+				# It is LVM, we need to process everything ASAP.
+				
+				# Populate LVMshare with direction on what we should do...
+				self.LVMshare = {
+					"type":"remove",
+					"obj":part
+				}
+				
+				# Apply!
+				self.idle_add(self.lvm_apply)
 			else:
-				# Ok!
-				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+				# Remove the partition
+				res = lib.delete_partition(part)
+				if not res:
+					# Failed!
+					self.set_header("error", _("Unable to remove the partition."), _("Why did it happen?!"))
+				else:
+					# Ok!
+					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+				
+				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 			
-			if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
-			
-			self.manual_populate()
+				self.manual_populate()
 		
 		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
+		if obj == self.remove_no or not isLVM:
+			self.objects["parent"].main.set_sensitive(True)
 
 	def on_delete_window_button_clicked(self, obj):
 		""" Called when a button on the delete window has been clicked. """
