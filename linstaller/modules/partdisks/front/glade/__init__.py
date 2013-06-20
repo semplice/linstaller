@@ -1800,6 +1800,9 @@ class Frontend(glade.Frontend):
 
 		# First loop create the lvm frames
 		for name, obj in lvm.VolumeGroups.items():
+			
+			if not obj.infos["exists"]: continue
+			
 			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, lvm=True)
 			if "description" in self.manual_devices[obj.path]:
 				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = self.manual_devices[obj.path]["description"]

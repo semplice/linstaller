@@ -70,38 +70,41 @@ class VolumeGroup:
 		
 		self.infos = {}
 		
-		for line in commands.getoutput("vgs --noheadings %s" % self.name).split("\n"):
-			if not line.replace(" ","").startswith("Filedescriptor"):
-				# Example output:
-				# testgroup   1   1   0 wz--n- 3,73g 1,73g
-				line = line.split(" ")
-				if len(line) == 1: continue # Skip blank lines
-				# Remove blank items
-				while line.count('') > 0:
-					line.remove('')
-				if not line[0] == self.name: continue
-				
-				print line
-				
-				# size
-				if "g" in line[5]:
-					self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
-				elif "m" in line[5]:
-					self.infos["size"] = float(line[5].replace(",",".").replace("m",""))
-				elif "k" in line[5]:
-					self.infos["size"] = float(line[5].replace(",",".").replace("k",""))/1024.0
-				else:
-					self.infos["size"] = float(line[5])
-				
-				# free
-				if "g" in line[6]:
-					self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
-				elif "m" in line[6]:
-					self.infos["free"] = float(line[6].replace(",",".").replace("m",""))
-				elif "k" in line[6]:
-					self.infos["free"] = float(line[6].replace(",",".").replace("k",""))/1024.0
-				else:
-					self.infos["free"] = float(line[6])
+		try:
+			for line in commands.getoutput("vgs --noheadings %s" % self.name).split("\n"):
+				if not line.replace(" ","").startswith("Filedescriptor"):
+					# Example output:
+					# testgroup   1   1   0 wz--n- 3,73g 1,73g
+					line = line.split(" ")
+					if len(line) == 1: continue # Skip blank lines
+					# Remove blank items
+					while line.count('') > 0:
+						line.remove('')
+					if not line[0] == self.name: continue
+					
+					print line
+					
+					# size
+					if "g" in line[5]:
+						self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
+					elif "m" in line[5]:
+						self.infos["size"] = float(line[5].replace(",",".").replace("m",""))
+					elif "k" in line[5]:
+						self.infos["size"] = float(line[5].replace(",",".").replace("k",""))/1024.0
+					else:
+						self.infos["size"] = float(line[5])
+					
+					# free
+					if "g" in line[6]:
+						self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
+					elif "m" in line[6]:
+						self.infos["free"] = float(line[6].replace(",",".").replace("m",""))
+					elif "k" in line[6]:
+						self.infos["free"] = float(line[6].replace(",",".").replace("k",""))/1024.0
+					else:
+						self.infos["free"] = float(line[6])
+		except:
+			self.infos = {}
 
 		if len(self.infos) == 0:
 			# The volume does not exist!
@@ -210,28 +213,31 @@ class LogicalVolume:
 		
 		self.infos = {}
 		
-		for line in commands.getoutput("lvs --noheadings %s" % self.vgroup.name).split("\n"):
-			if not line.replace(" ","").startswith("Filedescriptor"):
-				# Example output:
-				# testvolume testgroup -wi-a---- 2,00g
-				line = line.split(" ")
-				if len(line) == 1: continue # Skip blank lines
-				# Remove blank items
-				while line.count('') > 0:
-					line.remove('')
-				if not line[0] == self.name: continue
-				
-				print line
-				
-				# size
-				if "g" in line[3]:
-					self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
-				elif "m" in line[3]:
-					self.infos["size"] = float(line[3].replace(",",".").replace("m",""))
-				elif "k" in line[3]:
-					self.infos["size"] = float(line[3].replace(",",".").replace("k",""))/1024.0
-				else:
-					self.infos["size"] = float(line[3])
+		try:
+			for line in commands.getoutput("lvs --noheadings %s" % self.vgroup.name).split("\n"):
+				if not line.replace(" ","").startswith("Filedescriptor"):
+					# Example output:
+					# testvolume testgroup -wi-a---- 2,00g
+					line = line.split(" ")
+					if len(line) == 1: continue # Skip blank lines
+					# Remove blank items
+					while line.count('') > 0:
+						line.remove('')
+					if not line[0] == self.name: continue
+					
+					print line
+					
+					# size
+					if "g" in line[3]:
+						self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
+					elif "m" in line[3]:
+						self.infos["size"] = float(line[3].replace(",",".").replace("m",""))
+					elif "k" in line[3]:
+						self.infos["size"] = float(line[3].replace(",",".").replace("k",""))/1024.0
+					else:
+						self.infos["size"] = float(line[3])
+		except:
+			self.infos = {}
 
 		if len(self.infos) == 0:
 			# The volume does not exist!
@@ -354,7 +360,7 @@ def return_lv():
 	
 	# Add too a freespace LogicalVolume for every group
 	for group, res in VolumeGroups.items():
-		if res.infos["free"] > 5: # Do not look at LVs under the 5 MB of size
+		if "free" in res.infos and res.infos["free"] > 5: # Do not look at LVs under the 5 MB of size
 			if not group in result:
 				result[group] = {}
 			result[group][group + "-1"] = LogicalVolume(group + "-1", res)
