@@ -191,6 +191,9 @@ class LVM_apply(glade.Progress):
 			elif share["type"] == "remove":
 				# We need to remove a LV
 				share["obj"].remove()
+			elif share["type"] == "delete":
+				# We need to clear the VG
+				share["obj"].clear()
 		except:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 								
@@ -226,7 +229,7 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		if not share["type"] == "remove":
+		if not share["type"] in ("remove","delete"):
 			# Add the new partition to changed
 			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
@@ -236,9 +239,13 @@ class LVM_apply(glade.Progress):
 			# Set mountpoint
 			if "mountpoint" in share and share["mountpoint"]:
 				self.parent.change_mountpoint(share["obj"].path, share["mountpoint"])
-		else:
+		elif share["type"] == "remove":
 			# Remove from changed
 			del self.parent.changed[share["obj"].path]
+		elif share["type"] == "delete":
+			for item, content in self.parent.changed.items():
+				if item.startswith(share["obj"].path):
+					del self.parent.changed[item]
 
 		# Clear LVMshare
 		self.parent.LVMshare = {}
@@ -914,11 +921,21 @@ class Frontend(glade.Frontend):
 	
 	def get_device_from_selected(self):
 		""" Returns a device object from self.current_selected. """
-		
+
+		# This may be a LVM Logical Volume, we should check the path
+		path = self.current_selected["value"].replace("/dev/","").split("/")[0]
+		if path in lvm.VolumeGroups:
+			return lvm.VolumeGroups[path]
+
 		return self.devices[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 
 	def get_disk_from_selected(self):
 		""" Returns a device object from self.current_selected. """
+
+		# This may be a LVM Logical Volume, we should check the path
+		path = self.current_selected["value"].replace("/dev/","").split("/")[0]
+		if path in lvm.VolumeGroups:
+			return lvm.VolumeGroups[path]
 		
 		return self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 	
@@ -1022,7 +1039,17 @@ class Frontend(glade.Frontend):
 	def on_delete_button_clicked(self, obj):
 		""" Called when the delete button has been clicked. """
 
-		self.delete_window.set_markup("<big><b>" + _("Do you really want to delete all partitions on %s?") % self.get_device_from_selected().path + "</b></big>")
+		dev = self.get_device_from_selected()
+
+		self.delete_window.set_markup("<big><b>" + _("Do you really want to delete all partitions on %s?") % dev.path + "</b></big>")
+
+		if hasattr(dev, "isLVM") and dev.isLVM:
+			# properly set the secondary text
+			self.delete_window.format_secondary_markup(_('You cannot <b>go back!</b>'))
+			self.delete_window.set_property("message_type", Gtk.MessageType.WARNING)
+		else:
+			self.delete_window.format_secondary_markup(_('Use the "Refresh" button to undo this change.'))
+			self.delete_window.set_property("message_type", Gtk.MessageType.QUESTION)
 
 		self.idle_add(self.objects["parent"].main.set_sensitive, False)
 		self.idle_add(self.delete_window.show)
@@ -1299,7 +1326,7 @@ class Frontend(glade.Frontend):
 				# first to convert everything to kilobytes and then
 				# drop any decimal number that may be still there...
 				# SAFETY ALERT: IT'S UGLY.
-				size = float(self.size_adjustment.get_value())*1024
+				size = float((self.size_adjustment.get_value())-1.0)*1024
 				if "." in str(size):
 					size = str(size).split(".")[0]
 				size = str(size) + "K"
@@ -1543,24 +1570,42 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.delete_window.hide)
 		
 		dev = self.get_disk_from_selected()
+
+		# is LVM?
+		isLVM = False
+		if hasattr(dev, "isLVM") and dev.isLVM: isLVM = True
 		
 		if obj == self.delete_yes:
 			# Yes.
-			# Clear the device
-			res = lib.delete_all(dev)
-			if not res:
-				# Failed!
-				self.set_header("error", _("Unable to delete all partitions."), _("Why did it happen?!"))
+			
+			if isLVM:
+				# It is LVM, we need to process everything ASAP.
+				
+				# Populate LVMshare with direction on what we should do...
+				self.LVMshare = {
+					"type":"delete",
+					"obj":dev
+				}
+				
+				# Apply!
+				self.idle_add(self.lvm_apply)			
 			else:
-				# Ok!
-				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+				# Clear the device
+				res = lib.delete_all(dev)
+				if not res:
+					# Failed!
+					self.set_header("error", _("Unable to delete all partitions."), _("Why did it happen?!"))
+				else:
+					# Ok!
+					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
-			if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
+				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 
-			self.manual_populate()
+				self.manual_populate()
 		
 		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
+		if obj == self.remove_no or not isLVM:
+			self.objects["parent"].main.set_sensitive(True)
 
 	def manual_apply(self):
 		""" Workaround to get the apply window hidden while doing things. """

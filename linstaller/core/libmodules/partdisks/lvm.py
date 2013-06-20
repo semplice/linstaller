@@ -84,10 +84,24 @@ class VolumeGroup:
 				print line
 				
 				# size
-				self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
+				if "g" in line[5]:
+					self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
+				elif "m" in line[5]:
+					self.infos["size"] = float(line[5].replace(",",".").replace("m",""))
+				elif "k" in line[5]:
+					self.infos["size"] = float(line[5].replace(",",".").replace("k",""))/1024.0
+				else:
+					self.infos["size"] = float(line[5])
 				
 				# free
-				self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
+				if "g" in line[6]:
+					self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
+				elif "m" in line[6]:
+					self.infos["free"] = float(line[6].replace(",",".").replace("m",""))
+				elif "k" in line[6]:
+					self.infos["free"] = float(line[6].replace(",",".").replace("k",""))/1024.0
+				else:
+					self.infos["free"] = float(line[6])
 
 		if len(self.infos) == 0:
 			# The volume does not exist!
@@ -128,7 +142,13 @@ class VolumeGroup:
 	def remove(self):
 		"""Removes the Volume Group."""
 		
-		m.sexec("vgremove %s" % self.name)
+		m.sexec("vgremove --force %s" % self.name)
+	
+	def clear(self):
+		"""Removes every LV into the Volume Group"""
+		
+		for lv in self.logicalvolumes:
+			lv.remove()
 	
 	@property
 	def path(self):
@@ -204,7 +224,14 @@ class LogicalVolume:
 				print line
 				
 				# size
-				self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
+				if "g" in line[3]:
+					self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
+				elif "m" in line[3]:
+					self.infos["size"] = float(line[3].replace(",",".").replace("m",""))
+				elif "k" in line[3]:
+					self.infos["size"] = float(line[3].replace(",",".").replace("k",""))/1024.0
+				else:
+					self.infos["size"] = float(line[3])
 
 		if len(self.infos) == 0:
 			# The volume does not exist!
@@ -326,9 +353,11 @@ def return_lv():
 			result[line[1]][line[0]] = LogicalVolume(line[0], VolumeGroup(line[1]))
 	
 	# Add too a freespace LogicalVolume for every group
-	for group, res in result.items():
-		if VolumeGroups[group].infos["free"] > 5: # Do not look at LVs under the 5 MB of size
-			result[group][group + "-1"] = LogicalVolume(group + "-1", VolumeGroups[group])
+	for group, res in VolumeGroups.items():
+		if res.infos["free"] > 5: # Do not look at LVs under the 5 MB of size
+			if not group in result:
+				result[group] = {}
+			result[group][group + "-1"] = LogicalVolume(group + "-1", res)
 	
 	return result 
 
@@ -337,8 +366,11 @@ def refresh():
 	
 	PhysicalVolumes = return_pv()
 	VolumeGroups = return_vg()
+	
+	global VolumeGroups # Needed by return_lv
+	
 	LogicalVolumes = return_lv()
 	
-	global PhysicalVolumes, VolumeGroups, LogicalVolumes
+	global PhysicalVolumes, LogicalVolumes
 
 refresh()
