@@ -145,7 +145,7 @@ class Apply(glade.Progress):
 		for item in self.parent.touched:
 			if not item in self.parent.previously_changed: self.parent.previously_changed.append(item)
 
-		if not self.parent.is_automatic: self.parent.refresh_manual(complete=False)
+		if not self.parent.is_automatic: self.parent.idle_add(self.parent.refresh_manual, None, False)
 		
 		# If we're here, ok!	
 		self.parent.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
@@ -251,7 +251,7 @@ class LVM_apply(glade.Progress):
 		self.parent.LVMshare = {}
 
 		# FIXME?
-		self.parent.idle_add(self.parent.refresh_manual, False, True)
+		self.parent.idle_add(self.parent.refresh_manual, None, False, True)
 
 		# Restore sensitivity
 		self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
