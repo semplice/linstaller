@@ -12,6 +12,23 @@ from linstaller.core.main import warn,info,verbose
 import sys, fileinput
 
 class Install(module.Install):
+	def grub_pkgs_install(self):
+		""" Selects and install the bootloader from the supportrepo. """
+		
+		if not self.moduleclass.cache:
+			# Older Semplice release, no repo, returning nicely
+			return
+		
+		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
+			# UEFI
+			self.moduleclass.cache["grub-efi"].mark_install()
+		else:
+			# Normal BIOS or unable to detect
+			self.moduleclass.cache["grub-pc"].mark_install()
+		
+		# COMMIT!
+		self.moduleclass.cache.commit()
+	
 	def grub_install(self):
 		""" Installs grub. """
 
@@ -64,7 +81,11 @@ class Module(module.Module):
 	def start(self):
 		""" Start module """
 		
+		if "supportrepo.inst" in self.modules_settings:
+			self.cache = self.modules_settings["supportrepo.inst"]["cache"]
+		
 		self.install = Install(self)
+		self._pkgs_install = {"grub":self.install.grub_pkgs_install}
 		self._install = {"grub":self.install.grub_install}
 		self._update = {"grub":self.install.grub_update}
 		

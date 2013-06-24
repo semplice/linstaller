@@ -2,7 +2,7 @@
 
 [linstaller]
 distribution = Semplice
-modules = uefidetect.inst welcome.front language.front update.front timezone.front userhost.front partdisks.front bootloader.front bricks.front mirrorselect.front summary.front partdisks.inst unsquash.inst language.inst timezone.inst userhost.inst network.inst debian.inst semplice.inst bricks.inst mirrorselect.inst clean.inst bootloader.inst fstab.inst end.front
+modules = uefidetect.inst welcome.front language.front update.front timezone.front userhost.front partdisks.front bootloader.front bricks.front mirrorselect.front summary.front partdisks.inst unsquash.inst language.inst timezone.inst userhost.inst network.inst debian.inst semplice.inst supportrepo.inst bricks.inst mirrorselect.inst clean.inst bootloader.inst fstab.inst end.front
 special = partdisks.inst unsquash.inst
 
 [module:language]
@@ -31,3 +31,6 @@ sets = debian semplice changes
 [module:bootloader]
 bootloader = grub
 
+[module:supportrepo]
+path = file:///lib/live/mount/medium/support
+binarydir = ./
