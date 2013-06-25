@@ -21,12 +21,15 @@ class BootloaderInstall(glade.Progress):
 
 		m.verbose("Installing %s bootloader..." % bootloader)
 
+		# PASS 1: INSTALLING THE PACKAGES
+		self.parent.progress_set_text(_("Installing bootloader packages..."))
+		self.parent.moduleclass._pkgs_install[bootloader]()
+		self.parent.progress_set_percentage(1)
+
+		# Now, enter the chroot.
+		self.parent.moduleclass.install_phase()
+
 		try:
-			# PASS 1: INSTALLING THE PACKAGES
-			self.parent.progress_set_text(_("Installing bootloader packages..."))
-			self.parent.moduleclass._pkgs_install[bootloader]()
-			self.parent.progress_set_percentage(1)
-						
 			# PASS 2: INSTALL
 			self.parent.progress_set_text(_("Installing bootloader..."))
 			self.parent.moduleclass._install[bootloader]()

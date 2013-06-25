@@ -25,11 +25,14 @@ class Frontend(cli.Frontend):
 		# Start progressbar
 		progress.start()
 
+		# PASS 1: INSTALLING THE PACKAGES
+		self.moduleclass._pkgs_install[bootloader]()
+		progress.update(1)
+
+		# Now, enter the chroot.
+		self.moduleclass.install_phase()
+
 		try:
-			# PASS 1: INSTALLING THE PACKAGES
-			self.moduleclass._pkgs_install[bootloader]()
-			progress.update(1)
-			
 			# PASS 2: INSTALL
 			self.moduleclass._install[bootloader]()
 			progress.update(2)

@@ -6,10 +6,10 @@
 
 import linstaller.core.main as m
 
-import apt
+import apt.cache
 import os
 
-RepositoryType = m.enum("Trivial", "Automatic")
+RepositoryType = m.enum("TRIVIAL", "AUTOMATIC")
 
 class Cache(apt.cache.Cache):
 	
@@ -25,6 +25,8 @@ class Cache(apt.cache.Cache):
 		apt.cache.Cache.__init__(self, progress=None, rootdir=rootdir, memonly=memonly)
 		
 		self.sourceslist = sourceslist
+		if os.path.exists(self.sourceslist):
+			os.remove(self.sourceslist)
 	
 	def add_repository(self, mode, path, binarydir="./", distro=None, sections=None, withsrc=False):
 		""" Adds the repository to self.sourceslist.
@@ -46,15 +48,15 @@ class Cache(apt.cache.Cache):
 		
 		if mode == RepositoryType.TRIVIAL:
 			with open(self.sourceslist, openmode) as f:
-				f.write("deb %(path)s %(binarydir)s\n") % {"path":path, "binarydir":binarydir}
+				f.write("deb %(path)s %(binarydir)s\n" % {"path":path, "binarydir":binarydir})
 		elif mode == RepositoryType.AUTOMATIC:
 			if None in (distro, sections):
 				raise TypeError("add_repository() in RepositoryType.AUTOMATIC mode needs distro and sections defined")
 			
 			with open(self.sourceslist, openmode) as f:
-				f.write("deb %(path)s %(distro)s %(sections)s\n") % {"path":path, "distro":distro, "sections":" ".join(sections)}
+				f.write("deb %(path)s %(distro)s %(sections)s\n" % {"path":path, "distro":distro, "sections":" ".join(sections)})
 				if withsrc:
-					f.write("deb-src %(path)s %(distro)s %(sections)s\n") % {"path":path, "distro":distro, "sections":" ".join(sections)}
+					f.write("deb-src %(path)s %(distro)s %(sections)s\n" % {"path":path, "distro":distro, "sections":" ".join(sections)})
 	
 	def update(self, fetch_progress=None, pulse_interval=0, raise_on_error=True):
 		""" Run the equivalent of apt-get update.
@@ -62,9 +64,9 @@ class Cache(apt.cache.Cache):
 		See apt.cache.update() for a detailed explanation.
 		This method will call update() with the sources_list overrided by self.sourceslist. """
 		
-		apt.cache.update(self,
+		apt.cache.Cache.update(self,
 			fetch_progress=fetch_progress,
 			pulse_interval=pulse_interval,
 			raise_on_error=raise_on_error,
-			sources_list=self.sources_list
+			sources_list=self.sourceslist
 		)
