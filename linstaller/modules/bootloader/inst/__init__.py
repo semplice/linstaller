@@ -9,9 +9,29 @@ import linstaller.core.main as m
 
 from linstaller.core.main import warn,info,verbose
 
-import sys, fileinput
+import os, sys, fileinput
+import commands
+
+UEFIplatforms = {
+	"i386": "i386-efi",
+	"amd64": "x86_64-efi"
+}
 
 class Install(module.Install):
+	def grub_pkgs_install(self):
+		""" Installs the packages previously fetched. """
+		
+		if not self.moduleclass.cache:
+			# Older Semplice release, no repo, returning nicely
+			return
+		
+		# We need to reset the cache rootdir to / because we are into the
+		# chroot.
+		self.moduleclass.cache.change_rootdir("/")
+		
+		# Now we can commit.
+		self.moduleclass.cache.commit()
+	
 	def grub_install(self):
 		""" Installs grub. """
 
@@ -22,8 +42,18 @@ class Install(module.Install):
 
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
 			# UEFI (need blank grub-install)
+			
+			# We need to get the architecture on which we are running.
+			# platform.machine() is not reliable as it will give the host system's architecture
+			# So we are relying on dpkg-architecture (if Debian system), or fallbacking
+			# to amd64 if not a Debian system
+			if os.path.exists("/usr/bin/dpkg-architecture"):
+				arch = commands.getoutput("/usr/bin/dpkg-architecture -qDEB_BUILD_ARCH")
+			else:
+				arch = "amd64"
+			
 			location = ""
-			args = ""
+			args = "--target=%s" % UEFIplatforms[arch]
 		elif target == "root":
 			# Root.
 			location = self.moduleclass.modules_settings["partdisks"]["root"]
@@ -67,12 +97,15 @@ class Module(module.Module):
 		if "supportrepo.inst" in self.modules_settings:
 			self.cache = self.modules_settings["supportrepo.inst"]["cache"]
 
-		self._pkgs_install = {"grub":self.grub_pkgs_install}
+		self._pkgs_fetch = {"grub":self.grub_pkgs_fetch}
 		
 		module.Module.start(self)
+		
+		# Reset rootdir
+		self.cache.change_rootdir(self.main_settings["target"])
 
-	def grub_pkgs_install(self):
-		""" Selects and install the bootloader from the supportrepo. """
+	def grub_pkgs_fetch(self):
+		""" Selects and fetches the bootloader from the supportrepo. """
 		
 		if not self.cache:
 			# Older Semplice release, no repo, returning nicely
@@ -84,11 +117,9 @@ class Module(module.Module):
 		else:
 			# Normal BIOS or unable to detect
 			self.cache["grub-pc"].mark_install()
-		
-		print self.cache.get_changes()
-		
-		# COMMIT!
-		self.cache.commit()
+				
+		# FETCH!
+		self.cache.local_fetch_changes()
 	
 	def install_phase(self):
 		""" Set-ups self.install and relevant dictionaries.
@@ -96,6 +127,7 @@ class Module(module.Module):
 		as we should execute it outside the chroot. """
 		
 		self.install = Install(self)
+		self._pkgs_install = {"grub":self.install.grub_pkgs_install}
 		self._install = {"grub":self.install.grub_install}
 		self._update = {"grub":self.install.grub_update}
 

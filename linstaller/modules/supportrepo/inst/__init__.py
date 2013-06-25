@@ -31,7 +31,6 @@ class Module(module.Module):
 		# a 32-bit system from a 64-bit one (unless one is a linstaller developer)
 		# we can go ahead.
 		
-		
 		with open(os.path.join(self.main_settings["target"], "etc/apt/apt.conf.d/100linstaller"), "w") as f:
 			if os.path.exists(os.path.join(self.main_settings["target"], "etc/semplice64-build")):
 				# We are 64!
@@ -56,7 +55,8 @@ class Module(module.Module):
 			
 			# Update
 			self.cache.update()
-			
+			self.cache.open()
+						
 			# Cache the cache object. This will be used by whoever wants to use the supportrepo.
 			self.settings["cache"] = self.cache
 		else:
