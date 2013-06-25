@@ -1,3 +1,40 @@
+linstaller (4.70.0-1) devel; urgency=low
+
+  * Added settings support for frontends.
+  * Added new setting -p|--configpath to select the path where search for linstaller configurations
+  * config/thewall-test: added test thewall config.
+  * frontends/cli: added "follow" setting.
+  * Added supermodules support (a virtual module which calls a set of modules defined on the configuration file).
+  * Added some simple test modules.
+  * Added support for user-defined target directory (-t switch).
+  * Added seed_setup() function in module.py, override this to set-up things before seeding occours.
+  * Check for modu before revert.
+  * modules/partdisks: library: mount_partition added support for mount type.
+  * modules/timezone: front/glade: ensure we focus the timezone treeview.
+  * Added the basics of LVM and Crypting support.
+    Nothing works yet (as it is still not finished ;D) and the current GUI may be changed at any time.
+    Still, tracking it in GIT seems the best thing to do to avoid huge commits later.
+    I hope to get it finished soon!
+  * lvm.py: do not use python-lvm for now. Added LogicalVolume and and VolumeGroup classes.
+    The lvm library now does something useful.
+  * modules/partdisks: added base LVM view and modify (edit view and format) support.
+  * partdisks can now add a new LV.
+  * partdisks: properly set do_not_format_box if we should not format.
+  * partdisks can now delete LVs.
+  * partdisks can now clear entire VGs.
+  * Do not fail if LVM devices have some I/O errors and can't be used
+  * Ensure we idle_add the refresh action after we applied things
+  * Added a nice APT library along with the supportrepo module (set-ups the support repo present in latest snapshots)
+  * modules/bootloader: inst: fetch bootloader from supportrepo, if we can
+  * core/main: support for enums.
+  * debian/control:
+    - linstaller: depend on python-apt
+    - linstaller-modules-base: remove dependency on grub (or firmware-raspberrypi), bootloaders are now in iso
+    - Changed URL of the project
+  * debian/linstaller-modules-base.install: ship supportrepo
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Jun 2013 11:43:18 +0200
+
 linstaller (4.0.0-1) unstable; urgency=low
 
   * modules/partdisks: do not leave sensitivity to False when closing child windows.

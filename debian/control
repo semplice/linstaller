@@ -7,11 +7,11 @@ Standards-Version: 3.9.4
 X-Python-Version: >= 2.7
 Vcs-Git: git://github.com/semplice/linstaller.git
 Vcs-Browser: https://github.com/semplice/linstaller
-Homepage: http://launchpad.net/linstaller
+Homepage: http://semplice.github.io/linstaller/
 
 Package: linstaller
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, linstaller-modules-base (= ${binary:Version}), linstaller-frontend-cli (= ${binary:Version})
+Depends: ${misc:Depends}, ${python:Depends}, linstaller-modules-base (= ${binary:Version}), linstaller-frontend-cli (= ${binary:Version}), python-apt
 Description: Modular GNU/Linux distribution installer
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
@@ -51,8 +51,7 @@ Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, pytho
  squashfs-tools,
  user-setup,
  imvirt,
- dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted,
- grub-pc | firmware-raspberrypi
+ dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted
 Description: Modular GNU/Linux distribution installer -- base modules
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
