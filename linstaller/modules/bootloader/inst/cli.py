@@ -20,19 +20,26 @@ class Frontend(cli.Frontend):
 		verbose("Installing %s bootloader..." % bootloader)
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Installing bootloader:"), 2)
+		progress = self.progressbar(_("Installing bootloader:"), 3)
 
 		# Start progressbar
 		progress.start()
 
+		# PASS 1: INSTALLING THE PACKAGES
+		self.moduleclass._pkgs_install[bootloader]()
+		progress.update(1)
+
+		# Now, enter the chroot.
+		self.moduleclass.install_phase()
+
 		try:
-			# PASS 1: INSTALL
+			# PASS 2: INSTALL
 			self.moduleclass._install[bootloader]()
-			progress.update(1)
-			
-			# PASS 2: UPDATE
-			self.moduleclass._update[bootloader]()
 			progress.update(2)
+			
+			# PASS 3: UPDATE
+			self.moduleclass._update[bootloader]()
+			progress.update(3)
 		finally:
 			# Exit
 			self.moduleclass.install.close()

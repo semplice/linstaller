@@ -24,7 +24,7 @@ class Install(module.Install):
 			# UEFI (need blank grub-install)
 			location = ""
 			args = ""
-		if target == "root":
+		elif target == "root":
 			# Root.
 			location = self.moduleclass.modules_settings["partdisks"]["root"]
 			args = "--no-floppy --force"
@@ -64,9 +64,38 @@ class Module(module.Module):
 	def start(self):
 		""" Start module """
 		
+		if "supportrepo.inst" in self.modules_settings:
+			self.cache = self.modules_settings["supportrepo.inst"]["cache"]
+
+		self._pkgs_install = {"grub":self.grub_pkgs_install}
+		
+		module.Module.start(self)
+
+	def grub_pkgs_install(self):
+		""" Selects and install the bootloader from the supportrepo. """
+		
+		if not self.cache:
+			# Older Semplice release, no repo, returning nicely
+			return
+		
+		if "uefidetect.inst" in self.modules_settings and self.modules_settings["uefidetect.inst"]["uefi"] == True:
+			# UEFI
+			self.cache["grub-efi"].mark_install()
+		else:
+			# Normal BIOS or unable to detect
+			self.cache["grub-pc"].mark_install()
+		
+		print self.cache.get_changes()
+		
+		# COMMIT!
+		self.cache.commit()
+	
+	def install_phase(self):
+		""" Set-ups self.install and relevant dictionaries.
+		To be executed by the frontend AFTER the package installation,
+		as we should execute it outside the chroot. """
+		
 		self.install = Install(self)
 		self._install = {"grub":self.install.grub_install}
 		self._update = {"grub":self.install.grub_update}
-		
-		module.Module.start(self)
 

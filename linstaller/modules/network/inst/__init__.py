@@ -8,6 +8,8 @@ import linstaller.core.main as m
 import linstaller.core.module as module
 import shutil
 
+import os
+
 class Install(module.Install):
 	def copy_resolvconf(self):
 		""" Copies host /etc/resolv.conf to target.
@@ -15,7 +17,7 @@ class Install(module.Install):
 		MUST BE CALLED AFTER CLOSING THE CHROOT!
 		"""
 		
-		shutil.copy2("/etc/resolv.conf", "/linstaller/target/etc/resolv.conf")
+		shutil.copy2("/etc/resolv.conf", os.path.join(self.moduleclass.main_settings["target"], "etc/resolv.conf"))
 
 	def configure(self):
 		""" Configures network. """

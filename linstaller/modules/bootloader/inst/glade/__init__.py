@@ -21,16 +21,24 @@ class BootloaderInstall(glade.Progress):
 
 		m.verbose("Installing %s bootloader..." % bootloader)
 
+		# PASS 1: INSTALLING THE PACKAGES
+		self.parent.progress_set_text(_("Installing bootloader packages..."))
+		self.parent.moduleclass._pkgs_install[bootloader]()
+		self.parent.progress_set_percentage(1)
+
+		# Now, enter the chroot.
+		self.parent.moduleclass.install_phase()
+
 		try:
-			# PASS 1: INSTALL
+			# PASS 2: INSTALL
 			self.parent.progress_set_text(_("Installing bootloader..."))
 			self.parent.moduleclass._install[bootloader]()
-			self.parent.progress_set_percentage(1)
+			self.parent.progress_set_percentage(2)
 			
-			# PASS 2: UPDATE
+			# PASS 3: UPDATE
 			self.parent.progress_set_text(_("Generating bootloader configuration..."))
 			self.parent.moduleclass._update[bootloader]()
-			self.parent.progress_set_percentage(2)
+			self.parent.progress_set_percentage(3)
 		finally:
 			# Exit
 			self.parent.moduleclass.install.close()
@@ -42,7 +50,7 @@ class Frontend(glade.Frontend):
 		
 		self.set_header("hold", _("Installing bootloader..."), _("Please wait during the installer is installing the bootloader..."))
 		
-		self.progress_set_quota(2)
+		self.progress_set_quota(3)
 	
 	def process(self):
 		""" Process install """

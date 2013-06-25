@@ -65,6 +65,7 @@ class Frontend(glade.Frontend):
 		else:
 			tzone = None
 		self.populate_timezone_model(tzone=tzone)
+		self.idle_add(self.timezone_treeview.grab_focus)
 		
 	def get_selected_timezone(self):
 		""" Gets the selected timezone. """

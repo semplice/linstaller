@@ -54,7 +54,7 @@ data_files = [
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='4.0.0',
+      version='4.70.0',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -161,6 +161,9 @@ distrib = setup(name='linstaller',
       "linstaller.modules.bricks.front.glade",
       "linstaller.modules.bricks.inst",
       "linstaller.modules.bricks.inst.glade",
+      
+      "linstaller.modules.supportrepo",
+      "linstaller.modules.supportrepo.inst",
       
       "linstaller.modules.echo",
       "linstaller.modules.echo.bootloader",

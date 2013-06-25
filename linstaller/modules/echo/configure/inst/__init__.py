@@ -51,7 +51,7 @@ class Module(module.Module):
 		args.append("live-media-path=%s" % self.image_path) # path for the image
 		
 		# Rebuild live.cfg to include persistent.cfg...
-		with open("/linstaller/target/syslinux/live.cfg", "w") as f:
+		with open(os.path.join(self.main_settings["target"], "syslinux/live.cfg"), "w") as f:
 			f.write("""include persistent.cfg
 label nextboot
 	menu label ^Next Boot Device
@@ -74,11 +74,11 @@ label nextboot
 """)
 
 		# Finally rewrite persistent.cfg in syslinux with our configuration...
-		if os.path.exists("/linstaller/target/syslinux/persistent.cfg"):
+		if os.path.exists(os.path.join(self.main_settings["target"], "syslinux/persistent.cfg")):
 			mode = "a" # Append.
 		else:
 			mode = "w"
-		with open("/linstaller/target/syslinux/persistent.cfg", mode) as f:
+		with open(os.path.join(self.main_settings["target"], "syslinux/persistent.cfg"), mode) as f:
 			if mode == "w":
 				f.write("""default usb
 label usb

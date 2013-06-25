@@ -12,11 +12,11 @@ import time
 from linstaller.core.main import info,warn,verbose
 
 class Unsquash:
-	def __init__(self, squashimage):
+	def __init__(self, squashimage, target="/linstaller/target"):
 		
 		# Set squashimage
 		self.squashimage = squashimage
-		self.TARGET = "/linstaller/target"
+		self.TARGET = target
 		
 	def get_files(self):
 		""" Get the number of files to be copied. """

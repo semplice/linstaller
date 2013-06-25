@@ -1,0 +1,15 @@
+[linstaller]
+distribution = thewall
+modules = tests.simple.inst misc welcome.front tests.simple_with_revert2.inst hellogoodbye
+special = tests.simple_with_revert2.inst
+
+[frontend:cli]
+follow = True
+
+[supermodule:hellogoodbye]
+modules = tests.crashy.inst welcome.front end.front
+special = tests.crashy.inst
+
+[supermodule:misc]
+modules = tests.simple_with_revert.inst 
+special = tests.simple_with_revert.inst

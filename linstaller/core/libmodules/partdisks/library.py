@@ -17,9 +17,6 @@ from linstaller.core.main import info,warn,verbose
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-global devices
-global disks
-
 # FIXME: These variables should be in distribution's configuration file.
 min_size = 0.2 # In GB.
 rec_size = 0.3 # In GB.
@@ -192,12 +189,12 @@ def device_sort(dct):
 
 def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
+
+	devices, disks = return_devices(onlyusb=onlyusb)
 	
 	global devices
 	global disks
 	
-	devices, disks = return_devices(onlyusb=onlyusb)
-
 def disk_partitions(disk):
 	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
 
@@ -438,7 +435,7 @@ def is_mounted(obj):
 			return {"path":items[0], "mountpoint":items[2], "type":items[4], "options":items[-1].replace("(","").replace(")","").replace("\n","")}
 
 
-def mount_partition(parted_part=None, path=None, opts=False, target=False, check=True):
+def mount_partition(parted_part=None, path=None, opts=False, typ=None, target=False, check=True):
 	""" Mounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -452,7 +449,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		raise m.UserError("mount_partition called without parted_part and without path!")
 	
 	# Check if path exists...
-	if not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
+	if path.startswith("/") and not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
 	
 	# Generate a mount point
 	_directory = path.replace("/","") # Strip all /. We should have something like this: devsda1.
@@ -501,7 +498,11 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		opts = "-o %s" % opts
 	else:
 		opts = ""
-	m.sexec("mount %s %s %s" % (opts, path, _mountpoint))
+	if typ:
+		typ = "-t %s" % typ
+	else:
+		typ = ""
+	m.sexec("mount %s %s %s %s" % (typ, opts, path, _mountpoint))
 	
 	# Return mountpoint
 	return _mountpoint
@@ -711,11 +712,12 @@ def automatic_precheck(by="freespace", distribs=None):
 class automatic_check_ng:
 	""" Automatic check class. """
 	
-	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False):
+	def __init__(self, distribs={}, efi=None, onlyusb=False, is_echo=False, crypt_enabled=False):
 		""" Set required variables. """
 		
 		self.onlyusb = onlyusb
 		self.is_echo = is_echo
+		self.crypt_enabled = crypt_enabled
 		
 		self.dev, self.dis = return_devices(onlyusb=self.onlyusb)
 		
@@ -1132,6 +1134,27 @@ class automatic_check_ng:
 		
 		return result_dict, order
 	
+	def by_crypt_device(self):
+		""" Returns possible solutions by looking only at hard disks. """
+		
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+		
+		result_dict = {} # "crypt_deviceX" : (dev, dis)
+		order = []
+		
+		current = 0
+		
+		for name, obj in self.dis.items():
+			if obj == "notable": continue
+			
+			current += 1
+			order.append("crypt_device%s" % current)
+			result_dict["crypt_device%s" % current] = {"result":{"part":None, "swap":None, "efi":None, "format":None}, "disk":self.dis[name], "device":self.dev[name], "model":self.dev[name].model}
+		
+		return result_dict, order
+	
 	def main(self):
 		""" Checks for solutions for the automatic partitioner.
 		Every solution is applied on a virtual Disk object.
@@ -1140,20 +1163,28 @@ class automatic_check_ng:
 		# Check by notable
 		notable, notableord = self.by_notable()
 
-		# Check by freespace
-		free, freeord = self.by_freespace()
-		
-		# Check by delete
-		dele, deleord = self.by_delete()
-		
-		# Check by clear
-		clea, cleaord = self.by_clear()
-		
-		# Check by echo
-		echo, echoord = self.by_echo()
-		
-		results = dict(notable.items() + free.items() + dele.items() + clea.items() + echo.items())
-		order = notableord + freeord + deleord + cleaord + echoord
+		if not self.crypt_enabled:
+			# Check by freespace
+			free, freeord = self.by_freespace()
+			
+			# Check by delete
+			dele, deleord = self.by_delete()
+			
+			# Check by clear
+			clea, cleaord = self.by_clear()
+			
+			# Check by echo
+			echo, echoord = self.by_echo()
+			
+			results = dict(notable.items() + free.items() + dele.items() + clea.items() + echo.items())
+			order = notableord + freeord + deleord + cleaord + echoord
+		else:
+			# Check by crypt_device
+			
+			cryptd, cryptdord = self.by_crypt_device()
+			
+			results = dict(notable.items() + cryptd.items())
+			order = notableord + cryptdord
 		
 		return results, order
 	
