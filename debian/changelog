@@ -1,3 +1,12 @@
+linstaller (4.70.1-1) devel; urgency=low
+
+  * Improvements, workarounds, fixes on the APT handling inside and outside the chroot.
+    Cache() now (mostly) works in both situations, unlike the upstream apt.cache.Cache().
+    And that's so fuckin' great.
+    Also, grub-efi installation now works correctly.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 27 Jun 2013 19:12:41 +0200
+
 linstaller (4.70.0-1) devel; urgency=low
 
   * Added settings support for frontends.
