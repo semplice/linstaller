@@ -96,6 +96,11 @@ class Module(module.Module):
 			if lib.is_mounted(key):
 				# Umount
 				lib.umount(path=key)
+			if useas == "/boot/efi":
+				# If this is going to be the /boot/efi partition
+				# we should make sure that it's going to have the
+				# proper partition type set to EFI System Partition
+				lib.prepareforEFI(lib.return_partition(key))
 			lib.mount_partition(path=key, target=mountpoint)
 			
 			# Ok, it is mounted. Now let's see if it is empty

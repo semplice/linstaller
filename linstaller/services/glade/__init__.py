@@ -35,6 +35,7 @@ uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
 head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+#head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
@@ -352,6 +353,9 @@ class Service(linstaller.core.service.Service):
 			
 			folor = Gdk.RGBA()
 			folor.parse("#363636")
+
+#		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
+#		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
 
 		# Get and set icon
 		if not appicon:

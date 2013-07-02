@@ -342,6 +342,14 @@ def commit(obj, touched):
 	except:
 		return False
 
+def prepareforEFI(partition):
+	""" Sets boot flag and type to EFI System Partition on the partition object. """
+	
+	partition.setFlag(p.PARTITION_BOOT)
+	
+	# Uh, it seems that by setting the boot flag we are marking the 
+	# partition as EFI system partition. AWESOME!
+
 def format_partition_for_real(obj, fs):
 	""" Uses mkfs.* to format partition. """	
 
