@@ -1345,6 +1345,7 @@ class Frontend(glade.Frontend):
 				
 				# Show the window, the Apply process will be started by
 				# the window
+				self.idle_add(self.lvm_apply_window.set_sensitive, True)
 				self.idle_add(self.lvm_apply_window.show)
 			else:
 				self.set_header("hold", _("Creating the partition..."), _("Please wait."))
