@@ -252,6 +252,8 @@ class Service(linstaller.core.service.Service):
 		
 		self.pages_built = False
 		
+		self.is_fullscreen = False
+		
 		self.builder = Gtk.Builder()
 		self.builder.set_translation_domain("linstaller")
 		self.builder.add_from_file(uipath)
@@ -333,6 +335,22 @@ class Service(linstaller.core.service.Service):
 
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
+	
+	def fullscreen(self):
+		""" Makes the window fullscreen. """
+		
+		if not self.is_fullscreen:
+			GObject.idle_add(self.main.set_resizable, True)
+			GObject.idle_add(self.main.fullscreen)
+			self.is_fullscreen = True
+	
+	def unfullscreen(self):
+		""" Unfullscreens the window """
+		
+		if self.is_fullscreen:
+			GObject.idle_add(self.main.set_resizable, False)
+			GObject.idle_add(self.main.unfullscreen)
+			self.is_fullscreen = False
 	
 	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
