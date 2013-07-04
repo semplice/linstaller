@@ -27,6 +27,57 @@ class Apply(glade.Progress):
 		
 		threading.Thread.__init__(self)
 
+	def resize(self, lst, dct, action):
+		""" Do the resize process. """
+
+		# Mini-loop to process filesystem resizing...
+		for key in lst:
+			try:
+				obj = dct[key]["obj"]
+				cng = dct[key]["changes"]
+				if "LVMcontainer" in dct[key]:
+					LVMcontainer = dct[key]["LVMcontainer"]
+				else:
+					LVMcontainer = None
+			except:
+				verbose("Unable to get a correct object/changes from %s." % key)
+				continue # Skip.
+				
+			# Should resize?
+			if "resize" in cng:
+								
+				if LVMcontainer:
+					# It is a LVM logical volume, pass it instead of the parted object
+					_obj = LVMcontainer
+				else:
+					_obj = obj
+
+				if (cng["resize"] < _obj.getSize("MB") and not action == lib.ResizeAction.SHRINK) or (
+				cng["resize"] > _obj.getSize("MB") and not action == lib.ResizeAction.GROW):
+					continue
+				try:
+					progress = lib.resize_partition_for_real(_obj, cng["resize"], action)
+					self.parent.set_header("hold", _("Resizing %s...") % key, _("Let's hope everything goes well! :)"))
+					if not progress:
+						continue
+					status = progress.wait()
+				except:
+					# Workaround to avoid duplicate code when handling errors
+					status = 1
+				if status != 0:
+					# Failed ...
+					self.parent.set_header("error", _("Failed resizing %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details.") + "\n" + _("Maybe you shrinked too much the partition."))
+
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+					
+					# Restore sensitivity
+					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+					return False
+
 	def progress(self):
 		""" Applies the changes to the devices. """
 		
@@ -37,6 +88,10 @@ class Apply(glade.Progress):
 		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, False)
 		
 		lst, dct = lib.device_sort(self.parent.changed)
+		
+		# If we should shrink something, do it now
+		self.resize(lst, dct, lib.ResizeAction.SHRINK)
+		
 		for key in lst:
 			try:
 				obj = dct[key]["obj"]
@@ -137,6 +192,9 @@ class Apply(glade.Progress):
 					# Preseed
 					self.parent.settings["swap"] = key
 					self.parent.settings["swap_noformat"] = True
+
+		# If we should grow something, do it now
+		self.resize(lst, dct, lib.ResizeAction.GROW)
 
 		# Preseed *all* changes
 		self.parent.settings["changed"] = self.parent.changed
@@ -954,6 +1012,11 @@ class Frontend(glade.Frontend):
 			
 			return result
 		
+		# If there is an existing object in changed, we want to return that
+		# instead of getting a new one
+		if not "-1" in self.current_selected["value"] and self.current_selected["value"] in self.changed:
+			return self.changed[self.current_selected["value"]]["obj"]
+		
 		disk = self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 		result = disk.getPartitionByPath(self.current_selected["value"])
 		if result == None:
@@ -1247,6 +1310,11 @@ class Frontend(glade.Frontend):
 		
 		self.changed[path]["changes"]["format"] = fs
 	
+	def queue_for_resize(self, path, newsize):
+		""" Queues for resize. """
+		
+		self.changed[path]["changes"]["resize"] = newsize
+	
 	def change_mountpoint(self, path, mpoint):
 		""" Changes the mountpoint in self.changed. """
 		
@@ -1364,7 +1432,7 @@ class Frontend(glade.Frontend):
 				self.change_mountpoint(res.path, self.get_mountpoint())
 
 				# Seed mount_on_install
-				self.changed[part.path]["changes"]["mount_on_install"] = True
+				self.changed[res.path]["changes"]["mount_on_install"] = True
 				
 				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
@@ -1401,13 +1469,18 @@ class Frontend(glade.Frontend):
 			newsize = self.size_manual_entry.get_value()
 			if newsize != self.current_length:
 				# Yes! We need to resize!
-				res = lib.resize_partition(part, lib.MbToSector(float(newsize)))
+				res = lib.resize_partition(part, lib.KbToSector(int(float(newsize)*1024))-1)
 				if not res:
 					# Failed! Ouch!
 					self.set_header("error", _("Failed to resize partition."), _("Please double-check the inserted values."))
 					
 					self.objects["parent"].main.set_sensitive(True)
 					return
+				
+				self.queue_for_resize(path, float(newsize))
+			else:
+				if path in self.changed and "resize" in self.changed[path]["changes"]:
+					del self.changed[path]["changes"]["resize"]
 			
 			# We should format?
 			newtoformat = self.format_box.get_active()
@@ -1712,6 +1785,10 @@ class Frontend(glade.Frontend):
 					path = LVMcontainer.path
 				else:
 					path = part.path
+				
+					# Let's see if we can reuse objects in changed to avoid nasty bugs...
+					if not "-1" in path and path in self.changed:
+						part = self.changed[path]["obj"]
 				
 				if not path in self.changed: self.changed[path] = {"obj":part, "changes":{}, "LVMcontainer":LVMcontainer}
 

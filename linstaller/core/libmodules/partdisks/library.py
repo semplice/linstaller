@@ -28,6 +28,9 @@ rec_size *= 1024
 # FIXME
 obj_old = False
 
+# Resize actions enum
+ResizeAction = m.enum("GROW", "SHRINK")
+
 supported = {
 	"ext2" : ("/sbin/mkfs.ext2",""),
 	"ext3" : ("/sbin/mkfs.ext3",""),
@@ -46,6 +49,21 @@ supported = {
 supported_tables = {
 	"mbr" : "msdos",
 	"gpt" : "gpt",
+}
+
+supported_resize = {
+	"ext2" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"ext3" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"ext4" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"fat32" : ("/usr/sbin/fatresize","--size %(size)sk %(device)s"),
+	"fat16" : ("/usr/sbin/fatresize","--size %(size)sk %(device)s"),
+	"ntfs" : ("/sbin/ntfsresize","--size %(size)sk %(device)s"),
+	"hfs+" : None,
+	# JFS doesn't support shrinking?
+#	"btrfs" : ("/sbin/btrfs filesystem resize %(size)sM %(mountpoint)s"),
+	"reiserfs" : None,
+	# XFS doesn't support shrinking?
+	"linux-swap(v1)" : None,
 }
 
 flags = {
@@ -75,9 +93,14 @@ def is_disk(dsk):
 		return False
 
 def MbToSector(mbs):
-    """ Convert Megabytes in sectors"""
+    """ Convert Megabytes in sectors """
 
     return ( mbs * 1024 * 1024 ) / 512
+
+def KbToSector(kbs):
+	""" Convert Kilobytes in sectors """
+	
+	return ( kbs * 1024 ) / 512
 
 def swap_available(deep=False, disksd=None):
 	""" check if there is a swap partition available (True/False) """
@@ -402,7 +425,44 @@ def resize_partition(obj, newLength):
 	cons = p.Constraint(exactGeom=obj.geometry)
 	
 	# maximize the partition at the given constraint.
-	return obj.disk.maximizePartition(obj, cons)
+	#return obj.disk.maximizePartition(obj, cons)
+	return obj.disk.setPartitionGeometry(obj, cons, start=obj.geometry.start, end=obj.geometry.end)
+
+def resize_partition_for_real(obj, newLength, action):
+	""" Given a partition object and the new start and end, this
+	will resize the partition's filesystem. """
+
+	# newLength from MB to KB, rounded minus one
+	newLength = int(newLength*1024)-1
+
+	# Get filesystem
+	fs = obj.fileSystem.type
+	
+	# Get an appropriate resizer
+	if fs in supported_resize:
+		resizer = supported_resize[fs]
+	else:
+		m.verbose("Resizer unavailable for %s. This may be an issue ;)" % fs)
+		return
+	
+	if not resizer:
+		# Handled internally by parted
+		obj.fileSystem.resize(obj.geometry)
+		return
+	
+	_app = resizer[0]
+	_opt = resizer[1] % {"device":obj.path, "size":newLength, "mountpoint":"FIXME"}
+
+	# Umount...
+	if fs not in ("btrfs") and is_mounted(obj.path):
+		umount(parted_part=obj)
+	
+	# BEGIN RESIZING!!!!111111!!!!!!!!!!!!!1111111111111111
+	process = m.execute("%s %s" % (_app, _opt))
+	process.start() # START!!!111111111!!!!!!!!!!!!!!!111111111111111
+	
+	# Return object to frontend.
+	return process
 
 def delete_all(obj):
 	""" Deletes all partitions on obj (a Disk object). """
