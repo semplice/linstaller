@@ -16,6 +16,11 @@ import parted as pa
 # FIXME?: This library may be a bit slow, but we may bear with it as it
 # is just an installation program...
 
+class fakeFileSystem:
+	def __init__(self, type):
+		
+		self.type = type
+
 class PhysicalVolume:
 	def __init__(self, device_name=None, disk=None, part=None):
 		"""A Physical Volume object.
@@ -71,7 +76,7 @@ class VolumeGroup:
 		self.infos = {}
 		
 		try:
-			for line in commands.getoutput("vgs --noheadings %s" % self.name).split("\n"):
+			for line in commands.getoutput("vgs --noheadings --units M %s" % self.name).split("\n"):
 				if not line.replace(" ","").startswith("Filedescriptor"):
 					# Example output:
 					# testgroup   1   1   0 wz--n- 3,73g 1,73g
@@ -81,26 +86,16 @@ class VolumeGroup:
 					while line.count('') > 0:
 						line.remove('')
 					if not line[0] == self.name: continue
-					
-					print line
-					
+										
 					# size
-					if "g" in line[5]:
-						self.infos["size"] = float(line[5].replace(",",".").replace("g",""))*1024.0
-					elif "m" in line[5]:
-						self.infos["size"] = float(line[5].replace(",",".").replace("m",""))
-					elif "k" in line[5]:
-						self.infos["size"] = float(line[5].replace(",",".").replace("k",""))/1024.0
+					if "M" in line[5]:
+						self.infos["size"] = float(line[5].replace(",",".").replace("M",""))
 					else:
 						self.infos["size"] = float(line[5])
 					
 					# free
-					if "g" in line[6]:
-						self.infos["free"] = float(line[6].replace(",",".").replace("g",""))*1024.0
-					elif "m" in line[6]:
-						self.infos["free"] = float(line[6].replace(",",".").replace("m",""))
-					elif "k" in line[6]:
-						self.infos["free"] = float(line[6].replace(",",".").replace("k",""))/1024.0
+					if "M" in line[6]:
+						self.infos["free"] = float(line[6].replace(",",".").replace("M",""))
 					else:
 						self.infos["free"] = float(line[6])
 		except:
@@ -113,13 +108,15 @@ class VolumeGroup:
 		else:
 			self.infos["exists"] = True
 	
-	def getSize(self, unit="MB"):
+	def getLength(self, unit="MB"):
 		"""Returns the size in the unit specified."""
 		
 		if unit == "MB":
 			return self.infos["size"]
 		elif unit == "GB":
-			return self.infos["size"]/1024.0
+			return self.infos["size"]/1000.0
+		elif unit == "KB":
+			return self.infos["size"]*1000.0
 		
 	def create(self, devices):
 		"""Creates the Volume Group.
@@ -151,7 +148,8 @@ class VolumeGroup:
 		"""Removes every LV into the Volume Group"""
 		
 		for lv in self.logicalvolumes:
-			lv.remove()
+			if not lv.name.endswith("-1"):
+				lv.remove()
 	
 	@property
 	def path(self):
@@ -165,7 +163,7 @@ class VolumeGroup:
 		
 		result = []
 		
-		for line in commands.getoutput("lvs --noheadings -o lv_name %s" % self.name).split("\n"):
+		for line in commands.getoutput("lvs --noheadings --units M -o lv_name %s" % self.name).split("\n"):
 			line = line.replace(" ","")
 			
 			if not line.startswith("Filedescriptor"):
@@ -183,7 +181,7 @@ class VolumeGroup:
 	def getVolume(self, name):
 		"""Returns the logical volume name if it is in this volume group"""
 
-		for line in commands.getoutput("lvs --noheadings -o lv_name %s" % self.name).split("\n"):
+		for line in commands.getoutput("lvs --noheadings --units M -o lv_name %s" % self.name).split("\n"):
 			line = line.replace(" ","")
 			
 			if not line.startswith("Filedescriptor") and line == name:
@@ -214,7 +212,7 @@ class LogicalVolume:
 		self.infos = {}
 		
 		try:
-			for line in commands.getoutput("lvs --noheadings %s" % self.vgroup.name).split("\n"):
+			for line in commands.getoutput("lvs --noheadings --units M %s" % self.vgroup.name).split("\n"):
 				if not line.replace(" ","").startswith("Filedescriptor"):
 					# Example output:
 					# testvolume testgroup -wi-a---- 2,00g
@@ -224,16 +222,10 @@ class LogicalVolume:
 					while line.count('') > 0:
 						line.remove('')
 					if not line[0] == self.name: continue
-					
-					print line
-					
+										
 					# size
-					if "g" in line[3]:
-						self.infos["size"] = float(line[3].replace(",",".").replace("g",""))*1024.0
-					elif "m" in line[3]:
-						self.infos["size"] = float(line[3].replace(",",".").replace("m",""))
-					elif "k" in line[3]:
-						self.infos["size"] = float(line[3].replace(",",".").replace("k",""))/1024.0
+					if "M" in line[3]:
+						self.infos["size"] = float(line[3].replace(",",".").replace("M",""))
 					else:
 						self.infos["size"] = float(line[3])
 		except:
@@ -252,11 +244,18 @@ class LogicalVolume:
 			except:
 				# If this is the case (see FIXME), do not crash on the user but instead
 				# "disable" this LV...
+				m.verbose("Marking %s as inexistent because it appears empty" % self.name)
 				self.infos["exists"] = False
 				self.partition = None
 	
 	def create(self, size):
 		"""Creates the logical volume on self.vgroup with size 'size'."""
+		
+		# Size comes in as MB (S.I.), we need to transform them to kibibytes...
+		size *= 1000 # KB
+		size /= 1.024 # KiB
+		size = int(size)-1 # round and ensure we aren't in excess
+		size = str(size) + "k"
 		
 		m.sexec("lvcreate --name %(name)s --size %(size)s %(vgroup)s" % {"name":self.name, "size":size, "vgroup":self.vgroup.name})
 		self.reload_infos()
@@ -276,16 +275,64 @@ class LogicalVolume:
 		m.sexec("lvremove --force %s" % self.path)
 		self.reload_infos()
 	
+	def resize(self, size):
+		"""Resizes the Logical Volume."""
+
+		# Size comes in as MB (S.I.), we need to transform them to kibibytes...
+		size *= 1000 # KB
+		size /= 1.024 # KiB
+		size = int(size)-1 # round and ensure we aren't in excess
+		size = str(size) + "k"
+		
+		m.sexec("lvresize --force --size %(size)s %(path)s" % {"size":size, "path":self.path})
+		self.reload_infos()
+		
 	@property
 	def path(self):
 		"""Returns the path of the Logical Volume."""
 		
 		return os.path.join("/dev", self.vgroup.name, self.name)
 	
-	def getSize(self, unit="GB"):
-		"""Returns the """
+	def getLength(self, unit="MB"):
+		"""Returns the size in the unit specified."""
 		
-		pass
+		if not self.infos["exists"]:
+			size = self.vgroup.infos["free"]
+		else:
+			size = self.infos["size"]
+		
+		if unit == "MB":
+			return size
+		elif unit == "GB":
+			return size/1000.0
+		elif unit == "KB":
+			return size*1000.0
+
+	### PARTED COMPATIBILITY ###
+	
+	@property
+	def fileSystem(self):
+		if self.infos["exists"] and self.partition.fileSystem:
+			return self.partition.fileSystem
+		elif self.infos["exists"]:
+			# partition with no fs, it seems. But we know that is fat32,
+			# as freespace partitions are like that guy who doesn't exist
+			return fakeFileSystem(type="fat32") # HUGE FIXME
+	
+	@property
+	def number(self):
+		if self.infos["exists"] and self.partition.fileSystem:
+			return self.partition.number
+		elif self.infos["exists"]:
+			# Same as fileSystem, we are almost sure it's fat32.
+			# Return a fake number != -1, please don't rely on it
+			return 666
+		else:
+			return -1
+	
+	@property
+	def type(self):
+		return 1 # ?
 
 class FakePartition:
 	"""FakePartition class to resemble a parted.Partition object on freespace LogicalVolumes."""
@@ -300,10 +347,10 @@ class FakePartition:
 		self.fileSystem = None
 		self.number = -1 #freespace!
 	
-	def getSize(self, unit="GB"):
+	def getLength(self, unit="GB"):
 		
 		if unit == "GB":
-			return self.logicalvolume.vgroup.infos["free"]/1024.0
+			return self.logicalvolume.vgroup.infos["free"]/1000.0
 		elif unit == "MB":
 			return self.logicalvolume.vgroup.infos["free"]
 
@@ -314,7 +361,7 @@ def return_pv():
 	
 	result = {}
 	
-	for line in commands.getoutput("pvs --noheadings -o pv_name").split("\n"):
+	for line in commands.getoutput("pvs --noheadings --units M -o pv_name").split("\n"):
 		line = line.replace(" ","")
 		
 		if not line.startswith("Filedescriptor"):
@@ -330,7 +377,7 @@ def return_vg():
 	
 	result = {}
 	
-	for line in commands.getoutput("vgs --noheadings -o vg_name").split("\n"):
+	for line in commands.getoutput("vgs --noheadings --units M -o vg_name").split("\n"):
 		line = line.replace(" ","")
 		
 		if not line.startswith("Filedescriptor"):
@@ -346,7 +393,7 @@ def return_lv():
 	
 	result = {}
 	
-	for line in commands.getoutput("lvs --noheadings -o lv_name,vg_name").split("\n"):
+	for line in commands.getoutput("lvs --noheadings --units M -o lv_name,vg_name").split("\n"):
 		if not line.replace(" ","").startswith("Filedescriptor"):
 			line = line.split(" ")
 			# Remove blank items

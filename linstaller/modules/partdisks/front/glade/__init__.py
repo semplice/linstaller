@@ -52,8 +52,8 @@ class Apply(glade.Progress):
 				else:
 					_obj = obj
 
-				if (cng["resize"] < _obj.getSize("MB") and not action == lib.ResizeAction.SHRINK) or (
-				cng["resize"] > _obj.getSize("MB") and not action == lib.ResizeAction.GROW):
+				if (cng["resize"] < _obj.getLength("MB") and not action == lib.ResizeAction.SHRINK) or (
+				cng["resize"] > _obj.getLength("MB") and not action == lib.ResizeAction.GROW):
 					continue
 				try:
 					progress = lib.resize_partition_for_real(_obj, cng["resize"], action)
@@ -90,7 +90,8 @@ class Apply(glade.Progress):
 		lst, dct = lib.device_sort(self.parent.changed)
 		
 		# If we should shrink something, do it now
-		self.resize(lst, dct, lib.ResizeAction.SHRINK)
+		res = self.resize(lst, dct, lib.ResizeAction.SHRINK)
+		if res == False: return res
 		
 		for key in lst:
 			try:
@@ -194,7 +195,8 @@ class Apply(glade.Progress):
 					self.parent.settings["swap_noformat"] = True
 
 		# If we should grow something, do it now
-		self.resize(lst, dct, lib.ResizeAction.GROW)
+		res = self.resize(lst, dct, lib.ResizeAction.GROW)
+		if res == False: return res
 
 		# Preseed *all* changes
 		self.parent.settings["changed"] = self.parent.changed
@@ -225,6 +227,32 @@ class LVM_apply(glade.Progress):
 		
 		threading.Thread.__init__(self)
 
+	def resize(self, obj, newsize, action):
+		""" Do the resize process. """
+		
+		try:
+			progress = lib.resize_partition_for_real(obj.partition, newsize, action, path=obj.path, fs=obj.fileSystem.type)
+			self.parent.set_header("hold", _("Resizing LVM logical volume..."), _("Let's hope everything goes well! :)"))
+			if not progress:
+				return
+			status = progress.wait()
+		except KeyError:
+			# Workaround to avoid duplicate code when handling errors
+			status = 1
+		if status != 0:
+			# Failed ...
+			self.parent.set_header("error", _("Failed resizing the LVM logical volume."), _("See /var/log/linstaller/linstaller_latest.log for more details.") + "\n" + _("Maybe you shrinked too much the partition."))
+
+			if self.parent.is_automatic:
+				self.parent.is_automatic = "fail"
+				self.parent.on_steps_ok()
+				
+			# Restore sensitivity
+			self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+			self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+			return False
+
 	def progress(self):
 		""" Applies the changes to the devices. """
 		
@@ -252,7 +280,24 @@ class LVM_apply(glade.Progress):
 			elif share["type"] == "delete":
 				# We need to clear the VG
 				share["obj"].clear()
-		except:
+			elif share["type"] == "modify":
+				if "size" in share:
+					# We need to resize
+					
+					oldsize = share["obj"].getLength("MB")
+					
+					if oldsize > share["size"]:
+						# Shrink, reduce the filesystem then the LV
+						res = self.resize(share["obj"], share["size"], lib.ResizeAction.SHRINK)
+						if res == False: return res
+
+						share["obj"].resize(share["size"])
+					else:
+						# Grow, grow the LV then the filesystem
+						share["obj"].resize(share["size"])
+						res = self.resize(share["obj"], share["size"], lib.ResizeAction.GROW)
+						if res == False: return res
+		except KeyError:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 								
 			# Restore sensitivity
@@ -287,7 +332,7 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		if not share["type"] in ("remove","delete"):
+		if not share["type"] in ("remove","delete","modify"):
 			# Add the new partition to changed
 			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
@@ -522,7 +567,7 @@ class Frontend(glade.Frontend):
 		# Create the button objects
 		if by == "freespace":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1024, 2), "drive":info["drive"]}))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1000, 2), "drive":info["drive"]}))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This installs the distribution on the free space on the drive."))
@@ -1034,7 +1079,6 @@ class Frontend(glade.Frontend):
 		# Get color
 		color1 = Gdk.RGBA()
 		color1.parse(color)
-		print color1
 		
 		self.idle_add(button.override_background_color, Gtk.StateFlags.NORMAL, color1)
 
@@ -1164,10 +1208,13 @@ class Frontend(glade.Frontend):
 				
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
+		self.size_adjustment.set_upper(round(device.getLength("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
+		self.size_manual_entry.set_value(round(device.getLength("MB"), 3))
+		
+		# Ensure the size frame is sensitive
+		self.size_frame.set_sensitive(True)
 		
 		# Ensure the format checkbox is set to True and the "Do not format" unsensitive...
 		self.format_box.set_active(True)
@@ -1215,19 +1262,21 @@ class Frontend(glade.Frontend):
 		LVMcontainer = None
 		if hasattr(device, "isLVM") and device.isLVM:
 			LVMcontainer = device
-			device = device.partition
+			#device = device.partition
 			
 			path = LVMcontainer.path
 			
 			# Show the lv_frame
 			self.lv_frame.show()
-			
+
+			# Save the LV name
+			self.LVname = LVMcontainer.name
+
 			# Set the LV name
 			self.lv_name.set_text(LVMcontainer.name)
 			self.size_manual_entry.grab_focus()
 
-			# Save the LV name
-			self.LVname = LVMcontainer.name
+			self.size_adjustment.set_upper(round(device.getLength("MB"), 3) + round(device.vgroup.infos["free"],3))
 		else:
 			path = device.path
 			
@@ -1235,16 +1284,24 @@ class Frontend(glade.Frontend):
 			self.lv_frame.hide()
 			
 			self.LVname = False
+			
+			self.size_adjustment.set_upper(lib.maxGrow(device))
 		
-		self.current_length = round(device.getSize("MB"), 3)
+		self.current_length = round(device.getLength("MB"), 3)
 		
 		# Adjust the adjustment
 		self.size_adjustment.set_lower(0.01)
-		#self.size_adjustment.set_upper(round(device.getSize("MB"), 3))
-		self.size_adjustment.set_upper(lib.maxGrow(device)) #round(device.getMaxAvailableSize("MB"), 3))
+		#self.size_adjustment.set_upper(round(device.getLength("MB"), 3))
+		 #round(device.getMaxAvailableSize("MB"), 3))
 
 		# Populate the size
-		self.size_manual_entry.set_value(round(device.getSize("MB"), 3))
+		self.size_manual_entry.set_value(round(device.getLength("MB"), 3))
+		
+		# If LVM and fat32, we can't resize
+		if LVMcontainer and device.fileSystem.type == "fat32":
+			self.size_frame.set_sensitive(False)
+		else:
+			self.size_frame.set_sensitive(True)
 		
 		# Unset the format checkbox if we should.
 		self.format_box.set_sensitive(True) # Ensure is sensitive
@@ -1394,7 +1451,7 @@ class Frontend(glade.Frontend):
 				# first to convert everything to kilobytes and then
 				# drop any decimal number that may be still there...
 				# SAFETY ALERT: IT'S UGLY.
-				size = float((self.size_adjustment.get_value())-1.0)*1024
+				size = float((self.size_adjustment.get_value())-1.0)*1000
 				if "." in str(size):
 					size = str(size).split(".")[0]
 				size = str(size) + "K"
@@ -1405,7 +1462,7 @@ class Frontend(glade.Frontend):
 					"type":"create",
 					"obj":part,
 					"name":self.lv_name.get_text(),
-					"size":size,
+					"size":float(self.size_adjustment.get_value()),
 					"filesystem":targetfs,
 					"format":True,
 					"mountpoint":self.get_mountpoint()
@@ -1456,20 +1513,31 @@ class Frontend(glade.Frontend):
 			
 			part = self.get_partition_from_selected()
 			LVMcontainer = None
+			isLVM = False # we could use LVMcontainer, but to ensure consistency with add we use this
 			if hasattr(part, "isLVM") and part.isLVM:
 				LVMcontainer = part
-				part = part.partition
-				
+
+				#part = part.partition
+				isLVM = True
+
 				path = LVMcontainer.path
+
+				# It is LVM, we need to display a confirmation dialog and
+				# wait for the user input
+
+				self.LVMshare = {
+					"type":"modify",
+					"obj":LVMcontainer,
+				}
 			else:
 				path = part.path
 			
 			# What we should do?
 			# Check if the size has been changed...
 			newsize = self.size_manual_entry.get_value()
-			if newsize != self.current_length:
+			if newsize != self.current_length and not isLVM:
 				# Yes! We need to resize!
-				res = lib.resize_partition(part, lib.KbToSector(int(float(newsize)*1024))-1)
+				res = lib.resize_partition(part, lib.KbToSector(int(float(newsize)*1000))-1)
 				if not res:
 					# Failed! Ouch!
 					self.set_header("error", _("Failed to resize partition."), _("Please double-check the inserted values."))
@@ -1478,6 +1546,8 @@ class Frontend(glade.Frontend):
 					return
 				
 				self.queue_for_resize(path, float(newsize))
+			elif newsize != self.current_length and isLVM:
+				self.LVMshare["size"] = float(newsize)
 			else:
 				if path in self.changed and "resize" in self.changed[path]["changes"]:
 					del self.changed[path]["changes"]["resize"]
@@ -1485,14 +1555,18 @@ class Frontend(glade.Frontend):
 			# We should format?
 			newtoformat = self.format_box.get_active()
 			if newtoformat != self.current_toformat:
-				if not newtoformat:
+				if not newtoformat and not isLVM:
 					if path in self.changed and "format" in self.changed[path]["changes"]:
 						del self.changed[path]["changes"]["format"]
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
-				lib.format_partition(part, newfs) # Ensure we change part.fileSystem
-				self.queue_for_format(path, newfs)
+				if not isLVM:
+					lib.format_partition(part, newfs) # Ensure we change part.fileSystem
+					self.queue_for_format(path, newfs)
+				else:
+					self.LVMshare["filesystem"] = newfs
+					self.LVMshare["format"] = True
 							
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -1506,21 +1580,29 @@ class Frontend(glade.Frontend):
 			# Seed mount_on_install
 			self.changed[path]["changes"]["mount_on_install"] = self.mount_on_install.get_active()
 
-			self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+			if isLVM and ("format" in self.LVMshare or "size" in self.LVMshare):
+				# Show the window, the Apply process will be started by
+				# the window
+				self.idle_add(self.lvm_apply_window.set_sensitive, True)
+				self.idle_add(self.lvm_apply_window.show)
+			else:
+				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
-			if path in self.previously_changed: self.previously_changed.remove(path)
-			if not path in self.touched: self.touched.append(path)
-						
-			self.manual_populate()
+				if path in self.previously_changed: self.previously_changed.remove(path)
+				if not path in self.touched: self.touched.append(path)
+							
+				self.manual_populate()
+				
+				# Ensure isLVM is False, to set sensitiveness later...
+				isLVM = False
 		
 		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
-			
+		if obj == self.partition_cancel or not isLVM:
+			self.objects["parent"].main.set_sensitive(True)
+				
 	def on_formatbox_change(self, obj):
 		""" Called when formatbox has been toggled. """
-		
-		print("CALLED", obj)
-		
+				
 		if obj == self.format_box and obj.get_active():
 			# Make the combobox sensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, True)
@@ -1678,7 +1760,7 @@ class Frontend(glade.Frontend):
 				self.manual_populate()
 		
 		# Restore sensitivity
-		if obj == self.remove_no or not isLVM:
+		if obj == self.delete_no or not isLVM:
 			self.objects["parent"].main.set_sensitive(True)
 
 	def manual_apply(self):
@@ -1733,7 +1815,7 @@ class Frontend(glade.Frontend):
 			_model = _("LVM Volume Group")
 		else:
 			_model = device.model
-		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, _model, round(device.getSize(unit="GB"), 2)))
+		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, _model, round(device.getLength(unit="GB"), 2)))
 		container["frame"] = Gtk.Frame()
 		container["frame"].set_label_widget(container["frame_label"])
 		## Create the TreeView 
@@ -1780,7 +1862,8 @@ class Frontend(glade.Frontend):
 				LVMcontainer = None
 				if hasattr(part, "isLVM") and part.isLVM:
 					LVMcontainer = part
-					part = part.partition
+					#part = part.partition
+					
 					
 					path = LVMcontainer.path
 				else:
@@ -1800,17 +1883,17 @@ class Frontend(glade.Frontend):
 				elif not path in self.distribs:
 					name.append("Normal partition")
 
-				if int(part.getSize("GB")) > 0:
+				if int(part.getLength("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
-					_size = round(part.getSize("GB"), 2)
+					_size = round(part.getLength("GB"), 2)
 					_unit = "GB"
-				elif int(part.getSize("MB")) > 0:
+				elif int(part.getLength("MB")) > 0:
 					# Partition is too small to be represented with gigabytes. Use megabytes instead.
-					_size = round(part.getSize("MB"), 2)
+					_size = round(part.getLength("MB"), 2)
 					_unit = "MB"
 				else:
 					## Last try.. using kilobytes
-					#_size = round(part.getSize("kB"), 2)
+					#_size = round(part.getLength("kB"), 2)
 					#_unit = "kB"
 					
 					# Partition is too small and can be confusing. Simply do not show it.
@@ -1994,6 +2077,7 @@ class Frontend(glade.Frontend):
 		self.partition_window.connect("delete_event", self.child_window_delete)
 		self.lv_frame = self.objects["builder"].get_object("lv_frame")
 		self.lv_name = self.objects["builder"].get_object("lv_name")
+		self.size_frame = self.objects["builder"].get_object("size_frame")
 		self.size_manual_radio = self.objects["builder"].get_object("size_manual_radio")
 		self.size_adjustment = self.objects["builder"].get_object("size_adjustment")
 		self.size_manual_entry = self.objects["builder"].get_object("size_manual_entry")

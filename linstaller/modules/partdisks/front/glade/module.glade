@@ -564,7 +564,7 @@ If you are unsure, press No.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame1">
+              <object class="GtkFrame" id="size_frame">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
@@ -606,7 +606,6 @@ If you are unsure, press No.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="is_focus">True</property>
-                                <property name="max_length">4</property>
                                 <property name="invisible_char">•</property>
                                 <property name="primary_icon_stock">gtk-harddisk</property>
                                 <property name="adjustment">size_adjustment</property>

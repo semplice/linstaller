@@ -22,8 +22,8 @@ min_size = 0.2 # In GB.
 rec_size = 0.3 # In GB.
 
 # Convert min_size and rec_size in MB.
-min_size *= 1024
-rec_size *= 1024
+min_size *= 1000
+rec_size *= 1000
 
 # FIXME
 obj_old = False
@@ -95,12 +95,12 @@ def is_disk(dsk):
 def MbToSector(mbs):
     """ Convert Megabytes in sectors """
 
-    return ( mbs * 1024 * 1024 ) / 512
+    return ( mbs * 1000 * 1000 ) / 512
 
 def KbToSector(kbs):
 	""" Convert Kilobytes in sectors """
 	
-	return ( kbs * 1024 ) / 512
+	return ( kbs * 1000 ) / 512
 
 def swap_available(deep=False, disksd=None):
 	""" check if there is a swap partition available (True/False) """
@@ -138,7 +138,7 @@ def return_memory():
 	memline = int(memline[-2])
 	
 	# We do not want KiloBytes, but MegaBytes...
-	return memline / 1024
+	return memline / 1000
 
 def return_device(dev):
 	""" Returns a device from a partition (str) """
@@ -269,14 +269,14 @@ def unsetFlag(partition, flag):
 def maxGrow(partition):
 	""" Given a partition, it calculates the maximum it can grow, by looking at the subsequent partition. """
 	
-	current = partition.getSize("MB")
+	current = partition.getLength("MB")
 	
 	#nxt = partition.nextPartition()
 	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 	if not pednxt: return current
 	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
 	if nxt.type & p.PARTITION_FREESPACE:
-		current += nxt.getSize("MB")
+		current += nxt.getLength("MB")
 	
 	return current	
 
@@ -428,15 +428,21 @@ def resize_partition(obj, newLength):
 	#return obj.disk.maximizePartition(obj, cons)
 	return obj.disk.setPartitionGeometry(obj, cons, start=obj.geometry.start, end=obj.geometry.end)
 
-def resize_partition_for_real(obj, newLength, action):
+def resize_partition_for_real(obj, newLength, action, path=None, fs=None):
 	""" Given a partition object and the new start and end, this
 	will resize the partition's filesystem. """
 
 	# newLength from MB to KB, rounded minus one
-	newLength = int(newLength*1024)-1
+	newLengthKiB = int((newLength*1000)/1.024)-1 # KiB, needed by resize2fs
+	newLength = int(newLength*1000)-1 # KB, used by conforming applications
 
 	# Get filesystem
-	fs = obj.fileSystem.type
+	if not fs:
+		fs = obj.fileSystem.type
+	if fs.startswith("ext"):
+		# ext* filesystems uses resize2fs, which uses kibibytes even if
+		# they call them kilobytes
+		newLength = newLengthKiB
 	
 	# Get an appropriate resizer
 	if fs in supported_resize:
@@ -450,8 +456,11 @@ def resize_partition_for_real(obj, newLength, action):
 		obj.fileSystem.resize(obj.geometry)
 		return
 	
+	if not path:
+		path = obj.path
+	
 	_app = resizer[0]
-	_opt = resizer[1] % {"device":obj.path, "size":newLength, "mountpoint":"FIXME"}
+	_opt = resizer[1] % {"device":path, "size":newLength, "mountpoint":"FIXME"}
 
 	# Umount...
 	if fs not in ("btrfs") and is_mounted(obj.path):
@@ -727,7 +736,7 @@ def automatic_precheck(by="freespace", distribs=None):
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in obj.getFreeSpacePartitions():
-					size = round(part.getSize("MB"), 2)
+					size = round(part.getLength("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -761,7 +770,7 @@ def automatic_precheck(by="freespace", distribs=None):
 					continue
 				
 				# Check size
-				if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
+				if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
 					# We can.
 					delete[part] = name
 			
@@ -958,7 +967,7 @@ class automatic_check_ng:
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in parts:
-					size = round(part.getSize("MB"), 2)
+					size = round(part.getLength("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -1037,7 +1046,7 @@ class automatic_check_ng:
 					continue
 				
 				# Check size
-				size = round(part.getSize("MB"), 2)
+				size = round(part.getLength("MB"), 2)
 
 				if self.swap:
 					# Swap already in, go straight check of required space
@@ -1097,7 +1106,7 @@ class automatic_check_ng:
 			obj.deleteAllPartitions()
 
 			part = obj.getFreeSpacePartitions()[0]
-			size = round(part.getSize("MB"), 2)
+			size = round(part.getLength("MB"), 2)
 			
 			result = None
 			swapwarning = False
@@ -1309,7 +1318,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 			# Check the size of the partitions...
 			part_sizes = {}
 			for part in obj.getFreeSpacePartitions():
-				size = round(part.getSize("MB"), 2)
+				size = round(part.getLength("MB"), 2)
 				# Add part object and size in part_sizes
 				part_sizes[part] = size
 			
@@ -1444,7 +1453,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 				raise main.CodeError("An error! o_O")
 			
 			# Check size
-			if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
+			if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
 				# We can.
 				delete[part] = name
 		
