@@ -1219,6 +1219,12 @@ class Frontend(glade.Frontend):
 		# Ensure the format checkbox is set to True and the "Do not format" unsensitive...
 		self.format_box.set_active(True)
 		self.idle_add(self.do_not_format_box.set_sensitive, False)
+		
+		# Also if we are in a LV, we need to disable "Use for LVM"
+		if LVMcontainer:
+			self.idle_add(self.lvm_box.set_sensitive, False)
+		else:
+			self.idle_add(self.lvm_box.set_sensitive, True)
 
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
@@ -1325,6 +1331,12 @@ class Frontend(glade.Frontend):
 			self.filesystem_combo.set_active(self.fs_table[self.current_fs])
 		else:
 			self.filesystem_combo.set_active(-1)
+
+		# Also if we are in a LV, we need to disable "Use for LVM"
+		if LVMcontainer:
+			self.idle_add(self.lvm_box.set_sensitive, False)
+		else:
+			self.idle_add(self.lvm_box.set_sensitive, True)
 
 		# Clear mountpoint
 		self.mountpoint_entry.set_text("")
