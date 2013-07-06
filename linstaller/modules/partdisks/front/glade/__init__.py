@@ -2012,6 +2012,36 @@ class Frontend(glade.Frontend):
 			self.size_manual_entry.set_sensitive(False)
 			self.size_scale_scale.set_sensitive(True)
 	
+	def on_advanced_clicked(self, caller):
+		""" Shows advanced options if caller is the 'Advanced options' button.
+		Otherwise it hides them. """
+				
+		if caller == self.advanced_button:
+			# Hide add, remove, edit, separator, advanced
+			self.idle_add(self.add_button.hide)
+			self.idle_add(self.remove_button.hide)
+			self.idle_add(self.edit_button.hide)
+			self.idle_add(self.toolbar_separator.hide)
+			self.idle_add(self.advanced_button.hide)
+
+			# Show back, newtable, delete
+			self.idle_add(self.back_to_normal_button.show)
+			self.idle_add(self.newtable_button.show)
+			self.idle_add(self.delete_button.show)
+		elif caller == self.back_to_normal_button:
+			# Show add, remove, edit, separator, advanced
+			self.idle_add(self.add_button.show)
+			self.idle_add(self.remove_button.show)
+			self.idle_add(self.edit_button.show)
+			self.idle_add(self.toolbar_separator.show)
+			self.idle_add(self.advanced_button.show)
+			
+			# Hide back, newtable, delete
+			self.idle_add(self.back_to_normal_button.hide)
+			self.idle_add(self.newtable_button.hide)
+			self.idle_add(self.delete_button.hide)
+
+	
 	def manual_ready(self, clean=True):
 		""" Called when the manual window is ready. """
 		
@@ -2213,6 +2243,9 @@ class Frontend(glade.Frontend):
 		self.add_button = self.objects["builder"].get_object("add_button")
 		self.remove_button = self.objects["builder"].get_object("remove_button")
 		self.edit_button = self.objects["builder"].get_object("edit_button")
+		self.toolbar_separator = self.objects["builder"].get_object("toolbar_separator")
+		self.advanced_button = self.objects["builder"].get_object("advanced_button")
+		self.back_to_normal_button = self.objects["builder"].get_object("back_to_normal_button")
 		self.newtable_button = self.objects["builder"].get_object("newtable_button")
 		self.delete_button = self.objects["builder"].get_object("delete_button")
 		self.refresh_button = self.objects["builder"].get_object("refresh_button")
@@ -2223,9 +2256,14 @@ class Frontend(glade.Frontend):
 		self.edit_button.connect("clicked", self.on_edit_button_clicked)
 		self.newtable_button.connect("clicked", self.on_newtable_button_clicked)
 		self.remove_button.connect("clicked", self.on_remove_button_clicked)
+		self.advanced_button.connect("clicked", self.on_advanced_clicked)
+		self.back_to_normal_button.connect("clicked", self.on_advanced_clicked)
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)
 		self.refresh_button.connect("clicked", self.refresh_manual)
 		self.apply_button.connect("clicked", self.on_apply_button_clicked)
+		
+		# Trigger advanced buttons hiding by calling on_advanced_clicked
+		self.on_advanced_clicked(self.back_to_normal_button)
 		
 		# Change text of newtable_button
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:

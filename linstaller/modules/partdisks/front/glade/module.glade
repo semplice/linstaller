@@ -1509,11 +1509,45 @@ option for your system.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSeparatorToolItem" id="separator">
+                      <object class="GtkSeparatorToolItem" id="toolbar_separator">
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="advanced_button">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Advanced options</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes">Advanced options</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-preferences</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="back_to_normal_button">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Go Back</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes">Go Back</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-go-back</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
