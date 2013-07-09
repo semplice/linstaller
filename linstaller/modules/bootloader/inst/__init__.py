@@ -30,7 +30,17 @@ class Install(module.Install):
 			args = "--no-floppy --force"
 		else:
 			# MBR
-			location = "(hd0)"
+			
+			# Latest GRUB fucked up the (hd0) method, we need to get the
+			# first drive by ourselves...
+			with open("/proc/partitions","r") as f:
+				for line in f.readlines():
+					# Drop \n, split and grab the last section
+					line = line.replace("\n","").split(" ")[-1]
+					if not line in ("name",""):
+						location = "/dev/%s" % line
+						break
+					
 			args = "--no-floppy"
 			
 		m.sexec("grub-install %(args)s '%(location)s'" % {"args":args,"location":location})
