@@ -1,3 +1,10 @@
+linstaller (4.0.1-1) unstable; urgency=low
+
+  * modules/timezone: front/glade: ensure we focus the timezone treeview.
+  * Latest GRUB fucked up the (hd0) method, get the first drive by ourselves...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 10 Jul 2013 01:08:35 +0200
+
 linstaller (4.0.0-1) unstable; urgency=low
 
   * modules/partdisks: do not leave sensitivity to False when closing child windows.
