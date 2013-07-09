@@ -1118,6 +1118,14 @@ class Frontend(glade.Frontend):
 			else:
 				self.idle_add(self.partition_ok.set_sensitive, False)
 
+	def on_vgmanage_button_clicked(self, obj):
+		""" Called when the vgmanage button has been clicked. """
+		
+		self.idle_add(self.objects["parent"].main.set_sensitive, False)
+		self.idle_add(self.vgmanage_window.set_sensitive, False)
+		self.idle_add(self.vgmanage_window.show)
+		
+		self.idle_add(self.vgmanage_window_populate)
 
 	def on_newtable_button_clicked(self, obj):
 		""" Called when the newtable button has been clicked. """
@@ -1429,7 +1437,7 @@ class Frontend(glade.Frontend):
 		# Also check the lv_name
 		self.on_lv_name_change(self.lv_name)
 	
-	def child_window_delete(self, obj, event):
+	def child_window_delete(self, obj, event=None):
 		""" Called when the Close button on the child window has been clicked. """
 				
 		self.idle_add(obj.hide)
@@ -1782,6 +1790,26 @@ class Frontend(glade.Frontend):
 			
 		res = self.apply()
 
+	def on_vgmanage_window_button_clicked(self, obj):
+		""" Called when the close button on the vgmanage window has been clicked. """
+
+		# Make window insensitive
+		#self.idle_add(self.vgmanage_window.set_sensitive, False)
+
+		# Refresh
+		#self.refresh_manual(noclear=True)
+		
+		# Make window sensitive
+		#self.idle_add(self.vgmanage_window.set_sensitive, True)
+
+		# Regenerate view
+		self.manual_populate()
+
+		# Restore sensitivity
+		self.idle_add(self.objects["parent"].main.set_sensitive, True)
+		
+		# Hide window
+		self.idle_add(self.vgmanage_window.hide)
 
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
@@ -1999,7 +2027,21 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.edit_button.set_sensitive, False)
 		self.idle_add(self.newtable_button.set_sensitive, False)
 		self.idle_add(self.delete_button.set_sensitive, False)
-	
+
+	def vgmanage_window_populate(self):
+		""" Populate the vgmanage window. """
+		
+		self.vg_store.clear()
+		
+		# Loop through VGs...
+		for vg_name, pvs in lvm.return_vg_with_pvs().items():
+			pvs_list = []
+			for pv in pvs:
+				pvs_list.append(pv.pv)
+			self.vg_store.append((vg_name, "\n".join(pvs_list)))
+		
+		self.idle_add(self.vgmanage_window.set_sensitive, True)
+
 	def on_manual_radio_changed(self, obj=None):
 		""" Called when the radios on the add/edit partition window are changed. """
 		
@@ -2017,29 +2059,37 @@ class Frontend(glade.Frontend):
 		Otherwise it hides them. """
 				
 		if caller == self.advanced_button:
-			# Hide add, remove, edit, separator, advanced
+			# Hide add, remove, edit, advanced, coso_che_separa, refresh, apply
 			self.idle_add(self.add_button.hide)
 			self.idle_add(self.remove_button.hide)
 			self.idle_add(self.edit_button.hide)
-			self.idle_add(self.toolbar_separator.hide)
+			#self.idle_add(self.toolbar_separator.hide)
 			self.idle_add(self.advanced_button.hide)
+			self.idle_add(self.coso_che_separa.hide)
+			self.idle_add(self.refresh_button.hide)
+			self.idle_add(self.apply_button.hide)
 
-			# Show back, newtable, delete
+			# Show back, newtable, delete, vgmanage
 			self.idle_add(self.back_to_normal_button.show)
 			self.idle_add(self.newtable_button.show)
 			self.idle_add(self.delete_button.show)
+			self.idle_add(self.vgmanage_button.show)
 		elif caller == self.back_to_normal_button:
-			# Show add, remove, edit, separator, advanced
+			# Show add, remove, edit, advanced, coso_che_separa, refresh, apply
 			self.idle_add(self.add_button.show)
 			self.idle_add(self.remove_button.show)
 			self.idle_add(self.edit_button.show)
-			self.idle_add(self.toolbar_separator.show)
+			#self.idle_add(self.toolbar_separator.show)
 			self.idle_add(self.advanced_button.show)
+			self.idle_add(self.coso_che_separa.show)
+			self.idle_add(self.refresh_button.show)
+			self.idle_add(self.apply_button.show)
 			
-			# Hide back, newtable, delete
+			# Hide back, newtable, delete, vgmanage
 			self.idle_add(self.back_to_normal_button.hide)
 			self.idle_add(self.newtable_button.hide)
 			self.idle_add(self.delete_button.hide)
+			self.idle_add(self.vgmanage_button.hide)
 
 	
 	def manual_ready(self, clean=True):
@@ -2114,6 +2164,7 @@ class Frontend(glade.Frontend):
 		self.delete_window = self.objects["builder"].get_object("delete_window")
 		self.apply_window = self.objects["builder"].get_object("apply_window")
 		self.lvm_apply_window = self.objects["builder"].get_object("lvm_apply_window")
+		self.vgmanage_window = self.objects["builder"].get_object("vgmanage_window")
 		
 		## Partition window:
 		self.partition_window.connect("delete_event", self.child_window_delete)
@@ -2238,6 +2289,26 @@ class Frontend(glade.Frontend):
 		self.lvm_apply_no.connect("clicked", self.on_lvm_apply_window_button_clicked)
 		self.lvm_apply_yes.connect("clicked", self.on_lvm_apply_window_button_clicked)
 
+		## Manage LVM Volume Groups window
+		self.vgmanage_window.connect("delete_event", self.child_window_delete)
+		self.vg_scrolledwindow = self.objects["builder"].get_object("vg_scrolledwindow")
+		self.vg_add_button = self.objects["builder"].get_object("vg_add_button")
+		self.vg_modify_button = self.objects["builder"].get_object("vg_modify_button")
+		self.vg_remove_button = self.objects["builder"].get_object("vg_remove_button")
+		self.vg_close_button = self.objects["builder"].get_object("vg_close")
+		self.vg_close_button.connect("clicked", self.on_vgmanage_window_button_clicked)
+
+		# Populate now the vgmanage window
+		self.vg_store = Gtk.ListStore(str, str)
+		self.vg_treeview = Gtk.TreeView(self.vg_store)
+		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Name"), Gtk.CellRendererText(), text=0))
+		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Physical Volumes"), Gtk.CellRendererText(), text=1))
+		self.vg_treeview.show()
+		#self.vg_treeview.connect("cursor-changed", self.on_vg_treeview_changed)
+		
+		# Add the treeview to the scrolledwindow
+		self.vg_scrolledwindow.add(self.vg_treeview)
+
 		# Get toolbar buttons
 		self.manual_toolbar = self.objects["builder"].get_object("manual_toolbar")
 		self.add_button = self.objects["builder"].get_object("add_button")
@@ -2248,6 +2319,8 @@ class Frontend(glade.Frontend):
 		self.back_to_normal_button = self.objects["builder"].get_object("back_to_normal_button")
 		self.newtable_button = self.objects["builder"].get_object("newtable_button")
 		self.delete_button = self.objects["builder"].get_object("delete_button")
+		self.vgmanage_button = self.objects["builder"].get_object("vgmanage_button")
+		self.coso_che_separa = self.objects["builder"].get_object("coso_che_separa")
 		self.refresh_button = self.objects["builder"].get_object("refresh_button")
 		self.apply_button = self.objects["builder"].get_object("apply_button")
 
@@ -2259,6 +2332,7 @@ class Frontend(glade.Frontend):
 		self.advanced_button.connect("clicked", self.on_advanced_clicked)
 		self.back_to_normal_button.connect("clicked", self.on_advanced_clicked)
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)
+		self.vgmanage_button.connect("clicked", self.on_vgmanage_button_clicked)
 		self.refresh_button.connect("clicked", self.refresh_manual)
 		self.apply_button.connect("clicked", self.on_apply_button_clicked)
 		

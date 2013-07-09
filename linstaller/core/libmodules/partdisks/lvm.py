@@ -414,6 +414,28 @@ def return_lv():
 	
 	return result 
 
+def return_vg_with_pvs():
+	"""Returns a dictionary with every VolumeGroups present in the system,
+	matched with the PhyicalVolume they use.
+	
+	Example output: {"testgroup":[PhysicalVolume(device_name="/dev/sdc1"),]}"""
+	
+	result = {}
+	
+	for line in commands.getoutput("pvs --noheadings -o pv_name,vg_name").split("\n"):
+		if not line.replace(" ","").startswith("Filedescriptor"):
+			line = line.split(" ")
+			# Remove blank items
+			while line.count('') > 0:
+				line.remove('')
+			# Ensure we skip filedescriptors
+			if not line[1] in result:
+				# add the group dictionary
+				result[line[1]] = []
+			result[line[1]].append(PhysicalVolume(line[0]))
+	
+	return result
+
 def refresh():
 	""" Refreshes the LVM objects lists... """
 	
