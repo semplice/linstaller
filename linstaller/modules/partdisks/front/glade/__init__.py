@@ -1437,13 +1437,16 @@ class Frontend(glade.Frontend):
 		# Also check the lv_name
 		self.on_lv_name_change(self.lv_name)
 	
-	def child_window_delete(self, obj, event=None):
+	def child_window_delete(self, obj, event, restoreto=False):
 		""" Called when the Close button on the child window has been clicked. """
 				
+		if restoreto == False:
+			restoreto = self.objects["parent"].main
+		
 		self.idle_add(obj.hide)
 
 		# Restore sensitivity
-		self.objects["parent"].main.set_sensitive(True)
+		if restoreto: restoreto.set_sensitive(True)
 		
 		return True
 	
@@ -1790,6 +1793,18 @@ class Frontend(glade.Frontend):
 			
 		res = self.apply()
 
+	def on_vgmanage_add_clicked(self, obj):
+		""" Called when the add button on the vgmanage window has been clicked. """
+		
+		self.idle_add(self.vgmanage_window.set_sensitive, False)
+		self.idle_add(self.vgmanage_manage_window.show)
+
+	def on_vgmanage_edit_clicked(self, obj):
+		""" Called when Edit add button on the vgmanage window has been clicked. """
+		
+		self.idle_add(self.vgmanage_window.set_sensitive, False)
+		self.idle_add(self.vgmanage_manage_window.show)
+
 	def on_vgmanage_window_button_clicked(self, obj):
 		""" Called when the close button on the vgmanage window has been clicked. """
 
@@ -1801,15 +1816,21 @@ class Frontend(glade.Frontend):
 		
 		# Make window sensitive
 		#self.idle_add(self.vgmanage_window.set_sensitive, True)
+		
+		# Hide window
+		self.vgmanage_window.hide()
+		
+		# Calling post_vgmanage_population()
+		self.idle_add(self.post_vgmanage_population)
+	
+	def post_vgmanage_population(self):
+		""" Do manual populate and set sensitiveness to main. """
 
 		# Regenerate view
 		self.manual_populate()
 
 		# Restore sensitivity
 		self.idle_add(self.objects["parent"].main.set_sensitive, True)
-		
-		# Hide window
-		self.idle_add(self.vgmanage_window.hide)
 
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
@@ -2165,6 +2186,7 @@ class Frontend(glade.Frontend):
 		self.apply_window = self.objects["builder"].get_object("apply_window")
 		self.lvm_apply_window = self.objects["builder"].get_object("lvm_apply_window")
 		self.vgmanage_window = self.objects["builder"].get_object("vgmanage_window")
+		self.vgmanage_manage_window = self.objects["builder"].get_object("vgmanage_manage_window")
 		
 		## Partition window:
 		self.partition_window.connect("delete_event", self.child_window_delete)
@@ -2293,9 +2315,11 @@ class Frontend(glade.Frontend):
 		self.vgmanage_window.connect("delete_event", self.child_window_delete)
 		self.vg_scrolledwindow = self.objects["builder"].get_object("vg_scrolledwindow")
 		self.vg_add_button = self.objects["builder"].get_object("vg_add_button")
-		self.vg_modify_button = self.objects["builder"].get_object("vg_modify_button")
+		self.vg_edit_button = self.objects["builder"].get_object("vg_edit_button")
 		self.vg_remove_button = self.objects["builder"].get_object("vg_remove_button")
 		self.vg_close_button = self.objects["builder"].get_object("vg_close")
+		self.vg_add_button.connect("clicked", self.on_vgmanage_add_clicked)
+		self.vg_edit_button.connect("clicked", self.on_vgmanage_edit_clicked)
 		self.vg_close_button.connect("clicked", self.on_vgmanage_window_button_clicked)
 
 		# Populate now the vgmanage window
@@ -2308,6 +2332,12 @@ class Frontend(glade.Frontend):
 		
 		# Add the treeview to the scrolledwindow
 		self.vg_scrolledwindow.add(self.vg_treeview)
+		
+		## VGmanage - Manage window
+		self.vgmanage_manage_window.connect("delete_event", self.child_window_delete, self.vgmanage_window)
+		self.vg_manage_ok = self.objects["builder"].get_object("vg_manage_ok")
+		self.vg_manage_entry = self.objects["builder"].get_object("vg_manage_entry")
+		self.vg_manage_viewport = self.objects["builder"].get_object("vg_manage_viewport")
 
 		# Get toolbar buttons
 		self.manual_toolbar = self.objects["builder"].get_object("manual_toolbar")

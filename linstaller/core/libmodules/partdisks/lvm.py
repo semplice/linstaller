@@ -439,13 +439,11 @@ def return_vg_with_pvs():
 def refresh():
 	""" Refreshes the LVM objects lists... """
 	
+	global VolumeGroups, PhysicalVolumes, LogicalVolumes
+	
 	PhysicalVolumes = return_pv()
 	VolumeGroups = return_vg()
-	
-	global VolumeGroups # Needed by return_lv
-	
 	LogicalVolumes = return_lv()
 	
-	global PhysicalVolumes, LogicalVolumes
 
 refresh()
