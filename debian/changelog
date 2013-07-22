@@ -1,3 +1,25 @@
+linstaller (4.71.0-1) devel; urgency=low
+
+  * Ensure we properly prepare the /boot/efi partition
+  * Support for markup in header's subtext, which is now properly resizes too long texts
+    modules/bricks: frontend/glade: changed subtext.
+  * Ensure we try to umount boot/efi in the wrappers.
+  * frontends/glade: added support for fullscreen (set frontends:glade.fullscreen to True)
+    config/: added semplice-fullscreen config which uses the newly implemented fullscreen function
+  * Ensure the apply window is sensitive before showing it
+  * Improved resize actions, some bugfixes
+  * Added LVM Logical Volume modification support, along with resizing.
+    In a LV, rely on pyparted only to get the fileSystem.
+    If a LV exists but has a None filesystem, assume it's fat32.
+    Migration to standard kilobytes (SI).
+  * Disable 'Use for LVM' box if we are in a LV
+  * Move newtable and delete buttons to the new 'advanced options'
+  * Preliminary VG manage GUI
+  * Latest GRUB fucked up the (hd0) method, get the first drive by ourselves...
+  * More progress on the VGmanage window.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 22 Jul 2013 20:25:55 +0200
+
 linstaller (4.70.1-1) devel; urgency=low
 
   * Improvements, workarounds, fixes on the APT handling inside and outside the chroot.
