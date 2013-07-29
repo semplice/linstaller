@@ -418,21 +418,26 @@ def return_vg_with_pvs():
 	"""Returns a dictionary with every VolumeGroups present in the system,
 	matched with the PhyicalVolume they use.
 	
-	Example output: {"testgroup":[PhysicalVolume(device_name="/dev/sdc1"),]}"""
+	Example output: {"testgroup":[{"volume":PhysicalVolume(device_name="/dev/sdc1"), "size":"400M"},]}"""
 	
 	result = {}
 	
-	for line in commands.getoutput("pvs --noheadings -o pv_name,vg_name").split("\n"):
+	for line in commands.getoutput("pvs --noheadings --units M -o pv_name,pv_size,vg_name").split("\n"):
+		# Ensure we skip filedescriptors
 		if not line.replace(" ","").startswith("Filedescriptor"):
 			line = line.split(" ")
 			# Remove blank items
 			while line.count('') > 0:
 				line.remove('')
-			# Ensure we skip filedescriptors
-			if not line[1] in result:
+			if len(line) == 2:
+				name = None
+			else:
+				name = line[2]
+			if not name in result:
 				# add the group dictionary
-				result[line[1]] = []
-			result[line[1]].append(PhysicalVolume(line[0]))
+				result[name] = []
+			size = float(line[1].replace("M","").replace(",","."))
+			result[name].append({"volume":PhysicalVolume(line[0]), "size":size})
 	
 	return result
 
