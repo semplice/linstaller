@@ -369,6 +369,9 @@ class LVM_apply(glade.Progress):
 
 		# FIXME?
 		self.parent.idle_add(self.parent.refresh_manual, None, False, True)
+		# FIXMEEEEE!
+		if self.parent.LVMrestoreto == self.parent.vgmanage_window:
+			self.parent.idle_add(self.parent.vgmanage_window_populate)
 
 		# Restore sensitivity
 		self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
@@ -1846,7 +1849,7 @@ class Frontend(glade.Frontend):
 		
 		pass
 
-	def on_vg_manage_entry_change(self, obj):
+	def on_vg_manage_entry_changed(self, obj):
 		""" Called when vg_manage_entry is changed. """
 		
 		if self.VGname == False:
@@ -1865,20 +1868,20 @@ class Frontend(glade.Frontend):
 				self.idle_add(self.vg_manage_ok.set_sensitive, False)
 			elif obj:
 				# Called from a true keystroke :)
-				# Fire up on_vg_manage_checkbox_change to check if we can
+				# Fire up on_vg_manage_checkbox_changed to check if we can
 				# go ahead
-				self.idle_add(self.on_vg_manage_checkbox_change, None)
+				self.idle_add(self.on_vg_manage_checkbox_changed, None)
 			else:
 				self.idle_add(self.vg_manage_ok.set_sensitive, True)
 	
-	def on_vg_manage_checkbox_change(self, obj):
+	def on_vg_manage_checkbox_changed(self, obj):
 		""" Called when a checkbox has been clicked. """
 		
 		if obj and obj.get_active():
 			# Called from a true click :)
-			# Fire up on_vg_manage_entry_change to check if we can
+			# Fire up on_vg_manage_entry_changed to check if we can
 			# go ahead
-			self.idle_add(self.on_vg_manage_entry_change, None)
+			self.idle_add(self.on_vg_manage_entry_changed, None)
 		else:
 			# See the other checkboxes
 			for cb in self.vgmanage_manage_checkboxes:
@@ -1903,6 +1906,40 @@ class Frontend(glade.Frontend):
 		
 		# Generate checkboxes of available physical volumes
 		dct = lvm.return_vg_with_pvs()
+		if not add:
+			# Get selection
+			selection = self.vg_treeview.get_selection()
+		
+			# Get selected item
+			model, _iter = selection.get_selected()
+			value = model.get_value(_iter, 0)
+			
+			# Edit mode, generate also the "Currently Used" frame
+			used_frame = Gtk.Frame()
+			used_frame.set_shadow_type(Gtk.ShadowType.NONE)
+			used_frame_label = Gtk.Label()
+			used_frame_label.set_markup("<b>%s</b>" % _("Currently used"))
+			used_frame.set_label_widget(used_frame_label)
+			
+			used_frame_alignment = Gtk.Alignment()
+			used_frame_alignment.set_padding(2,2,12,0)
+
+			used_frame_vbox = Gtk.VBox()
+
+			used_frame_alignment.add(used_frame_vbox)
+			used_frame.add(used_frame_alignment)
+
+			frame_container.pack_start(used_frame, True, True, 0)
+			
+			for pv in dct[value]:
+				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
+				self.vgmanage_manage_checkboxes[pv["volume"].pv].set_active(True)
+				self.vgmanage_manage_checkboxes[pv["volume"].pv].connect(
+					"clicked", 
+					self.on_vg_manage_checkbox_changed
+				)
+				used_frame_vbox.pack_start(self.vgmanage_manage_checkboxes[pv["volume"].pv], False, True, 0)
+		
 		if None in dct:
 			# We have some free PVs
 			available_frame = Gtk.Frame()
@@ -1925,7 +1962,7 @@ class Frontend(glade.Frontend):
 				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
 				self.vgmanage_manage_checkboxes[pv["volume"].pv].connect(
 					"clicked", 
-					self.on_vg_manage_checkbox_change
+					self.on_vg_manage_checkbox_changed
 				)
 				available_frame_vbox.pack_start(self.vgmanage_manage_checkboxes[pv["volume"].pv], False, True, 0)
 		
@@ -1952,8 +1989,8 @@ class Frontend(glade.Frontend):
 			
 			self.vgmanage_manage_window.set_title(_("Modify a volume group"))
 			
-			self.VGname = "FIXME"
-			self.vg_manage_entry.set_text("")
+			self.VGname = value
+			self.vg_manage_entry.set_text(self.VGname)
 
 			# Make OK button sensitive
 			self.idle_add(self.vg_manage_ok.set_sensitive, True)
@@ -2007,6 +2044,14 @@ class Frontend(glade.Frontend):
 
 		# Restore sensitivity
 		self.idle_add(self.objects["parent"].main.set_sensitive, True)
+
+	def on_vg_treeview_changed(self, obj):
+		""" Called when an item on the VG treeview has been selected """
+		
+		# If the treeview has been changed, we have at least one
+		# VG, thus needing the Edit and Remove buttons
+		self.idle_add(self.vg_edit_button.set_sensitive, True)
+		self.idle_add(self.vg_remove_button.set_sensitive, True)
 
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
@@ -2241,6 +2286,10 @@ class Frontend(glade.Frontend):
 			for pv in pvs:
 				pvs_list.append(pv["volume"].pv)
 			self.vg_store.append((vg_name, "\n".join(pvs_list)))
+		
+		# Disable Edit and Remove buttons
+		self.idle_add(self.vg_edit_button.set_sensitive, False)
+		self.idle_add(self.vg_remove_button.set_sensitive, False)
 		
 		self.idle_add(self.vgmanage_window.set_sensitive, True)
 
@@ -2519,7 +2568,7 @@ class Frontend(glade.Frontend):
 		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Name"), Gtk.CellRendererText(), text=0))
 		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Physical Volumes"), Gtk.CellRendererText(), text=1))
 		self.vg_treeview.show()
-		#self.vg_treeview.connect("cursor-changed", self.on_vg_treeview_changed)
+		self.vg_treeview.connect("cursor-changed", self.on_vg_treeview_changed)
 		
 		# Add the treeview to the scrolledwindow
 		self.vg_scrolledwindow.add(self.vg_treeview)
@@ -2529,7 +2578,7 @@ class Frontend(glade.Frontend):
 		self.vg_manage_ok = self.objects["builder"].get_object("vg_manage_ok")
 		self.vg_manage_cancel = self.objects["builder"].get_object("vg_manage_cancel")
 		self.vg_manage_entry = self.objects["builder"].get_object("vg_manage_entry")
-		self.vg_manage_entry.connect("changed", self.on_vg_manage_entry_change)
+		self.vg_manage_entry.connect("changed", self.on_vg_manage_entry_changed)
 		self.vg_manage_viewport = self.objects["builder"].get_object("vg_manage_viewport")
 
 		# Get toolbar buttons
