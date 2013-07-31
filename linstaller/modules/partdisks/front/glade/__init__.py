@@ -311,6 +311,38 @@ class LVM_apply(glade.Progress):
 						if res == False: return res
 			elif share["type"] == "VGcreate":
 				share["obj"].create(share["devices"])
+			elif share["type"] == "VGmodify":
+				# Compare old devices and new, and
+				# extend/reduce
+				toadd = []
+				toremove = []
+				_original = lvm.return_vg_with_pvs()[self.parent.VGname]
+				# Make _original easier to manage
+				original = []
+				for pv in _original:
+					original.append(pv["volume"].pv)
+				
+				for pv in share["devices"]:
+					if not pv in original:
+						# Added
+						verbose("%s: going to extend VG with %s" % (self.parent.VGname, pv))
+						toadd.append(pv)
+				
+				for pv in original:
+					if not pv in share["devices"]:
+						# Removed
+						verbose("%s: going to reduce VG by removing %s" % (self.parent.VGname, pv))
+						toremove.append(pv)
+				
+				# Add, remove
+				if toadd: share["obj"].extend(toadd)
+				if toremove: share["obj"].reduce(toremove)
+
+				# Compare names...
+				if self.parent.VGname != share["name"]:
+					# Name changed, rename
+					share["obj"].rename(share["name"])
+				
 		except KeyError:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 								
@@ -346,7 +378,7 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		if not share["type"] in ("remove","delete","modify","VGcreate"):
+		if not share["type"] in ("remove","delete","modify","VGcreate","VGmodify"):
 			# Add the new partition to changed
 			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
@@ -1817,7 +1849,8 @@ class Frontend(glade.Frontend):
 		for name, cbox in self.vgmanage_manage_checkboxes.items():
 			if cbox.get_active():
 				# cbox is active, we need to use it!
-				lst.append(lvm.PhysicalVolume(device_name=name))
+				#lst.append(lvm.PhysicalVolume(device_name=name))
+				lst.append(name)
 		
 		return tuple(lst)
 
@@ -1847,8 +1880,27 @@ class Frontend(glade.Frontend):
 	def on_vgmanage_edit_window_button_clicked(self, obj):
 		""" Triggered when a button in the vgmanage-edit window has been clicked. """
 		
-		pass
-
+		# Hide
+		self.idle_add(self.vgmanage_manage_window.hide)
+		
+		if obj == self.vg_manage_ok:
+			# Ok button clicked, populate LVMshare
+			
+			self.LVMshare = {
+				"type":"VGmodify",
+				"obj":lvm.VolumeGroup(name=self.VGname),
+				"name":self.vg_manage_entry.get_text(),
+				"devices":self.return_selected_physicalvolumes()
+			}
+				
+			# Show the window, the Apply process will be started by
+			# the window
+			self.LVMrestoreto = self.vgmanage_window
+			self.idle_add(self.lvm_apply_window.set_sensitive, True)
+			self.idle_add(self.lvm_apply_window.show)
+		else:
+			self.idle_add(self.vgmanage_window.set_sensitive, True)
+	
 	def on_vg_manage_entry_changed(self, obj):
 		""" Called when vg_manage_entry is changed. """
 		
@@ -1903,6 +1955,8 @@ class Frontend(glade.Frontend):
 		self.vgmanage_manage_checkboxes = {}
 		
 		frame_container = Gtk.VBox()
+		frame_container.set_homogeneous(False)
+		frame_container.set_spacing(3)
 		
 		# Generate checkboxes of available physical volumes
 		dct = lvm.return_vg_with_pvs()
@@ -1912,7 +1966,7 @@ class Frontend(glade.Frontend):
 		
 			# Get selected item
 			model, _iter = selection.get_selected()
-			value = model.get_value(_iter, 0)
+			self.VGname = model.get_value(_iter, 0)
 			
 			# Edit mode, generate also the "Currently Used" frame
 			used_frame = Gtk.Frame()
@@ -1922,16 +1976,16 @@ class Frontend(glade.Frontend):
 			used_frame.set_label_widget(used_frame_label)
 			
 			used_frame_alignment = Gtk.Alignment()
-			used_frame_alignment.set_padding(2,2,12,0)
+			used_frame_alignment.set_padding(3,0,12,0)
 
 			used_frame_vbox = Gtk.VBox()
 
 			used_frame_alignment.add(used_frame_vbox)
 			used_frame.add(used_frame_alignment)
 
-			frame_container.pack_start(used_frame, True, True, 0)
+			frame_container.pack_start(used_frame, False, True, 0)
 			
-			for pv in dct[value]:
+			for pv in dct[self.VGname]:
 				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
 				self.vgmanage_manage_checkboxes[pv["volume"].pv].set_active(True)
 				self.vgmanage_manage_checkboxes[pv["volume"].pv].connect(
@@ -1939,6 +1993,12 @@ class Frontend(glade.Frontend):
 					self.on_vg_manage_checkbox_changed
 				)
 				used_frame_vbox.pack_start(self.vgmanage_manage_checkboxes[pv["volume"].pv], False, True, 0)
+				
+				# If this PV is used, set sensitiveness to False
+				if pv["volume"].is_used:
+					self.vgmanage_manage_checkboxes[pv["volume"].pv].set_sensitive(False)
+		else:
+			self.VGname = ""
 		
 		if None in dct:
 			# We have some free PVs
@@ -1949,14 +2009,14 @@ class Frontend(glade.Frontend):
 			available_frame.set_label_widget(available_frame_label)
 			
 			available_frame_alignment = Gtk.Alignment()
-			available_frame_alignment.set_padding(2,2,12,0)
+			available_frame_alignment.set_padding(3,0,12,0)
 
 			available_frame_vbox = Gtk.VBox()
 
 			available_frame_alignment.add(available_frame_vbox)
 			available_frame.add(available_frame_alignment)
 
-			frame_container.pack_start(available_frame, True, True, 0)
+			frame_container.pack_start(available_frame, False, True, 0)
 			
 			for pv in dct[None]:
 				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
@@ -1978,8 +2038,8 @@ class Frontend(glade.Frontend):
 			
 			self.vgmanage_manage_window.set_title(_("Add a new volume group"))
 			
-			self.VGname = ""
-			self.vg_manage_entry.set_text("")
+			# Hide self.vg_manage_editlabel
+			self.vg_manage_editlabel.hide()
 			
 			# Make OK button insensitive
 			self.idle_add(self.vg_manage_ok.set_sensitive, False)
@@ -1987,13 +2047,15 @@ class Frontend(glade.Frontend):
 			self.vg_manage_ok_id = self.vg_manage_ok.connect("clicked", self.on_vgmanage_edit_window_button_clicked)
 			self.vg_manage_cancel_id = self.vg_manage_cancel.connect("clicked", self.on_vgmanage_edit_window_button_clicked)
 			
-			self.vgmanage_manage_window.set_title(_("Modify a volume group"))
+			self.vgmanage_manage_window.set_title(_("Edit %s") % self.VGname)
 			
-			self.VGname = value
-			self.vg_manage_entry.set_text(self.VGname)
-
+			# Show self.vg_manage_editlabel
+			self.vg_manage_editlabel.show()
+			
 			# Make OK button sensitive
 			self.idle_add(self.vg_manage_ok.set_sensitive, True)
+		
+		self.vg_manage_entry.set_text(self.VGname)
 		
 		self.vg_manage_viewport.show_all()
 		self.idle_add(self.vgmanage_manage_window.set_sensitive, True)
@@ -2579,6 +2641,7 @@ class Frontend(glade.Frontend):
 		self.vg_manage_cancel = self.objects["builder"].get_object("vg_manage_cancel")
 		self.vg_manage_entry = self.objects["builder"].get_object("vg_manage_entry")
 		self.vg_manage_entry.connect("changed", self.on_vg_manage_entry_changed)
+		self.vg_manage_editlabel = self.objects["builder"].get_object("vg_manage_editlabel")
 		self.vg_manage_viewport = self.objects["builder"].get_object("vg_manage_viewport")
 
 		# Get toolbar buttons

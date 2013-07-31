@@ -57,6 +57,17 @@ class PhysicalVolume:
 		# We are fallbacking to the good old m.sexec
 		m.sexec("pvcreate %s" % self.pv)
 	
+	@property
+	def is_used(self):
+		"""Returns True if this PV is used, False if not."""
+		
+		used = commands.getoutput("pvs %s --noheadings --units b -o pv_used" % self.pv).replace(" ","").replace("B","").split("\n")[-1]
+		
+		if used == "0":
+			return False
+		else:
+			return True
+	
 class VolumeGroup:
 	def __init__(self, name):
 		"""A Volume Group object.
@@ -123,14 +134,52 @@ class VolumeGroup:
 		
 		devices is a tuple which contains the list of devices to include into the VG."""
 		
-		if not type(devices) == tuple: devices = (devices,)
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
 		
 		_devices = []
 		for device in devices:
-			_devices.append(device.pv)
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
 		
 		m.sexec("vgcreate %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
 	
+	def extend(self, devices):
+		"""Extends the Volume Group.
+		
+		devices is a tuple which contains the list of devices to include into the VG."""
+
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
+		
+		_devices = []
+		for device in devices:
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
+		
+		m.sexec("vgextend %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
+
+	def reduce(self, devices):
+		"""Reduces the Volume Group.
+		
+		devices is a tuple which contains the list of devices to remove from the VG."""
+
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
+		
+		_devices = []
+		for device in devices:
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
+		
+		m.sexec("vgreduce %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
+
 	def rename(self, new):
 		"""Renames the Volume Group.
 		
