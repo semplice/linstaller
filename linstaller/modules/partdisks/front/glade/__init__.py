@@ -342,6 +342,8 @@ class LVM_apply(glade.Progress):
 				if self.parent.VGname != share["name"]:
 					# Name changed, rename
 					share["obj"].rename(share["name"])
+			elif share["type"] == "VGremove":
+				share["obj"].remove()
 				
 		except KeyError:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
@@ -378,7 +380,7 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		if not share["type"] in ("remove","delete","modify","VGcreate","VGmodify"):
+		if not share["type"] in ("remove","delete","modify","VGcreate","VGmodify","VGremove"):
 			# Add the new partition to changed
 			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
@@ -2071,7 +2073,7 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.prepare_vgmanage_manage_window, True)
 
 	def on_vgmanage_edit_clicked(self, obj):
-		""" Called when Edit add button on the vgmanage window has been clicked. """
+		""" Called when the edit button on the vgmanage window has been clicked. """
 		
 		self.idle_add(self.vgmanage_window.set_sensitive, False)
 		self.idle_add(self.vgmanage_manage_window.set_sensitive, False)
@@ -2079,6 +2081,28 @@ class Frontend(glade.Frontend):
 		
 		
 		self.idle_add(self.prepare_vgmanage_manage_window, False)
+
+	def on_vgmanage_remove_clicked(self, obj):
+		""" Called when the remove button on the vgmanage window has been clicked. """
+
+		self.idle_add(self.vgmanage_window.set_sensitive, False)
+
+		selection = self.vg_treeview.get_selection()
+		
+		# Get selected item
+		model, _iter = selection.get_selected()
+		value = model.get_value(_iter, 0)
+
+		self.LVMshare = {
+			"type":"VGremove",
+			"obj":lvm.VolumeGroup(name=value)
+		}
+				
+		# Show the window, the Apply process will be started by
+		# the window
+		self.LVMrestoreto = self.vgmanage_window
+		self.idle_add(self.lvm_apply_window.set_sensitive, True)
+		self.idle_add(self.lvm_apply_window.show)
 
 	def on_vgmanage_window_button_clicked(self, obj):
 		""" Called when the close button on the vgmanage window has been clicked. """
@@ -2622,6 +2646,7 @@ class Frontend(glade.Frontend):
 		self.vg_close_button = self.objects["builder"].get_object("vg_close")
 		self.vg_add_button.connect("clicked", self.on_vgmanage_add_clicked)
 		self.vg_edit_button.connect("clicked", self.on_vgmanage_edit_clicked)
+		self.vg_remove_button.connect("clicked", self.on_vgmanage_remove_clicked)
 		self.vg_close_button.connect("clicked", self.on_vgmanage_window_button_clicked)
 
 		# Populate now the vgmanage window
