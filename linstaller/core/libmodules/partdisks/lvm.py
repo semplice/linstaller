@@ -45,16 +45,11 @@ class PhysicalVolume:
 	def create(self):
 		"""Creates the Physical Volume."""
 		
-		if type(self.pv) == parted.Disk:
+		if type(self.pv) == pa.Disk:
 			# If we are initializing a disk, we need to erase the partition table
 			# Using the good old dd to do so.
 			m.sexec("dd if=/dev/zero of=%s bs=512 count=1" % self.pv)
-		else:
-			# We are initializing a partition, so we need to set the proper id
-			print("FIXME: We need to set 0x8e to the partition!")
 		
-		# Our version is too old to have the pvCreate method.
-		# We are fallbacking to the good old m.sexec
 		m.sexec("pvcreate %s" % self.pv)
 	
 	@property

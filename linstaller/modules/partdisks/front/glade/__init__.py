@@ -182,6 +182,24 @@ class Apply(glade.Progress):
 					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
 
 					return False
+			
+			# Should create a PV?
+			if "PVcreate" in cng:
+				try:
+					lvm.PhysicalVolume(part=obj).create()
+				except:
+					# Failed ...
+					self.parent.set_header("error", _("Failed creating a LVM Physical Volume in %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+					
+					# Restore sensitivity
+					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+					return False
 							
 			# Check if it is root or swap
 			if "useas" in cng:
@@ -1240,6 +1258,8 @@ class Frontend(glade.Frontend):
 	def prepare_partition_window_for_add(self):
 		""" Prepares the partition window for add partition action. """
 		
+		self.is_add = True
+		
 		# Get the device
 		device = self.get_partition_from_selected()
 		LVMcontainer = None
@@ -1291,6 +1311,9 @@ class Frontend(glade.Frontend):
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
 		
+		# Hide the PVwarning
+		self.idle_add(self.PVwarning.hide)
+		
 		# mount_on_install unsensitive
 		self.idle_add(self.mount_on_install.set_sensitive, False)
 		
@@ -1321,7 +1344,9 @@ class Frontend(glade.Frontend):
 	
 	def prepare_partition_window_for_edit(self):
 		""" Prepares the partition window for edit partition action. """
-				
+		
+		self.is_add = False
+		
 		# Get the device
 		device = self.get_partition_from_selected()
 		LVMcontainer = None
@@ -1376,6 +1401,12 @@ class Frontend(glade.Frontend):
 			# Set too the filesystem, as it is specified in "format".
 			self.current_fs = self.changed[device.path]["changes"]["format"]
 			self.current_toformat = True
+		elif path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+			# LVM Physical Volume, select "Use as LVM physical volume" radiobutton
+			self.lvm_box.set_active(True)
+			# No filesystem is here...
+			self.current_fs = "ext4"
+			self.current_toformat = False
 		else:
 			# Unset the format box
 			self.do_not_format_box.set_active(True)
@@ -1383,7 +1414,7 @@ class Frontend(glade.Frontend):
 			if device.fileSystem != None:
 				self.current_fs = device.fileSystem.type
 			else:
-				self.current_fs = None
+				self.current_fs = "ext4"
 			self.current_toformat = False
 		
 		if self.current_fs:
@@ -1415,7 +1446,13 @@ class Frontend(glade.Frontend):
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
 		self.idle_add(self.do_not_format_box.set_sensitive, True)
-		
+
+		# Show PVwarning if we need to
+		if path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+			self.idle_add(self.PVwarning.show)
+		else:
+			self.idle_add(self.PVwarning.hide)
+				
 		# Make mount_on_install sensitive and set it if it is needed
 		self.idle_add(self.mount_on_install.set_sensitive, True)
 		self.mount_on_install_prepare = True
@@ -1549,6 +1586,11 @@ class Frontend(glade.Frontend):
 			else:
 				self.set_header("hold", _("Creating the partition..."), _("Please wait."))
 
+				if self.lvm_box.get_active():
+					# Ensure the filesystem is None if we are going to make
+					# the partition a LVM physical volume
+					targetfs = None
+
 				try:
 					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
 				except:
@@ -1558,12 +1600,17 @@ class Frontend(glade.Frontend):
 				
 				# Add the new partition to changed
 				self.changed[res.path] = {"obj":res, "changes":{}}
-				
-				self.queue_for_format(res.path, targetfs)
-				self.change_mountpoint(res.path, self.get_mountpoint())
 
-				# Seed mount_on_install
-				self.changed[res.path]["changes"]["mount_on_install"] = True
+				# Should we make this partition a LVM Physical Volume?
+				if self.lvm_box.get_active():
+					# YES!
+					self.changed[res.path]["changes"]["PVcreate"] = True
+				else:
+					self.queue_for_format(res.path, targetfs)
+					self.change_mountpoint(res.path, self.get_mountpoint())
+
+					# Seed mount_on_install
+					self.changed[res.path]["changes"]["mount_on_install"] = True
 				
 				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
@@ -1641,6 +1688,15 @@ class Frontend(glade.Frontend):
 				else:
 					self.LVMshare["filesystem"] = newfs
 					self.LVMshare["format"] = True
+			
+			# Should we make this partition a LVM Physical Volume?
+			if self.lvm_box.get_active() and not path in lvm.PhysicalVolumes:
+				# YES!
+				self.changed[path]["changes"]["PVcreate"] = True
+			else:
+				# NO :(
+				if "PVcreate" in self.changed[path]["changes"]:
+					del self.changed[path]["changes"]["PVcreate"]
 							
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -1711,6 +1767,10 @@ class Frontend(glade.Frontend):
 		elif obj in (self.lvm_box, self.crypting_box):
 			# Restore sensitivity to the mountpoint_frame
 			self.idle_add(self.mountpoint_frame.set_sensitive, True)
+
+		if obj == self.lvm_box and obj.get_active() and not self.is_add:
+			# Show PVwarning...
+			self.idle_add(self.PVwarning.show)
 		
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
@@ -1787,7 +1847,10 @@ class Frontend(glade.Frontend):
 					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 				
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
-			
+				# Remove changes?
+				#self.changed[part.path]["changes"] = {}
+				#if part.path in self.previously_changed: self.previously_changed.remove(part.path)
+				
 				self.manual_populate()
 		
 		# Restore sensitivity
@@ -2176,14 +2239,14 @@ class Frontend(glade.Frontend):
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.lvm_apply_window.hide)
 			
-	def manual_frame_creator(self, device, disk, lvm=False):
+	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
 		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "changes":{}}
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
-		if lvm:
+		if on_lvm:
 			_model = _("LVM Volume Group")
 		else:
 			_model = device.model
@@ -2194,7 +2257,7 @@ class Frontend(glade.Frontend):
 		# ListStore: /dev/part - system/label - filesystem - format? - size
 
 		#if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
-		if lvm:
+		if on_lvm:
 			partitions = device.logicalvolumes
 		elif disk != "notable":
 			partitions = lib.disk_partitions(disk)
@@ -2271,13 +2334,19 @@ class Frontend(glade.Frontend):
 					# Partition is too small and can be confusing. Simply do not show it.
 					continue
 
-				if path in self.changed and "format" in self.changed[path]["changes"]:
+				if path in self.changed and "PVcreate" in self.changed[path]["changes"]:
+					# We need to make a LVM Physical volume...
+					_fs = _("LVM physical volume")
+					_to_format = True
+				elif path in self.changed and "format" in self.changed[path]["changes"]:
 					# We need to format the partition, so don't use the one that parted returns to us
 					_fs = self.changed[path]["changes"]["format"]
 					_to_format = True
 				else:
 					# See what parted tells us
-					if part.fileSystem == None and not part.number == -1 and not part.type == 2:
+					if path in lvm.PhysicalVolumes:
+						_fs = _("LVM physical volume")
+					elif part.fileSystem == None and not part.number == -1 and not part.type == 2:
 						# If filesystem == None, skip.
 						_fs = _("not formatted")
 					elif part.number == -1:
@@ -2336,7 +2405,7 @@ class Frontend(glade.Frontend):
 			
 			if not obj.infos["exists"]: continue
 			
-			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, lvm=True)
+			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, on_lvm=True)
 			if "description" in self.manual_devices[obj.path]:
 				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = self.manual_devices[obj.path]["description"]
 			else:
@@ -2438,6 +2507,8 @@ class Frontend(glade.Frontend):
 		
 		self.current_selected = None
 		
+		self.is_add = None
+		
 		self.LVMshare = {}
 		
 		self.LVname = ""
@@ -2528,6 +2599,12 @@ class Frontend(glade.Frontend):
 		self.lvm_box = self.objects["builder"].get_object("lvm_box")
 		self.crypting_box = self.objects["builder"].get_object("crypting_box")
 		self.do_not_format_box = self.objects["builder"].get_object("do_not_format_box")
+		self.PVwarning = self.objects["builder"].get_object("PVwarning")
+		# Hold color in PVwarning
+		col = Gdk.RGBA()
+		col.parse(self.objects["parent"].return_color("hold"))
+		self.PVwarning.override_background_color(0, col)
+		# ---
 		self.filesystem_combo = self.objects["builder"].get_object("filesystem_combo")
 		self.mountpoint_frame = self.objects["builder"].get_object("mountpoint_frame")
 		self.mountpoint_combo = self.objects["builder"].get_object("mountpoint_combo")
