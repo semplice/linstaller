@@ -1,3 +1,14 @@
+linstaller (4.72.0-1) devel; urgency=low
+
+  * linstaller can now create LVM Volume Groups.
+  * Some fine tuning and plumbing for the Edit VG mode
+  * linstaller can now rename, extend and reduce existing VGs.
+  * linstaller can now remove VGs.
+  * linstaller can now create LVM physical volumes.
+  * partdisks: front/glade: do not fail if part.name in manual_frame_creator() is None
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 13:07:37 +0200
+
 linstaller (4.71.0-1) devel; urgency=low
 
   * Ensure we properly prepare the /boot/efi partition
