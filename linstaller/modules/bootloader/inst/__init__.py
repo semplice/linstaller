@@ -33,13 +33,10 @@ class Install(module.Install):
 			
 			# Latest GRUB fucked up the (hd0) method, we need to get the
 			# first drive by ourselves...
-			with open("/proc/partitions","r") as f:
-				for line in f.readlines():
-					# Drop \n, split and grab the last section
-					line = line.replace("\n","").split(" ")[-1]
-					if not line in ("name",""):
-						location = "/dev/%s" % line
-						break
+			m.sexec("grub-mkdevicemap --no-floppy --device-map=/tmp/.linstaller")
+			
+			with open("/tmp/.linstaller","r") as f:
+				location = f.readline().replace("\n","").split("	")[-1]
 					
 			args = "--no-floppy"
 			
