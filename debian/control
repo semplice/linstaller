@@ -51,7 +51,8 @@ Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, pytho
  squashfs-tools,
  user-setup,
  imvirt,
- dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted
+ lvm2,
+ ntfs-3g, fatresize, dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted
 Description: Modular GNU/Linux distribution installer -- base modules
  linstaller is a modular and preseedable GNU/Linux distribution
  installer, written in python.
