@@ -2313,10 +2313,12 @@ class Frontend(glade.Frontend):
 				name = []
 				if path in self.distribs:
 					name.append(self.distribs[path])
-				if name:
+				if name and part.name:
 					name.append(part.name)
 				elif not path in self.distribs:
 					name.append("Normal partition")
+				else:
+					name.append("")
 
 				if int(part.getLength("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
