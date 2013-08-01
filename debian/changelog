@@ -1,3 +1,13 @@
+linstaller (4.72.1-0) devel; urgency=low
+
+  * The famous after-many-changes bug squashing phase!
+    - core/aptlib: set DEBIAN_FRONTEND to noninteractive
+    - modules/partdisks: library: 1MB offset when adding partitions
+    - modules/partdisks: lvm: force pvcreate when creating a PV
+    - modules/bootloader: properly get the device and seed grub-pc
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 20:45:12 +0200
+
 linstaller (4.72.0-1) devel; urgency=low
 
   * linstaller can now create LVM Volume Groups.
