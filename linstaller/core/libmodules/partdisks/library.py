@@ -285,7 +285,7 @@ def add_partition(obj, start, size, type, filesystem):
 
 	# Create Geometry and Constraint
 	cons = p.Constraint(device=obj.device)
-	geom = p.Geometry(device=obj.device, start=start, length=size)
+	geom = p.Geometry(device=obj.device, start=start+2048, length=size)
 	
 	if filesystem:
 		filesystem = p.FileSystem(type=filesystem, geometry=geom)

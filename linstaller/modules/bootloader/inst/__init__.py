@@ -12,6 +12,18 @@ from linstaller.core.main import warn,info,verbose
 import os, sys, fileinput
 import commands
 
+## Why are we using the "manual" install method instead of debconf?
+## First, we want to keep some sort of compatibility with non-Debian
+## distros.
+## But the most important reason is that we are unable to get the first
+## hard-drive without using grub's tools.
+## We can use /proc/partitions but it's better to not rely on it.
+## Another solution is to split package installation and install 
+## the packages which requires configuration (grub-pc, grub-efi-*)
+## at last, but we really do not want to split things.
+## So, at last, we are using OUR method (it's OUR installer after all)
+## and even if we love debconf, in this case is a no go.
+
 UEFIplatforms = {
 	"i386": "i386-efi",
 	"amd64": "x86_64-efi"
@@ -63,15 +75,22 @@ class Install(module.Install):
 			
 			# Latest GRUB fucked up the (hd0) method, we need to get the
 			# first drive by ourselves...
-			with open("/proc/partitions","r") as f:
-				for line in f.readlines():
-					# Drop \n, split and grab the last section
-					line = line.replace("\n","").split(" ")[-1]
-					if not line in ("name",""):
-						location = "/dev/%s" % line
-						break
+			m.sexec("grub-mkdevicemap --no-floppy --device-map=/tmp/.linstaller")
+			
+			with open("/tmp/.linstaller","r") as f:
+				location = f.readline().replace("\n","").split("	")[-1]
 					
 			args = "--no-floppy"
+			
+			# Also set the location in debconf database, to avoid apt to
+			# bug us when an upgrade of grub occours
+			# FIXME: this breaks systems without the debconf module,
+			# i.e. every non-Debian based distributions.
+			import debconf
+			db = debconf.DebconfCommunicator("linstaller")
+			db.set("grub-pc/install_devices", location)
+			db.shutdown() # Exit.
+			
 			
 		m.sexec("grub-install %(args)s '%(location)s'" % {"args":args,"location":location})
 		

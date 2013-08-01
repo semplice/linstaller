@@ -6,10 +6,12 @@
 
 import linstaller.core.main as m
 
+import os
+os.environ["DEBIAN_FRONTEND"] = "noninteractive"
+
 import apt_pkg
 import apt
 import shutil
-import os
 
 RepositoryType = m.enum("TRIVIAL", "AUTOMATIC")
 MarkType = m.enum("INSTALL","DELETE","KEEP","UPGRADE")

@@ -50,7 +50,7 @@ class PhysicalVolume:
 			# Using the good old dd to do so.
 			m.sexec("dd if=/dev/zero of=%s bs=512 count=1" % self.pv)
 		
-		m.sexec("pvcreate %s" % self.pv)
+		m.sexec("pvcreate --force %s" % self.pv)
 	
 	@property
 	def is_used(self):
