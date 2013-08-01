@@ -425,9 +425,17 @@ class LVM_apply(glade.Progress):
 		if self.parent.LVMrestoreto == self.parent.vgmanage_window:
 			self.parent.idle_add(self.parent.vgmanage_window_populate)
 
+		# If we're here, ok!	
+		self.parent.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
+
+		# Enable Next button
+		self.parent.on_steps_ok()
+
 		# Restore sensitivity
 		self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
 		self.restore()
+		
+		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
 
 class Crypt_initialize(glade.Progress):
@@ -1716,7 +1724,14 @@ class Frontend(glade.Frontend):
 				self.idle_add(self.lvm_apply_window.set_sensitive, True)
 				self.idle_add(self.lvm_apply_window.show)
 			else:
-				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+				if not "PVcreate" in self.changed[path]["changes"]:
+					subtext = _("Use the Apply button to save them.")
+				else:
+					# If we should create a physical volume, urge the
+					# user to apply ASAP in order to make it usable for
+					# the VGmanage dialog...
+					subtext = _("You need to apply your changes in order to use the new LVM physical volume.")
+				self.set_header("hold", _("You have some unsaved changes!"), subtext)
 
 				if path in self.previously_changed: self.previously_changed.remove(path)
 				if not path in self.touched: self.touched.append(path)

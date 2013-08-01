@@ -275,7 +275,9 @@ def maxGrow(partition):
 	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 	if not pednxt: return current
 	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
-	if nxt.type & p.PARTITION_FREESPACE:
+	if nxt.type & p.PARTITION_FREESPACE and nxt.getLength("MB") > 2:
+		# Be on the safe side and do not increment the length if it is
+		# lower than two megabytes...
 		current += nxt.getLength("MB")
 	
 	return current	
