@@ -1,3 +1,10 @@
+linstaller (4.0.2-1) unstable; urgency=low
+
+  * modules/bootloader: inst: correctly retrieve the first
+    hard disk, as seen in the devel branch
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 22:53:27 +0200
+
 linstaller (4.0.1-1) unstable; urgency=low
 
   * modules/timezone: front/glade: ensure we focus the timezone treeview.
