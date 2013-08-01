@@ -45,17 +45,23 @@ class PhysicalVolume:
 	def create(self):
 		"""Creates the Physical Volume."""
 		
-		if type(self.pv) == parted.Disk:
+		if type(self.pv) == pa.Disk:
 			# If we are initializing a disk, we need to erase the partition table
 			# Using the good old dd to do so.
 			m.sexec("dd if=/dev/zero of=%s bs=512 count=1" % self.pv)
-		else:
-			# We are initializing a partition, so we need to set the proper id
-			print("FIXME: We need to set 0x8e to the partition!")
 		
-		# Our version is too old to have the pvCreate method.
-		# We are fallbacking to the good old m.sexec
 		m.sexec("pvcreate %s" % self.pv)
+	
+	@property
+	def is_used(self):
+		"""Returns True if this PV is used, False if not."""
+		
+		used = commands.getoutput("pvs %s --noheadings --units b -o pv_used" % self.pv).replace(" ","").replace("B","").split("\n")[-1]
+		
+		if used == "0":
+			return False
+		else:
+			return True
 	
 class VolumeGroup:
 	def __init__(self, name):
@@ -123,14 +129,52 @@ class VolumeGroup:
 		
 		devices is a tuple which contains the list of devices to include into the VG."""
 		
-		if not type(devices) == tuple: devices = (devices,)
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
 		
 		_devices = []
 		for device in devices:
-			_devices.append(device.pv)
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
 		
 		m.sexec("vgcreate %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
 	
+	def extend(self, devices):
+		"""Extends the Volume Group.
+		
+		devices is a tuple which contains the list of devices to include into the VG."""
+
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
+		
+		_devices = []
+		for device in devices:
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
+		
+		m.sexec("vgextend %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
+
+	def reduce(self, devices):
+		"""Reduces the Volume Group.
+		
+		devices is a tuple which contains the list of devices to remove from the VG."""
+
+		if not type(devices) == tuple and not type(devices) == list: devices = (devices,)
+		
+		_devices = []
+		for device in devices:
+			if type(device) == str:
+				name = device
+			else:
+				name = device.pv
+			_devices.append(name)
+		
+		m.sexec("vgreduce %(name)s %(devices)s" % {"name":self.name, "devices":" ".join(_devices)})
+
 	def rename(self, new):
 		"""Renames the Volume Group.
 		
@@ -418,21 +462,26 @@ def return_vg_with_pvs():
 	"""Returns a dictionary with every VolumeGroups present in the system,
 	matched with the PhyicalVolume they use.
 	
-	Example output: {"testgroup":[PhysicalVolume(device_name="/dev/sdc1"),]}"""
+	Example output: {"testgroup":[{"volume":PhysicalVolume(device_name="/dev/sdc1"), "size":"400M"},]}"""
 	
 	result = {}
 	
-	for line in commands.getoutput("pvs --noheadings -o pv_name,vg_name").split("\n"):
+	for line in commands.getoutput("pvs --noheadings --units M -o pv_name,pv_size,vg_name").split("\n"):
+		# Ensure we skip filedescriptors
 		if not line.replace(" ","").startswith("Filedescriptor"):
 			line = line.split(" ")
 			# Remove blank items
 			while line.count('') > 0:
 				line.remove('')
-			# Ensure we skip filedescriptors
-			if not line[1] in result:
+			if len(line) == 2:
+				name = None
+			else:
+				name = line[2]
+			if not name in result:
 				# add the group dictionary
-				result[line[1]] = []
-			result[line[1]].append(PhysicalVolume(line[0]))
+				result[name] = []
+			size = float(line[1].replace("M","").replace(",","."))
+			result[name].append({"volume":PhysicalVolume(line[0]), "size":size})
 	
 	return result
 

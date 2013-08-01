@@ -182,6 +182,24 @@ class Apply(glade.Progress):
 					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
 
 					return False
+			
+			# Should create a PV?
+			if "PVcreate" in cng:
+				try:
+					lvm.PhysicalVolume(part=obj).create()
+				except:
+					# Failed ...
+					self.parent.set_header("error", _("Failed creating a LVM Physical Volume in %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+					
+					# Restore sensitivity
+					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+					return False
 							
 			# Check if it is root or swap
 			if "useas" in cng:
@@ -227,6 +245,18 @@ class LVM_apply(glade.Progress):
 		
 		threading.Thread.__init__(self)
 
+	def restore(self):
+		""" Restores sensitivity to the window specified in parent's
+		LVMrestoreto. """
+		
+		if not self.parent.LVMrestoreto:
+			# Main window
+			self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+		else:
+			# User specified window
+			self.parent.idle_add(self.parent.LVMrestoreto.set_sensitive, True)
+			self.parent.LVMrestoreto = None # Reset
+
 	def resize(self, obj, newsize, action):
 		""" Do the resize process. """
 		
@@ -248,8 +278,8 @@ class LVM_apply(glade.Progress):
 				self.parent.on_steps_ok()
 				
 			# Restore sensitivity
-			self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
-			self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+			self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
+			self.restore()
 
 			return False
 
@@ -297,12 +327,48 @@ class LVM_apply(glade.Progress):
 						share["obj"].resize(share["size"])
 						res = self.resize(share["obj"], share["size"], lib.ResizeAction.GROW)
 						if res == False: return res
+			elif share["type"] == "VGcreate":
+				share["obj"].create(share["devices"])
+			elif share["type"] == "VGmodify":
+				# Compare old devices and new, and
+				# extend/reduce
+				toadd = []
+				toremove = []
+				_original = lvm.return_vg_with_pvs()[self.parent.VGname]
+				# Make _original easier to manage
+				original = []
+				for pv in _original:
+					original.append(pv["volume"].pv)
+				
+				for pv in share["devices"]:
+					if not pv in original:
+						# Added
+						verbose("%s: going to extend VG with %s" % (self.parent.VGname, pv))
+						toadd.append(pv)
+				
+				for pv in original:
+					if not pv in share["devices"]:
+						# Removed
+						verbose("%s: going to reduce VG by removing %s" % (self.parent.VGname, pv))
+						toremove.append(pv)
+				
+				# Add, remove
+				if toadd: share["obj"].extend(toadd)
+				if toremove: share["obj"].reduce(toremove)
+
+				# Compare names...
+				if self.parent.VGname != share["name"]:
+					# Name changed, rename
+					share["obj"].rename(share["name"])
+			elif share["type"] == "VGremove":
+				share["obj"].remove()
+				
 		except KeyError:
 			self.parent.set_header("error", _("Failed committing changes to %s..")  % share["obj"].path, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 								
 			# Restore sensitivity
-			self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
-			self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+			self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
+			self.restore()
 
 			# Clear LVMshare
 			self.parent.LVMshare = {}
@@ -321,7 +387,7 @@ class LVM_apply(glade.Progress):
 				
 				# Restore sensitivity
 				self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
-				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+				self.restore()
 
 				# Clear LVMshare
 				self.parent.LVMshare = {}
@@ -332,7 +398,7 @@ class LVM_apply(glade.Progress):
 		if not share["obj"].path in self.parent.previously_changed:
 			self.parent.previously_changed.append(share["obj"].path)
 
-		if not share["type"] in ("remove","delete","modify"):
+		if not share["type"] in ("remove","delete","modify","VGcreate","VGmodify","VGremove"):
 			# Add the new partition to changed
 			self.parent.changed[share["obj"].path] = {"obj":share["obj"], "changes":{}}
 
@@ -355,10 +421,13 @@ class LVM_apply(glade.Progress):
 
 		# FIXME?
 		self.parent.idle_add(self.parent.refresh_manual, None, False, True)
+		# FIXMEEEEE!
+		if self.parent.LVMrestoreto == self.parent.vgmanage_window:
+			self.parent.idle_add(self.parent.vgmanage_window_populate)
 
 		# Restore sensitivity
 		self.parent.idle_add(self.parent.lvm_apply_window.set_sensitive, True)
-		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+		self.restore()
 
 
 class Crypt_initialize(glade.Progress):
@@ -1189,6 +1258,8 @@ class Frontend(glade.Frontend):
 	def prepare_partition_window_for_add(self):
 		""" Prepares the partition window for add partition action. """
 		
+		self.is_add = True
+		
 		# Get the device
 		device = self.get_partition_from_selected()
 		LVMcontainer = None
@@ -1240,6 +1311,9 @@ class Frontend(glade.Frontend):
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
 		
+		# Hide the PVwarning
+		self.idle_add(self.PVwarning.hide)
+		
 		# mount_on_install unsensitive
 		self.idle_add(self.mount_on_install.set_sensitive, False)
 		
@@ -1270,7 +1344,9 @@ class Frontend(glade.Frontend):
 	
 	def prepare_partition_window_for_edit(self):
 		""" Prepares the partition window for edit partition action. """
-				
+		
+		self.is_add = False
+		
 		# Get the device
 		device = self.get_partition_from_selected()
 		LVMcontainer = None
@@ -1325,6 +1401,12 @@ class Frontend(glade.Frontend):
 			# Set too the filesystem, as it is specified in "format".
 			self.current_fs = self.changed[device.path]["changes"]["format"]
 			self.current_toformat = True
+		elif path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+			# LVM Physical Volume, select "Use as LVM physical volume" radiobutton
+			self.lvm_box.set_active(True)
+			# No filesystem is here...
+			self.current_fs = "ext4"
+			self.current_toformat = False
 		else:
 			# Unset the format box
 			self.do_not_format_box.set_active(True)
@@ -1332,7 +1414,7 @@ class Frontend(glade.Frontend):
 			if device.fileSystem != None:
 				self.current_fs = device.fileSystem.type
 			else:
-				self.current_fs = None
+				self.current_fs = "ext4"
 			self.current_toformat = False
 		
 		if self.current_fs:
@@ -1364,7 +1446,13 @@ class Frontend(glade.Frontend):
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
 		self.idle_add(self.do_not_format_box.set_sensitive, True)
-		
+
+		# Show PVwarning if we need to
+		if path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+			self.idle_add(self.PVwarning.show)
+		else:
+			self.idle_add(self.PVwarning.hide)
+				
 		# Make mount_on_install sensitive and set it if it is needed
 		self.idle_add(self.mount_on_install.set_sensitive, True)
 		self.mount_on_install_prepare = True
@@ -1498,6 +1586,11 @@ class Frontend(glade.Frontend):
 			else:
 				self.set_header("hold", _("Creating the partition..."), _("Please wait."))
 
+				if self.lvm_box.get_active():
+					# Ensure the filesystem is None if we are going to make
+					# the partition a LVM physical volume
+					targetfs = None
+
 				try:
 					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
 				except:
@@ -1507,12 +1600,17 @@ class Frontend(glade.Frontend):
 				
 				# Add the new partition to changed
 				self.changed[res.path] = {"obj":res, "changes":{}}
-				
-				self.queue_for_format(res.path, targetfs)
-				self.change_mountpoint(res.path, self.get_mountpoint())
 
-				# Seed mount_on_install
-				self.changed[res.path]["changes"]["mount_on_install"] = True
+				# Should we make this partition a LVM Physical Volume?
+				if self.lvm_box.get_active():
+					# YES!
+					self.changed[res.path]["changes"]["PVcreate"] = True
+				else:
+					self.queue_for_format(res.path, targetfs)
+					self.change_mountpoint(res.path, self.get_mountpoint())
+
+					# Seed mount_on_install
+					self.changed[res.path]["changes"]["mount_on_install"] = True
 				
 				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
@@ -1590,6 +1688,15 @@ class Frontend(glade.Frontend):
 				else:
 					self.LVMshare["filesystem"] = newfs
 					self.LVMshare["format"] = True
+			
+			# Should we make this partition a LVM Physical Volume?
+			if self.lvm_box.get_active() and not path in lvm.PhysicalVolumes:
+				# YES!
+				self.changed[path]["changes"]["PVcreate"] = True
+			else:
+				# NO :(
+				if "PVcreate" in self.changed[path]["changes"]:
+					del self.changed[path]["changes"]["PVcreate"]
 							
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -1660,6 +1767,10 @@ class Frontend(glade.Frontend):
 		elif obj in (self.lvm_box, self.crypting_box):
 			# Restore sensitivity to the mountpoint_frame
 			self.idle_add(self.mountpoint_frame.set_sensitive, True)
+
+		if obj == self.lvm_box and obj.get_active() and not self.is_add:
+			# Show PVwarning...
+			self.idle_add(self.PVwarning.show)
 		
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
@@ -1736,7 +1847,10 @@ class Frontend(glade.Frontend):
 					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 				
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
-			
+				# Remove changes?
+				#self.changed[part.path]["changes"] = {}
+				#if part.path in self.previously_changed: self.previously_changed.remove(part.path)
+				
 				self.manual_populate()
 		
 		# Restore sensitivity
@@ -1793,17 +1907,265 @@ class Frontend(glade.Frontend):
 			
 		res = self.apply()
 
+	def return_selected_physicalvolumes(self):
+		""" Returns the selected physical volumes on the Add/Edit VG window. """
+		
+		lst = []
+		for name, cbox in self.vgmanage_manage_checkboxes.items():
+			if cbox.get_active():
+				# cbox is active, we need to use it!
+				#lst.append(lvm.PhysicalVolume(device_name=name))
+				lst.append(name)
+		
+		return tuple(lst)
+
+	def on_vgmanage_add_window_button_clicked(self, obj):
+		""" Triggered when a button in the vgmanage-add window has been clicked. """
+		
+		# Hide
+		self.idle_add(self.vgmanage_manage_window.hide)
+		
+		if obj == self.vg_manage_ok:
+			# Ok button clicked, populate LVMshare
+			
+			self.LVMshare = {
+				"type":"VGcreate",
+				"obj":lvm.VolumeGroup(name=self.vg_manage_entry.get_text()),
+				"devices":self.return_selected_physicalvolumes()
+			}
+				
+			# Show the window, the Apply process will be started by
+			# the window
+			self.LVMrestoreto = self.vgmanage_window
+			self.idle_add(self.lvm_apply_window.set_sensitive, True)
+			self.idle_add(self.lvm_apply_window.show)
+		else:
+			self.idle_add(self.vgmanage_window.set_sensitive, True)
+
+	def on_vgmanage_edit_window_button_clicked(self, obj):
+		""" Triggered when a button in the vgmanage-edit window has been clicked. """
+		
+		# Hide
+		self.idle_add(self.vgmanage_manage_window.hide)
+		
+		if obj == self.vg_manage_ok:
+			# Ok button clicked, populate LVMshare
+			
+			self.LVMshare = {
+				"type":"VGmodify",
+				"obj":lvm.VolumeGroup(name=self.VGname),
+				"name":self.vg_manage_entry.get_text(),
+				"devices":self.return_selected_physicalvolumes()
+			}
+				
+			# Show the window, the Apply process will be started by
+			# the window
+			self.LVMrestoreto = self.vgmanage_window
+			self.idle_add(self.lvm_apply_window.set_sensitive, True)
+			self.idle_add(self.lvm_apply_window.show)
+		else:
+			self.idle_add(self.vgmanage_window.set_sensitive, True)
+	
+	def on_vg_manage_entry_changed(self, obj):
+		""" Called when vg_manage_entry is changed. """
+		
+		if self.VGname == False:
+			self.idle_add(self.vg_manage_ok.set_sensitive, True)
+			return
+		
+		txt = self.vg_manage_entry.get_text()
+		
+		if txt == "":
+			# No text, no sensitiveness...
+			self.idle_add(self.vg_manage_ok.set_sensitive, False)
+		else:
+			# There is text, check if we can use the name...
+			
+			if txt in lvm.VolumeGroups and not txt == self.VGname:
+				self.idle_add(self.vg_manage_ok.set_sensitive, False)
+			elif obj:
+				# Called from a true keystroke :)
+				# Fire up on_vg_manage_checkbox_changed to check if we can
+				# go ahead
+				self.idle_add(self.on_vg_manage_checkbox_changed, None)
+			else:
+				self.idle_add(self.vg_manage_ok.set_sensitive, True)
+	
+	def on_vg_manage_checkbox_changed(self, obj):
+		""" Called when a checkbox has been clicked. """
+		
+		if obj and obj.get_active():
+			# Called from a true click :)
+			# Fire up on_vg_manage_entry_changed to check if we can
+			# go ahead
+			self.idle_add(self.on_vg_manage_entry_changed, None)
+		else:
+			# See the other checkboxes
+			for cb in self.vgmanage_manage_checkboxes:
+				if self.vgmanage_manage_checkboxes[cb].get_active():
+					# At least one
+					self.idle_add(self.vg_manage_ok.set_sensitive, True)
+					return
+			
+			self.idle_add(self.vg_manage_ok.set_sensitive, False)
+
+	def prepare_vgmanage_manage_window(self, add=True):
+		""" Set-ups the vgmanage-manage window to be ready to add
+		a new virtual group. """
+
+		# Destroy every child that may be into the viewport
+		for child in self.vg_manage_viewport.get_children():
+			child.destroy()
+		
+		self.vgmanage_manage_checkboxes = {}
+		
+		frame_container = Gtk.VBox()
+		frame_container.set_homogeneous(False)
+		frame_container.set_spacing(3)
+		
+		# Generate checkboxes of available physical volumes
+		dct = lvm.return_vg_with_pvs()
+		if not add:
+			# Get selection
+			selection = self.vg_treeview.get_selection()
+		
+			# Get selected item
+			model, _iter = selection.get_selected()
+			self.VGname = model.get_value(_iter, 0)
+			
+			# Edit mode, generate also the "Currently Used" frame
+			used_frame = Gtk.Frame()
+			used_frame.set_shadow_type(Gtk.ShadowType.NONE)
+			used_frame_label = Gtk.Label()
+			used_frame_label.set_markup("<b>%s</b>" % _("Currently used"))
+			used_frame.set_label_widget(used_frame_label)
+			
+			used_frame_alignment = Gtk.Alignment()
+			used_frame_alignment.set_padding(3,0,12,0)
+
+			used_frame_vbox = Gtk.VBox()
+
+			used_frame_alignment.add(used_frame_vbox)
+			used_frame.add(used_frame_alignment)
+
+			frame_container.pack_start(used_frame, False, True, 0)
+			
+			for pv in dct[self.VGname]:
+				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
+				self.vgmanage_manage_checkboxes[pv["volume"].pv].set_active(True)
+				self.vgmanage_manage_checkboxes[pv["volume"].pv].connect(
+					"clicked", 
+					self.on_vg_manage_checkbox_changed
+				)
+				used_frame_vbox.pack_start(self.vgmanage_manage_checkboxes[pv["volume"].pv], False, True, 0)
+				
+				# If this PV is used, set sensitiveness to False
+				if pv["volume"].is_used:
+					self.vgmanage_manage_checkboxes[pv["volume"].pv].set_sensitive(False)
+		else:
+			self.VGname = ""
+		
+		if None in dct:
+			# We have some free PVs
+			available_frame = Gtk.Frame()
+			available_frame.set_shadow_type(Gtk.ShadowType.NONE)
+			available_frame_label = Gtk.Label()
+			available_frame_label.set_markup("<b>%s</b>" % _("Available"))
+			available_frame.set_label_widget(available_frame_label)
+			
+			available_frame_alignment = Gtk.Alignment()
+			available_frame_alignment.set_padding(3,0,12,0)
+
+			available_frame_vbox = Gtk.VBox()
+
+			available_frame_alignment.add(available_frame_vbox)
+			available_frame.add(available_frame_alignment)
+
+			frame_container.pack_start(available_frame, False, True, 0)
+			
+			for pv in dct[None]:
+				self.vgmanage_manage_checkboxes[pv["volume"].pv] = Gtk.CheckButton("%s (%s MB)" % (pv["volume"].pv, pv["size"]))
+				self.vgmanage_manage_checkboxes[pv["volume"].pv].connect(
+					"clicked", 
+					self.on_vg_manage_checkbox_changed
+				)
+				available_frame_vbox.pack_start(self.vgmanage_manage_checkboxes[pv["volume"].pv], False, True, 0)
+		
+		self.vg_manage_viewport.add(frame_container)
+
+		# Disconnect buttons
+		if self.vg_manage_ok_id: self.vg_manage_ok.disconnect(self.vg_manage_ok_id)
+		if self.vg_manage_cancel_id: self.vg_manage_cancel.disconnect(self.vg_manage_cancel_id)
+		# Reconnect them now, set window title and do a couple of other things...
+		if add:
+			self.vg_manage_ok_id = self.vg_manage_ok.connect("clicked", self.on_vgmanage_add_window_button_clicked)
+			self.vg_manage_cancel_id = self.vg_manage_cancel.connect("clicked", self.on_vgmanage_add_window_button_clicked)
+			
+			self.vgmanage_manage_window.set_title(_("Add a new volume group"))
+			
+			# Hide self.vg_manage_editlabel
+			self.vg_manage_editlabel.hide()
+			
+			# Make OK button insensitive
+			self.idle_add(self.vg_manage_ok.set_sensitive, False)
+		else:
+			self.vg_manage_ok_id = self.vg_manage_ok.connect("clicked", self.on_vgmanage_edit_window_button_clicked)
+			self.vg_manage_cancel_id = self.vg_manage_cancel.connect("clicked", self.on_vgmanage_edit_window_button_clicked)
+			
+			self.vgmanage_manage_window.set_title(_("Edit %s") % self.VGname)
+			
+			# Show self.vg_manage_editlabel
+			self.vg_manage_editlabel.show()
+			
+			# Make OK button sensitive
+			self.idle_add(self.vg_manage_ok.set_sensitive, True)
+		
+		self.vg_manage_entry.set_text(self.VGname)
+		
+		self.vg_manage_viewport.show_all()
+		self.idle_add(self.vgmanage_manage_window.set_sensitive, True)
+
 	def on_vgmanage_add_clicked(self, obj):
 		""" Called when the add button on the vgmanage window has been clicked. """
 		
 		self.idle_add(self.vgmanage_window.set_sensitive, False)
+		self.idle_add(self.vgmanage_manage_window.set_sensitive, False)
 		self.idle_add(self.vgmanage_manage_window.show)
+		
+		
+		self.idle_add(self.prepare_vgmanage_manage_window, True)
 
 	def on_vgmanage_edit_clicked(self, obj):
-		""" Called when Edit add button on the vgmanage window has been clicked. """
+		""" Called when the edit button on the vgmanage window has been clicked. """
 		
 		self.idle_add(self.vgmanage_window.set_sensitive, False)
+		self.idle_add(self.vgmanage_manage_window.set_sensitive, False)
 		self.idle_add(self.vgmanage_manage_window.show)
+		
+		
+		self.idle_add(self.prepare_vgmanage_manage_window, False)
+
+	def on_vgmanage_remove_clicked(self, obj):
+		""" Called when the remove button on the vgmanage window has been clicked. """
+
+		self.idle_add(self.vgmanage_window.set_sensitive, False)
+
+		selection = self.vg_treeview.get_selection()
+		
+		# Get selected item
+		model, _iter = selection.get_selected()
+		value = model.get_value(_iter, 0)
+
+		self.LVMshare = {
+			"type":"VGremove",
+			"obj":lvm.VolumeGroup(name=value)
+		}
+				
+		# Show the window, the Apply process will be started by
+		# the window
+		self.LVMrestoreto = self.vgmanage_window
+		self.idle_add(self.lvm_apply_window.set_sensitive, True)
+		self.idle_add(self.lvm_apply_window.show)
 
 	def on_vgmanage_window_button_clicked(self, obj):
 		""" Called when the close button on the vgmanage window has been clicked. """
@@ -1832,6 +2194,14 @@ class Frontend(glade.Frontend):
 		# Restore sensitivity
 		self.idle_add(self.objects["parent"].main.set_sensitive, True)
 
+	def on_vg_treeview_changed(self, obj):
+		""" Called when an item on the VG treeview has been selected """
+		
+		# If the treeview has been changed, we have at least one
+		# VG, thus needing the Edit and Remove buttons
+		self.idle_add(self.vg_edit_button.set_sensitive, True)
+		self.idle_add(self.vg_remove_button.set_sensitive, True)
+
 	def on_apply_window_button_clicked(self, obj):
 		""" Called when a button on the apply window has been clicked. """
 				
@@ -1857,7 +2227,11 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.lvm_apply)
 		else:
 			# Restore sensitivity
-			self.objects["parent"].main.set_sensitive(True)
+			if self.LVMrestoreto:
+				self.LVMrestoreto.set_sensitive(True)
+				self.LVMrestoreto = None
+			else:
+				self.objects["parent"].main.set_sensitive(True)
 			
 			# Ensure we clear out the LVMshare
 			self.LVMshare = {}
@@ -1865,14 +2239,14 @@ class Frontend(glade.Frontend):
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.lvm_apply_window.hide)
 			
-	def manual_frame_creator(self, device, disk, lvm=False):
+	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
 		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "changes":{}}
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
-		if lvm:
+		if on_lvm:
 			_model = _("LVM Volume Group")
 		else:
 			_model = device.model
@@ -1883,7 +2257,7 @@ class Frontend(glade.Frontend):
 		# ListStore: /dev/part - system/label - filesystem - format? - size
 
 		#if disk != "notable": partitions = list(disk.partitions) + disk.getFreeSpacePartitions()
-		if lvm:
+		if on_lvm:
 			partitions = device.logicalvolumes
 		elif disk != "notable":
 			partitions = lib.disk_partitions(disk)
@@ -1939,10 +2313,12 @@ class Frontend(glade.Frontend):
 				name = []
 				if path in self.distribs:
 					name.append(self.distribs[path])
-				if name:
+				if name and part.name:
 					name.append(part.name)
 				elif not path in self.distribs:
 					name.append("Normal partition")
+				else:
+					name.append("")
 
 				if int(part.getLength("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
@@ -1960,13 +2336,19 @@ class Frontend(glade.Frontend):
 					# Partition is too small and can be confusing. Simply do not show it.
 					continue
 
-				if path in self.changed and "format" in self.changed[path]["changes"]:
+				if path in self.changed and "PVcreate" in self.changed[path]["changes"]:
+					# We need to make a LVM Physical volume...
+					_fs = _("LVM physical volume")
+					_to_format = True
+				elif path in self.changed and "format" in self.changed[path]["changes"]:
 					# We need to format the partition, so don't use the one that parted returns to us
 					_fs = self.changed[path]["changes"]["format"]
 					_to_format = True
 				else:
 					# See what parted tells us
-					if part.fileSystem == None and not part.number == -1 and not part.type == 2:
+					if path in lvm.PhysicalVolumes:
+						_fs = _("LVM physical volume")
+					elif part.fileSystem == None and not part.number == -1 and not part.type == 2:
 						# If filesystem == None, skip.
 						_fs = _("not formatted")
 					elif part.number == -1:
@@ -2025,7 +2407,7 @@ class Frontend(glade.Frontend):
 			
 			if not obj.infos["exists"]: continue
 			
-			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, lvm=True)
+			self.manual_devices[obj.path] = self.manual_frame_creator(obj, None, on_lvm=True)
 			if "description" in self.manual_devices[obj.path]:
 				self.treeview_description[self.manual_devices[obj.path]["treeview"]] = self.manual_devices[obj.path]["description"]
 			else:
@@ -2056,10 +2438,15 @@ class Frontend(glade.Frontend):
 		
 		# Loop through VGs...
 		for vg_name, pvs in lvm.return_vg_with_pvs().items():
+			if vg_name == None: continue
 			pvs_list = []
 			for pv in pvs:
-				pvs_list.append(pv.pv)
+				pvs_list.append(pv["volume"].pv)
 			self.vg_store.append((vg_name, "\n".join(pvs_list)))
+		
+		# Disable Edit and Remove buttons
+		self.idle_add(self.vg_edit_button.set_sensitive, False)
+		self.idle_add(self.vg_remove_button.set_sensitive, False)
 		
 		self.idle_add(self.vgmanage_window.set_sensitive, True)
 
@@ -2122,9 +2509,12 @@ class Frontend(glade.Frontend):
 		
 		self.current_selected = None
 		
+		self.is_add = None
+		
 		self.LVMshare = {}
 		
 		self.LVname = ""
+		self.VGname = ""
 		
 		if clean:			
 			self.changed = {}
@@ -2171,6 +2561,15 @@ class Frontend(glade.Frontend):
 
 		self.partition_ok_id = None
 		self.partition_cancel_id = None
+		self.vg_manage_ok_id = None
+		self.vg_manage_cancel_id = None
+		
+		# The following is used to tell the LVM_apply class what window
+		# Should it make sensitive after doing things.
+		# If None, the main installer window will be set as sensitive.
+		# Otherwise, the Gtk.Window object into the variable will be touched.
+		# Please note that the variable will be reset everytime to None.
+		self.LVMrestoreto = None
 
 		if self.is_module_virgin or not ("changed" in self.settings and self.settings["changed"]):
 			self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
@@ -2202,6 +2601,12 @@ class Frontend(glade.Frontend):
 		self.lvm_box = self.objects["builder"].get_object("lvm_box")
 		self.crypting_box = self.objects["builder"].get_object("crypting_box")
 		self.do_not_format_box = self.objects["builder"].get_object("do_not_format_box")
+		self.PVwarning = self.objects["builder"].get_object("PVwarning")
+		# Hold color in PVwarning
+		col = Gdk.RGBA()
+		col.parse(self.objects["parent"].return_color("hold"))
+		self.PVwarning.override_background_color(0, col)
+		# ---
 		self.filesystem_combo = self.objects["builder"].get_object("filesystem_combo")
 		self.mountpoint_frame = self.objects["builder"].get_object("mountpoint_frame")
 		self.mountpoint_combo = self.objects["builder"].get_object("mountpoint_combo")
@@ -2320,6 +2725,7 @@ class Frontend(glade.Frontend):
 		self.vg_close_button = self.objects["builder"].get_object("vg_close")
 		self.vg_add_button.connect("clicked", self.on_vgmanage_add_clicked)
 		self.vg_edit_button.connect("clicked", self.on_vgmanage_edit_clicked)
+		self.vg_remove_button.connect("clicked", self.on_vgmanage_remove_clicked)
 		self.vg_close_button.connect("clicked", self.on_vgmanage_window_button_clicked)
 
 		# Populate now the vgmanage window
@@ -2328,7 +2734,7 @@ class Frontend(glade.Frontend):
 		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Name"), Gtk.CellRendererText(), text=0))
 		self.vg_treeview.append_column(Gtk.TreeViewColumn(_("Physical Volumes"), Gtk.CellRendererText(), text=1))
 		self.vg_treeview.show()
-		#self.vg_treeview.connect("cursor-changed", self.on_vg_treeview_changed)
+		self.vg_treeview.connect("cursor-changed", self.on_vg_treeview_changed)
 		
 		# Add the treeview to the scrolledwindow
 		self.vg_scrolledwindow.add(self.vg_treeview)
@@ -2336,7 +2742,10 @@ class Frontend(glade.Frontend):
 		## VGmanage - Manage window
 		self.vgmanage_manage_window.connect("delete_event", self.child_window_delete, self.vgmanage_window)
 		self.vg_manage_ok = self.objects["builder"].get_object("vg_manage_ok")
+		self.vg_manage_cancel = self.objects["builder"].get_object("vg_manage_cancel")
 		self.vg_manage_entry = self.objects["builder"].get_object("vg_manage_entry")
+		self.vg_manage_entry.connect("changed", self.on_vg_manage_entry_changed)
+		self.vg_manage_editlabel = self.objects["builder"].get_object("vg_manage_editlabel")
 		self.vg_manage_viewport = self.objects["builder"].get_object("vg_manage_viewport")
 
 		# Get toolbar buttons
