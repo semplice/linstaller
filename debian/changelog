@@ -1,3 +1,9 @@
+linstaller (4.72.3-1) devel; urgency=low
+
+  * (upstream) Ship semplice-fullscreen configuration.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 02 Aug 2013 13:43:09 +0200
+
 linstaller (4.72.2-1) devel; urgency=low
 
   * partdisks: library: do not count as freespace the partition offsets
