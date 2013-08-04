@@ -12,10 +12,11 @@ import linstaller.frontends.glade as glade
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-from linstaller.core.main import warn,info,verbose,root_check		
+from linstaller.core.main import warn,info,verbose,root_check,CmdError
 
 import linstaller.core.libmodules.partdisks.library as lib
 import linstaller.core.libmodules.partdisks.lvm as lvm
+import linstaller.core.libmodules.partdisks.crypt as crypt
 
 from gi.repository import Gtk, Gdk, GObject
 
@@ -158,7 +159,33 @@ class Apply(glade.Progress):
 				# We *can't* check for it exists as it prevents the creation of new partitions.
 				# So we use this.
 
-							
+			
+			# Should crypt?
+			is_crypt = False
+			if "crypt" in cng:
+				try:
+					self.parent.set_header("hold", _("Encrypting %s...") % key, _("Let's hope everything goes well! :)"))
+					cryptdev = crypt.LUKSdrive(obj)
+					cryptdev.format(cng["crypt"])
+					# Open crypt partition...
+					cryptdev.open(cng["crypt"])
+					
+					is_crypt = obj
+					obj = cryptdev
+				except CmdError:
+					# Failed ...
+					self.parent.set_header("error", _("Failed encrypting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+					if self.parent.is_automatic:
+						self.parent.is_automatic = "fail"
+						self.parent.on_steps_ok()
+					
+					# Restore sensitivity
+					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+					return False
+			
 			# Should format?
 			if "format" in cng:
 				if LVMcontainer:
@@ -187,7 +214,7 @@ class Apply(glade.Progress):
 			if "PVcreate" in cng:
 				try:
 					lvm.PhysicalVolume(part=obj).create()
-				except:
+				except CmdError:
 					# Failed ...
 					self.parent.set_header("error", _("Failed creating a LVM Physical Volume in %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 
@@ -1180,6 +1207,8 @@ class Frontend(glade.Frontend):
 		if txt == "":
 			# No text, no sensitiveness...
 			self.idle_add(self.partition_ok.set_sensitive, False)
+			
+			self.change_entry_status(obj, "hold")
 		else:
 			# There is text, check if we can use the name...
 			
@@ -1192,8 +1221,12 @@ class Frontend(glade.Frontend):
 			
 			if not used:
 				self.idle_add(self.partition_ok.set_sensitive, True)
+				
+				self.change_entry_status(obj, "ok")
 			else:
 				self.idle_add(self.partition_ok.set_sensitive, False)
+				
+				self.change_entry_status(obj, "error", "Logical volume name already used!")
 
 	def on_vgmanage_button_clicked(self, obj):
 		""" Called when the vgmanage button has been clicked. """
@@ -1322,8 +1355,12 @@ class Frontend(glade.Frontend):
 		# Hide the PVwarning
 		self.idle_add(self.PVwarning.hide)
 		
+		# Set crypting_box to false
+		self.idle_add(self.crypting_box.set_active, False)
+		
 		# mount_on_install unsensitive
 		self.idle_add(self.mount_on_install.set_sensitive, False)
+		self.idle_add(self.crypting_password_alignment.hide)
 		
 		# Clear mountpoint
 		self.mountpoint_entry.set_text("")
@@ -1608,6 +1645,11 @@ class Frontend(glade.Frontend):
 				
 				# Add the new partition to changed
 				self.changed[res.path] = {"obj":res, "changes":{}}
+				
+				# Should we encrypt this partition?
+				if self.crypting_box.get_active():
+					# YES!
+					self.changed[res.path]["changes"]["crypt"] = self.crypting_password.get_text()
 
 				# Should we make this partition a LVM Physical Volume?
 				if self.lvm_box.get_active():
@@ -1756,7 +1798,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.mount_on_install.set_sensitive, False)
 			self.mount_on_install.set_active(False)
 			
-		else:
+		elif not obj == self.crypting_box:
 			# Make it unsensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, False)
 			# ...and restore the filesystem
@@ -1771,7 +1813,7 @@ class Frontend(glade.Frontend):
 			# mount_on_install sensitive
 			self.idle_add(self.mount_on_install.set_sensitive, True)
 		
-		if obj in (self.lvm_box, self.crypting_box) and obj.get_active():
+		if obj == self.lvm_box and obj.get_active():
 			# If lvm_box and crypting_box, also disable "mountpoint" section.
 			
 			# Clear mountpoint
@@ -1779,14 +1821,58 @@ class Frontend(glade.Frontend):
 			self.mountpoint_combo.set_active(-1)
 			
 			self.idle_add(self.mountpoint_frame.set_sensitive, False)
-		elif obj in (self.lvm_box, self.crypting_box):
+		elif obj == self.crypting_box and obj.get_active():
+			# crypting_box, show crypting_password_alignment
+			self.idle_add(self.crypting_password_alignment.show)
+			
+			# Reset passwords
+			self.crypting_password.set_text("")
+			self.crypting_password_confirm.set_text("")
+			
+			# Set OK button insensitive
+			self.on_crypting_password_changed(None)
+		elif obj == self.lvm_box:
 			# Restore sensitivity to the mountpoint_frame
 			self.idle_add(self.mountpoint_frame.set_sensitive, True)
+		elif obj == self.crypting_box:
+			# hide password alignment
+			self.idle_add(self.crypting_password_alignment.hide)
+
+			# Check if mountpoint is ok (thus enabling the OK button)
+			self.on_mountpoint_change(None)
 
 		if obj == self.lvm_box and obj.get_active() and not self.is_add:
 			# Show PVwarning...
 			self.idle_add(self.PVwarning.show)
+	
+	def on_crypting_password_changed(self, obj):
+		""" Called when a crypting password entry box has been changed. """
 		
+		# Get the passwords
+		passw1 = self.crypting_password.get_text()
+		passw2 = self.crypting_password_confirm.get_text()
+
+		if not passw1:
+			# passw1 is empty, set both on old
+			self.change_entry_status(self.crypting_password, "hold")
+			self.change_entry_status(self.crypting_password_confirm, "hold")
+			
+			self.idle_add(self.partition_ok.set_sensitive, False)
+		elif passw1 == passw2:
+			# Ok
+			self.change_entry_status(self.crypting_password, "ok")
+			self.change_entry_status(self.crypting_password_confirm, "ok")
+			
+			# Check if mountpoint is ok (thus enabling the OK button)
+			self.on_mountpoint_change(None)
+		else:
+			# No match :/
+			failmessage = _("The passwords doesn't match.")
+			self.change_entry_status(self.crypting_password, "error", failmessage)
+			self.change_entry_status(self.crypting_password_confirm, "error", failmessage)
+			
+			self.idle_add(self.partition_ok.set_sensitive, False)
+	
 	def on_newtable_window_button_clicked(self, obj):
 		""" Called when a button on the newtable window has been clicked. """
 		
@@ -2615,6 +2701,9 @@ class Frontend(glade.Frontend):
 		self.format_box = self.objects["builder"].get_object("format_box")
 		self.lvm_box = self.objects["builder"].get_object("lvm_box")
 		self.crypting_box = self.objects["builder"].get_object("crypting_box")
+		self.crypting_password_alignment = self.objects["builder"].get_object("crypting_password_alignment")
+		self.crypting_password = self.objects["builder"].get_object("crypting_password")
+		self.crypting_password_confirm = self.objects["builder"].get_object("crypting_password_confirm")
 		self.do_not_format_box = self.objects["builder"].get_object("do_not_format_box")
 		self.PVwarning = self.objects["builder"].get_object("PVwarning")
 		# Hold color in PVwarning
@@ -2642,6 +2731,9 @@ class Frontend(glade.Frontend):
 		self.lvm_box.connect("toggled", self.on_formatbox_change)
 		self.crypting_box.connect("toggled", self.on_formatbox_change)
 		self.do_not_format_box.connect("toggled", self.on_formatbox_change)
+		
+		self.crypting_password.connect("changed", self.on_crypting_password_changed)
+		self.crypting_password_confirm.connect("changed", self.on_crypting_password_changed)
 		
 		# Connect mountpoint entry and combobox...
 		self.mountpoint_combo.connect("changed", self.on_mountpoint_change)

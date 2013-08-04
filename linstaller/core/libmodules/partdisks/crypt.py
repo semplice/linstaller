@@ -7,6 +7,8 @@
 ## Maybe it's better to move everything to python-cryptosetup when it
 ## lands on Debian... ~g7
 
+import os
+
 import linstaller.core.main as m
 import linstaller.core.libmodules.partdisks.library as lib
 
@@ -39,5 +41,55 @@ class Crypt:
 		
 		# Return object to frontend
 		return command
+
+class LUKSdrive:
+	""" A LUKS-encrypted drive/partition. """
 	
+	def __init__(self, device):
+		
+		self.device = device
 	
+	def format(self, password):
+		""" Formats the device and sets password as the drive's password. """
+		
+		# Umount
+		lib.umount_bulk(self.device.path)
+		
+		# Try to close
+		try:
+			self.close()
+		except m.CmdError:
+			pass
+		
+		# Ugly as hell
+		m.sexec("echo '%(password)s' | cryptsetup luksFormat %(device)s" % {"password":password, "device":self.device.path})
+
+	def open(self, password):
+		""" Opens the device. """
+		
+		# Ugly as hell
+		m.sexec("echo '%(password)s' | cryptsetup luksOpen %(device)s %(name)s" % {"password":password, "device":self.device.path, "name":lib.get_UUID(self.device.path)})
+	
+	def close(self):
+		""" Closes the device. """
+		
+		m.sexec("cryptsetup luksClose %s" % self.mapper_path)
+	
+	def get_partition(self):
+		""" Returns a parted.Partition object from the encrypted device. """
+		
+		return lib.p.Disk(device=lib.p.Device(self.mapper_path)).getFirstPartition()
+	
+	@property
+	def mapper_path(self):
+		""" Returns the path of the device in /dev/mapper.
+		Please note that this method will return the path regardless of
+		the state of the device (i.e. it does not check if it exists or not)"""
+		
+		return os.path.join("/dev/mapper", lib.get_UUID(self.device.path))
+	
+	@property
+	def path(self):
+		""" Compatibility purposes with parted-only things. """
+		
+		return self.mapper_path
