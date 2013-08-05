@@ -855,7 +855,7 @@ Ensure that the physical volume is unlinked from any volume group before attempt
                             <property name="can_focus">False</property>
                             <property name="top_padding">10</property>
                             <child>
-                              <object class="GtkBox" id="box19">
+                              <object class="GtkBox" id="crypting_vbox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
