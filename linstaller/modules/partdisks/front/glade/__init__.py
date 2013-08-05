@@ -597,8 +597,9 @@ class Frontend(glade.Frontend):
 		lib.restore_devices(onlyusb=self.onlyusb)
 		self.disks, self.devices = lib.disks, lib.devices
 		
-		# Also reload LVM devices...
+		# Also reload LVM  and LUKS devices...
 		lvm.refresh()
+		crypt.refresh()
 	
 	def refresh_manual(self, obj=None, complete=True, noclear=False):
 		""" Refreshes the manual partitioning page. """
@@ -1798,6 +1799,12 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.mount_on_install.set_sensitive, False)
 			self.mount_on_install.set_active(False)
 			
+			
+			# Ensure the crypting box is not active
+			self.idle_add(self.crypting_box.set_active, False)
+			# And also set it as unsensitive
+			self.idle_add(self.crypting_box.set_sensitive, False)
+			
 		elif not obj == self.crypting_box:
 			# Make it unsensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, False)
@@ -1821,6 +1828,9 @@ class Frontend(glade.Frontend):
 			self.mountpoint_combo.set_active(-1)
 			
 			self.idle_add(self.mountpoint_frame.set_sensitive, False)
+			
+			# Ensure the crypting box is sensitive
+			self.idle_add(self.crypting_box.set_sensitive, True)
 		elif obj == self.crypting_box and obj.get_active():
 			# crypting_box, show crypting_password_alignment
 			self.idle_add(self.crypting_password_alignment.show)
@@ -2414,13 +2424,15 @@ class Frontend(glade.Frontend):
 				name = []
 				if path in self.distribs:
 					name.append(self.distribs[path])
-				if name and part.name:
+				if path in crypt.LUKSdevices:
+					name.append("Encrypted partition")
+				elif name and part.name:
 					name.append(part.name)
 				elif not path in self.distribs:
 					name.append("Normal partition")
 				else:
 					name.append("")
-
+				
 				if int(part.getLength("GB")) > 0:
 					# We can use GigaBytes to represent partition size.
 					_size = round(part.getLength("GB"), 2)
@@ -2437,6 +2449,10 @@ class Frontend(glade.Frontend):
 					# Partition is too small and can be confusing. Simply do not show it.
 					continue
 
+#				if not path and path in crypt.LUKSdevices:
+#					# Encrypted locked partition
+#					_fs = _("Locked")
+#					_to_format = False
 				if path in self.changed and "PVcreate" in self.changed[path]["changes"]:
 					# We need to make a LVM Physical volume...
 					_fs = _("LVM physical volume")
@@ -2447,7 +2463,7 @@ class Frontend(glade.Frontend):
 					_to_format = True
 				else:
 					# See what parted tells us
-					if path in lvm.PhysicalVolumes:
+					if path in lvm.PhysicalVolumes or path in crypt.LUKSdevices and crypt.LUKSdevices[path].path in lvm.PhysicalVolumes:
 						_fs = _("LVM physical volume")
 					elif part.fileSystem == None and not part.number == -1 and not part.type == 2:
 						# If filesystem == None, skip.

@@ -850,40 +850,25 @@ Ensure that the physical volume is unlinked from any volume group before attempt
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="crypting_box">
-                            <property name="label" translatable="yes">Crypt the volume</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="crypting_password_alignment">
+                          <object class="GtkAlignment" id="alignment11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="left_padding">20</property>
+                            <property name="top_padding">10</property>
                             <child>
-                              <object class="GtkBox" id="box18">
+                              <object class="GtkBox" id="box19">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkEntry" id="crypting_password">
+                                  <object class="GtkCheckButton" id="crypting_box">
+                                    <property name="label" translatable="yes">Encrypt the volume</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="visibility">False</property>
-                                    <property name="invisible_char">•</property>
-                                    <property name="primary_icon_name">lock</property>
-                                    <property name="placeholder_text">Password</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -892,13 +877,49 @@ Ensure that the physical volume is unlinked from any volume group before attempt
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkEntry" id="crypting_password_confirm">
+                                  <object class="GtkAlignment" id="crypting_password_alignment">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="visibility">False</property>
-                                    <property name="invisible_char">•</property>
-                                    <property name="primary_icon_name">lock</property>
-                                    <property name="placeholder_text">Password (confirm)</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="left_padding">20</property>
+                                    <child>
+                                      <object class="GtkBox" id="box18">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkEntry" id="crypting_password">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="visibility">False</property>
+                                            <property name="invisible_char">•</property>
+                                            <property name="invisible_char_set">True</property>
+                                            <property name="primary_icon_name">lock</property>
+                                            <property name="placeholder_text">Password</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="crypting_password_confirm">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="visibility">False</property>
+                                            <property name="invisible_char">•</property>
+                                            <property name="invisible_char_set">True</property>
+                                            <property name="primary_icon_name">lock</property>
+                                            <property name="placeholder_text">Password (confirm)</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -912,7 +933,7 @@ Ensure that the physical volume is unlinked from any volume group before attempt
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">6</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>
