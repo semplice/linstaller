@@ -1,3 +1,11 @@
+linstaller (4.90.0-1) devel; urgency=low
+
+  * LVM Physical Volume encryption
+  * modules/fstab: added /etc/crypttab generation
+  * debian/control: linstaller-modules-base: depend on cryptsetup and util-linux
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 07 Aug 2013 13:03:55 +0200
+
 linstaller (4.72.3-1) devel; urgency=low
 
   * (upstream) Ship semplice-fullscreen configuration.
