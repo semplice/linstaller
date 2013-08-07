@@ -1316,6 +1316,7 @@ class Frontend(glade.Frontend):
 			
 			# Set the LV name
 			self.lv_name.set_text("")
+			self.change_entry_status(self.lv_name, "hold")
 			self.size_manual_entry.grab_focus()
 			
 			self.LVname = ""				
@@ -1340,12 +1341,17 @@ class Frontend(glade.Frontend):
 		# Ensure the format checkbox is set to True and the "Do not format" unsensitive...
 		self.format_box.set_active(True)
 		self.idle_add(self.do_not_format_box.set_sensitive, False)
-		
+
+		# Set crypting_box to false
+		self.idle_add(self.crypting_box.set_sensitive, True)
+
 		# Also if we are in a LV, we need to disable "Use for LVM"
 		if LVMcontainer:
 			self.idle_add(self.lvm_box.set_sensitive, False)
+			self.idle_add(self.crypting_box.set_sensitive, False)
 		else:
 			self.idle_add(self.lvm_box.set_sensitive, True)
+			self.idle_add(self.crypting_box.set_sensitive, True)
 
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
@@ -1355,10 +1361,6 @@ class Frontend(glade.Frontend):
 		
 		# Hide the PVwarning
 		self.idle_add(self.PVwarning.hide)
-		
-		# Set crypting_box to false
-		self.idle_add(self.crypting_box.set_active, False)
-		self.idle_add(self.crypting_vbox.set_sensitive, True)
 		
 		# mount_on_install unsensitive
 		self.idle_add(self.mount_on_install.set_sensitive, False)
@@ -1470,12 +1472,6 @@ class Frontend(glade.Frontend):
 		else:
 			self.filesystem_combo.set_active(-1)
 
-		# Also if we are in a LV, we need to disable "Use for LVM"
-		if LVMcontainer:
-			self.idle_add(self.lvm_box.set_sensitive, False)
-		else:
-			self.idle_add(self.lvm_box.set_sensitive, True)
-
 		# Ensure we make sensitive/unsensitive the fs combobox
 		self.on_formatbox_change(self.format_box)
 		self.idle_add(self.do_not_format_box.set_sensitive, True)
@@ -1487,13 +1483,19 @@ class Frontend(glade.Frontend):
 			self.on_formatbox_change(self.crypting_box)
 			self.idle_add(self.crypting_box.set_sensitive, False)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, False)
-			self.idle_add(self.crypting_password.set_text, " ") # Dummy password
-			self.idle_add(self.crypting_password_confirm.set_text, " ") # Dummy password
+			self.idle_add(self.crypting_password.set_text, "DUMMYPASSWORD") # Dummy password
+			self.idle_add(self.crypting_password_confirm.set_text, "DUMMYPASSWORD") # Dummy password
 		else:
-			self.idle_add(self.crypting_box.set_active, False)
-			self.on_formatbox_change(self.crypting_box)
 			self.idle_add(self.crypting_box.set_sensitive, True)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, True)
+
+		# Also if we are in a LV, we need to disable "Use for LVM"
+		if LVMcontainer:
+			self.idle_add(self.lvm_box.set_sensitive, False)
+			self.idle_add(self.crypting_box.set_sensitive, False)
+		else:
+			self.idle_add(self.lvm_box.set_sensitive, True)
+			self.idle_add(self.crypting_box.set_sensitive, True)
 
 		# Clear mountpoint
 		self.mountpoint_entry.set_text("")
@@ -1525,7 +1527,7 @@ class Frontend(glade.Frontend):
 			self.mount_on_install.set_active(False)
 		self.mount_on_install_prepare = False
 		
-		self.partition_ok.set_sensitive(True)
+		self.idle_add(self.partition_ok.set_sensitive, True)
 		
 		# Connect buttons
 		if self.partition_ok_id: self.partition_ok.disconnect(self.partition_ok_id)
@@ -1828,13 +1830,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.mount_on_install.set_sensitive, False)
 			self.mount_on_install.set_active(False)
 			
-			
-			# Ensure the crypting box is not active
-			self.idle_add(self.crypting_box.set_active, False)
-			# And also set it as unsensitive
-			self.idle_add(self.crypting_vbox.set_sensitive, False)
-			
-		elif not obj == self.crypting_box:
+		else:
 			# Make it unsensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, False)
 			# ...and restore the filesystem
@@ -1849,7 +1845,7 @@ class Frontend(glade.Frontend):
 			# mount_on_install sensitive
 			self.idle_add(self.mount_on_install.set_sensitive, True)
 		
-		if obj == self.lvm_box and obj.get_active():
+		if obj in (self.lvm_box, self.crypting_box) and obj.get_active():
 			# If lvm_box and crypting_box, also disable "mountpoint" section.
 			
 			# Clear mountpoint
@@ -1857,31 +1853,27 @@ class Frontend(glade.Frontend):
 			self.mountpoint_combo.set_active(-1)
 			
 			self.idle_add(self.mountpoint_frame.set_sensitive, False)
-			
-			# Ensure the crypting box is sensitive
-			self.idle_add(self.crypting_vbox.set_sensitive, True)
-		elif obj == self.crypting_box and obj.get_active():
-			# crypting_box, show crypting_password_alignment
-			self.idle_add(self.crypting_password_alignment.show)
-			
-			# Reset passwords
-			self.crypting_password.set_text("")
-			self.crypting_password_confirm.set_text("")
-			
-			# Set OK button insensitive
-			self.on_crypting_password_changed(None)
-		elif obj == self.lvm_box:
+						
+			if obj == self.crypting_box and obj.get_active():
+				# crypting_box, show crypting_password_alignment
+				self.idle_add(self.crypting_password_alignment.show)
+				
+				# Reset passwords
+				self.crypting_password.set_text("")
+				self.crypting_password_confirm.set_text("")
+				
+				# Set OK button insensitive
+				self.on_crypting_password_changed(None)
+		elif obj in (self.lvm_box, self.crypting_box):
 			# Restore sensitivity to the mountpoint_frame
 			self.idle_add(self.mountpoint_frame.set_sensitive, True)
+			
+			if obj == self.crypting_box:
+				# hide password alignment
+				self.idle_add(self.crypting_password_alignment.hide)
 
-			# Ensure the crypting box is insensitive
-			self.idle_add(self.crypting_vbox.set_sensitive, False)
-		elif obj == self.crypting_box:
-			# hide password alignment
-			self.idle_add(self.crypting_password_alignment.hide)
-
-			# Check if mountpoint is ok (thus enabling the OK button)
-			self.on_mountpoint_change(None)
+				# Check if mountpoint is ok (thus enabling the OK button)
+				self.on_mountpoint_change(None)
 
 		if obj == self.lvm_box and obj.get_active() and not self.is_add:
 			# Show PVwarning...
@@ -2121,18 +2113,22 @@ class Frontend(glade.Frontend):
 		if txt == "":
 			# No text, no sensitiveness...
 			self.idle_add(self.vg_manage_ok.set_sensitive, False)
+			self.change_entry_status(self.vg_manage_entry, "hold")
 		else:
 			# There is text, check if we can use the name...
 			
 			if txt in lvm.VolumeGroups and not txt == self.VGname:
 				self.idle_add(self.vg_manage_ok.set_sensitive, False)
+				self.change_entry_status(self.vg_manage_entry, "error", _("Volume group name already used!"))
 			elif obj:
 				# Called from a true keystroke :)
 				# Fire up on_vg_manage_checkbox_changed to check if we can
 				# go ahead
 				self.idle_add(self.on_vg_manage_checkbox_changed, None)
+				self.change_entry_status(self.vg_manage_entry, "ok")
 			else:
 				self.idle_add(self.vg_manage_ok.set_sensitive, True)
+				self.change_entry_status(self.vg_manage_entry, "ok")
 	
 	def on_vg_manage_checkbox_changed(self, obj):
 		""" Called when a checkbox has been clicked. """
@@ -2264,6 +2260,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.vg_manage_ok.set_sensitive, True)
 		
 		self.vg_manage_entry.set_text(self.VGname)
+		if self.VGname == "": self.change_entry_status(self.vg_manage_entry, "hold")
 		
 		self.vg_manage_viewport.show_all()
 		self.idle_add(self.vgmanage_manage_window.set_sensitive, True)
@@ -2752,7 +2749,6 @@ class Frontend(glade.Frontend):
 		self.size_scale_scale = self.objects["builder"].get_object("size_scale_scale")
 		self.format_box = self.objects["builder"].get_object("format_box")
 		self.lvm_box = self.objects["builder"].get_object("lvm_box")
-		self.crypting_vbox = self.objects["builder"].get_object("crypting_vbox")
 		self.crypting_box = self.objects["builder"].get_object("crypting_box")
 		self.crypting_password_alignment = self.objects["builder"].get_object("crypting_password_alignment")
 		self.crypting_password = self.objects["builder"].get_object("crypting_password")
