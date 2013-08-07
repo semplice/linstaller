@@ -256,6 +256,15 @@ def return_partition(partition):
 	# If we are here, nothing found.
 	return None
 
+def get_UUID(partition):
+	""" Returns the UUID of partition. """
+	
+	UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (partition))
+	if UUID:
+		return UUID
+	else:
+		return None
+
 def setFlag(partition, flag):
 	""" Sets the specified flag into the partition (which must be a parted.Partition object) """
 	
