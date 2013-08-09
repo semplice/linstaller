@@ -2008,6 +2008,11 @@ class Frontend(glade.Frontend):
 				del self.changed[part.path]
 				if part.path in self.touched: self.touched.remove(part.path)
 				if part.path in self.previously_changed: self.previously_changed.remove(part.path)
+				# Remove eventual mountpoints
+				for mpoint, parts in self.mountpoints_added.items():
+					if parts == part.path:
+						del self.mountpoints_added[mpoint]
+						break
 				
 				self.manual_populate()
 		
@@ -2057,6 +2062,12 @@ class Frontend(glade.Frontend):
 						del self.changed[dev]
 						if dev in self.touched: self.touched.remove(dev)
 						if dev in self.previously_changed: self.previously_changed.remove(dev)
+
+						# Remove eventual mountpoints
+						for mpoint, parts in self.mountpoints_added.items():
+							if parts == dev:
+								del self.mountpoints_added[mpoint]
+								break
 
 				self.manual_populate()
 		
@@ -3059,8 +3070,39 @@ class Frontend(glade.Frontend):
 				# Set root.
 				self.settings["root"] = self.mountpoints_added["/"]
 			
+			# Check for /boot if / is on an encrypted partition...
+			if len(self.mountpoints_added["/"].split("/")) > 3:
+				# Root is on a LVM VG.
+				vg = os.path.basename(os.path.dirname(self.mountpoints_added["/"]))
+				# Check if at least one PV composing the VG is encrypted
+				for pv in lvm.return_vg_with_pvs()[vg]:
+					for encrypted in crypt.LUKSdevices:
+						if pv["volume"].pv == crypt.LUKSdevices[encrypted].mapper_path and not "/boot" in self.mountpoints_added:
+							# Yeah
+							self.set_header("error", _("You can't continue!"), _("The root partition is on an encrypted device. You need a separated /boot partition on a non-encrypted device."))
+							return True
+			
+			# Do the same for /boot
+			if "/boot" in self.mountpoints_added and len(self.mountpoints_added["/boot"].split("/")) > 3:
+				# /boot is on a LVM VG.
+				vg = os.path.basename(os.path.dirname(self.mountpoints_added["/"]))
+				# Check if at least one PV composing the VG is encrypted
+				for pv in lvm.return_vg_with_pvs()[vg]:
+					for encrypted in crypt.LUKSdevices:
+						if pv["volume"].pv == crypt.LUKSdevices[encrypted].mapper_path:
+							# Yeah
+							self.set_header("error", _("You can't continue!"), _("The /boot partition should not be on an encrypted device."))
+							return True
+			
 			# If in UEFI mode, ensure /boot/efi is selected
-			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True and not lib.return_partition(self.mountpoints_added["/"]).disk.type == "msdos":
+			part = lib.return_partition(self.mountpoints_added["/"])
+			if not part:
+				# We can guess this is an LVM volume group
+				part = "gpt"
+			else:
+				# No LVM VG, get the disk table
+				part = part.disk.type
+			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True and not part == "msdos":
 				if not "/boot/efi" in self.mountpoints_added:
 					# Error!
 					self.set_header("error", _("You can't continue!"), _("You need to specify the EFI System Partition (/boot/efi)."))

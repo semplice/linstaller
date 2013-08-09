@@ -82,7 +82,7 @@ class VolumeGroup:
 		self.infos = {}
 		
 		try:
-			for line in commands.getoutput("vgs --noheadings --units M %s" % self.name).split("\n"):
+			for line in commands.getoutput("vgs --noheadings --units M -o vg_name,vg_size,vg_free,vg_extent_size,vg_free_count %s" % self.name).split("\n"):
 				if not line.replace(" ","").startswith("Filedescriptor"):
 					# Example output:
 					# testgroup   1   1   0 wz--n- 3,73g 1,73g
@@ -94,16 +94,25 @@ class VolumeGroup:
 					if not line[0] == self.name: continue
 										
 					# size
-					if "M" in line[5]:
-						self.infos["size"] = float(line[5].replace(",",".").replace("M",""))
+					if "M" in line[1]:
+						self.infos["size"] = float(line[1].replace(",",".").replace("M",""))
 					else:
-						self.infos["size"] = float(line[5])
+						self.infos["size"] = float(line[1])
 					
 					# free
-					if "M" in line[6]:
-						self.infos["free"] = float(line[6].replace(",",".").replace("M",""))
+					if "M" in line[2]:
+						self.infos["free"] = float(line[2].replace(",",".").replace("M",""))
 					else:
-						self.infos["free"] = float(line[6])
+						self.infos["free"] = float(line[2])
+					
+					# extent size
+					if "M" in line[3]:
+						self.infos["extentsize"] = float(line[3].replace(",",".").replace("M",""))
+					else:
+						self.infos["extentsize"] = float(line[3])
+
+					# free extents
+					self.infos["extentfree"] = float(line[4])
 		except:
 			self.infos = {}
 
@@ -299,6 +308,20 @@ class LogicalVolume:
 		size *= 1000 # KB
 		size /= 1.024 # KiB
 		size = int(size)-1 # round and ensure we aren't in excess
+		#size = str(size) + "K"
+		
+		# Do the same with the extents
+		unit = self.vgroup.infos["extentsize"]
+		unit *= 1000 # KB
+		unit /= 1.024 # KiB
+		unit = int(unit)-1 # round and ensure we aren't in excess
+		free = int(self.vgroup.infos["extentfree"])*unit
+		
+		# Compare the size with the unit
+		if size > free:
+			# More than free, use the maximum allowed
+			size = free
+		
 		size = str(size) + "k"
 		
 		m.sexec("lvcreate --name %(name)s --size %(size)s %(vgroup)s" % {"name":self.name, "size":size, "vgroup":self.vgroup.name})
@@ -326,6 +349,20 @@ class LogicalVolume:
 		size *= 1000 # KB
 		size /= 1.024 # KiB
 		size = int(size)-1 # round and ensure we aren't in excess
+		#size = str(size) + "K"
+		
+		# Do the same with the extents
+		unit = self.vgroup.infos["extentsize"]
+		unit *= 1000 # KB
+		unit /= 1.024 # KiB
+		unit = int(unit)-1 # round and ensure we aren't in excess
+		free = int(self.vgroup.infos["extentfree"])*unit
+		
+		# Compare the size with the unit
+		if size > free:
+			# More than free, use the maximum allowed
+			size = free
+		
 		size = str(size) + "k"
 		
 		m.sexec("lvresize --force --size %(size)s %(path)s" % {"size":size, "path":self.path})
