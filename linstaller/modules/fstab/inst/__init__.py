@@ -107,7 +107,7 @@ proc   /proc   proc   defaults   0   0
 			return
 		
 		with open("/etc/crypttab", "w") as f:
-			for device, obj in crypt.LUKSdevices:
+			for device, obj in crypt.LUKSdevices.items():
 				# See if the device is a physical volume, otherwise
 				# we will not touch it...
 				if not device in lvm.PhysicalVolumes:

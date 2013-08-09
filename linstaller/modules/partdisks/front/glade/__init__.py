@@ -93,7 +93,7 @@ class Apply(glade.Progress):
 		# If we should shrink something, do it now
 		res = self.resize(lst, dct, lib.ResizeAction.SHRINK)
 		if res == False: return res
-		
+				
 		for key in lst:
 			try:
 				obj = dct[key]["obj"]
@@ -615,12 +615,21 @@ class Frontend(glade.Frontend):
 			for name, changes in self.changed.items():
 				if complete:
 					# Clear.
-					changes["changes"].clear()
+					#changes["changes"].clear()
+					del self.changed[name]
 				else:
 					# Remove all but useas and mount_on_install
 					for key, value in changes["changes"].items():
 						if not key in ("useas","mount_on_install"):
 							del changes["changes"][key]
+					
+					nm = os.path.basename(name)
+					if lib.is_disk(nm):
+						changes["obj"] = self.devices[nm]
+					else:
+						changes["obj"] = lib.return_partition(nm)
+						
+					#changes["obj"] = None					
 		
 			# Clear touched
 			self.touched = []
@@ -1135,6 +1144,11 @@ class Frontend(glade.Frontend):
 		if path in lvm.VolumeGroups:
 			return lvm.VolumeGroups[path]
 
+		# If there is an existing object in changed, we want to return that
+		# instead of getting a new one
+		if self.current_selected["value"].replace("/dev/","") in self.changed and self.changed[self.current_selected["value"].replace("/dev/","")]["obj"]:
+			return self.changed[self.current_selected["value"].replace("/dev/","")]["obj"]
+
 		return self.devices[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 
 	def get_disk_from_selected(self):
@@ -1144,7 +1158,7 @@ class Frontend(glade.Frontend):
 		path = self.current_selected["value"].replace("/dev/","").split("/")[0]
 		if path in lvm.VolumeGroups:
 			return lvm.VolumeGroups[path]
-		
+
 		return self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 	
 	def get_partition_from_selected(self):
@@ -1164,8 +1178,12 @@ class Frontend(glade.Frontend):
 		
 		# If there is an existing object in changed, we want to return that
 		# instead of getting a new one
-		if not "-1" in self.current_selected["value"] and self.current_selected["value"] in self.changed:
+		if not "-1" in self.current_selected["value"] and self.current_selected["value"] in self.changed and self.changed[self.current_selected["value"]]["obj"]:
 			return self.changed[self.current_selected["value"]]["obj"]
+		
+		# Get the object from the iter
+		result = self.current_selected["model"].get_value(self.current_selected["iter"], 7)
+		if result: return result
 		
 		disk = self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 		result = disk.getPartitionByPath(self.current_selected["value"])
@@ -1983,8 +2001,9 @@ class Frontend(glade.Frontend):
 				
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes?
-				#self.changed[part.path]["changes"] = {}
-				#if part.path in self.previously_changed: self.previously_changed.remove(part.path)
+				del self.changed[part.path]
+				if part.path in self.touched: self.touched.remove(part.path)
+				if part.path in self.previously_changed: self.previously_changed.remove(part.path)
 				
 				self.manual_populate()
 		
@@ -2028,6 +2047,12 @@ class Frontend(glade.Frontend):
 					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
 
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
+				# Remove changes
+				for dev in self.changed:
+					if not dev == self.current_selected["value"] and dev.startswith(self.current_selected["value"]):
+						del self.changed[dev]
+						if dev in self.touched: self.touched.remove(dev)
+						if dev in self.previously_changed: self.previously_changed.remove(dev)
 
 				self.manual_populate()
 		
@@ -2403,7 +2428,7 @@ class Frontend(glade.Frontend):
 			partitions = lib.disk_partitions(disk)
 
 		if disk != "notable" and len(partitions) > 0:	
-			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str)
+			container["model"] = Gtk.ListStore(str, str, str, str, bool, str, str, object)
 		else:
 			container["model"] = Gtk.ListStore(str, str)
 		#container["model"].set_sort_column_id(0, Gtk.SortType.ASCENDING)
@@ -2443,12 +2468,13 @@ class Frontend(glade.Frontend):
 					path = LVMcontainer.path
 				else:
 					path = part.path
-				
+
 					# Let's see if we can reuse objects in changed to avoid nasty bugs...
-					if not "-1" in path and path in self.changed:
+					if not "-1" in path and path in self.changed and self.changed[path]["obj"]:
 						part = self.changed[path]["obj"]
 				
 				if not path in self.changed: self.changed[path] = {"obj":part, "changes":{}, "LVMcontainer":LVMcontainer}
+				if not self.changed[path]["obj"]: self.changed[path]["obj"] = part
 
 				name = []
 				if path in self.distribs:
@@ -2530,7 +2556,7 @@ class Frontend(glade.Frontend):
 					_bg = None
 				
 				
-				container[path] = container["model"].append((path, "/".join(name), _fs, _mpoint, _to_format, "%s %s" % (_size, _unit), _bg))
+				container[path] = container["model"].append((path, "/".join(name), _fs, _mpoint, _to_format, "%s %s" % (_size, _unit), _bg, part))
 		elif len(partitions) == 0:
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Informations"), Gtk.CellRendererText(), text=1, cell_background=2))
 			
