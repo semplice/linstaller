@@ -110,16 +110,20 @@ proc   /proc   proc   defaults   0   0
 			for device, obj in crypt.LUKSdevices.items():
 				# See if the device is a physical volume, otherwise
 				# we will not touch it...
-				if not device in lvm.PhysicalVolumes:
+				if not obj.mapper_path in lvm.PhysicalVolumes:
 					continue
 				
 				UUID = lib.get_UUID(device)
 				
-				f.write("%(name)s %(UUID)s none luks\n" % {"name":obj.crypt_name, "UUID":UUID})
+				f.write("%(name)s UUID=%(UUID)s none luks\n" % {"name":obj.crypt_name, "UUID":UUID})
 		
 		# Set proper owner and permissions on the file
 		os.chown("/etc/crypttab", 0, 0)
 		os.chmod("/etc/crypttab", 0744)
+		
+		# Also update-initramfs to make sure we include cryptsetup & family
+		# into the initramfs
+		m.sexec("update-initramfs -u -k all")
 
 
 class Module(module.Module):
