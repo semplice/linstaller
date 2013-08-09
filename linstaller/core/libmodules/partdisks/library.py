@@ -40,7 +40,7 @@ supported = {
 	"ntfs" : ("/sbin/mkfs.ntfs","-Q"), # lol
 	"hfs+" : ("/sbin/mkfs.hfsplus",""),
 	"jfs" : ("/sbin/mkfs.jfs",""),
-	"btrfs" : ("/sbin/mkfs.btrfs",""),
+	"btrfs" : ("/sbin/mkfs.btrfs","-f"),
 	"reiserfs" : ("/sbin/mkfs.reiser4","-f"),
 	"xfs" : ("/sbin/mkfs.xfs",""),
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
@@ -76,6 +76,7 @@ sample_mountpoints = {
 	"/" : _("Root (/)"),
 	"/home" : _("Home Partition (/home)"),
 	"/usr" : _("Global applications (/usr)"),
+	"/boot" : _("Boot partition (/boot)"),
 	"/boot/efi" : _("EFI boot partition (/boot/efi)")
 }
 
@@ -213,10 +214,9 @@ def device_sort(dct):
 def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
 
+	global devices, disks
+
 	devices, disks = return_devices(onlyusb=onlyusb)
-	
-	global devices
-	global disks
 	
 def disk_partitions(disk):
 	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
@@ -228,8 +228,11 @@ def disk_partitions(disk):
 		if partition.type & p.PARTITION_FREESPACE or \
 			not partition.type & p.PARTITION_METADATA or \
 			not partition.type & p.PARTITION_PROTECTED:
-		
-			partitions.append(partition)
+			
+			if not (partition.type & p.PARTITION_FREESPACE and partition.getLength("MB") < 3):
+				# Exclude freespace partitions smaller than 3 MB
+
+				partitions.append(partition)
 		
 		pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 		if not pednxt: break
@@ -296,7 +299,7 @@ def add_partition(obj, start, size, type, filesystem):
 
 	# Create Geometry and Constraint
 	cons = p.Constraint(device=obj.device)
-	geom = p.Geometry(device=obj.device, start=start+2048, length=size)
+	geom = p.Geometry(device=obj.device, start=start+2048, length=size-2048)
 	
 	if filesystem:
 		filesystem = p.FileSystem(type=filesystem, geometry=geom)
@@ -320,7 +323,9 @@ def add_partition(obj, start, size, type, filesystem):
 
 def delete_partition(obj):
 	""" Deletes partition from disk. """
-	disk = obj.disk
+	#disk = obj.disk
+	print disks
+	disk = disks[os.path.basename(return_device(obj.path))]
 	
 	# Remove this partition
 	return disk.deletePartition(obj)
