@@ -447,7 +447,9 @@ class LVM_apply(glade.Progress):
 		self.parent.LVMshare = {}
 
 		# FIXME?
-		self.parent.idle_add(self.parent.refresh_manual, None, False, True)
+		self.parent.idle_add(lvm.refresh)
+		self.parent.idle_add(self.parent.manual_populate)
+		#self.parent.idle_add(self.parent.refresh_manual, None, False, True)
 		# FIXMEEEEE!
 		if self.parent.LVMrestoreto == self.parent.vgmanage_window:
 			self.parent.idle_add(self.parent.vgmanage_window_populate)
@@ -1089,6 +1091,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(False)
 			self.remove_button.set_sensitive(False)
 			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(True)
 			self.delete_button.set_sensitive(False)
 		elif description == "empty":
@@ -1096,6 +1099,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(True)
 			self.remove_button.set_sensitive(False)
 			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(False)
 		elif description == "full":
@@ -1103,6 +1107,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(False)
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(True)
 		elif description == None:
@@ -1110,6 +1115,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(True)
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(True)
 		## END TOOLBAR
@@ -1125,19 +1131,28 @@ class Frontend(glade.Frontend):
 					is_extended = False
 			else:
 				is_extended = False
+			if self.current_selected["value"] in crypt.LUKSdevices:
+				# Encrypted partition
+				is_encrypted = True
+			else:
+				is_encrypted = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
 			if not description == "notable":
 				if "-" in self.current_selected["value"]:
 					self.add_button.set_sensitive(True)
 					self.remove_button.set_sensitive(False)
 					self.edit_button.set_sensitive(False)
+					self.lock_button.set_sensitive(False)
 				else:
 					self.add_button.set_sensitive(False)
 					self.remove_button.set_sensitive(True)
 					self.edit_button.set_sensitive(True)
+					self.lock_button.set_sensitive(False)
 				if is_extended:
 					self.remove_button.set_sensitive(False)
 					self.edit_button.set_sensitive(False)
+				if is_encrypted:
+					self.lock_button.set_sensitive(True)
 	
 	def get_device_from_selected(self):
 		""" Returns a device object from self.current_selected. """
@@ -1635,6 +1650,9 @@ class Frontend(glade.Frontend):
 			
 			part = self.get_partition_from_selected()
 			targetfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+			if targetfs == "fat32" and float(self.size_adjustment.get_value()) < 512.0:
+				# fat32 fs must be at least on a 512 mb partition, reverting to fat16
+				targetfs = "fat16"
 			
 			# is LVM?
 			isLVM = False
@@ -1703,8 +1721,15 @@ class Frontend(glade.Frontend):
 
 					# Seed mount_on_install
 					self.changed[res.path]["changes"]["mount_on_install"] = True
-				
-				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+
+				if not "PVcreate" in self.changed[res.path]["changes"]:
+					subtext = _("Use the Apply button to save them.")
+				else:
+					# If we should create a physical volume, urge the
+					# user to apply ASAP in order to make it usable for
+					# the VGmanage dialog...
+					subtext = _("You need to apply your changes in order to use the new LVM physical volume.")
+				self.set_header("hold", _("You have some unsaved changes!"), subtext)
 				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
 				
 				if not res.path in self.touched: self.touched.append(res.path)
@@ -1774,6 +1799,9 @@ class Frontend(glade.Frontend):
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+				if newfs == "fat32" and float(self.size_adjustment.get_value()) < 512.0:
+					# fat32 fs must be at least on a 512 mb partition, reverting to fat16
+					newfs = "fat16"
 				if not isLVM:
 					lib.format_partition(part, newfs) # Ensure we change part.fileSystem
 					self.queue_for_format(path, newfs)
@@ -2057,8 +2085,9 @@ class Frontend(glade.Frontend):
 
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes
-				for dev in self.changed:
-					if not dev == self.current_selected["value"] and dev.startswith(self.current_selected["value"]):
+				val = lib.return_device(self.current_selected["value"])
+				for dev, content in self.changed.items():
+					if not dev == val and dev.startswith(val):
 						del self.changed[dev]
 						if dev in self.touched: self.touched.remove(dev)
 						if dev in self.previously_changed: self.previously_changed.remove(dev)
@@ -2397,6 +2426,25 @@ class Frontend(glade.Frontend):
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.apply_window.hide)
 	
+	def on_unlock_window_button_clicked(self, obj):
+		""" Called when a button on the unlock window has been clicked. """
+		
+		if obj == self.unlock_ok:
+			# Get object
+			dev = crypt.LUKSdevices[self.current_selected["value"]]
+			try:
+				dev.open(self.unlock_entry.get_text())
+			except m.CmdError:
+				# Failed :(
+				self.set_header("error", _("Unable to unlock the volume."), _("You inserted the wrong password."))
+			
+			lvm.refresh()
+			self.idle_add(self.manual_populate)
+
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)		
+		self.idle_add(self.unlock_window.hide)
+	
 	def on_lvm_apply_window_button_clicked(self, obj):
 		""" Called when a button on the LVM apply window has been clicked. """
 				
@@ -2619,6 +2667,7 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.add_button.set_sensitive, False)
 		self.idle_add(self.remove_button.set_sensitive, False)
 		self.idle_add(self.edit_button.set_sensitive, False)
+		self.idle_add(self.lock_button.set_sensitive, False)
 		self.idle_add(self.newtable_button.set_sensitive, False)
 		self.idle_add(self.delete_button.set_sensitive, False)
 
@@ -2653,6 +2702,23 @@ class Frontend(glade.Frontend):
 			self.size_manual_entry.set_sensitive(False)
 			self.size_scale_scale.set_sensitive(True)
 	
+	def on_lock_button_clicked(self, caller):
+		""" Called when the Lock/Unlock partition has been clicked. """
+		
+		device = crypt.LUKSdevices[self.current_selected["value"]]
+		
+		if device.path:
+			# Unlocked, lock
+			device.close()
+			lvm.refresh()
+			self.idle_add(self.manual_populate)
+		else:
+			self.idle_add(self.objects["parent"].main.set_sensitive, False)
+			self.idle_add(self.unlock_entry.set_text, "")
+			self.idle_add(self.unlock_entry.grab_focus)
+			self.idle_add(self.unlock_window.show)
+		
+	
 	def on_advanced_clicked(self, caller):
 		""" Shows advanced options if caller is the 'Advanced options' button.
 		Otherwise it hides them. """
@@ -2663,6 +2729,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.remove_button.hide)
 			self.idle_add(self.edit_button.hide)
 			#self.idle_add(self.toolbar_separator.hide)
+			self.idle_add(self.lock_button.hide)
 			self.idle_add(self.advanced_button.hide)
 			self.idle_add(self.coso_che_separa.hide)
 			self.idle_add(self.refresh_button.hide)
@@ -2679,6 +2746,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.remove_button.show)
 			self.idle_add(self.edit_button.show)
 			#self.idle_add(self.toolbar_separator.show)
+			self.idle_add(self.lock_button.show)
 			self.idle_add(self.advanced_button.show)
 			self.idle_add(self.coso_che_separa.show)
 			self.idle_add(self.refresh_button.show)
@@ -2775,6 +2843,7 @@ class Frontend(glade.Frontend):
 		self.delete_window = self.objects["builder"].get_object("delete_window")
 		self.apply_window = self.objects["builder"].get_object("apply_window")
 		self.lvm_apply_window = self.objects["builder"].get_object("lvm_apply_window")
+		self.unlock_window = self.objects["builder"].get_object("unlock_window")
 		self.vgmanage_window = self.objects["builder"].get_object("vgmanage_window")
 		self.vgmanage_manage_window = self.objects["builder"].get_object("vgmanage_manage_window")
 		
@@ -2913,6 +2982,14 @@ class Frontend(glade.Frontend):
 		self.lvm_apply_no.connect("clicked", self.on_lvm_apply_window_button_clicked)
 		self.lvm_apply_yes.connect("clicked", self.on_lvm_apply_window_button_clicked)
 
+		## Unlock window:
+		self.unlock_window.connect("delete_event", self.child_window_delete)
+		self.unlock_entry = self.objects["builder"].get_object("unlock_entry")
+		self.unlock_ok = self.objects["builder"].get_object("unlock_ok")
+		self.unlock_cancel = self.objects["builder"].get_object("unlock_cancel")
+		self.unlock_ok.connect("clicked", self.on_unlock_window_button_clicked)
+		self.unlock_cancel.connect("clicked", self.on_unlock_window_button_clicked)
+
 		## Manage LVM Volume Groups window
 		self.vgmanage_window.connect("delete_event", self.child_window_delete)
 		self.vg_scrolledwindow = self.objects["builder"].get_object("vg_scrolledwindow")
@@ -2951,6 +3028,7 @@ class Frontend(glade.Frontend):
 		self.remove_button = self.objects["builder"].get_object("remove_button")
 		self.edit_button = self.objects["builder"].get_object("edit_button")
 		self.toolbar_separator = self.objects["builder"].get_object("toolbar_separator")
+		self.lock_button = self.objects["builder"].get_object("lock_button")
 		self.advanced_button = self.objects["builder"].get_object("advanced_button")
 		self.back_to_normal_button = self.objects["builder"].get_object("back_to_normal_button")
 		self.newtable_button = self.objects["builder"].get_object("newtable_button")
@@ -2965,6 +3043,7 @@ class Frontend(glade.Frontend):
 		self.edit_button.connect("clicked", self.on_edit_button_clicked)
 		self.newtable_button.connect("clicked", self.on_newtable_button_clicked)
 		self.remove_button.connect("clicked", self.on_remove_button_clicked)
+		self.lock_button.connect("clicked", self.on_lock_button_clicked)
 		self.advanced_button.connect("clicked", self.on_advanced_clicked)
 		self.back_to_normal_button.connect("clicked", self.on_advanced_clicked)
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)
