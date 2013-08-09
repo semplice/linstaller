@@ -248,7 +248,10 @@ def return_partition(partition):
 	
 	# Get device
 	dev = return_device(partition)
-	dev = disks[dev]
+	if dev in disks:
+		dev = disks[dev]
+	else:
+		return None
 	
 	# Search for partition
 	for part in dev._partitions:

@@ -625,7 +625,10 @@ class Frontend(glade.Frontend):
 					
 					nm = os.path.basename(name)
 					if lib.is_disk(nm):
-						changes["obj"] = self.devices[nm]
+						if nm in self.devices:
+							changes["obj"] = self.devices[nm]
+						else:
+							changes["obj"] = None
 					else:
 						changes["obj"] = lib.return_partition(nm)
 						
@@ -1498,7 +1501,6 @@ class Frontend(glade.Frontend):
 			# The partition is/should be encrypted.
 			# Ensure the encryption part is shown, but set sensitiveness to False
 			self.idle_add(self.crypting_box.set_active, True)
-			self.on_formatbox_change(self.crypting_box)
 			self.idle_add(self.crypting_box.set_sensitive, False)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, False)
 			self.idle_add(self.crypting_password.set_text, "DUMMYPASSWORD") # Dummy password
@@ -1506,6 +1508,7 @@ class Frontend(glade.Frontend):
 		else:
 			self.idle_add(self.crypting_box.set_sensitive, True)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, True)
+		self.on_formatbox_change(self.crypting_box)
 
 		# Also if we are in a LV, we need to disable "Use for LVM"
 		if LVMcontainer:
@@ -1684,15 +1687,16 @@ class Frontend(glade.Frontend):
 				# Add the new partition to changed
 				self.changed[res.path] = {"obj":res, "changes":{}}
 				
-				# Should we encrypt this partition?
-				if self.crypting_box.get_active():
-					# YES!
-					self.changed[res.path]["changes"]["crypt"] = self.crypting_password.get_text()
 
 				# Should we make this partition a LVM Physical Volume?
-				if self.lvm_box.get_active():
+				if self.lvm_box.get_active() or self.crypting_box.get_active():
 					# YES!
 					self.changed[res.path]["changes"]["PVcreate"] = True
+
+					# Should we encrypt this partition?
+					if self.crypting_box.get_active():
+						# YES!
+						self.changed[res.path]["changes"]["crypt"] = self.crypting_password.get_text()
 				else:
 					self.queue_for_format(res.path, targetfs)
 					self.change_mountpoint(res.path, self.get_mountpoint())
