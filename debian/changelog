@@ -1,3 +1,9 @@
+linstaller (4.90.1-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEEEES
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 14:02:05 +0200
+
 linstaller (4.90.0-1) devel; urgency=low
 
   * LVM Physical Volume encryption
