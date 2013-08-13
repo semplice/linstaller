@@ -239,7 +239,10 @@ for arg in sys.argv:
 		_action = "start"
 	elif arg[0][0] == ":":
 		# Preseed.
-		__module, __option, __value = arg[0].split(":")[1:] # Get seed
+		__splitted = arg[0].split(":")[1:]
+		__module  = __splitted[0]
+		__option  = __splitted[1]
+		__value   = ":".join(__splitted[2:])
 		
 		if not __module in preseeds:
 			# Create a new dictionary

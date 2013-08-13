@@ -166,7 +166,7 @@ class Apply(glade.Progress):
 				try:
 					self.parent.set_header("hold", _("Encrypting %s...") % key, _("Let's hope everything goes well! :)"))
 					cryptdev = crypt.LUKSdrive(obj)
-					cryptdev.format(cng["crypt"])
+					cryptdev.format(cng["crypt"], cipher=self.parent.settings["cipher"], keysize=int(self.parent.settings["keysize"]))
 					# Open crypt partition...
 					cryptdev.open(cng["crypt"])
 					
@@ -918,29 +918,16 @@ class Frontend(glade.Frontend):
 		
 		self.idle_add(self.crypt_confirm_window.hide)
 
-	def on_crypt_random_toggled(self, obj):
-		""" Called when crypt_random is toggled. """
+	def on_crypting_random_toggled(self, obj):
+		""" Called when crypting_random is toggled. """
 		
 		if obj.get_active():
 			# True
-			self.idle_add(self.crypt_random_hq.set_sensitive, True) # Make the HQ box sensitive
-			self.crypt_random_enabled = True
-			self.crypt_random_hq_enabled = False
+			self.idle_add(self.crypting_random_hq.set_sensitive, True) # Make the HQ box sensitive
 		else:
 			# False
-			self.idle_add(self.crypt_random_hq.set_active, False) # Reset the HQ box
-			self.idle_add(self.crypt_random_hq.set_sensitive, False) # ...and make it insensitive
-			self.crypt_random_enabled = False
-			self.crypt_random_hq_enabled = False
-	
-	def on_crypt_random_hq_toggled(self, obj):
-		""" Called when crypt_random_hq is toggled. """
-		
-		if obj.get_active():
-			# True
-			self.crypt_random_hq_enabled = True
-		else:
-			self.crypt_random_hq_enabled = False
+			self.idle_add(self.crypting_random_hq.set_active, False) # Reset the HQ box
+			self.idle_add(self.crypting_random_hq.set_sensitive, False) # ...and make it insensitive
 
 	def automatic_ready(self):
 		""" Called when the automatic window is ready. """
@@ -982,8 +969,8 @@ class Frontend(glade.Frontend):
 		self.crypt_confirm_yes.connect("clicked", self.on_crypt_confirm_clicked)
 		
 		# Also connect the crypt checkboxes where they belong
-		self.crypt_random.connect("toggled", self.on_crypt_random_toggled)
-		self.crypt_random_hq.connect("toggled", self.on_crypt_random_hq_toggled)
+		#self.crypt_random.connect("toggled", self.on_crypt_random_toggled)
+		#self.crypt_random_hq.connect("toggled", self.on_crypt_random_hq_toggled)
 		
 		# Create automatic_check_ng object
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
@@ -2434,7 +2421,8 @@ class Frontend(glade.Frontend):
 			dev = crypt.LUKSdevices[self.current_selected["value"]]
 			try:
 				dev.open(self.unlock_entry.get_text())
-			except m.CmdError:
+				self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
+			except CmdError:
 				# Failed :(
 				self.set_header("error", _("Unable to unlock the volume."), _("You inserted the wrong password."))
 			
@@ -2863,6 +2851,8 @@ class Frontend(glade.Frontend):
 		self.crypting_password_alignment = self.objects["builder"].get_object("crypting_password_alignment")
 		self.crypting_password = self.objects["builder"].get_object("crypting_password")
 		self.crypting_password_confirm = self.objects["builder"].get_object("crypting_password_confirm")
+		self.crypting_random = self.objects["builder"].get_object("crypting_random")
+		self.crypting_random_hq = self.objects["builder"].get_object("crypting_random_hq")
 		self.do_not_format_box = self.objects["builder"].get_object("do_not_format_box")
 		self.PVwarning = self.objects["builder"].get_object("PVwarning")
 		# Hold color in PVwarning
@@ -2893,6 +2883,9 @@ class Frontend(glade.Frontend):
 		
 		self.crypting_password.connect("changed", self.on_crypting_password_changed)
 		self.crypting_password_confirm.connect("changed", self.on_crypting_password_changed)
+
+		# Also connect the crypt checkboxes where they belong
+		self.crypting_random.connect("toggled", self.on_crypting_random_toggled)
 		
 		# Connect mountpoint entry and combobox...
 		self.mountpoint_combo.connect("changed", self.on_mountpoint_change)

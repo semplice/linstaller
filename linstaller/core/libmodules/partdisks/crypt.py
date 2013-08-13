@@ -12,6 +12,7 @@ import os, commands
 import linstaller.core.main as m
 import linstaller.core.libmodules.partdisks.library as lib
 
+EncryptionType = m.enum("LOL")
 class Crypt:
 	""" A Crypt object handles a drive that should encrypted with LUKS. """
 	
@@ -62,7 +63,7 @@ class LUKSdrive:
 		self.mapper_path = os.path.join("/dev/mapper", self.crypt_name)
 		#self.path = self.mapper_path
 		
-	def format(self, password):
+	def format(self, password, cipher="aes-xts-plain64", keysize=512):
 		""" Formats the device and sets password as the drive's password. """
 		
 		# Umount
@@ -75,7 +76,7 @@ class LUKSdrive:
 			pass
 		
 		# Ugly as hell
-		m.sexec("echo '%(password)s' | cryptsetup luksFormat %(device)s" % {"password":password, "device":self.string_device})
+		m.sexec("echo '%(password)s' | cryptsetup luksFormat --cipher %(cipher)s --key-size %(keysize)s %(device)s" % {"password":password, "device":self.string_device, "cipher":cipher, "keysize":keysize})
 
 	def open(self, password):
 		""" Opens the device. """
