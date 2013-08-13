@@ -932,7 +932,7 @@ If you are unsure, press No.</property>
                                       <object class="GtkLabel" id="label21">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Please note that by formatting/making a LVM physical volume you will destroy all data contained there.
+                                        <property name="label" translatable="yes">Please note that by formatting/making/encrypting a LVM physical volume you will destroy all data contained there.
 Ensure that the physical volume is unlinked from any volume group before attempting to remove or format it.</property>
                                         <property name="wrap">True</property>
                                         <property name="wrap_mode">word-char</property>

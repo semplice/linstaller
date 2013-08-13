@@ -163,6 +163,26 @@ class Apply(glade.Progress):
 			# Should crypt?
 			is_crypt = False
 			if "crypt" in cng:
+				# Fill?
+				if "fill" in cng:
+					try:
+						self.parent.set_header("hold", _("Filling %s with random data...") % key, _("This may take a while, depending by the quality of random data selected."))
+						cryptdev = crypt.LUKSdrive(obj)
+						cryptdev.random_fill(type=cng["fill"])
+					except CmdError:
+						# Failed ...
+						self.parent.set_header("error", _("Failed filling %s with random data.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+						if self.parent.is_automatic:
+							self.parent.is_automatic = "fail"
+							self.parent.on_steps_ok()
+						
+						# Restore sensitivity
+						self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+						self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+						return False
+				
 				try:
 					self.parent.set_header("hold", _("Encrypting %s...") % key, _("Let's hope everything goes well! :)"))
 					cryptdev = crypt.LUKSdrive(obj)
@@ -1382,6 +1402,10 @@ class Frontend(glade.Frontend):
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
 		
+		# Ensure the "Fill the device with random data" box is false...
+		self.idle_add(self.crypting_random.set_active, False)
+		self.on_crypting_random_toggled(self.crypting_random)
+		
 		# Hide the PVwarning
 		self.idle_add(self.PVwarning.hide)
 		
@@ -1511,6 +1535,9 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.crypting_box.set_sensitive, True)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, True)
 		self.on_formatbox_change(self.crypting_box)
+		# Ensure the "Fill the device with random data" box is false...
+		self.idle_add(self.crypting_random.set_active, False)
+		self.on_crypting_random_toggled(self.crypting_random)
 
 		# Also if we are in a LV, we need to disable "Use for LVM"
 		if LVMcontainer:
@@ -1536,7 +1563,7 @@ class Frontend(glade.Frontend):
 			self.current_mountpoint = None
 
 		# Show PVwarning if we need to
-		if path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+		if path in lvm.PhysicalVolumes or path in crypt.LUKSdevices or "PVcreate" in self.changed[device.path]["changes"]:
 			self.idle_add(self.PVwarning.show)
 		else:
 			self.idle_add(self.PVwarning.hide)
@@ -1702,6 +1729,14 @@ class Frontend(glade.Frontend):
 					if self.crypting_box.get_active():
 						# YES!
 						self.changed[res.path]["changes"]["crypt"] = self.crypting_password.get_text()
+						
+						# Fill?
+						if self.crypting_random.get_active() and not self.crypting_random_hq.get_active():
+							# "low"-quality data
+							self.changed[res.path]["changes"]["fill"] = crypt.FillQuality.LOW
+						elif self.crypting_random_hq.get_active():
+							# high-quality data
+							self.changed[res.path]["changes"]["fill"] = crypt.FillQuality.HIGH
 				else:
 					self.queue_for_format(res.path, targetfs)
 					self.change_mountpoint(res.path, self.get_mountpoint())
@@ -1812,10 +1847,20 @@ class Frontend(glade.Frontend):
 				self.changed[path]["changes"]["crypt"] = self.crypting_password.get_text()
 				# Also ensure we will recreate the LVM PV...
 				self.changed[path]["changes"]["PVcreate"] = True
+
+				# Fill?
+				if self.crypting_random.get_active() and not self.crypting_random_hq.get_active():
+					# "low"-quality data
+					self.changed[path]["changes"]["fill"] = crypt.FillQuality.LOW
+				elif self.crypting_random_hq.get_active():
+					# high-quality data
+					self.changed[path]["changes"]["fill"] = crypt.FillQuality.HIGH
 			else:
 				# NO :(
 				if "crypt" in self.changed[path]["changes"]:
 					del self.changed[path]["changes"]["crypt"]
+				if "fill" in self.changed[path]["changes"]:
+					del self.changed[path]["changes"]["fill"]
 
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -1912,7 +1957,7 @@ class Frontend(glade.Frontend):
 				# Check if mountpoint is ok (thus enabling the OK button)
 				self.on_mountpoint_change(None)
 
-		if obj == self.lvm_box and obj.get_active() and not self.is_add:
+		if obj in (self.lvm_box, self.crypting_box) and obj.get_active() and not self.is_add:
 			# Show PVwarning...
 			self.idle_add(self.PVwarning.show)
 	
