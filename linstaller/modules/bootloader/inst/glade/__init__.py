@@ -15,6 +15,10 @@ class BootloaderInstall(glade.Progress):
 	def progress(self):
 		
 		self.parent.progress_wait_for_quota()
+		
+		# Should we skip?
+		if self.parent.moduleclass.modules_settings["bootloader"]["skip"]:
+			return
 
 		# Get bootloader
 		bootloader = self.parent.moduleclass.modules_settings["bootloader"]["bootloader"]

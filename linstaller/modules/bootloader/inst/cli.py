@@ -14,6 +14,10 @@ class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 
+		# Should we skip?
+		if self.moduleclass.modules_settings["bootloader"]["skip"]:
+			return
+
 		# Get bootloader
 		bootloader = self.moduleclass.modules_settings["bootloader"]["bootloader"]
 

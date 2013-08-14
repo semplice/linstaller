@@ -368,10 +368,15 @@ class LVM_apply(glade.Progress):
 						res = self.resize(share["obj"], share["size"], lib.ResizeAction.SHRINK)
 						if res == False: return res
 
-						share["obj"].resize(share["size"])
+						share["obj"].resize(share["size"], type=lib.ResizeAction.SHRINK)
 					else:
 						# Grow, grow the LV then the filesystem
-						share["obj"].resize(share["size"])
+						share["obj"].resize(share["size"], type=lib.ResizeAction.GROW)
+						
+						# We do not trust our data, so get the size from the LV object
+						share["obj"].reload_infos()
+						share["size"] = share["obj"].infos["size"]
+						
 						res = self.resize(share["obj"], share["size"], lib.ResizeAction.GROW)
 						if res == False: return res
 			elif share["type"] == "VGcreate":
@@ -1598,12 +1603,12 @@ class Frontend(glade.Frontend):
 	def change_mountpoint(self, path, mpoint):
 		""" Changes the mountpoint in self.changed. """
 		
-		self.changed[path]["changes"]["useas"] = mpoint
-		
-		# Add to mountpoints_added if there is a mpoint
 		if mpoint:
+			self.changed[path]["changes"]["useas"] = mpoint
 			self.mountpoints_added[mpoint] = path
-		
+		elif "useas" in self.changed[path]["changes"]:
+			del self.changed[path]["changes"]["useas"]
+
 	def get_mountpoint(self):
 		""" Gets the mountpoint from the ComboboxTextEntry which asks for mountpoint. """
 		
@@ -2604,7 +2609,7 @@ class Frontend(glade.Frontend):
 					# We need to make a LVM Physical volume...
 					_fs = _("LVM physical volume")
 					_to_format = True
-				elif path in crypt.LUKSdevices and not crypt.LUKSdevices[path].path:
+				elif path in crypt.LUKSdevices and not crypt.LUKSdevices[path].path and not (path in self.changed and "format" in self.changed[path]["changes"]):
 					# Encrypted locked partition
 					_fs = _("Locked")
 					_to_format = False

@@ -16,11 +16,8 @@ class Module(module.Module):
 
 	def start(self):
 		""" Start module """
-		
-		print self.settings
-		
+				
 		if self.settings["uefi"] == None:
-			# FIXME: We need to detect UEFI even when booting in BIOS emulation (is it possible?)
 			if os.path.exists("/sys/firmware/efi"):
 				m.verbose("UEFI Detected.")
 				self.settings["uefi"] = True

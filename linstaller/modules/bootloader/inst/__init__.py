@@ -70,7 +70,7 @@ class Install(module.Install):
 			# Root.
 			location = self.moduleclass.modules_settings["partdisks"]["root"]
 			args = "--no-floppy --force"
-		else:
+		elif target == "mbr":
 			# MBR
 			
 			# Latest GRUB fucked up the (hd0) method, we need to get the
@@ -81,7 +81,12 @@ class Install(module.Install):
 				location = f.readline().replace("\n","").split("	")[-1]
 					
 			args = "--no-floppy"
-			
+		else:
+			# Forced
+			location = self.moduleclass.modules_settings["partdisks"]["device"]
+			args = "--no-floppy"
+
+		if not "uefidetect.inst" in self.moduleclass.modules_settings or self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == False:
 			# Also set the location in debconf database, to avoid apt to
 			# bug us when an upgrade of grub occours
 			# FIXME: this breaks systems without the debconf module,
@@ -125,13 +130,15 @@ class Module(module.Module):
 		
 		if "supportrepo.inst" in self.modules_settings:
 			self.cache = self.modules_settings["supportrepo.inst"]["cache"]
+		else:
+			self.cache = None
 
 		self._pkgs_fetch = {"grub":self.grub_pkgs_fetch}
 		
 		module.Module.start(self)
 		
 		# Reset rootdir
-		self.cache.change_rootdir(self.main_settings["target"])
+		if self.cache: self.cache.change_rootdir(self.main_settings["target"])
 
 	def grub_pkgs_fetch(self):
 		""" Selects and fetches the bootloader from the supportrepo. """

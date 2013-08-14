@@ -10,6 +10,8 @@ import os
 
 import parted as pa
 
+from linstaller.core.libmodules.partdisks.library import ResizeAction
+
 #import lvm as lvm_library
 #lvm = lvm_library.Liblvm() # Needed to get it to work on non-GIT version of pylvm2.
 
@@ -342,7 +344,7 @@ class LogicalVolume:
 		m.sexec("lvremove --force %s" % self.path)
 		self.reload_infos()
 	
-	def resize(self, size):
+	def resize(self, size, type):
 		"""Resizes the Logical Volume."""
 
 		# Size comes in as MB (S.I.), we need to transform them to kibibytes...
@@ -350,18 +352,6 @@ class LogicalVolume:
 		size /= 1.024 # KiB
 		size = int(size)-1 # round and ensure we aren't in excess
 		#size = str(size) + "K"
-		
-		# Do the same with the extents
-		unit = self.vgroup.infos["extentsize"]
-		unit *= 1000 # KB
-		unit /= 1.024 # KiB
-		unit = int(unit)-1 # round and ensure we aren't in excess
-		free = int(self.vgroup.infos["extentfree"])*unit
-		
-		# Compare the size with the unit
-		if size > free:
-			# More than free, use the maximum allowed
-			size = free
 		
 		size = str(size) + "k"
 		
