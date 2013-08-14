@@ -12,6 +12,8 @@ import os, commands
 import linstaller.core.main as m
 import linstaller.core.libmodules.partdisks.library as lib
 
+FillQuality = m.enum("LOW", "HIGH")
+
 class Crypt:
 	""" A Crypt object handles a drive that should encrypted with LUKS. """
 	
@@ -61,8 +63,24 @@ class LUKSdrive:
 		self.crypt_name = os.path.basename(self.string_device) + "_crypt"
 		self.mapper_path = os.path.join("/dev/mapper", self.crypt_name)
 		#self.path = self.mapper_path
+
+	def random_fill(self, type=FillQuality.LOW):
+		""" Fills the device with random data.
 		
-	def format(self, password):
+		type is an object from the FillQuality enum.
+		
+		It returns the process object to the frontend.
+		"""
+		
+		# Umount
+		lib.umount_bulk(self.string_device)
+		
+		if type == FillQuality.LOW:
+			m.sexec("badblocks -c 10240 -s -w -t random -v %s" % self.string_device)
+		elif type == FillQuality.HIGH:
+			m.sexec("dd if=/dev/urandom of=%s" % self.string_device)
+
+	def format(self, password, cipher="aes-xts-plain64", keysize=512):
 		""" Formats the device and sets password as the drive's password. """
 		
 		# Umount
@@ -75,7 +93,7 @@ class LUKSdrive:
 			pass
 		
 		# Ugly as hell
-		m.sexec("echo '%(password)s' | cryptsetup luksFormat %(device)s" % {"password":password, "device":self.string_device})
+		m.sexec("echo '%(password)s' | cryptsetup luksFormat --cipher %(cipher)s --key-size %(keysize)s %(device)s" % {"password":password, "device":self.string_device, "cipher":cipher, "keysize":keysize})
 
 	def open(self, password):
 		""" Opens the device. """

@@ -163,10 +163,30 @@ class Apply(glade.Progress):
 			# Should crypt?
 			is_crypt = False
 			if "crypt" in cng:
+				# Fill?
+				if "fill" in cng:
+					try:
+						self.parent.set_header("hold", _("Filling %s with random data...") % key, _("This may take a while, depending by the quality of random data selected."))
+						cryptdev = crypt.LUKSdrive(obj)
+						cryptdev.random_fill(type=cng["fill"])
+					except CmdError:
+						# Failed ...
+						self.parent.set_header("error", _("Failed filling %s with random data.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
+
+						if self.parent.is_automatic:
+							self.parent.is_automatic = "fail"
+							self.parent.on_steps_ok()
+						
+						# Restore sensitivity
+						self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+						self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
+
+						return False
+				
 				try:
 					self.parent.set_header("hold", _("Encrypting %s...") % key, _("Let's hope everything goes well! :)"))
 					cryptdev = crypt.LUKSdrive(obj)
-					cryptdev.format(cng["crypt"])
+					cryptdev.format(cng["crypt"], cipher=self.parent.settings["cipher"], keysize=int(self.parent.settings["keysize"]))
 					# Open crypt partition...
 					cryptdev.open(cng["crypt"])
 					
@@ -348,10 +368,15 @@ class LVM_apply(glade.Progress):
 						res = self.resize(share["obj"], share["size"], lib.ResizeAction.SHRINK)
 						if res == False: return res
 
-						share["obj"].resize(share["size"])
+						share["obj"].resize(share["size"], type=lib.ResizeAction.SHRINK)
 					else:
 						# Grow, grow the LV then the filesystem
-						share["obj"].resize(share["size"])
+						share["obj"].resize(share["size"], type=lib.ResizeAction.GROW)
+						
+						# We do not trust our data, so get the size from the LV object
+						share["obj"].reload_infos()
+						share["size"] = share["obj"].infos["size"]
+						
 						res = self.resize(share["obj"], share["size"], lib.ResizeAction.GROW)
 						if res == False: return res
 			elif share["type"] == "VGcreate":
@@ -447,7 +472,9 @@ class LVM_apply(glade.Progress):
 		self.parent.LVMshare = {}
 
 		# FIXME?
-		self.parent.idle_add(self.parent.refresh_manual, None, False, True)
+		self.parent.idle_add(lvm.refresh)
+		self.parent.idle_add(self.parent.manual_populate)
+		#self.parent.idle_add(self.parent.refresh_manual, None, False, True)
 		# FIXMEEEEE!
 		if self.parent.LVMrestoreto == self.parent.vgmanage_window:
 			self.parent.idle_add(self.parent.vgmanage_window_populate)
@@ -916,29 +943,16 @@ class Frontend(glade.Frontend):
 		
 		self.idle_add(self.crypt_confirm_window.hide)
 
-	def on_crypt_random_toggled(self, obj):
-		""" Called when crypt_random is toggled. """
+	def on_crypting_random_toggled(self, obj):
+		""" Called when crypting_random is toggled. """
 		
 		if obj.get_active():
 			# True
-			self.idle_add(self.crypt_random_hq.set_sensitive, True) # Make the HQ box sensitive
-			self.crypt_random_enabled = True
-			self.crypt_random_hq_enabled = False
+			self.idle_add(self.crypting_random_hq.set_sensitive, True) # Make the HQ box sensitive
 		else:
 			# False
-			self.idle_add(self.crypt_random_hq.set_active, False) # Reset the HQ box
-			self.idle_add(self.crypt_random_hq.set_sensitive, False) # ...and make it insensitive
-			self.crypt_random_enabled = False
-			self.crypt_random_hq_enabled = False
-	
-	def on_crypt_random_hq_toggled(self, obj):
-		""" Called when crypt_random_hq is toggled. """
-		
-		if obj.get_active():
-			# True
-			self.crypt_random_hq_enabled = True
-		else:
-			self.crypt_random_hq_enabled = False
+			self.idle_add(self.crypting_random_hq.set_active, False) # Reset the HQ box
+			self.idle_add(self.crypting_random_hq.set_sensitive, False) # ...and make it insensitive
 
 	def automatic_ready(self):
 		""" Called when the automatic window is ready. """
@@ -980,8 +994,8 @@ class Frontend(glade.Frontend):
 		self.crypt_confirm_yes.connect("clicked", self.on_crypt_confirm_clicked)
 		
 		# Also connect the crypt checkboxes where they belong
-		self.crypt_random.connect("toggled", self.on_crypt_random_toggled)
-		self.crypt_random_hq.connect("toggled", self.on_crypt_random_hq_toggled)
+		#self.crypt_random.connect("toggled", self.on_crypt_random_toggled)
+		#self.crypt_random_hq.connect("toggled", self.on_crypt_random_hq_toggled)
 		
 		# Create automatic_check_ng object
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
@@ -1089,6 +1103,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(False)
 			self.remove_button.set_sensitive(False)
 			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(True)
 			self.delete_button.set_sensitive(False)
 		elif description == "empty":
@@ -1096,6 +1111,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(True)
 			self.remove_button.set_sensitive(False)
 			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(False)
 		elif description == "full":
@@ -1103,6 +1119,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(False)
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(True)
 		elif description == None:
@@ -1110,6 +1127,7 @@ class Frontend(glade.Frontend):
 			self.add_button.set_sensitive(True)
 			self.remove_button.set_sensitive(True)
 			self.edit_button.set_sensitive(True)
+			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(False)
 			self.delete_button.set_sensitive(True)
 		## END TOOLBAR
@@ -1125,19 +1143,28 @@ class Frontend(glade.Frontend):
 					is_extended = False
 			else:
 				is_extended = False
+			if self.current_selected["value"] in crypt.LUKSdevices:
+				# Encrypted partition
+				is_encrypted = True
+			else:
+				is_encrypted = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
 			if not description == "notable":
 				if "-" in self.current_selected["value"]:
 					self.add_button.set_sensitive(True)
 					self.remove_button.set_sensitive(False)
 					self.edit_button.set_sensitive(False)
+					self.lock_button.set_sensitive(False)
 				else:
 					self.add_button.set_sensitive(False)
 					self.remove_button.set_sensitive(True)
 					self.edit_button.set_sensitive(True)
+					self.lock_button.set_sensitive(False)
 				if is_extended:
 					self.remove_button.set_sensitive(False)
 					self.edit_button.set_sensitive(False)
+				if is_encrypted:
+					self.lock_button.set_sensitive(True)
 	
 	def get_device_from_selected(self):
 		""" Returns a device object from self.current_selected. """
@@ -1380,6 +1407,10 @@ class Frontend(glade.Frontend):
 		# Set ext4 as default...
 		self.filesystem_combo.set_active(self.fs_table["ext4"])
 		
+		# Ensure the "Fill the device with random data" box is false...
+		self.idle_add(self.crypting_random.set_active, False)
+		self.on_crypting_random_toggled(self.crypting_random)
+		
 		# Hide the PVwarning
 		self.idle_add(self.PVwarning.hide)
 		
@@ -1509,6 +1540,9 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.crypting_box.set_sensitive, True)
 			self.idle_add(self.crypting_password_alignment.set_sensitive, True)
 		self.on_formatbox_change(self.crypting_box)
+		# Ensure the "Fill the device with random data" box is false...
+		self.idle_add(self.crypting_random.set_active, False)
+		self.on_crypting_random_toggled(self.crypting_random)
 
 		# Also if we are in a LV, we need to disable "Use for LVM"
 		if LVMcontainer:
@@ -1534,7 +1568,7 @@ class Frontend(glade.Frontend):
 			self.current_mountpoint = None
 
 		# Show PVwarning if we need to
-		if path in lvm.PhysicalVolumes or "PVcreate" in self.changed[device.path]["changes"]:
+		if path in lvm.PhysicalVolumes or path in crypt.LUKSdevices or "PVcreate" in self.changed[device.path]["changes"]:
 			self.idle_add(self.PVwarning.show)
 		else:
 			self.idle_add(self.PVwarning.hide)
@@ -1569,12 +1603,12 @@ class Frontend(glade.Frontend):
 	def change_mountpoint(self, path, mpoint):
 		""" Changes the mountpoint in self.changed. """
 		
-		self.changed[path]["changes"]["useas"] = mpoint
-		
-		# Add to mountpoints_added if there is a mpoint
 		if mpoint:
+			self.changed[path]["changes"]["useas"] = mpoint
 			self.mountpoints_added[mpoint] = path
-		
+		elif "useas" in self.changed[path]["changes"]:
+			del self.changed[path]["changes"]["useas"]
+
 	def get_mountpoint(self):
 		""" Gets the mountpoint from the ComboboxTextEntry which asks for mountpoint. """
 		
@@ -1635,6 +1669,9 @@ class Frontend(glade.Frontend):
 			
 			part = self.get_partition_from_selected()
 			targetfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+			if targetfs == "fat32" and float(self.size_adjustment.get_value()) < 512.0:
+				# fat32 fs must be at least on a 512 mb partition, reverting to fat16
+				targetfs = "fat16"
 			
 			# is LVM?
 			isLVM = False
@@ -1697,14 +1734,29 @@ class Frontend(glade.Frontend):
 					if self.crypting_box.get_active():
 						# YES!
 						self.changed[res.path]["changes"]["crypt"] = self.crypting_password.get_text()
+						
+						# Fill?
+						if self.crypting_random.get_active() and not self.crypting_random_hq.get_active():
+							# "low"-quality data
+							self.changed[res.path]["changes"]["fill"] = crypt.FillQuality.LOW
+						elif self.crypting_random_hq.get_active():
+							# high-quality data
+							self.changed[res.path]["changes"]["fill"] = crypt.FillQuality.HIGH
 				else:
 					self.queue_for_format(res.path, targetfs)
 					self.change_mountpoint(res.path, self.get_mountpoint())
 
 					# Seed mount_on_install
 					self.changed[res.path]["changes"]["mount_on_install"] = True
-				
-				self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
+
+				if not "PVcreate" in self.changed[res.path]["changes"]:
+					subtext = _("Use the Apply button to save them.")
+				else:
+					# If we should create a physical volume, urge the
+					# user to apply ASAP in order to make it usable for
+					# the VGmanage dialog...
+					subtext = _("You need to apply your changes in order to use the new LVM physical volume.")
+				self.set_header("hold", _("You have some unsaved changes!"), subtext)
 				self.change_button_bg(self.apply_button, self.objects["parent"].return_color("ok"))
 				
 				if not res.path in self.touched: self.touched.append(res.path)
@@ -1774,6 +1826,9 @@ class Frontend(glade.Frontend):
 			
 			if newtoformat:	
 				newfs = self.fs_table_inverse[self.filesystem_combo.get_active()]
+				if newfs == "fat32" and float(self.size_adjustment.get_value()) < 512.0:
+					# fat32 fs must be at least on a 512 mb partition, reverting to fat16
+					newfs = "fat16"
 				if not isLVM:
 					lib.format_partition(part, newfs) # Ensure we change part.fileSystem
 					self.queue_for_format(path, newfs)
@@ -1797,10 +1852,20 @@ class Frontend(glade.Frontend):
 				self.changed[path]["changes"]["crypt"] = self.crypting_password.get_text()
 				# Also ensure we will recreate the LVM PV...
 				self.changed[path]["changes"]["PVcreate"] = True
+
+				# Fill?
+				if self.crypting_random.get_active() and not self.crypting_random_hq.get_active():
+					# "low"-quality data
+					self.changed[path]["changes"]["fill"] = crypt.FillQuality.LOW
+				elif self.crypting_random_hq.get_active():
+					# high-quality data
+					self.changed[path]["changes"]["fill"] = crypt.FillQuality.HIGH
 			else:
 				# NO :(
 				if "crypt" in self.changed[path]["changes"]:
 					del self.changed[path]["changes"]["crypt"]
+				if "fill" in self.changed[path]["changes"]:
+					del self.changed[path]["changes"]["fill"]
 
 			# We should change mountpoint?
 			newmountpoint = self.get_mountpoint()
@@ -1897,7 +1962,7 @@ class Frontend(glade.Frontend):
 				# Check if mountpoint is ok (thus enabling the OK button)
 				self.on_mountpoint_change(None)
 
-		if obj == self.lvm_box and obj.get_active() and not self.is_add:
+		if obj in (self.lvm_box, self.crypting_box) and obj.get_active() and not self.is_add:
 			# Show PVwarning...
 			self.idle_add(self.PVwarning.show)
 	
@@ -2057,8 +2122,9 @@ class Frontend(glade.Frontend):
 
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes
-				for dev in self.changed:
-					if not dev == self.current_selected["value"] and dev.startswith(self.current_selected["value"]):
+				val = lib.return_device(self.current_selected["value"])
+				for dev, content in self.changed.items():
+					if not dev == val and dev.startswith(val):
 						del self.changed[dev]
 						if dev in self.touched: self.touched.remove(dev)
 						if dev in self.previously_changed: self.previously_changed.remove(dev)
@@ -2397,6 +2463,26 @@ class Frontend(glade.Frontend):
 		#self.apply_window.set_sensitive(True)
 		self.idle_add(self.apply_window.hide)
 	
+	def on_unlock_window_button_clicked(self, obj):
+		""" Called when a button on the unlock window has been clicked. """
+		
+		if obj == self.unlock_ok:
+			# Get object
+			dev = crypt.LUKSdevices[self.current_selected["value"]]
+			try:
+				dev.open(self.unlock_entry.get_text())
+				self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
+			except CmdError:
+				# Failed :(
+				self.set_header("error", _("Unable to unlock the volume."), _("You inserted the wrong password."))
+			
+			lvm.refresh()
+			self.idle_add(self.manual_populate)
+
+		# Restore sensitivity
+		self.objects["parent"].main.set_sensitive(True)		
+		self.idle_add(self.unlock_window.hide)
+	
 	def on_lvm_apply_window_button_clicked(self, obj):
 		""" Called when a button on the LVM apply window has been clicked. """
 				
@@ -2523,7 +2609,7 @@ class Frontend(glade.Frontend):
 					# We need to make a LVM Physical volume...
 					_fs = _("LVM physical volume")
 					_to_format = True
-				elif path in crypt.LUKSdevices and not crypt.LUKSdevices[path].path:
+				elif path in crypt.LUKSdevices and not crypt.LUKSdevices[path].path and not (path in self.changed and "format" in self.changed[path]["changes"]):
 					# Encrypted locked partition
 					_fs = _("Locked")
 					_to_format = False
@@ -2619,6 +2705,7 @@ class Frontend(glade.Frontend):
 		self.idle_add(self.add_button.set_sensitive, False)
 		self.idle_add(self.remove_button.set_sensitive, False)
 		self.idle_add(self.edit_button.set_sensitive, False)
+		self.idle_add(self.lock_button.set_sensitive, False)
 		self.idle_add(self.newtable_button.set_sensitive, False)
 		self.idle_add(self.delete_button.set_sensitive, False)
 
@@ -2653,6 +2740,23 @@ class Frontend(glade.Frontend):
 			self.size_manual_entry.set_sensitive(False)
 			self.size_scale_scale.set_sensitive(True)
 	
+	def on_lock_button_clicked(self, caller):
+		""" Called when the Lock/Unlock partition has been clicked. """
+		
+		device = crypt.LUKSdevices[self.current_selected["value"]]
+		
+		if device.path:
+			# Unlocked, lock
+			device.close()
+			lvm.refresh()
+			self.idle_add(self.manual_populate)
+		else:
+			self.idle_add(self.objects["parent"].main.set_sensitive, False)
+			self.idle_add(self.unlock_entry.set_text, "")
+			self.idle_add(self.unlock_entry.grab_focus)
+			self.idle_add(self.unlock_window.show)
+		
+	
 	def on_advanced_clicked(self, caller):
 		""" Shows advanced options if caller is the 'Advanced options' button.
 		Otherwise it hides them. """
@@ -2663,6 +2767,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.remove_button.hide)
 			self.idle_add(self.edit_button.hide)
 			#self.idle_add(self.toolbar_separator.hide)
+			self.idle_add(self.lock_button.hide)
 			self.idle_add(self.advanced_button.hide)
 			self.idle_add(self.coso_che_separa.hide)
 			self.idle_add(self.refresh_button.hide)
@@ -2679,6 +2784,7 @@ class Frontend(glade.Frontend):
 			self.idle_add(self.remove_button.show)
 			self.idle_add(self.edit_button.show)
 			#self.idle_add(self.toolbar_separator.show)
+			self.idle_add(self.lock_button.show)
 			self.idle_add(self.advanced_button.show)
 			self.idle_add(self.coso_che_separa.show)
 			self.idle_add(self.refresh_button.show)
@@ -2775,6 +2881,7 @@ class Frontend(glade.Frontend):
 		self.delete_window = self.objects["builder"].get_object("delete_window")
 		self.apply_window = self.objects["builder"].get_object("apply_window")
 		self.lvm_apply_window = self.objects["builder"].get_object("lvm_apply_window")
+		self.unlock_window = self.objects["builder"].get_object("unlock_window")
 		self.vgmanage_window = self.objects["builder"].get_object("vgmanage_window")
 		self.vgmanage_manage_window = self.objects["builder"].get_object("vgmanage_manage_window")
 		
@@ -2794,6 +2901,8 @@ class Frontend(glade.Frontend):
 		self.crypting_password_alignment = self.objects["builder"].get_object("crypting_password_alignment")
 		self.crypting_password = self.objects["builder"].get_object("crypting_password")
 		self.crypting_password_confirm = self.objects["builder"].get_object("crypting_password_confirm")
+		self.crypting_random = self.objects["builder"].get_object("crypting_random")
+		self.crypting_random_hq = self.objects["builder"].get_object("crypting_random_hq")
 		self.do_not_format_box = self.objects["builder"].get_object("do_not_format_box")
 		self.PVwarning = self.objects["builder"].get_object("PVwarning")
 		# Hold color in PVwarning
@@ -2824,6 +2933,9 @@ class Frontend(glade.Frontend):
 		
 		self.crypting_password.connect("changed", self.on_crypting_password_changed)
 		self.crypting_password_confirm.connect("changed", self.on_crypting_password_changed)
+
+		# Also connect the crypt checkboxes where they belong
+		self.crypting_random.connect("toggled", self.on_crypting_random_toggled)
 		
 		# Connect mountpoint entry and combobox...
 		self.mountpoint_combo.connect("changed", self.on_mountpoint_change)
@@ -2913,6 +3025,14 @@ class Frontend(glade.Frontend):
 		self.lvm_apply_no.connect("clicked", self.on_lvm_apply_window_button_clicked)
 		self.lvm_apply_yes.connect("clicked", self.on_lvm_apply_window_button_clicked)
 
+		## Unlock window:
+		self.unlock_window.connect("delete_event", self.child_window_delete)
+		self.unlock_entry = self.objects["builder"].get_object("unlock_entry")
+		self.unlock_ok = self.objects["builder"].get_object("unlock_ok")
+		self.unlock_cancel = self.objects["builder"].get_object("unlock_cancel")
+		self.unlock_ok.connect("clicked", self.on_unlock_window_button_clicked)
+		self.unlock_cancel.connect("clicked", self.on_unlock_window_button_clicked)
+
 		## Manage LVM Volume Groups window
 		self.vgmanage_window.connect("delete_event", self.child_window_delete)
 		self.vg_scrolledwindow = self.objects["builder"].get_object("vg_scrolledwindow")
@@ -2951,6 +3071,7 @@ class Frontend(glade.Frontend):
 		self.remove_button = self.objects["builder"].get_object("remove_button")
 		self.edit_button = self.objects["builder"].get_object("edit_button")
 		self.toolbar_separator = self.objects["builder"].get_object("toolbar_separator")
+		self.lock_button = self.objects["builder"].get_object("lock_button")
 		self.advanced_button = self.objects["builder"].get_object("advanced_button")
 		self.back_to_normal_button = self.objects["builder"].get_object("back_to_normal_button")
 		self.newtable_button = self.objects["builder"].get_object("newtable_button")
@@ -2965,6 +3086,7 @@ class Frontend(glade.Frontend):
 		self.edit_button.connect("clicked", self.on_edit_button_clicked)
 		self.newtable_button.connect("clicked", self.on_newtable_button_clicked)
 		self.remove_button.connect("clicked", self.on_remove_button_clicked)
+		self.lock_button.connect("clicked", self.on_lock_button_clicked)
 		self.advanced_button.connect("clicked", self.on_advanced_clicked)
 		self.back_to_normal_button.connect("clicked", self.on_advanced_clicked)
 		self.delete_button.connect("clicked", self.on_delete_button_clicked)

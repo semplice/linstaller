@@ -102,7 +102,7 @@ class Frontend(glade.Frontend):
 				root.set_text(_("No"))
 			hostname.set_text(self.moduleclass.modules_settings["userhost"]["hostname"])
 		
-		if not "bootloader" in self.moduleclass.modules_settings or ("uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True):
+		if not "bootloader" in self.moduleclass.modules_settings or ("uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True) or self.moduleclass.modules_settings["bootloader"]["skip"]:
 			bootloader_frame.hide()
 		else:
 			bootloader.set_text(self.moduleclass.modules_settings["bootloader"]["bootloader"])
