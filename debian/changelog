@@ -1,3 +1,16 @@
+linstaller (4.91.0-1) devel; urgency=low
+
+  * Added LUKS Unlock dialog.
+    Also, bug fixeeeeeeeeeeeeeeeeeeeeeeeeeeeees.
+  * partdisks: add cipher and key-size selection for the to-be-encrypted volumes (using seeds).
+    partdisks: default to aes-xts-plain64 (cipher) and 512 (key-size)
+    linstaller.py: resolved a seed parsing bug which involves values with an :
+  * partdisks: made the fill checkboxes working
+  * bootloader: now the user can force a device or skip the bootloader installation (via seeds)
+    bootloader/front: glade: if LVM, assume root = /boot if it's isn't a LV, or skip installation
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 14 Aug 2013 19:20:51 +0200
+
 linstaller (4.90.3-1) devel; urgency=low
 
   * BUG FIXEEEEEEEEEES...
