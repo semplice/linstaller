@@ -85,6 +85,11 @@ class Frontend(glade.Frontend):
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return
+		
+		# Should we disable the checkbox?
+		if self.settings["disable"]:
+			self.check.set_sensitive(False)
+			self.check.set_active(False)
 
 		# Get text label
 		text = self.objects["builder"].get_object("text")
@@ -100,11 +105,11 @@ class Frontend(glade.Frontend):
 
 		# Properly set it
 		text.set_markup("\n".join(label))
-	
+			
 	def on_next_button_click(self):
 		""" Do things ;-). """
 		
-		if not self.is_module_virgin: return None
+		#if not self.is_module_virgin: return None
 		
 		value = self.check.get_active()
 		if value:
