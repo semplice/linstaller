@@ -1,3 +1,12 @@
+linstaller (4.99.0-1) devel; urgency=low
+
+  * Removed deprecated encrypting code.
+  * modules/update: new seed 'disable', used to disable the checkbox when doing fullrestart.
+    Also, ensure we update if the user wants to even if we aren't at the first run
+    (of the module, not after fullrestart)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 16 Aug 2013 20:36:09 +0200
+
 linstaller (4.91.0-1) devel; urgency=low
 
   * Added LUKS Unlock dialog.
