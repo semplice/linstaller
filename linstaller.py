@@ -458,6 +458,9 @@ elif _action == "start":
 			if " " in arg:
 				arg = arg.replace(" ","\ ")
 			args.append(arg)
+		if "update.front" in main_settings["modules"]:
+			# FIXME: This isn't really the best place to put this...
+			args.append(":update:disable:True")
 		
 		sys.exit(os.system(" ".join(args)))
 	
