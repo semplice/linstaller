@@ -14,36 +14,6 @@ import linstaller.core.libmodules.partdisks.library as lib
 
 FillQuality = m.enum("LOW", "HIGH")
 
-class Crypt:
-	""" A Crypt object handles a drive that should encrypted with LUKS. """
-	
-	def __init__(self, device, disk):
-		""" Init. """
-		
-		self.device = device
-		self.disk = disk
-	
-	def random_fill(self, hq=False):
-		""" Fills the device with random data.
-		
-		If hq is True, it will use /dev/urandom (slower but more secure).
-		
-		
-		It returns the process object to the frontend.
-		"""
-		
-		# Umount
-		lib.umount_bulk(self.device.path)
-		
-		if not hq:
-			command = m.execute("badblocks -c 10240 -s -w -t random -v %s" % self.device.path)
-		else:
-			command = m.execute("dd if=/dev/urandom of=%s" % self.device.path)
-		command.start()
-		
-		# Return object to frontend
-		return command
-
 class LUKSdrive:
 	""" A LUKS-encrypted drive/partition. """
 	

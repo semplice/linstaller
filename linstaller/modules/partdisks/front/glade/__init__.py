@@ -492,53 +492,6 @@ class LVM_apply(glade.Progress):
 		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
 
-class Crypt_initialize(glade.Progress):
-	def __init__(self, parent, quit=True):
-		
-		self.parent = parent
-		self.quit = quit
-		
-		threading.Thread.__init__(self)
-
-	def progress(self):
-		""" Applies the changes to the devices. """
-		
-		# Disable next button
-		self.parent.on_steps_hold()
-		
-		# Make window unsensitive
-		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, False)
-		
-		# Get a shiny lib.Crypt object
-		cryptobj = lib.Crypt(self.parent.crypt_infos["device"], self.parent.crypt_infos["device"])
-		
-		# First, fill the device with random data if the user wants so
-		if self.parent.crypt_random_enabled:
-			self.parent.set_header("hold", _("Filling the drive with random data..."), _("This may take a while, depending by the quality of random data selected."))
-			process = cryptobj.random_fill(hq=self.parent.crypt_random_hq_enabled)
-			status = process.wait()
-			if status != 0:
-				# Failed ...
-				self.parent.set_header("error", _("Process failed."), _("See /var/log/linstaller/linstaller_latest.log for more details."))
-					
-				# Restore sensitivity
-				self.parent.idle_add(self.parent.crypt_confirm_window.set_sensitive, True)
-				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
-
-				return False
-
-		# If we're here, ok!	
-		self.parent.set_header("ok", _("Changes applied!"), _("Press the Forward button to continue!"))		
-
-		# Enable Next button
-		self.parent.on_steps_ok()
-
-		# Restore sensitivity
-		self.parent.idle_add(self.parent.crypt_confirm_window.set_sensitive, True)
-		self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
-		
-
-
 class Frontend(glade.Frontend):	
 	def ready(self):
 		""" partdisks is a really complex module which needs a fresh start every time.
@@ -571,9 +524,6 @@ class Frontend(glade.Frontend):
 		self.onlyusb = False
 		self.has_manual_touched = False
 		self.is_automatic = None
-		self.crypt_enabled = False
-		self.crypt_random_enabled = False
-		self.crypt_random_hq_enabled = False
 		
 		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 
@@ -607,9 +557,6 @@ class Frontend(glade.Frontend):
 		
 		self.manual_button = self.objects["builder"].get_object("manual_button")
 		self.manual_button.connect("clicked", self.on_manual_button_clicked)
-
-		self.crypt_box = self.objects["builder"].get_object("crypt_box")
-		self.crypt_box.connect("toggled", self.on_crypt_box_toggled)
 		
 		# Disable next button
 		self.on_steps_hold()
@@ -665,14 +612,6 @@ class Frontend(glade.Frontend):
 			self.touched = []
 		
 		self.manual_populate()
-
-	def crypt_initialize(self):
-		""" Initializes the drive for crypting. """
-		
-		clss = Crypt_initialize(self, quit=False)
-		clss.start()
-		
-		return
 
 	def apply(self):
 		""" Applies the changes to the devices. """
@@ -785,19 +724,7 @@ class Frontend(glade.Frontend):
 			container["text2"] = None
 			
 			container["icon"] = Gtk.Image()
-			container["icon"].set_from_stock("gtk-new", 6)
-		elif by == "crypt_device":
-			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use %s") % (info["drive"])))
-			
-			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":info["drive"], "model":info["model"], "distro": self.moduleclass.main_settings["distro"]})
-			
-			container["text2"] = None
-			
-			container["icon"] = Gtk.Image()
-			container["icon"].set_from_stock("gtk-delete", 6)
-			
+			container["icon"].set_from_stock("gtk-new", 6)			
 			
 		# Add to the box
 		container["title"].set_alignment(0.0,0.50)
@@ -848,16 +775,6 @@ class Frontend(glade.Frontend):
 			else:
 				# Ok! Regenerate solutions...
 				self.on_automatic_button_clicked(obj=None)
-			
-			return
-		elif self.crypt_enabled:
-			# Crypting enabled, display the confirm_window
-			
-			# WORKAROUND: process class only see parent's objects
-			self.crypt_infos = {"device":dev,"disk":dis}
-			
-			self.idle_add(self.objects["parent"].main.set_sensitive, False)
-			self.idle_add(self.crypt_confirm_window.show)
 			
 			return
 
@@ -931,18 +848,6 @@ class Frontend(glade.Frontend):
 		if self.settings["is_echo"]:
 			self.on_next_button_click()
 
-	def on_crypt_confirm_clicked(self, obj):
-		""" Called when crypt_confirm_yes is clicked. """
-		
-		if obj == self.crypt_confirm_yes:
-			self.idle_add(self.crypt_confirm_window.set_sensitive, False)
-			self.idle_add(self.crypt_initialize)
-		elif obj == self.crypt_confirm_no:
-			# Restore sensitivity
-			self.objects["parent"].main.set_sensitive(True)
-		
-		self.idle_add(self.crypt_confirm_window.hide)
-
 	def on_crypting_random_toggled(self, obj):
 		""" Called when crypting_random is toggled. """
 		
@@ -978,31 +883,15 @@ class Frontend(glade.Frontend):
 		### COSMETIC HIDES
 		self.automatic_scroller = self.objects["builder"].get_object("automatic_scroller")
 		self.automatic_nosolutions = self.objects["builder"].get_object("automatic_nosolutions")
-		self.crypt_random = self.objects["builder"].get_object("crypt_random")
-		self.crypt_random_hq = self.objects["builder"].get_object("crypt_random_hq")
 		self.automatic_scroller.show()
 		self.automatic_nosolutions.show()
-		self.crypt_random.hide()
-		self.crypt_random_hq.hide()
-		
-		# Get crypt_confirm window and its buttons
-		self.crypt_confirm_window = self.objects["builder"].get_object("crypt_confirm_window")
-		self.crypt_confirm_window.connect("delete_event", self.child_window_delete)
-		self.crypt_confirm_no = self.objects["builder"].get_object("crypt_confirm_no")
-		self.crypt_confirm_no.connect("clicked", self.on_crypt_confirm_clicked)
-		self.crypt_confirm_yes = self.objects["builder"].get_object("crypt_confirm_yes")
-		self.crypt_confirm_yes.connect("clicked", self.on_crypt_confirm_clicked)
-		
-		# Also connect the crypt checkboxes where they belong
-		#self.crypt_random.connect("toggled", self.on_crypt_random_toggled)
-		#self.crypt_random_hq.connect("toggled", self.on_crypt_random_hq_toggled)
 		
 		# Create automatic_check_ng object
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
 			efi = True
 		else:
 			efi = False
-		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb, is_echo=self.settings["is_echo"], crypt_enabled=self.crypt_enabled)
+		automatic = lib.automatic_check_ng(distribs=self.distribs, efi=efi, onlyusb=self.onlyusb, is_echo=self.settings["is_echo"])
 		
 		# Check by freespace
 		self.automatic_res, self.automatic_order = automatic.main()
@@ -1028,20 +917,10 @@ class Frontend(glade.Frontend):
 					cont = self.automatic_buttons_creator(by="notable",info={"drive":self.automatic_res[item]["device"].path, "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
-				elif item.startswith("crypt_device"):
-					cont = self.automatic_buttons_creator(by="crypt_device",info={"drive":self.automatic_res[item]["device"].path, "model":self.automatic_res[item]["model"]})
-					self.automatic_buttons[item] = cont
-					self.automatic_buttons_reverse[cont["button"]] = item
 							
 			# Ensure we hide nosolutions as we have indeeed some solution
 			self.automatic_nosolutions.hide()
 			
-			# If we are in crypt, show the two checkboxes
-			if self.crypt_enabled:
-				self.crypt_random.show()
-				self.crypt_random_hq.show()
-				# Also make the last one insensitive
-				self.idle_add(self.crypt_random_hq.set_sensitive, False)
 		else:
 			# Hide the solution scroller
 			self.automatic_scroller.hide()
@@ -3108,18 +2987,6 @@ class Frontend(glade.Frontend):
 		self.manual_populate()
 		
 		self.has_manual_touched = True
-	
-	def on_crypt_box_toggled(self, obj):
-		""" Called when crypt_box is clicked. """
-		
-		if obj.get_active():
-			# Toggled, disable Manual partitioning
-			#self.idle_add(self.manual_button.set_sensitive, False)
-			self.crypt_enabled = True
-		else:
-			# Untoggled, enable Manual partitioning
-			#self.idle_add(self.manual_button.set_sensitive, True)
-			self.crypt_enabled = False
 
 	def on_automatic_button_clicked(self, obj):
 		""" Called when automatic_button is clicked. """
