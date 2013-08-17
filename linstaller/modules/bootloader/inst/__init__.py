@@ -9,7 +9,7 @@ import linstaller.core.main as m
 
 from linstaller.core.main import warn,info,verbose
 
-import sys, fileinput
+import os, sys, fileinput
 
 class Install(module.Install):
 	def grub_install(self):
