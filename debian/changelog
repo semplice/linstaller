@@ -1,3 +1,9 @@
+linstaller (4.0.4-1) unstable; urgency=low
+
+  * Without os we can't do much.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 11:59:58 +0200
+
 linstaller (4.0.3-1) unstable; urgency=low
 
   * Ensure we follow the symlink to get the right GRUB location.
