@@ -1,3 +1,10 @@
+linstaller (4.99.1-1) devel; urgency=low
+
+  * Ensure we follow the symlink to get the right GRUB location.
+  * Updated translations.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 20:08:22 +0200
+
 linstaller (4.99.0-1) devel; urgency=low
 
   * Removed deprecated encrypting code.
