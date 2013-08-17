@@ -1,3 +1,9 @@
+linstaller (4.0.3-1) unstable; urgency=low
+
+  * Ensure we follow the symlink to get the right GRUB location.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 11:54:40 +0200
+
 linstaller (4.0.2-1) unstable; urgency=low
 
   * modules/bootloader: inst: correctly retrieve the first
