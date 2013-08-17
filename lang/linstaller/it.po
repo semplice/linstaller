@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
-#  <me@medesimo.eu>, 2013.
-#   <me@medesimo.eu>, 2012.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011
+# g7 <me@medesimo.eu>, 2013
+# g7 <me@medesimo.eu>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 11:39+0200\n"
-"PO-Revision-Date: 2013-04-02 09:45+0000\n"
+"POT-Creation-Date: 2013-08-17 19:33+0200\n"
+"PO-Revision-Date: 2013-08-17 18:05+0000\n"
 "Last-Translator: g7 <me@medesimo.eu>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/semplice/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -20,56 +20,65 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: linstaller.py:206
+#: linstaller.py:255
 msgid "You have to pass at least an action!"
 msgstr "È necessario specificare almeno un'azione!"
 
-#: linstaller.py:210
+#: linstaller.py:259
 #, python-format
 msgid "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
 msgstr "SINTASSI: %s <opzioni> [AZIONE] <:seed:opzione:valore>"
 
-#: linstaller.py:212
+#: linstaller.py:261
 msgid "Recognized options:"
 msgstr "Opzioni riconosciute:"
 
-#: linstaller.py:213
+#: linstaller.py:262
 msgid " -c|--config\t\t- Selects the configuration file to read"
 msgstr " -c|--config\t\t- Seleziona il file di configurazione da leggere"
 
-#: linstaller.py:214
+#: linstaller.py:263
+msgid ""
+" -p|--configpath\t- Selects the directory to look for configuration files"
+msgstr " -p|--configpath\t- Seleziona la cartella dove prendere i file di configurazione"
+
+#: linstaller.py:264
+msgid " -t|--target\t\t- Selects the target directory (def: /linstaller/target)"
+msgstr " -t|--target\t\t- Seleziona la cartella target (def: /linstaller/target)"
+
+#: linstaller.py:265
 msgid " -f|--frontend\t\t- Selects the frontend to use (def: cli)"
 msgstr " -f|--frontend\t\t- Seleziona il frontend da usare (def: cli)"
 
-#: linstaller.py:215
+#: linstaller.py:266
 msgid " -m|--modules\t\t- Overrides the modules to be executed"
 msgstr " -m|--modules\t\t- Cambia i moduli da eseguire"
 
-#: linstaller.py:216
+#: linstaller.py:267
 msgid " -s|--services\t\t- Overrides the services to be executed"
 msgstr " -s|--services\t\t- Cambia i servizi da eseguire"
 
-#: linstaller.py:217
+#: linstaller.py:268
 msgid " -r|--remove\t\t- Removes the specified modules from the modules list"
 msgstr " -r|--remove\t\t- Rimuove i moduli specificati dalla lista dei moduli da eseguire"
 
-#: linstaller.py:219
+#: linstaller.py:270
 msgid "Recognized actions:"
 msgstr "Azioni riconosciute:"
 
-#: linstaller.py:220
+#: linstaller.py:271
 msgid " help\t\t\t- Displays this help message, then exits."
 msgstr " help\t\t\t- Visualizza il messaggio d'aiuto, quindi esce."
 
-#: linstaller.py:221
+#: linstaller.py:272
 msgid " start\t\t\t- Starts the installer."
 msgstr " start\t\t\t- Avvia il programma di installazione."
 
-#: linstaller.py:223
+#: linstaller.py:274
 msgid "Preseeding:"
 msgstr "Preseed:"
 
-#: linstaller.py:224
+#: linstaller.py:275
 msgid ""
 " linstaller supports preseeding. Seeds can be specified into the\n"
 " configuration file of the distribution, or with the notation below:\n"
@@ -83,7 +92,7 @@ msgid ""
 " :partdisks:swap_noformat:True\t- Does not format swap partition\n"
 msgstr " linstaller supporta i preseed. I seed possono essere specificati nel\n file di configurazione della distribuzione, o con la notazione seguente:\n \n :modulo:opzione:valore\n \n Esempi:\n \n :userhost:root:True\t\t- Abilita root\n :language:ask:True\t\t- Chiede la lingua\n :partdisks:swap_noformat:True\t- Non formatta la partizione di swap\n"
 
-#: linstaller.py:239
+#: linstaller.py:290
 #, python-format
 msgid "%s does not exist! Adjust --config accordingly."
 msgstr "%s non esiste! Regolare --config di conseguenza."
@@ -97,47 +106,47 @@ msgid "Start USB persistent installer"
 msgstr "Avvia il programma di installazione per chiavette USB persistenti"
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/gtk3.py:391
-#: linstaller/frontends/cli.py:86
+#: linstaller/frontends/cli.py:89
 msgid "You must insert something!"
 msgstr "È necessario inserire qualcosa!"
 
 #: linstaller/core/cli_frontend.py:108 linstaller/frontends/gtk3.py:409
-#: linstaller/frontends/cli.py:104
+#: linstaller/frontends/cli.py:107
 msgid "[Y/n]"
 msgstr "[S/n]"
 
 #: linstaller/core/cli_frontend.py:111 linstaller/frontends/gtk3.py:412
-#: linstaller/frontends/cli.py:107
+#: linstaller/frontends/cli.py:110
 msgid "[y/N]"
 msgstr "[s/N]"
 
 #: linstaller/core/cli_frontend.py:114 linstaller/frontends/gtk3.py:415
-#: linstaller/frontends/cli.py:110
+#: linstaller/frontends/cli.py:113
 msgid "[y/n]"
 msgstr "[s/n]"
 
 #: linstaller/core/cli_frontend.py:129 linstaller/frontends/gtk3.py:430
-#: linstaller/frontends/cli.py:125
+#: linstaller/frontends/cli.py:128
 msgid "y"
 msgstr "s"
 
 #: linstaller/core/cli_frontend.py:132 linstaller/frontends/gtk3.py:433
-#: linstaller/frontends/cli.py:128
+#: linstaller/frontends/cli.py:131
 msgid "n"
 msgstr "n"
 
 #: linstaller/core/cli_frontend.py:135 linstaller/frontends/gtk3.py:436
-#: linstaller/frontends/cli.py:131
+#: linstaller/frontends/cli.py:134
 msgid "yes"
 msgstr "sì"
 
 #: linstaller/core/cli_frontend.py:138 linstaller/frontends/gtk3.py:439
-#: linstaller/frontends/cli.py:134
+#: linstaller/frontends/cli.py:137
 msgid "no"
 msgstr "no"
 
 #: linstaller/core/cli_frontend.py:143 linstaller/frontends/gtk3.py:444
-#: linstaller/frontends/cli.py:139
+#: linstaller/frontends/cli.py:142
 #, python-format
 msgid "Unknown value %s. Please re-try."
 msgstr "Valore %s sconosciuto. Riprovare."
@@ -146,31 +155,35 @@ msgstr "Valore %s sconosciuto. Riprovare."
 #: linstaller/modules/partdisks/front/cli.py:490
 #: linstaller/modules/partdisks/front/cli.py:552
 #: linstaller/modules/partdisks/front/cli.py:958
-#: linstaller/frontends/gtk3.py:456 linstaller/frontends/cli.py:151
+#: linstaller/frontends/gtk3.py:456 linstaller/frontends/cli.py:154
 msgid "Please insert your action here"
 msgstr "Inserire l'azione qui"
 
-#: linstaller/core/libmodules/partdisks/library.py:59
+#: linstaller/core/libmodules/partdisks/library.py:74
 msgid "Do not set a mountpoint."
 msgstr "Non selezionare un mountpoint."
 
-#: linstaller/core/libmodules/partdisks/library.py:60
+#: linstaller/core/libmodules/partdisks/library.py:75
 msgid "Swap"
 msgstr "Swap"
 
-#: linstaller/core/libmodules/partdisks/library.py:61
+#: linstaller/core/libmodules/partdisks/library.py:76
 msgid "Root (/)"
 msgstr "Root (/)"
 
-#: linstaller/core/libmodules/partdisks/library.py:62
+#: linstaller/core/libmodules/partdisks/library.py:77
 msgid "Home Partition (/home)"
 msgstr "Partizione Home (/home)"
 
-#: linstaller/core/libmodules/partdisks/library.py:63
+#: linstaller/core/libmodules/partdisks/library.py:78
 msgid "Global applications (/usr)"
 msgstr "Applicazioni globali (/usr)"
 
-#: linstaller/core/libmodules/partdisks/library.py:64
+#: linstaller/core/libmodules/partdisks/library.py:79
+msgid "Boot partition (/boot)"
+msgstr "Partizione di boot (/boot)"
+
+#: linstaller/core/libmodules/partdisks/library.py:80
 msgid "EFI boot partition (/boot/efi)"
 msgstr "Partizione boot EFI (/boot/efi)"
 
@@ -188,7 +201,8 @@ msgstr "Configurando le funzionalità...."
 #: linstaller/modules/update/front/glade/__init__.py:42
 #: linstaller/modules/unsquash/inst/glade/__init__.py:24
 #: linstaller/modules/language/inst/glade/__init__.py:57
-#: linstaller/modules/partdisks/front/glade/__init__.py:70
+#: linstaller/modules/partdisks/front/glade/__init__.py:132
+#: linstaller/modules/partdisks/front/glade/__init__.py:345
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:38
 msgid "This may take a while."
 msgstr "L'operazione potrebbe richiedere del tempo."
@@ -203,8 +217,8 @@ msgid "Feature selection"
 msgstr "Selezione delle funzionalità"
 
 #: linstaller/modules/bricks/front/glade/__init__.py:112
-msgid "Select features."
-msgstr "Selezionare le funzionalità."
+msgid "You can further customize those after the installation."
+msgstr "È possibile personalizzare le funzionalità dopo l'installazione."
 
 #: linstaller/modules/bricks/front/glade/__init__.py:124
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:67
@@ -215,7 +229,7 @@ msgstr "Selezionare le funzionalità."
 #: linstaller/modules/language/front/glade/__init__.py:35
 #: linstaller/modules/language/front/glade/__init__.py:464
 #: linstaller/modules/language/front/glade/__init__.py:492
-#: linstaller/modules/partdisks/front/glade/__init__.py:1365
+#: linstaller/modules/partdisks/front/glade/__init__.py:2753
 #: linstaller/modules/summary/front/glade/__init__.py:19
 #: linstaller/frontends/glade/__init__.py:90
 msgid "You can continue!"
@@ -254,13 +268,13 @@ msgstr "Copia del sistema nel disco:"
 
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:17
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:26
-#: linstaller/modules/bootloader/inst/glade/__init__.py:26
 #: linstaller/modules/bootloader/inst/glade/__init__.py:43
+#: linstaller/modules/bootloader/inst/glade/__init__.py:60
 msgid "Installing bootloader..."
 msgstr "Installazione del bootloader..."
 
 #: linstaller/modules/echo/bootloader/inst/cli.py:16
-#: linstaller/modules/bootloader/inst/cli.py:23
+#: linstaller/modules/bootloader/inst/cli.py:27
 msgid "Installing bootloader:"
 msgstr "Installazione del bootloader:"
 
@@ -515,11 +529,19 @@ msgstr "Si vuole cercare il mirror più veloce?"
 msgid "Do you want to enable deb-src entries?"
 msgstr "Si vogliono abilitare i campi deb-src?"
 
-#: linstaller/modules/bootloader/inst/glade/__init__.py:31
+#: linstaller/modules/bootloader/inst/glade/__init__.py:29
+msgid "Fetching bootloader packages..."
+msgstr "Scaricamento dei pacchetti del bootloader..."
+
+#: linstaller/modules/bootloader/inst/glade/__init__.py:38
+msgid "Installing bootloader packages..."
+msgstr "Installazione dei pacchetti del bootloader..."
+
+#: linstaller/modules/bootloader/inst/glade/__init__.py:48
 msgid "Generating bootloader configuration..."
 msgstr "Generazione della configurazione del bootloader..."
 
-#: linstaller/modules/bootloader/inst/glade/__init__.py:43
+#: linstaller/modules/bootloader/inst/glade/__init__.py:60
 msgid "Please wait during the installer is installing the bootloader..."
 msgstr "Si prega di attendere mentre il programma di installazione sta installando il bootloader..."
 
@@ -533,7 +555,7 @@ msgid "Bootloader settings"
 msgstr "Impostazioni del bootloader"
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:37
-#: linstaller/modules/bootloader/front/cli.py:20
+#: linstaller/modules/bootloader/front/cli.py:23
 #, python-format
 msgid ""
 "The bootloader is that piece of software that lets you boot your "
@@ -541,13 +563,13 @@ msgid ""
 msgstr "Il bootloader è quel software che permette l'avvio del sistema %(distroname)s."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:38
-#: linstaller/modules/bootloader/front/cli.py:21
+#: linstaller/modules/bootloader/front/cli.py:24
 #, python-format
 msgid "Without the bootloader, you can't boot %(distroname)s."
 msgstr "Senza il bootloader, non è possibile avviare %(distroname)s."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:40
-#: linstaller/modules/bootloader/front/cli.py:39
+#: linstaller/modules/bootloader/front/cli.py:42
 msgid ""
 "You can choose to install the bootloader into the Master Boot Record of your"
 " hard disk. This is recommended."
@@ -559,23 +581,47 @@ msgid ""
 "installed on your root partition."
 msgstr "Se non si vuole installare il bootloader nell'MBR, verrà installato nella partizione root."
 
-#: linstaller/modules/bootloader/front/cli.py:26
+#: linstaller/modules/bootloader/front/glade/__init__.py:42
+msgid ""
+"If the root partition is a LVM Logical Volume, you are strongly encouraged "
+"to install the bootloader into the MBR."
+msgstr "Se la partizione root è un volume logico LVM, si raccomanda di installare il bootloader nell'MBR."
+
+#: linstaller/modules/bootloader/front/glade/__init__.py:43
+msgid ""
+"Otherwise, the installer will automatically install the bootloader into the "
+"/boot partition, if supplied."
+msgstr "Altrimenti, il programma di installazione lo installerà automaticamente nella partizione /boot, se selezionata."
+
+#: linstaller/modules/bootloader/front/glade/__init__.py:44
+msgid ""
+"If the /boot partition is a LVM Logical Volume too, the bootloader "
+"installation will be skipped."
+msgstr "Se la partizione /boot è anch'essa un volume logico LVM, il bootloader non verrà installato."
+
+#: linstaller/modules/bootloader/front/glade/__init__.py:46
+msgid ""
+"You can force the device where to install the bootloader by using the "
+":bootloader:forcedevice seed."
+msgstr "È possibile forzare il device dove installare il bootloader usando il seed :bootloader:forcedevice."
+
+#: linstaller/modules/bootloader/front/cli.py:29
 msgid "Which bootloader do you want to install? [press ENTER for 'grub']"
 msgstr "Quale bootloader installare? [premere INVIO per 'grub']"
 
-#: linstaller/modules/bootloader/front/cli.py:33
+#: linstaller/modules/bootloader/front/cli.py:36
 msgid "Invalid bootloader specified. [press ENTER to continue]"
 msgstr "Bootloader sconosciuto. [premere INVIO per continuare]"
 
-#: linstaller/modules/bootloader/front/cli.py:40
+#: linstaller/modules/bootloader/front/cli.py:43
 msgid "If you choose 'No', it will be installed on your root partition."
 msgstr "Se viene selezionato 'No', verrà installato nella partizione di root."
 
-#: linstaller/modules/bootloader/front/cli.py:42
+#: linstaller/modules/bootloader/front/cli.py:45
 msgid "Do you want to install the bootloader into the MBR?"
 msgstr "Installare il bootloader nell'MBR?"
 
-#: linstaller/modules/fstab/inst/__init__.py:85
+#: linstaller/modules/fstab/inst/__init__.py:89
 #, python-format
 msgid ""
 "mountpoint %s exists and it isn't a directory. Please change the mountpoint "
@@ -592,14 +638,14 @@ msgid "Update the installer"
 msgstr "Aggiorna l'installer"
 
 #: linstaller/modules/update/front/gtk3.py:26
-#: linstaller/modules/update/front/glade/__init__.py:94
+#: linstaller/modules/update/front/glade/__init__.py:99
 #: linstaller/modules/update/front/cli.py:26
 #, python-format
 msgid "%(distroname)s's installer improves every day."
 msgstr "Il programma di installazione di %(distroname)s si migliora ogni giorno."
 
 #: linstaller/modules/update/front/gtk3.py:27
-#: linstaller/modules/update/front/glade/__init__.py:95
+#: linstaller/modules/update/front/glade/__init__.py:100
 #: linstaller/modules/update/front/cli.py:27
 msgid ""
 "It is good measure to have the latest version before installing the "
@@ -667,7 +713,7 @@ msgstr "Premere avanti per avviare il programma di installazione aggiornato."
 msgid "Ensure you have the installer up-to-date."
 msgstr "Assicurarsi di avere il programma di installazione aggiornato."
 
-#: linstaller/modules/update/front/glade/__init__.py:97
+#: linstaller/modules/update/front/glade/__init__.py:102
 msgid ""
 "You can choose to check for installer updates before continuing the "
 "installation."
@@ -716,8 +762,8 @@ msgid "An error occoured while uncompressing system to disk."
 msgstr "Si è verificato un errore durante la decompressione del sistema nel disco."
 
 #: linstaller/modules/unsquash/inst/glade/__init__.py:59
-#: linstaller/modules/partdisks/front/glade/__init__.py:406
-#: linstaller/modules/partdisks/front/glade/__init__.py:1049
+#: linstaller/modules/partdisks/front/glade/__init__.py:774
+#: linstaller/modules/partdisks/front/glade/__init__.py:1893
 msgid "See /var/log/linstaller/linstaller_latest.log for details."
 msgstr "Guardare /var/log/linstaller/linstaller_latest.log per dettagli."
 
@@ -790,339 +836,498 @@ msgstr "Inserire il modello della tastiera (es: pc105, \"pc105\" è predefinito)
 msgid "Please insert your keyboard variant (press ENTER to skip)"
 msgstr "Inserire la variante della tastiera (premere INVIO per saltare)"
 
+#: linstaller/modules/partdisks/front/glade/__init__.py:61
+#, python-format
+msgid "Resizing %s..."
+msgstr "Ridimensionamento di %s..."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:61
+#: linstaller/modules/partdisks/front/glade/__init__.py:187
+#: linstaller/modules/partdisks/front/glade/__init__.py:217
+#: linstaller/modules/partdisks/front/glade/__init__.py:312
+#: linstaller/modules/partdisks/front/glade/__init__.py:434
+msgid "Let's hope everything goes well! :)"
+msgstr "Si spera che tutto finisca bene :)"
+
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
+#, python-format
+msgid "Failed resizing %s."
+msgstr "Impossibile ridimensionare %s."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:70
+#: linstaller/modules/partdisks/front/glade/__init__.py:146
+#: linstaller/modules/partdisks/front/glade/__init__.py:174
+#: linstaller/modules/partdisks/front/glade/__init__.py:197
+#: linstaller/modules/partdisks/front/glade/__init__.py:221
+#: linstaller/modules/partdisks/front/glade/__init__.py:239
+#: linstaller/modules/partdisks/front/glade/__init__.py:321
+#: linstaller/modules/partdisks/front/glade/__init__.py:419
+#: linstaller/modules/partdisks/front/glade/__init__.py:438
+msgid "See /var/log/linstaller/linstaller_latest.log for more details."
+msgstr "Guardare /var/log/linstaller/linstaller_latest.log per dettagli."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:70
+#: linstaller/modules/partdisks/front/glade/__init__.py:321
+msgid "Maybe you shrinked too much the partition."
+msgstr "È possibile che la partizione sia stata ridotta troppo."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:132
+#: linstaller/modules/partdisks/front/glade/__init__.py:345
 #, python-format
 msgid "Committing changes to %s..."
 msgstr "Scrittura dei cambiamenti su %s..."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:84
+#: linstaller/modules/partdisks/front/glade/__init__.py:146
+#: linstaller/modules/partdisks/front/glade/__init__.py:419
 #, python-format
 msgid "Failed committing changes to %s.."
 msgstr "Impossibile scrivere i cambiamenti su %s..."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:84
-#: linstaller/modules/partdisks/front/glade/__init__.py:108
-msgid "See /var/log/linstaller/linstaller_latest.log for more details."
-msgstr "Guardare /var/log/linstaller/linstaller_latest.log per dettagli."
+#: linstaller/modules/partdisks/front/glade/__init__.py:169
+#, python-format
+msgid "Filling %s with random data..."
+msgstr "Riempimento di %s con dati casuali..."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:104
+#: linstaller/modules/partdisks/front/glade/__init__.py:169
+msgid ""
+"This may take a while, depending by the quality of random data selected."
+msgstr "L'operazione potrebbe richiedere del tempo, a seconda della qualità dei dati casuali selezionata."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:174
+#, python-format
+msgid "Failed filling %s with random data."
+msgstr "Impossibile riempire %s di dati casuali."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:187
+#, python-format
+msgid "Encrypting %s..."
+msgstr "Crittografazione di %s..."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:197
+#, python-format
+msgid "Failed encrypting %s."
+msgstr "Impossibile crittografare %s."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:217
+#: linstaller/modules/partdisks/front/glade/__init__.py:434
 #: linstaller/modules/partdisks/front/cli.py:346
 #, python-format
 msgid "Formatting %s..."
 msgstr "Formattazione di %s..."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:104
-msgid "Let's hope everything goes well! :)"
-msgstr "Si spera che tutto finisca bene :)"
-
-#: linstaller/modules/partdisks/front/glade/__init__.py:108
+#: linstaller/modules/partdisks/front/glade/__init__.py:221
+#: linstaller/modules/partdisks/front/glade/__init__.py:438
 #, python-format
 msgid "Failed formatting %s."
 msgstr "Impossibile formattare %s."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:141
+#: linstaller/modules/partdisks/front/glade/__init__.py:239
+#, python-format
+msgid "Failed creating a LVM Physical Volume in %s."
+msgstr "Impossibile creare un volume fisico LVM in %s."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:276
+#: linstaller/modules/partdisks/front/glade/__init__.py:483
 msgid "Changes applied!"
 msgstr "Cambiamenti applicati!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:141
+#: linstaller/modules/partdisks/front/glade/__init__.py:276
+#: linstaller/modules/partdisks/front/glade/__init__.py:483
 msgid "Press the Forward button to continue!"
 msgstr "Premere il pulsante Avanti per continuare!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:185
-#: linstaller/modules/partdisks/front/glade/__init__.py:1528
+#: linstaller/modules/partdisks/front/glade/__init__.py:312
+msgid "Resizing LVM logical volume..."
+msgstr "Ridimensionamento del volume logico LVM..."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:321
+msgid "Failed resizing the LVM logical volume."
+msgstr "Impossibile ridimensionare il volume logico LVM."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:528
+#: linstaller/modules/partdisks/front/glade/__init__.py:3016
 #: linstaller/modules/partdisks/front/cli.py:43
 msgid "Disk partitioning"
 msgstr "Partizionamento del disco"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:185
-#: linstaller/modules/partdisks/front/glade/__init__.py:1528
+#: linstaller/modules/partdisks/front/glade/__init__.py:528
+#: linstaller/modules/partdisks/front/glade/__init__.py:3016
 msgid "Manage your drives"
 msgstr "Gestione dei dischi"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:234
-#: linstaller/modules/partdisks/front/glade/__init__.py:1363
+#: linstaller/modules/partdisks/front/glade/__init__.py:581
+#: linstaller/modules/partdisks/front/glade/__init__.py:2353
+#: linstaller/modules/partdisks/front/glade/__init__.py:2751
 msgid "Manual partitioning"
 msgstr "Partizionamento manuale"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:234
-#: linstaller/modules/partdisks/front/glade/__init__.py:1363
+#: linstaller/modules/partdisks/front/glade/__init__.py:581
+#: linstaller/modules/partdisks/front/glade/__init__.py:2353
+#: linstaller/modules/partdisks/front/glade/__init__.py:2751
 msgid "Powerful tools for powerful pepole."
 msgstr "Strumenti potenti per persone potenti."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:284
+#: linstaller/modules/partdisks/front/glade/__init__.py:653
 #, python-format
 msgid "Install %(distro)s to the %(size)s GB of free space in %(drive)s"
 msgstr "Installare %(distro)s sullo spazio libero (%(size)s GB) in %(drive)s"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:287
+#: linstaller/modules/partdisks/front/glade/__init__.py:656
 msgid "This installs the distribution on the free space on the drive."
 msgstr "La distribuzione verrà installata nello spazio libero del disco."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:291
-#: linstaller/modules/partdisks/front/glade/__init__.py:308
-#: linstaller/modules/partdisks/front/glade/__init__.py:325
+#: linstaller/modules/partdisks/front/glade/__init__.py:660
+#: linstaller/modules/partdisks/front/glade/__init__.py:677
+#: linstaller/modules/partdisks/front/glade/__init__.py:694
 msgid "<b>Note:</b> an existing virtual memory (swap) partition will be used."
 msgstr "<b>Nota:</b> una partizione di memoria virtuale (swap) già esistente sarà usata."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:293
-#: linstaller/modules/partdisks/front/glade/__init__.py:310
-#: linstaller/modules/partdisks/front/glade/__init__.py:327
+#: linstaller/modules/partdisks/front/glade/__init__.py:662
+#: linstaller/modules/partdisks/front/glade/__init__.py:679
+#: linstaller/modules/partdisks/front/glade/__init__.py:696
 msgid ""
 "<b>Note:</b> due to the few space, it's not possible to create a virtual "
 "memory (swap) partition."
 msgstr "<b>Nota:</b> a causa del poco spazio, non è possibile creare una partizione di memoria virtuale (swap)."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:295
-#: linstaller/modules/partdisks/front/glade/__init__.py:312
-#: linstaller/modules/partdisks/front/glade/__init__.py:329
+#: linstaller/modules/partdisks/front/glade/__init__.py:664
+#: linstaller/modules/partdisks/front/glade/__init__.py:681
+#: linstaller/modules/partdisks/front/glade/__init__.py:698
 msgid "<b>Note:</b> a virtual memory (swap) partition will be created."
 msgstr "<b>Nota:</b> una partizione di memoria virtuale (swap) sarà creata."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:301
+#: linstaller/modules/partdisks/front/glade/__init__.py:670
 #, python-format
 msgid "Replace %(system)s with %(distro)s"
 msgstr "Rimpiazza %(system)s con %(distro)s"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:304
+#: linstaller/modules/partdisks/front/glade/__init__.py:673
 #, python-format
 msgid ""
 "This replaces %(system)s with %(distro)s. <b>All data on %(system)s will be "
 "deleted.</b>"
 msgstr "%(system)s verrà rimpiazzato con %(distro)s.\n<b>Tutti i dati su %(system)s saranno cancellati.</b>"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:318
+#: linstaller/modules/partdisks/front/glade/__init__.py:687
 #, python-format
 msgid "Use the entire %s disk"
 msgstr "Usa l'intero disco (%s)"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:321
+#: linstaller/modules/partdisks/front/glade/__init__.py:690
 #, python-format
 msgid ""
 "This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs "
 "there %(distro)s."
 msgstr "Verrà <b>cancellato tutto</b> su <b>%(dev)s</b> (%(model)s) e %(distro)s verrà installato lì."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:335
+#: linstaller/modules/partdisks/front/glade/__init__.py:704
 #, python-format
 msgid "Install %(distro)s to %(path)s (%(model)s)"
 msgstr "Installa %(distro)s su %(path)s (%(model)s)"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:340
+#: linstaller/modules/partdisks/front/glade/__init__.py:709
 msgid "As the Disk is currently empty, this partition will be created."
 msgstr "Siccome il disco è attualmente vuoto, questa partizione verrà creata."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:342
+#: linstaller/modules/partdisks/front/glade/__init__.py:711
 msgid "No data will be deleted."
 msgstr "Nessun dato sarà cancellato."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:350
+#: linstaller/modules/partdisks/front/glade/__init__.py:719
 #, python-format
 msgid "Initialize %s"
 msgstr "Inizializza %s"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:353
+#: linstaller/modules/partdisks/front/glade/__init__.py:722
 #, python-format
 msgid ""
 "This initializes the drive (<b>%s</b>) for usage by creating a partition "
 "table."
 msgstr "Il disco (<b>%s</b>) verrà inizializzato creando una tabella delle partizioni."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:406
-#: linstaller/modules/partdisks/front/glade/__init__.py:1049
+#: linstaller/modules/partdisks/front/glade/__init__.py:774
+#: linstaller/modules/partdisks/front/glade/__init__.py:1893
 msgid "Unable to create a new partition table."
 msgstr "Impossibile creare una nuova tabella delle partizioni."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:475
+#: linstaller/modules/partdisks/front/glade/__init__.py:842
 msgid "Please review your changes."
 msgstr "Ricontrollare i cambiamenti."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:475
+#: linstaller/modules/partdisks/front/glade/__init__.py:842
 msgid ""
 "When done this, press the Next button to permanently write them to the disk."
 msgstr "Una volta fatto, premere il pulsante Avanti per scriverli permanentemente sul disco."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:496
+#: linstaller/modules/partdisks/front/glade/__init__.py:873
 #, python-format
 msgid "Select the partition where install %s"
 msgstr "Selezionare la partizione dove installare %s"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:496
+#: linstaller/modules/partdisks/front/glade/__init__.py:873
 msgid "No data will be touched."
 msgstr "Nessun dato verrà toccato."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:498
+#: linstaller/modules/partdisks/front/glade/__init__.py:875
 #: linstaller/modules/partdisks/front/cli.py:1111
 msgid "Automatic partitioning"
 msgstr "Partizionamento automatico"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:498
+#: linstaller/modules/partdisks/front/glade/__init__.py:875
 msgid "Let the magic manage your drives!"
 msgstr "Fai gestire i tuoi dischi alla magia!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:709
+#: linstaller/modules/partdisks/front/glade/__init__.py:1179
 #, python-format
 msgid "Do you really want to remove %s?"
 msgstr "Si vuole veramente rimuovere %s?"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:717
+#: linstaller/modules/partdisks/front/glade/__init__.py:1183
+#: linstaller/modules/partdisks/front/glade/__init__.py:1201
+msgid "You cannot <b>go back!</b>"
+msgstr "Non sarà possibile <b>tornare indietro!</b>"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:1186
+#: linstaller/modules/partdisks/front/glade/__init__.py:1204
+#: linstaller/modules/partdisks/front/glade/module.glade.h:8
+msgid "Use the \"Refresh\" button to undo this change."
+msgstr "Usare il pulsante \"Ricarica\" per annullare questo cambiamento."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:1197
 #, python-format
 msgid "Do you really want to delete all partitions on %s?"
 msgstr "Si vuole veramente cancellare tutte le partizioni in %s?"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:901
+#: linstaller/modules/partdisks/front/glade/__init__.py:1517
 msgid "Mountpoint already used!"
 msgstr "Mountpoint già usato!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:917
+#: linstaller/modules/partdisks/front/glade/__init__.py:1589
 msgid "Creating the partition..."
 msgstr "Creazione della partizione..."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:917
+#: linstaller/modules/partdisks/front/glade/__init__.py:1589
 msgid "Please wait."
 msgstr "Si prega di attendere."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:926
+#: linstaller/modules/partdisks/front/glade/__init__.py:1600
 msgid "Unable to add partition."
 msgstr "Impossibile aggiungere la partizione."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:926
+#: linstaller/modules/partdisks/front/glade/__init__.py:1600
 msgid "You shouldn't get here."
 msgstr "Non dovresti arrivare qua."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:938
-#: linstaller/modules/partdisks/front/glade/__init__.py:996
-#: linstaller/modules/partdisks/front/glade/__init__.py:1087
-#: linstaller/modules/partdisks/front/glade/__init__.py:1112
-msgid "You have some unsaved changes!"
-msgstr "Ci sono dei cambiamenti non salvati!"
-
-#: linstaller/modules/partdisks/front/glade/__init__.py:938
-#: linstaller/modules/partdisks/front/glade/__init__.py:996
-#: linstaller/modules/partdisks/front/glade/__init__.py:1087
-#: linstaller/modules/partdisks/front/glade/__init__.py:1112
+#: linstaller/modules/partdisks/front/glade/__init__.py:1632
+#: linstaller/modules/partdisks/front/glade/__init__.py:1768
+#: linstaller/modules/partdisks/front/glade/__init__.py:1948
+#: linstaller/modules/partdisks/front/glade/__init__.py:2000
 msgid "Use the Apply button to save them."
 msgstr "Usare il pulsante Applica per salvarli."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:967
+#: linstaller/modules/partdisks/front/glade/__init__.py:1637
+#: linstaller/modules/partdisks/front/glade/__init__.py:1773
+msgid ""
+"You need to apply your changes in order to use the new LVM physical volume."
+msgstr "È necessario applicare i cambiamenti per usare il nuovo volume fisico LVM."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:1638
+#: linstaller/modules/partdisks/front/glade/__init__.py:1774
+#: linstaller/modules/partdisks/front/glade/__init__.py:1948
+#: linstaller/modules/partdisks/front/glade/__init__.py:2000
+msgid "You have some unsaved changes!"
+msgstr "Ci sono dei cambiamenti non salvati!"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:1687
 msgid "Failed to resize partition."
 msgstr "Impossibile ridimensionare la partizione."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:967
+#: linstaller/modules/partdisks/front/glade/__init__.py:1687
 msgid "Please double-check the inserted values."
 msgstr "Controllare un'altra volta i valori inseriti."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1052
+#: linstaller/modules/partdisks/front/glade/__init__.py:1870
+msgid "The passwords doesn't match."
+msgstr "Le password non corrispondono."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:1896
 msgid "New table created successfully!"
 msgstr "Tabella creata correttamente!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1052
+#: linstaller/modules/partdisks/front/glade/__init__.py:1896
 msgid "The new table has been created."
 msgstr "La nuova tabella è stata creata correttamente."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1084
+#: linstaller/modules/partdisks/front/glade/__init__.py:1945
 msgid "Unable to remove the partition."
 msgstr "Impossibile rimuovere la partizione."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1084
-#: linstaller/modules/partdisks/front/glade/__init__.py:1109
+#: linstaller/modules/partdisks/front/glade/__init__.py:1945
+#: linstaller/modules/partdisks/front/glade/__init__.py:1997
 msgid "Why did it happen?!"
 msgstr "Perchè è successo?!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1109
+#: linstaller/modules/partdisks/front/glade/__init__.py:1997
 msgid "Unable to delete all partitions."
 msgstr "Impossibile rimuovere tutte le partizioni."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1178
-#: linstaller/modules/partdisks/front/glade/__init__.py:1262
+#: linstaller/modules/partdisks/front/glade/__init__.py:2107
+msgid "Volume group name already used!"
+msgstr "Nome del gruppo di volumi già usato!"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2164
+msgid "Currently used"
+msgstr "Usati"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2197
+msgid "Available"
+msgstr "Disponibili"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2228
+msgid "Add a new volume group"
+msgstr "Aggiungi un nuovo gruppo di volumi"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2239
+#, python-format
+msgid "Edit %s"
+msgstr "Modifica %s"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2356
+msgid "Unable to unlock the volume."
+msgstr "Impossibile sbloccare il volume."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2356
+msgid "You inserted the wrong password."
+msgstr "È stata inserita la password sbagliata."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2395
+msgid "LVM Volume Group"
+msgstr "Gruppo di volumi LVM"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2428
+#: linstaller/modules/partdisks/front/glade/__init__.py:2541
 msgid "Informations"
 msgstr "Informazioni"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1181
+#: linstaller/modules/partdisks/front/glade/__init__.py:2431
 msgid "No partition table yet!"
 msgstr "Nessuna tabella delle partizioni!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1184
+#: linstaller/modules/partdisks/front/glade/__init__.py:2434
 msgid "Partition"
 msgstr "Partizione"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1185
+#: linstaller/modules/partdisks/front/glade/__init__.py:2435
 msgid "Type"
 msgstr "Tipo"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1186
+#: linstaller/modules/partdisks/front/glade/__init__.py:2436
 msgid "Filesystem"
 msgstr "Filesystem"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1187
+#: linstaller/modules/partdisks/front/glade/__init__.py:2437
 msgid "Mountpoint"
 msgstr "Mountpoint"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1188
+#: linstaller/modules/partdisks/front/glade/__init__.py:2438
 msgid "Format?"
 msgstr "Formattare?"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1189
+#: linstaller/modules/partdisks/front/glade/__init__.py:2439
 msgid "Size"
 msgstr "Dimensione"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1226
+#: linstaller/modules/partdisks/front/glade/__init__.py:2489
+#: linstaller/modules/partdisks/front/glade/__init__.py:2502
+msgid "LVM physical volume"
+msgstr "Volume fisico LVM"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2493
+msgid "Locked"
+msgstr "Bloccato"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2505
 #: linstaller/modules/partdisks/front/cli.py:410
 #: linstaller/modules/partdisks/front/cli.py:1048
 msgid "not formatted"
 msgstr "non formattato"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1228
+#: linstaller/modules/partdisks/front/glade/__init__.py:2507
 #: linstaller/modules/partdisks/front/cli.py:412
 #: linstaller/modules/partdisks/front/cli.py:1050
 msgid "free space"
 msgstr "spazio libero"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1231
+#: linstaller/modules/partdisks/front/glade/__init__.py:2510
 #: linstaller/modules/partdisks/front/cli.py:415
 #: linstaller/modules/partdisks/front/cli.py:1053
 msgid "extended"
 msgstr "estesa"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1265
+#: linstaller/modules/partdisks/front/glade/__init__.py:2545
+msgid "Disk empty or Virtual Group not active!"
+msgstr "Disco vuoto o gruppo di volumi non attivo!"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2547
 msgid "Disk empty!"
 msgstr "Disco vuoto!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1365
+#: linstaller/modules/partdisks/front/glade/__init__.py:2753
 msgid "Press the Apply button and then Forward to continue."
 msgstr "Premere il pulsante Applica e poi Avanti per continuare."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1493
+#: linstaller/modules/partdisks/front/glade/__init__.py:2930
+msgid "Name"
+msgstr "Nome"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2931
+msgid "Physical Volumes"
+msgstr "Volumi fisici"
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:2981
 msgid "Add GPT partition table"
 msgstr "Nuova tabella delle partizioni GPT"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1495
+#: linstaller/modules/partdisks/front/glade/__init__.py:2983
 msgid "Add MBR partition table"
 msgstr "Nuova tabella delle partizioni MBR"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1568
-#: linstaller/modules/partdisks/front/glade/__init__.py:1578
+#: linstaller/modules/partdisks/front/glade/__init__.py:3056
+#: linstaller/modules/partdisks/front/glade/__init__.py:3071
+#: linstaller/modules/partdisks/front/glade/__init__.py:3083
+#: linstaller/modules/partdisks/front/glade/__init__.py:3097
 msgid "You can't continue!"
 msgstr "Non è possibile continuare!"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1568
+#: linstaller/modules/partdisks/front/glade/__init__.py:3056
 msgid "You need to specify the root (/) partition."
 msgstr "È necessario specificare la partizione root (/)."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1578
+#: linstaller/modules/partdisks/front/glade/__init__.py:3071
+msgid ""
+"The root partition is on an encrypted device. You need a separated /boot "
+"partition on a non-encrypted device."
+msgstr "La partizione root è su un disco crittografato. È necessaria una partizione /boot separata in un disco non crittografato."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:3083
+msgid "The /boot partition should not be on an encrypted device."
+msgstr "La partizione /boot non deve essere in un disco crittografato."
+
+#: linstaller/modules/partdisks/front/glade/__init__.py:3097
 msgid "You need to specify the EFI System Partition (/boot/efi)."
 msgstr "È necessario specificare la partizione EFI di sistema (/boot/efi)"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1586
+#: linstaller/modules/partdisks/front/glade/__init__.py:3105
 msgid "Are you sure?"
 msgstr "Si è sicuri di continuare?"
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1586
+#: linstaller/modules/partdisks/front/glade/__init__.py:3105
 msgid ""
 "It seems you haven't selected a swap partition.\n"
 "Select one now, or press Forward to continue without one."
 msgstr "Sembrerebbe che nessuna partizione swap è stata selezionata.\nSelezionarla adesso o premere Avanti per continuare senza."
 
-#: linstaller/modules/partdisks/front/glade/__init__.py:1592
+#: linstaller/modules/partdisks/front/glade/__init__.py:3111
 #: linstaller/modules/partdisks/front/cli.py:180
 msgid "No swap selected."
 msgstr "Nessuna partizione di swap selezionata."
@@ -1268,7 +1473,7 @@ msgid "You've selected:"
 msgstr "È stato selezionato:"
 
 #: linstaller/modules/partdisks/front/cli.py:448
-#: linstaller/modules/partdisks/front/glade/module.glade.h:40
+#: linstaller/modules/partdisks/front/glade/module.glade.h:63
 msgid "Add partition"
 msgstr "Aggiungi partizione"
 
@@ -1279,7 +1484,7 @@ msgstr "Formatta partizione"
 
 #: linstaller/modules/partdisks/front/cli.py:452
 #: linstaller/modules/partdisks/front/cli.py:831
-#: linstaller/modules/partdisks/front/glade/module.glade.h:5
+#: linstaller/modules/partdisks/front/glade/module.glade.h:7
 msgid "Delete partition"
 msgstr "Elimina partizione"
 
@@ -1345,11 +1550,12 @@ msgstr "Elimina un altro sistema"
 
 #: linstaller/modules/partdisks/front/cli.py:544
 #: linstaller/modules/partdisks/front/cli.py:762
-#: linstaller/modules/partdisks/front/glade/module.glade.h:41
+#: linstaller/modules/partdisks/front/glade/module.glade.h:67
 msgid "Delete all partitions"
 msgstr "Elimina tutte le partizioni"
 
 #: linstaller/modules/partdisks/front/cli.py:545
+#: linstaller/modules/partdisks/front/glade/module.glade.h:64
 msgid "Back"
 msgstr "Indietro"
 
@@ -1921,31 +2127,31 @@ msgstr "È necessario risolvere questi errori prima di continuare."
 msgid "You need to fix these errors before continuing:"
 msgstr "È necessario risolvere i seguenti errori prima di continuare:"
 
-#: linstaller/frontends/glade/__init__.py:226
+#: linstaller/frontends/glade/__init__.py:230
 #: linstaller/modules/timezone/front/glade/module.glade.h:22
 #: linstaller/modules/language/front/glade/module.glade.h:22
 msgid "Please wait..."
 msgstr "Si prega di attendere..."
 
-#: linstaller/frontends/cli.py:83
+#: linstaller/frontends/cli.py:86
 msgid "You need to insert a number!"
 msgstr "È necessario inserire un numero!"
 
-#: linstaller/services/glade/__init__.py:197
+#: linstaller/services/glade/__init__.py:202
 #, python-format
 msgid "Module path %s does not exist! Skipping..."
 msgstr "Il path %s non esiste! Saltando..."
 
-#: linstaller/services/glade/__init__.py:364
+#: linstaller/services/glade/__init__.py:390
 #, python-format
 msgid "%s Installer"
 msgstr "Installazione di %s"
 
-#: linstaller/services/glade/__init__.py:446
+#: linstaller/services/glade/__init__.py:472
 msgid "Reboot"
 msgstr "Riavvia"
 
-#: linstaller/services/glade/__init__.py:453
+#: linstaller/services/glade/__init__.py:479
 msgid "Restart installer"
 msgstr "Riavvia il programma di installazione"
 
@@ -1966,8 +2172,12 @@ msgstr "<b>Funzionalità</b>"
 msgid "<i>Please wait...</i>"
 msgstr "<i>Si prega di attendere...</i>"
 
+#: linstaller/modules/bricks/front/glade/module.glade.h:5
+msgid "Customize features"
+msgstr "Personalizza funzionalità"
+
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:1
-#: linstaller/modules/partdisks/front/glade/module.glade.h:21
+#: linstaller/modules/partdisks/front/glade/module.glade.h:26
 msgid "MB"
 msgstr "MB"
 
@@ -1984,7 +2194,7 @@ msgid "We are working for you."
 msgstr "Stiamo lavorando per te."
 
 #: linstaller/modules/end/front/glade/module.glade.h:3
-#: linstaller/modules/partdisks/front/glade/module.glade.h:31
+#: linstaller/modules/partdisks/front/glade/module.glade.h:53
 msgid "page 1"
 msgstr "pagina 1"
 
@@ -1997,12 +2207,12 @@ msgid "The installation wizard has just finished!"
 msgstr "È stata completata l'installazione!"
 
 #: linstaller/modules/end/front/glade/module.glade.h:6
-#: linstaller/modules/partdisks/front/glade/module.glade.h:39
+#: linstaller/modules/partdisks/front/glade/module.glade.h:62
 msgid "page 2"
 msgstr "pagina 2"
 
 #: linstaller/modules/end/front/glade/module.glade.h:7
-#: linstaller/modules/partdisks/front/glade/module.glade.h:44
+#: linstaller/modules/partdisks/front/glade/module.glade.h:71
 msgid "page 3"
 msgstr "pagina 3"
 
@@ -2177,25 +2387,36 @@ msgid ""
 "<b>You have been warned.</b>"
 msgstr "Non è possibile tornare indietro dopo aver premuto \"Sì\".\n<b>Si è stati avvertiti.</b>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:6
-msgid "Use the \"Refresh\" button to undo this change."
-msgstr "Usare il pulsante \"Ricarica\" per annullare questo cambiamento."
+#: linstaller/modules/partdisks/front/glade/module.glade.h:5
+msgid "Crypting support"
+msgstr "Supporto alla crittografazione"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:7
+#: linstaller/modules/partdisks/front/glade/module.glade.h:6
+msgid ""
+"<big><b>Do you really want to destroy everything on the drive?</b></big>"
+msgstr "<big><b>Si vuole veramente cancellare tutti i dati sul disco?</b></big>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:9
 msgid "Master Boot Record (MBR)"
 msgstr "Master Boot Record (MBR)"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:8
+#: linstaller/modules/partdisks/front/glade/module.glade.h:10
+msgid ""
+"This will touch only the affected drives and not everything in the Apply "
+"queue."
+msgstr "Questa operazione modificherà solamente i dischi richiesti e non tutti quelli nella lista delle modifiche da applicare."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:11
 msgid "Edit partition"
 msgstr "Modifica partizione"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:9
+#: linstaller/modules/partdisks/front/glade/module.glade.h:12
 msgid ""
 "<big><b>Do you really want to mount this partition during the installation "
 "phase?</b></big>"
 msgstr "<big><b>Si vuole veramente montare questa partizione durante la fase di installazione?</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:10
+#: linstaller/modules/partdisks/front/glade/module.glade.h:13
 msgid ""
 "If the partition is not empty, it is not touched by the install phase.\n"
 "This may make troubles on partitions where the installation program's intervention is reqiured, such as /home.\n"
@@ -2206,92 +2427,185 @@ msgid ""
 "If you are unsure, press No."
 msgstr "Se la partizione non è vuota, non viene toccata durante la fase di installazione.\nQuesto potrebbe portare a dei problemi dove l'intervento del programma di installazione è richiesto, come in /home.\n\nSe si vuol far creare al programma di installazione file in partizioni non vuote, premere Sì.\nTenere a mente che qualche file potrebbe essere sovrascritto.\n\nSe si è insicuri, premere No."
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:17
+#: linstaller/modules/partdisks/front/glade/module.glade.h:20
 msgid "Add partition table"
 msgstr "Aggiungere tabella delle partizioni"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:18
+#: linstaller/modules/partdisks/front/glade/module.glade.h:21
 msgid "<big><b>Do you really want to create a table on this disk?</b></big>"
 msgstr "<big><b>Si vuole veramente creare una tabella delle partizioni su questo disco?</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:19
+#: linstaller/modules/partdisks/front/glade/module.glade.h:22
 msgid "A table is needed to create partitions on this drive."
 msgstr "La tabella è necessaria per creare partizioni in questa memoria di massa."
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:20
-msgid "Specify the size: "
-msgstr "Specificare la dimensione:"
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:22
-msgid "Specify the size:"
-msgstr "Specificare la dimensione:"
-
 #: linstaller/modules/partdisks/front/glade/module.glade.h:23
-msgid "<b>Size</b>"
-msgstr "<b>Dimensione</b>"
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:24
-msgid "Format the partition"
-msgstr "Formattare la partizione"
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:25
-msgid "<b>File System</b>"
-msgstr "<b>File System</b>"
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:26
-msgid "Mount during the installation phase"
-msgstr "Montare durante la fase di installazione."
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:27
-msgid "<b>Mountpoint</b>"
-msgstr "<b>Mountpoint</b>"
-
-#: linstaller/modules/partdisks/front/glade/module.glade.h:28
 msgid "Remove partition"
 msgstr "Riumovi partizione"
 
+#: linstaller/modules/partdisks/front/glade/module.glade.h:24
+msgid "<b>Logical Volume</b>"
+msgstr "<b>Volume logico</b>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:25
+msgid "Specify the size: "
+msgstr "Specificare la dimensione:"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:27
+msgid "Specify the size:"
+msgstr "Specificare la dimensione:"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:28
+msgid "<b>Size</b>"
+msgstr "<b>Dimensione</b>"
+
 #: linstaller/modules/partdisks/front/glade/module.glade.h:29
+msgid "Format the partition"
+msgstr "Formattare la partizione"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:30
+msgid "Use as a LVM physical volume"
+msgstr "Usa come volume fisico LVM"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:31
+msgid "Use as an encrypted LVM physical volume"
+msgstr "Usa come volume fisico LVM crittografato"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:32
+msgid "Fill the device with random data"
+msgstr "Riempi il volume di dati casuali"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:33
+msgid "Use high quality random data (it will take a long time)"
+msgstr "Usa dati casuali di alta qualità (richiederà molto tempo)"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:34
+msgid "Do not format"
+msgstr "Non formattare"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:35
+msgid ""
+"Please note that by formatting/making/encrypting a LVM physical volume you will destroy all data contained there.\n"
+"Ensure that the physical volume is unlinked from any volume group before attempting to remove or format it."
+msgstr "Notare che formattando/creando/crittografando un volume fisico LVM tutti i dati presenti nella partizione verranno cancellati.\nAssicurarsi che il volume fisico sia scollegato da qualsiasi gruppo di volumi prima di tentare di rimuoverlo o di formattarlo."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:37
+msgid "<b>File System</b>"
+msgstr "<b>File System</b>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:38
+msgid "Mount during the installation phase"
+msgstr "Montare durante la fase di installazione."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:39
+msgid "<b>Mountpoint</b>"
+msgstr "<b>Mountpoint</b>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:40
+msgid "Unlock volume"
+msgstr "Sblocca volume"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:41
+msgid "<big><b>Please insert the volume's password.</b></big>"
+msgstr "<big><b>Inserire la password del volume.</b></big>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:42
+msgid ""
+"In order to unlock this encrypted volume, you need to insert its password."
+msgstr "Per sbloccare questo volume crittografato è necessario inserire la sua password."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:43
+msgid "Prova"
+msgstr "Prova (?)"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:44
+msgid "Lollo"
+msgstr "Lollo"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:45
+msgid "<b>Volume Group</b>"
+msgstr "<b>Gruppo di volumi</b>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:46
+msgid ""
+"You can make a partition a Physical Volume by selecting the \"<b>Use as a "
+"LVM Physical Volume</b>\" radio button in the <i>Edit partition</i> window."
+msgstr "È possibile far diventare una partizione un volume fisico selezionando il bottone \"<b>Usa come volume fisico LVM</b>\" nella finestra <i>Modifica partizione</i>."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:47
+msgid ""
+"A grayed out volume has some data on it and thus can't be removed.\n"
+"You can move the contents of the physical volume to another using the <i>pvmove</i> command."
+msgstr "Un volume grigio contiene dei dati e quindi non può essere rimosso.\nÈ possibile muovere i contenuti del volume fisico ad un altro usando il comando <i>pvmove</i>."
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:49
+msgid "<b>Physical Volumes</b>"
+msgstr "<b>Volumi fisici</b>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:50
+msgid "Manage LVM Virtual Groups"
+msgstr "Gestisci i gruppi fisici LVM"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:51
 msgid "<big><b>Please wait.</b></big>"
 msgstr "<big><b>Si prega di attendere.</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:30
+#: linstaller/modules/partdisks/front/glade/module.glade.h:52
 msgid ""
 "We are setting up things to offer an awesome partitioning experience ;)"
 msgstr "Stiamo preparando il tutto per offrire un'esperienza di partizionamento magnifica ;)"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:32
+#: linstaller/modules/partdisks/front/glade/module.glade.h:54
 msgid "<big><b>Automatic partitioning</b></big>"
 msgstr "<big><b>Partizionamento automatico</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:33
+#: linstaller/modules/partdisks/front/glade/module.glade.h:55
 msgid ""
 "Press this button to make the installer search the best\n"
 "option for your system."
 msgstr "Premere questo pulsante per far cercare al programma di installazione\nla migliore opzione per il proprio sistema."
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:35
+#: linstaller/modules/partdisks/front/glade/module.glade.h:57
 msgid "<big><b>Manual partitioning</b></big>"
 msgstr "<big><b>Partizionamento manuale</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:36
+#: linstaller/modules/partdisks/front/glade/module.glade.h:58
 msgid "The geek's paradise."
 msgstr "Il paradiso dei geek."
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:37
+#: linstaller/modules/partdisks/front/glade/module.glade.h:59
+msgid ""
+"<i>To use advanced features such as encryption and LVM, you must use the "
+"manual partitioning page.</i>"
+msgstr "<i>Per usare funzionalità avanzate come la crittografia e LVM è necessario usare la pagina di partizionamento manuale.</i>"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:60
 msgid "<big><b>No solution found.</b></big>"
 msgstr "<big><b>Nessuna soluzione trovata.</b></big>"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:38
+#: linstaller/modules/partdisks/front/glade/module.glade.h:61
 msgid ""
 "Unfortunately, we didn't find solutions for this system. Please use the "
 "manual partitioner."
 msgstr "Sfortunatamente, non ci sono soluzioni per questo sistema. Usare il partizionamento manuale."
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:42
+#: linstaller/modules/partdisks/front/glade/module.glade.h:65
+msgid "Lock/Unlock volume"
+msgstr "Blocca/Sblocca volume"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:66
+msgid "Advanced options"
+msgstr "Opzioni avanzate"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:68
+msgid "Manage LVM volume groups"
+msgstr "Gestisci i gruppi di volumi LVM"
+
+#: linstaller/modules/partdisks/front/glade/module.glade.h:69
 msgid "Refresh"
 msgstr "Ricarica"
 
-#: linstaller/modules/partdisks/front/glade/module.glade.h:43
+#: linstaller/modules/partdisks/front/glade/module.glade.h:70
 msgid "Apply"
 msgstr "Applica"
 

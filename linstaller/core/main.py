@@ -5,7 +5,7 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 ####
-VERSION = "4.99.0"
+VERSION = "4.99.1"
 ####
 
 import os, sys, traceback
