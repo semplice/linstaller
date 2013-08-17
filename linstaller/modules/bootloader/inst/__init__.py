@@ -78,7 +78,7 @@ class Install(module.Install):
 			m.sexec("grub-mkdevicemap --no-floppy --device-map=/tmp/.linstaller")
 			
 			with open("/tmp/.linstaller","r") as f:
-				location = f.readline().replace("\n","").split("	")[-1]
+				location = os.path.realpath(f.readline().replace("\n","").split("	")[-1])
 					
 			args = "--no-floppy"
 		else:
