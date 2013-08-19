@@ -213,9 +213,12 @@ class Apply(glade.Progress):
 					_obj = LVMcontainer
 				else:
 					_obj = obj
-				progress = lib.format_partition_for_real(_obj, cng["format"])
-				self.parent.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
-				status = progress.wait()
+				try:
+					progress = lib.format_partition_for_real(_obj, cng["format"])
+					self.parent.set_header("hold", _("Formatting %s...") % key, _("Let's hope everything goes well! :)"))
+					status = progress.wait()
+				except CmdError:
+					status = 1
 				if status != 0:
 					# Failed ...
 					self.parent.set_header("error", _("Failed formatting %s.") % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
