@@ -1,3 +1,9 @@
+linstaller (4.99.3-1) devel; urgency=low
+
+  * Bug fixes...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 19:49:31 +0200
+
 linstaller (4.99.2-1) devel; urgency=low
 
   * config/semplice-base: modified a bit the .isnt modules order:
