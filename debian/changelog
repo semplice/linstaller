@@ -1,3 +1,10 @@
+linstaller (4.99.4-1) devel; urgency=low
+
+  * config/semplice-base: changed order, again.
+    modules/bricks: inst: workaround to not make it clash with supportrepo.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 23:41:34 +0200
+
 linstaller (4.99.3-1) devel; urgency=low
 
   * Bug fixes...
