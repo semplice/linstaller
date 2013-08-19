@@ -1,3 +1,11 @@
+linstaller (4.99.2-1) devel; urgency=low
+
+  * config/semplice-base: modified a bit the .isnt modules order:
+    we should ensure that bricks is executed before user creation.
+  * services/glade: height of base_ui is now at 510 px.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 15:38:11 +0200
+
 linstaller (4.99.1-1) devel; urgency=low
 
   * Ensure we follow the symlink to get the right GRUB location.
