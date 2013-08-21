@@ -2629,7 +2629,11 @@ class Frontend(glade.Frontend):
 		
 		if device.path:
 			# Unlocked, lock
-			device.close()
+			try:
+				device.close()
+			except CmdError:
+				# Failed :(
+				self.set_header("error", _("Unable to lock the volume."), _("Please ensure that the volume is not used by another application."))
 			lvm.refresh()
 			self.idle_add(self.manual_populate)
 		else:
