@@ -1,3 +1,12 @@
+linstaller (4.99.5-1) devel; urgency=low
+
+  * Mount virtual partitions via new module virtualpartitions.inst, AFTER unsquash.
+    This avoids overwriting on some virtual /dev devices such as /dev/shm.
+    Also *FINALLY* fixed that stupid revert bug in partdisks.inst. I'm a moron.
+  * debian/linstaller-modules-base.install: ship virtualpartitions.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 21 Aug 2013 14:41:46 +0200
+
 linstaller (4.99.4-1) devel; urgency=low
 
   * config/semplice-base: changed order, again.
