@@ -40,18 +40,6 @@ class Module(module.Module):
 		lib.mount_partition(path=root, target=self.main_settings["target"])
 
 		used = []
-
-
-		# Bind-mount /dev, /sys and /proc (if no_virtual_partitions is not True):
-		if not self.settings["no_virtual_partitions"]:
-			for point in ("/dev","/sys","/proc"):
-				fullpath = os.path.join(self.main_settings["target"],os.path.basename(point))
-				if lib.is_mounted(fullpath):
-					lib.umount(path=fullpath)
-				
-				# We can go?
-				lib.mount_partition(path=point, opts="bind", target=fullpath, check=False)
-				used.append(fullpath)
 		
 		# Mount every partition which has "useas" on it
 		# Get changed.
@@ -141,7 +129,8 @@ class Module(module.Module):
 		
 		# See if "used" was... used :)
 		if "partdisks.inst" in self.modules_settings and "used" in self.modules_settings["partdisks.inst"]:
-			_used = self.modules_settings["partdisks.inst"]["used"].reverse()
+			_used = self.modules_settings["partdisks.inst"]["used"]
+			_used.reverse()
 			if _used:
 				for part in _used:
 					if lib.is_mounted(part):
@@ -159,5 +148,4 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Cache settings """
 		
-		self.cache("no_virtual_partitions")
 		self.cache("used")
