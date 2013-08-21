@@ -3069,7 +3069,7 @@ class Frontend(glade.Frontend):
 				# Check if at least one PV composing the VG is encrypted
 				for pv in lvm.return_vg_with_pvs()[vg]:
 					for encrypted in crypt.LUKSdevices:
-						if pv["volume"].pv == crypt.LUKSdevices[encrypted].mapper_path and not "/boot" in self.mountpoints_added:
+						if pv["volume"].pv == crypt.LUKSdevices[encrypted].path and not "/boot" in self.mountpoints_added:
 							# Yeah
 							self.set_header("error", _("You can't continue!"), _("The root partition is on an encrypted device. You need a separated /boot partition on a non-encrypted device."))
 							return True
@@ -3081,7 +3081,7 @@ class Frontend(glade.Frontend):
 				# Check if at least one PV composing the VG is encrypted
 				for pv in lvm.return_vg_with_pvs()[vg]:
 					for encrypted in crypt.LUKSdevices:
-						if pv["volume"].pv == crypt.LUKSdevices[encrypted].mapper_path:
+						if pv["volume"].pv == crypt.LUKSdevices[encrypted].path:
 							# Yeah
 							self.set_header("error", _("You can't continue!"), _("The /boot partition should not be on an encrypted device."))
 							return True

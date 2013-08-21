@@ -74,7 +74,7 @@ class LUKSdrive:
 	def close(self):
 		""" Closes the device. """
 		
-		m.sexec("cryptsetup luksClose %s" % self.mapper_path)
+		m.sexec("cryptsetup luksClose %s" % self.path)
 	
 	def get_partition(self):
 		""" Returns a parted.Partition object from the encrypted device. """
