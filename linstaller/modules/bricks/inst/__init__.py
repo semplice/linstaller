@@ -21,6 +21,13 @@ class Install(module.Install):
 				# remove!
 				atleastone = True
 				engine.remove(packages)
+				
+				# We should really, really, really ensure that no
+				# dependency remains. We do this by marking too the
+				# meta-package's dependencies as to be removed.
+				
+				for pkg in packages:
+					engine.remove(engine.dependencies_loop_simplified(pkg))
 		
 		# Commit
 		if atleastone:
