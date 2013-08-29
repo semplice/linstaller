@@ -1,3 +1,14 @@
+linstaller (4.99.6-1) devel; urgency=low
+
+  * partdisks: use path instead of mapper_path on LUKS devices to do checking and locking.
+    This may be slower, but now linstaller can lock and properly check mountpoints on
+    an encrypted partition unlocked by foreign applications.
+  * partdisks: warn the user if LUKSdrive.close() failed.
+  * bricks: inst: ensure we remove every dependencies of the features' meta-packages.
+  * userhost: inst: set groups if root is disabled.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Aug 2013 17:26:11 +0200
+
 linstaller (4.99.5-1) devel; urgency=low
 
   * Mount virtual partitions via new module virtualpartitions.inst, AFTER unsquash.
