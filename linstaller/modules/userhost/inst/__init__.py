@@ -40,6 +40,9 @@ class Install(module.Install):
 			db.set("passwd/root-password", rootpassword)
 		else:
 			db.set("passwd/root-login", "false")
+			
+			# Groups
+			db.set("passwd/user-default-groups", "audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor dialout fax tape fuse lpadmin")
 
 		# Make sure we make the user
 		db.set("passwd/make-user", "true")
