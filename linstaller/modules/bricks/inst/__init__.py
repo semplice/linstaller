@@ -27,7 +27,11 @@ class Install(module.Install):
 				# meta-package's dependencies as to be removed.
 				
 				for pkg in packages:
-					engine.remove(engine.dependencies_loop_simplified(pkg))
+					pkgs = []
+					for _pkg in engine.dependencies_loop_simplified(pkg):
+						if _pkg in engine.cache and not _pkg.marked_delete:
+							pkgs.append(_pkg)
+					engine.remove(pkgs, auto=False)
 		
 		# Commit
 		if atleastone:
