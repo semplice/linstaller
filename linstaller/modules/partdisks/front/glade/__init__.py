@@ -476,6 +476,7 @@ class LVM_apply(glade.Progress):
 
 		# FIXME?
 		self.parent.idle_add(lvm.refresh)
+		self.parent.idle_add(lvm.enable_all_vgs)
 		self.parent.idle_add(self.parent.manual_populate)
 		#self.parent.idle_add(self.parent.refresh_manual, None, False, True)
 		# FIXMEEEEE!
@@ -576,6 +577,7 @@ class Frontend(glade.Frontend):
 		
 		# Also reload LVM  and LUKS devices...
 		lvm.refresh()
+		lvm.enable_all_vgs()
 		crypt.refresh()
 	
 	def refresh_manual(self, obj=None, complete=True, noclear=False):
@@ -2359,6 +2361,7 @@ class Frontend(glade.Frontend):
 				self.set_header("error", _("Unable to unlock the volume."), _("You inserted the wrong password."))
 			
 			lvm.refresh()
+			lvm.enable_all_vgs()
 			self.idle_add(self.manual_populate)
 
 		# Restore sensitivity
@@ -2635,6 +2638,7 @@ class Frontend(glade.Frontend):
 				# Failed :(
 				self.set_header("error", _("Unable to lock the volume."), _("Please ensure that the volume is not used by another application."))
 			lvm.refresh()
+			lvm.enable_all_vgs()
 			self.idle_add(self.manual_populate)
 		else:
 			self.idle_add(self.objects["parent"].main.set_sensitive, False)

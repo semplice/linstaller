@@ -206,6 +206,18 @@ class VolumeGroup:
 			if not lv.name.endswith("-1"):
 				lv.remove()
 	
+	def enable(self):
+		""" Enables the VolumeGroup. """
+		
+		if not os.path.exists(self.path):
+			m.sexec("vgchange -a y %s" % self.name)
+
+	def disable(self):
+		""" Disables the VolumeGroup. """
+		
+		if os.path.exists(self.path):
+			m.sexec("vgchange -a n %s" % self.name)
+
 	@property
 	def path(self):
 		"""Returns the path of the Volume Group"""
@@ -520,6 +532,11 @@ def refresh():
 	PhysicalVolumes = return_pv()
 	VolumeGroups = return_vg()
 	LogicalVolumes = return_lv()
+
+def enable_all_vgs():
+	""" Enables every VG on the system. """
 	
+	for vg in VolumeGroups:
+		VolumeGroups[vg].enable()
 
 refresh()
