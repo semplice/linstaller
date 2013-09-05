@@ -1,3 +1,203 @@
+linstaller (4.99.6-1) devel; urgency=low
+
+  * partdisks: use path instead of mapper_path on LUKS devices to do checking and locking.
+    This may be slower, but now linstaller can lock and properly check mountpoints on
+    an encrypted partition unlocked by foreign applications.
+  * partdisks: warn the user if LUKSdrive.close() failed.
+  * bricks: inst: ensure we remove every dependencies of the features' meta-packages.
+  * userhost: inst: set groups if root is disabled.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Aug 2013 17:26:11 +0200
+
+linstaller (4.99.5-1) devel; urgency=low
+
+  * Mount virtual partitions via new module virtualpartitions.inst, AFTER unsquash.
+    This avoids overwriting on some virtual /dev devices such as /dev/shm.
+    Also *FINALLY* fixed that stupid revert bug in partdisks.inst. I'm a moron.
+  * debian/linstaller-modules-base.install: ship virtualpartitions.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 21 Aug 2013 14:41:46 +0200
+
+linstaller (4.99.4-1) devel; urgency=low
+
+  * config/semplice-base: changed order, again.
+    modules/bricks: inst: workaround to not make it clash with supportrepo.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 23:41:34 +0200
+
+linstaller (4.99.3-1) devel; urgency=low
+
+  * Bug fixes...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 19:49:31 +0200
+
+linstaller (4.99.2-1) devel; urgency=low
+
+  * config/semplice-base: modified a bit the .isnt modules order:
+    we should ensure that bricks is executed before user creation.
+  * services/glade: height of base_ui is now at 510 px.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 15:38:11 +0200
+
+linstaller (4.99.1-1) devel; urgency=low
+
+  * Ensure we follow the symlink to get the right GRUB location.
+  * Updated translations.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 20:08:22 +0200
+
+linstaller (4.99.0-1) devel; urgency=low
+
+  * Removed deprecated encrypting code.
+  * modules/update: new seed 'disable', used to disable the checkbox when doing fullrestart.
+    Also, ensure we update if the user wants to even if we aren't at the first run
+    (of the module, not after fullrestart)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 16 Aug 2013 20:36:09 +0200
+
+linstaller (4.91.0-1) devel; urgency=low
+
+  * Added LUKS Unlock dialog.
+    Also, bug fixeeeeeeeeeeeeeeeeeeeeeeeeeeeees.
+  * partdisks: add cipher and key-size selection for the to-be-encrypted volumes (using seeds).
+    partdisks: default to aes-xts-plain64 (cipher) and 512 (key-size)
+    linstaller.py: resolved a seed parsing bug which involves values with an :
+  * partdisks: made the fill checkboxes working
+  * bootloader: now the user can force a device or skip the bootloader installation (via seeds)
+    bootloader/front: glade: if LVM, assume root = /boot if it's isn't a LV, or skip installation
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 14 Aug 2013 19:20:51 +0200
+
+linstaller (4.90.3-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEES...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 19:44:35 +0200
+
+linstaller (4.90.2-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEES
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 15:39:05 +0200
+
+linstaller (4.90.1-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEEEES
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 14:02:05 +0200
+
+linstaller (4.90.0-1) devel; urgency=low
+
+  * LVM Physical Volume encryption
+  * modules/fstab: added /etc/crypttab generation
+  * debian/control: linstaller-modules-base: depend on cryptsetup and util-linux
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 07 Aug 2013 13:03:55 +0200
+
+linstaller (4.72.3-1) devel; urgency=low
+
+  * (upstream) Ship semplice-fullscreen configuration.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 02 Aug 2013 13:43:09 +0200
+
+linstaller (4.72.2-1) devel; urgency=low
+
+  * partdisks: library: do not count as freespace the partition offsets
+    partdisks: front/glade: new statuses in LVM-related things
+  * debian/control: linstaller-modules-base: depend on  lvm2, ntfs-3g and fatresize.
+    debian/linstaller-config-semplice.install: ship fullscreen configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 22:48:35 +0200
+
+linstaller (4.72.1-0) devel; urgency=low
+
+  * The famous after-many-changes bug squashing phase!
+    - core/aptlib: set DEBIAN_FRONTEND to noninteractive
+    - modules/partdisks: library: 1MB offset when adding partitions
+    - modules/partdisks: lvm: force pvcreate when creating a PV
+    - modules/bootloader: properly get the device and seed grub-pc
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 20:45:12 +0200
+
+linstaller (4.72.0-1) devel; urgency=low
+
+  * linstaller can now create LVM Volume Groups.
+  * Some fine tuning and plumbing for the Edit VG mode
+  * linstaller can now rename, extend and reduce existing VGs.
+  * linstaller can now remove VGs.
+  * linstaller can now create LVM physical volumes.
+  * partdisks: front/glade: do not fail if part.name in manual_frame_creator() is None
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 13:07:37 +0200
+
+linstaller (4.71.0-1) devel; urgency=low
+
+  * Ensure we properly prepare the /boot/efi partition
+  * Support for markup in header's subtext, which is now properly resizes too long texts
+    modules/bricks: frontend/glade: changed subtext.
+  * Ensure we try to umount boot/efi in the wrappers.
+  * frontends/glade: added support for fullscreen (set frontends:glade.fullscreen to True)
+    config/: added semplice-fullscreen config which uses the newly implemented fullscreen function
+  * Ensure the apply window is sensitive before showing it
+  * Improved resize actions, some bugfixes
+  * Added LVM Logical Volume modification support, along with resizing.
+    In a LV, rely on pyparted only to get the fileSystem.
+    If a LV exists but has a None filesystem, assume it's fat32.
+    Migration to standard kilobytes (SI).
+  * Disable 'Use for LVM' box if we are in a LV
+  * Move newtable and delete buttons to the new 'advanced options'
+  * Preliminary VG manage GUI
+  * Latest GRUB fucked up the (hd0) method, get the first drive by ourselves...
+  * More progress on the VGmanage window.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 22 Jul 2013 20:25:55 +0200
+
+linstaller (4.70.1-1) devel; urgency=low
+
+  * Improvements, workarounds, fixes on the APT handling inside and outside the chroot.
+    Cache() now (mostly) works in both situations, unlike the upstream apt.cache.Cache().
+    And that's so fuckin' great.
+    Also, grub-efi installation now works correctly.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 27 Jun 2013 19:12:41 +0200
+
+linstaller (4.70.0-1) devel; urgency=low
+
+  * Added settings support for frontends.
+  * Added new setting -p|--configpath to select the path where search for linstaller configurations
+  * config/thewall-test: added test thewall config.
+  * frontends/cli: added "follow" setting.
+  * Added supermodules support (a virtual module which calls a set of modules defined on the configuration file).
+  * Added some simple test modules.
+  * Added support for user-defined target directory (-t switch).
+  * Added seed_setup() function in module.py, override this to set-up things before seeding occours.
+  * Check for modu before revert.
+  * modules/partdisks: library: mount_partition added support for mount type.
+  * modules/timezone: front/glade: ensure we focus the timezone treeview.
+  * Added the basics of LVM and Crypting support.
+    Nothing works yet (as it is still not finished ;D) and the current GUI may be changed at any time.
+    Still, tracking it in GIT seems the best thing to do to avoid huge commits later.
+    I hope to get it finished soon!
+  * lvm.py: do not use python-lvm for now. Added LogicalVolume and and VolumeGroup classes.
+    The lvm library now does something useful.
+  * modules/partdisks: added base LVM view and modify (edit view and format) support.
+  * partdisks can now add a new LV.
+  * partdisks: properly set do_not_format_box if we should not format.
+  * partdisks can now delete LVs.
+  * partdisks can now clear entire VGs.
+  * Do not fail if LVM devices have some I/O errors and can't be used
+  * Ensure we idle_add the refresh action after we applied things
+  * Added a nice APT library along with the supportrepo module (set-ups the support repo present in latest snapshots)
+  * modules/bootloader: inst: fetch bootloader from supportrepo, if we can
+  * core/main: support for enums.
+  * debian/control:
+    - linstaller: depend on python-apt
+    - linstaller-modules-base: remove dependency on grub (or firmware-raspberrypi), bootloaders are now in iso
+    - Changed URL of the project
+  * debian/linstaller-modules-base.install: ship supportrepo
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Jun 2013 11:43:18 +0200
+
 linstaller (4.0.4-1) unstable; urgency=low
 
   * Without os we can't do much.
