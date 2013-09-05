@@ -1,0 +1,9 @@
+Why are the LVM2 and crypto libraries so ugly?
+==============================================
+
+Even if some bindings for LVM2 and cryptosetup are available, we do not
+want to change too much from upstream (= debian).
+So when python bindings for these applications will be available in
+Debian, we will update our libraries to use them.
+
+For now you'll have to deal with the ugly subprocesses ;)

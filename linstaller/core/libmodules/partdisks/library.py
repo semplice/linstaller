@@ -17,19 +17,19 @@ from linstaller.core.main import info,warn,verbose
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-global devices
-global disks
-
 # FIXME: These variables should be in distribution's configuration file.
 min_size = 0.2 # In GB.
 rec_size = 0.3 # In GB.
 
 # Convert min_size and rec_size in MB.
-min_size *= 1024
-rec_size *= 1024
+min_size *= 1000
+rec_size *= 1000
 
 # FIXME
 obj_old = False
+
+# Resize actions enum
+ResizeAction = m.enum("GROW", "SHRINK")
 
 supported = {
 	"ext2" : ("/sbin/mkfs.ext2",""),
@@ -40,7 +40,7 @@ supported = {
 	"ntfs" : ("/sbin/mkfs.ntfs","-Q"), # lol
 	"hfs+" : ("/sbin/mkfs.hfsplus",""),
 	"jfs" : ("/sbin/mkfs.jfs",""),
-	"btrfs" : ("/sbin/mkfs.btrfs",""),
+	"btrfs" : ("/sbin/mkfs.btrfs","-f"),
 	"reiserfs" : ("/sbin/mkfs.reiser4","-f"),
 	"xfs" : ("/sbin/mkfs.xfs",""),
 	"linux-swap(v1)" : ("/sbin/mkswap",""),
@@ -49,6 +49,21 @@ supported = {
 supported_tables = {
 	"mbr" : "msdos",
 	"gpt" : "gpt",
+}
+
+supported_resize = {
+	"ext2" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"ext3" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"ext4" : ("/sbin/resize2fs","%(device)s %(size)sK"),
+	"fat32" : ("/usr/sbin/fatresize","--size %(size)sk %(device)s"),
+	"fat16" : ("/usr/sbin/fatresize","--size %(size)sk %(device)s"),
+	"ntfs" : ("/sbin/ntfsresize","--size %(size)sk %(device)s"),
+	"hfs+" : None,
+	# JFS doesn't support shrinking?
+#	"btrfs" : ("/sbin/btrfs filesystem resize %(size)sM %(mountpoint)s"),
+	"reiserfs" : None,
+	# XFS doesn't support shrinking?
+	"linux-swap(v1)" : None,
 }
 
 flags = {
@@ -61,6 +76,7 @@ sample_mountpoints = {
 	"/" : _("Root (/)"),
 	"/home" : _("Home Partition (/home)"),
 	"/usr" : _("Global applications (/usr)"),
+	"/boot" : _("Boot partition (/boot)"),
 	"/boot/efi" : _("EFI boot partition (/boot/efi)")
 }
 
@@ -78,9 +94,14 @@ def is_disk(dsk):
 		return False
 
 def MbToSector(mbs):
-    """ Convert Megabytes in sectors"""
+    """ Convert Megabytes in sectors """
 
-    return ( mbs * 1024 * 1024 ) / 512
+    return ( mbs * 1000 * 1000 ) / 512
+
+def KbToSector(kbs):
+	""" Convert Kilobytes in sectors """
+	
+	return ( kbs * 1000 ) / 512
 
 def swap_available(deep=False, disksd=None):
 	""" check if there is a swap partition available (True/False) """
@@ -118,7 +139,7 @@ def return_memory():
 	memline = int(memline[-2])
 	
 	# We do not want KiloBytes, but MegaBytes...
-	return memline / 1024
+	return memline / 1000
 
 def return_device(dev):
 	""" Returns a device from a partition (str) """
@@ -192,12 +213,11 @@ def device_sort(dct):
 
 def restore_devices(onlyusb=False):
 	""" Restores *real* structure. """
-	
-	global devices
-	global disks
-	
-	devices, disks = return_devices(onlyusb=onlyusb)
 
+	global devices, disks
+
+	devices, disks = return_devices(onlyusb=onlyusb)
+	
 def disk_partitions(disk):
 	""" Given a disk object, returns the list of all partitions, included the freespace ones. """
 
@@ -208,8 +228,11 @@ def disk_partitions(disk):
 		if partition.type & p.PARTITION_FREESPACE or \
 			not partition.type & p.PARTITION_METADATA or \
 			not partition.type & p.PARTITION_PROTECTED:
-		
-			partitions.append(partition)
+			
+			if not (partition.type & p.PARTITION_FREESPACE and partition.getLength("MB") < 3):
+				# Exclude freespace partitions smaller than 3 MB
+
+				partitions.append(partition)
 		
 		pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 		if not pednxt: break
@@ -225,7 +248,10 @@ def return_partition(partition):
 	
 	# Get device
 	dev = return_device(partition)
-	dev = disks[dev]
+	if dev in disks:
+		dev = disks[dev]
+	else:
+		return None
 	
 	# Search for partition
 	for part in dev._partitions:
@@ -235,6 +261,15 @@ def return_partition(partition):
 	
 	# If we are here, nothing found.
 	return None
+
+def get_UUID(partition):
+	""" Returns the UUID of partition. """
+	
+	UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (partition))
+	if UUID:
+		return UUID
+	else:
+		return None
 
 def setFlag(partition, flag):
 	""" Sets the specified flag into the partition (which must be a parted.Partition object) """
@@ -249,14 +284,16 @@ def unsetFlag(partition, flag):
 def maxGrow(partition):
 	""" Given a partition, it calculates the maximum it can grow, by looking at the subsequent partition. """
 	
-	current = partition.getSize("MB")
+	current = partition.getLength("MB")
 	
 	#nxt = partition.nextPartition()
 	pednxt = partition.disk.getPedDisk().next_partition(partition.getPedPartition())
 	if not pednxt: return current
 	nxt = p.Partition(disk=partition.disk, PedPartition=pednxt)
-	if nxt.type & p.PARTITION_FREESPACE:
-		current += nxt.getSize("MB")
+	if nxt.type & p.PARTITION_FREESPACE and nxt.getLength("MB") > 2:
+		# Be on the safe side and do not increment the length if it is
+		# lower than two megabytes...
+		current += nxt.getLength("MB")
 	
 	return current	
 
@@ -265,7 +302,7 @@ def add_partition(obj, start, size, type, filesystem):
 
 	# Create Geometry and Constraint
 	cons = p.Constraint(device=obj.device)
-	geom = p.Geometry(device=obj.device, start=start, length=size)
+	geom = p.Geometry(device=obj.device, start=start+2048, length=size-2048)
 	
 	if filesystem:
 		filesystem = p.FileSystem(type=filesystem, geometry=geom)
@@ -289,7 +326,8 @@ def add_partition(obj, start, size, type, filesystem):
 
 def delete_partition(obj):
 	""" Deletes partition from disk. """
-	disk = obj.disk
+	#disk = obj.disk
+	disk = disks[os.path.basename(return_device(obj.path))]
 	
 	# Remove this partition
 	return disk.deletePartition(obj)
@@ -345,6 +383,14 @@ def commit(obj, touched):
 	except:
 		return False
 
+def prepareforEFI(partition):
+	""" Sets boot flag and type to EFI System Partition on the partition object. """
+	
+	partition.setFlag(p.PARTITION_BOOT)
+	
+	# Uh, it seems that by setting the boot flag we are marking the 
+	# partition as EFI system partition. AWESOME!
+
 def format_partition_for_real(obj, fs):
 	""" Uses mkfs.* to format partition. """	
 
@@ -397,7 +443,53 @@ def resize_partition(obj, newLength):
 	cons = p.Constraint(exactGeom=obj.geometry)
 	
 	# maximize the partition at the given constraint.
-	return obj.disk.maximizePartition(obj, cons)
+	#return obj.disk.maximizePartition(obj, cons)
+	return obj.disk.setPartitionGeometry(obj, cons, start=obj.geometry.start, end=obj.geometry.end)
+
+def resize_partition_for_real(obj, newLength, action, path=None, fs=None):
+	""" Given a partition object and the new start and end, this
+	will resize the partition's filesystem. """
+
+	# newLength from MB to KB, rounded minus one
+	newLengthKiB = int((newLength*1000)/1.024)-1 # KiB, needed by resize2fs
+	newLength = int(newLength*1000)-1 # KB, used by conforming applications
+
+	# Get filesystem
+	if not fs:
+		fs = obj.fileSystem.type
+	if fs.startswith("ext"):
+		# ext* filesystems uses resize2fs, which uses kibibytes even if
+		# they call them kilobytes
+		newLength = newLengthKiB
+	
+	# Get an appropriate resizer
+	if fs in supported_resize:
+		resizer = supported_resize[fs]
+	else:
+		m.verbose("Resizer unavailable for %s. This may be an issue ;)" % fs)
+		return
+	
+	if not resizer:
+		# Handled internally by parted
+		obj.fileSystem.resize(obj.geometry)
+		return
+	
+	if not path:
+		path = obj.path
+	
+	_app = resizer[0]
+	_opt = resizer[1] % {"device":path, "size":newLength, "mountpoint":"FIXME"}
+
+	# Umount...
+	if fs not in ("btrfs") and is_mounted(obj.path):
+		umount(parted_part=obj)
+	
+	# BEGIN RESIZING!!!!111111!!!!!!!!!!!!!1111111111111111
+	process = m.execute("%s %s" % (_app, _opt))
+	process.start() # START!!!111111111!!!!!!!!!!!!!!!111111111111111
+	
+	# Return object to frontend.
+	return process
 
 def delete_all(obj):
 	""" Deletes all partitions on obj (a Disk object). """
@@ -438,7 +530,7 @@ def is_mounted(obj):
 			return {"path":items[0], "mountpoint":items[2], "type":items[4], "options":items[-1].replace("(","").replace(")","").replace("\n","")}
 
 
-def mount_partition(parted_part=None, path=None, opts=False, target=False, check=True):
+def mount_partition(parted_part=None, path=None, opts=False, typ=None, target=False, check=True):
 	""" Mounts a partition. You can use parted_part or path.
 	parted_part is a Partition object of pyparted.
 	path is a str that contains the device in /dev (e.g. '/dev/sda1')
@@ -452,7 +544,7 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		raise m.UserError("mount_partition called without parted_part and without path!")
 	
 	# Check if path exists...
-	if not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
+	if path.startswith("/") and not os.path.exists(path): raise m.UserError("%s does not exist!" % path)
 	
 	# Generate a mount point
 	_directory = path.replace("/","") # Strip all /. We should have something like this: devsda1.
@@ -501,7 +593,11 @@ def mount_partition(parted_part=None, path=None, opts=False, target=False, check
 		opts = "-o %s" % opts
 	else:
 		opts = ""
-	m.sexec("mount %s %s %s" % (opts, path, _mountpoint))
+	if typ:
+		typ = "-t %s" % typ
+	else:
+		typ = ""
+	m.sexec("mount %s %s %s %s" % (typ, opts, path, _mountpoint))
 	
 	# Return mountpoint
 	return _mountpoint
@@ -658,7 +754,7 @@ def automatic_precheck(by="freespace", distribs=None):
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in obj.getFreeSpacePartitions():
-					size = round(part.getSize("MB"), 2)
+					size = round(part.getLength("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -692,7 +788,7 @@ def automatic_precheck(by="freespace", distribs=None):
 					continue
 				
 				# Check size
-				if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
+				if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
 					# We can.
 					delete[part] = name
 			
@@ -815,8 +911,7 @@ class automatic_check_ng:
 	def __common_delete_partition(self, part):
 		""" Deletes partition. """
 		
-		return delete_partition(part)
-
+		return part.disk.deletePartition(part)
 
 	def __common(self, obj, part, size, noswap=False):
 		""" Common routines to create required partitions. """
@@ -888,7 +983,7 @@ class automatic_check_ng:
 				# Check the size of the partitions...
 				part_sizes = {}
 				for part in parts:
-					size = round(part.getSize("MB"), 2)
+					size = round(part.getLength("MB"), 2)
 					# Add part object and size in part_sizes
 					part_sizes[part] = size
 				
@@ -967,7 +1062,7 @@ class automatic_check_ng:
 					continue
 				
 				# Check size
-				size = round(part.getSize("MB"), 2)
+				size = round(part.getLength("MB"), 2)
 
 				if self.swap:
 					# Swap already in, go straight check of required space
@@ -1027,7 +1122,7 @@ class automatic_check_ng:
 			obj.deleteAllPartitions()
 
 			part = obj.getFreeSpacePartitions()[0]
-			size = round(part.getSize("MB"), 2)
+			size = round(part.getLength("MB"), 2)
 			
 			result = None
 			swapwarning = False
@@ -1140,6 +1235,7 @@ class automatic_check_ng:
 		# Check by notable
 		notable, notableord = self.by_notable()
 
+
 		# Check by freespace
 		free, freeord = self.by_freespace()
 		
@@ -1210,7 +1306,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 			# Check the size of the partitions...
 			part_sizes = {}
 			for part in obj.getFreeSpacePartitions():
-				size = round(part.getSize("MB"), 2)
+				size = round(part.getLength("MB"), 2)
 				# Add part object and size in part_sizes
 				part_sizes[part] = size
 			
@@ -1345,7 +1441,7 @@ def automatic_check(obj, by="freespace", swap_created=False):
 				raise main.CodeError("An error! o_O")
 			
 			# Check size
-			if part.getSize("MB") > min_size or part.getSize("MB") == min_size:
+			if part.getLength("MB") > min_size or part.getLength("MB") == min_size:
 				# We can.
 				delete[part] = name
 		

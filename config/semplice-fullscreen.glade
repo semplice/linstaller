@@ -1,0 +1,10 @@
+## DEFAULT LINSTALLER CONFIG FOR SEMPLICE, ON GLADE FRONTEND.
+
+# ask for language, it's not time consuming as it is on the command-line frontend.
+[module:language]
+ask = True
+
+# ask for timezone, it's not time consuming as it is on the command-line frontend.
+[module:timezone]
+ask = True
+

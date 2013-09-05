@@ -12,10 +12,10 @@ try:
 except:
 	import configparser as cparser # Python 3.x
 
-configpath = "/etc/linstaller"
+#configpath = "/etc/linstaller"
 
 class Config:
-	def __init__(self, file, initial=False, frontend=None):
+	def __init__(self, file, initial=False, frontend=None, configpath="/etc/linstaller"):
 		""" This class will read a configfile. /etc/pylaivng is already inserted, so for file you only need to pass subdirectory and file, for example distributions/semplice. """
 		
 		self.configpath = configpath
@@ -146,9 +146,9 @@ class Config:
 
 class ConfigRead(Config):
 	""" Simple class to read config files. """
-	def __init__(self, file, module=False, initial=False, frontend=None):
+	def __init__(self, file, module=False, initial=False, frontend=None, configpath="/etc/linstaller"):
 		
-		Config.__init__(self, file, initial, frontend)
+		Config.__init__(self, file, initial, frontend, configpath)
 		self.module = module # Module ("section") name.
 	
 	def printv(self, opt, section=False):

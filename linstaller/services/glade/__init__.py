@@ -35,6 +35,7 @@ uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
 head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+#head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
@@ -189,10 +190,14 @@ class Service(linstaller.core.service.Service):
 				is_inst = True
 			else:
 				is_inst = False
-				
+			
+			if module.startswith("!") or module.startswith("+"):
+				# supermodule revert, skipping
+				continue
+			
 			module_new = module.replace(".","/")
 			module_new = os.path.join(MODULESDIR, module_new + "/glade/module.glade")
-						
+			
 			if not os.path.exists(module_new) and not is_inst:
 				warn(_("Module path %s does not exist! Skipping...") % module_new)
 				continue
@@ -246,6 +251,8 @@ class Service(linstaller.core.service.Service):
 		""" Get objects, show things... """
 		
 		self.pages_built = False
+		
+		self.is_fullscreen = False
 		
 		self.builder = Gtk.Builder()
 		self.builder.set_translation_domain("linstaller")
@@ -329,6 +336,22 @@ class Service(linstaller.core.service.Service):
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
 	
+	def fullscreen(self):
+		""" Makes the window fullscreen. """
+		
+		if not self.is_fullscreen:
+			GObject.idle_add(self.main.set_resizable, True)
+			GObject.idle_add(self.main.fullscreen)
+			self.is_fullscreen = True
+	
+	def unfullscreen(self):
+		""" Unfullscreens the window """
+		
+		if self.is_fullscreen:
+			GObject.idle_add(self.main.set_resizable, False)
+			GObject.idle_add(self.main.unfullscreen)
+			self.is_fullscreen = False
+	
 	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 		
@@ -349,6 +372,9 @@ class Service(linstaller.core.service.Service):
 			folor = Gdk.RGBA()
 			folor.parse("#363636")
 
+#		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
+#		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
+
 		# Get and set icon
 		if not appicon:
 			icon = head_ico[icon]
@@ -360,7 +386,7 @@ class Service(linstaller.core.service.Service):
 		#GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
 		# Set header message and window title
 		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title.replace("& ","&amp; "))
-		GObject.idle_add(self.header_message_subtitle.set_text, subtitle)
+		GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
 		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
 		# Set color

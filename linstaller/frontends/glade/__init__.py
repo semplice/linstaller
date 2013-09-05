@@ -190,7 +190,11 @@ class Frontend(linstaller.core.frontend.Frontend):
 
 	def on_objects_ready(self):
 		""" Called when the module objects are ready. """
-				
+
+		# Set fullscreen if we should
+		if self.frontend_settings["fullscreen"] and not self.objects["parent"].is_fullscreen:
+			self.objects["parent"].fullscreen()
+
 		# Set next button sensitivity to True
 		if not self.objects["parent"].on_inst: self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
 
@@ -284,3 +288,8 @@ class Frontend(linstaller.core.frontend.Frontend):
 		""" Override this function to process things. """
 		
 		pass
+	
+	def seedpre(self):
+		""" Seed settings """
+		
+		self.cache("fullscreen",False)

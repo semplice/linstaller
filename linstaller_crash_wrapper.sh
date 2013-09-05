@@ -12,6 +12,6 @@ fi
 
 ## FIXME: This should be handled by stock linstaller, but sometimes target
 ## remains mounted and we clearly do not want it
-sudo umount /linstaller/target/{proc,dev,sys,} &> /dev/null
+sudo umount /linstaller/target/{proc,dev,sys,boot/efi,} &> /dev/null
 
 exit $res
