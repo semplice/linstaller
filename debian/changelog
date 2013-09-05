@@ -1,3 +1,15 @@
+linstaller (5.0.0-1) unstable; urgency=low
+
+  * Fixed full removal of features introduced in 2a95e429b15a7d760e8dda9a5a09778ced89c14d.
+    For some strange reason, python-apt won't find the package in cache, even if the changes are still not commited.
+    This commit workarounds that, but the issue should be inspected in detail.
+  * libmodules/partdisks: lvm: added methods VolumeGroup.enable(), VolumeGroup.disable() and enable_all_vgs().
+    enable_all_vgs() are now called after every lvm refresh to ensure that there aren't any disabled volumegroups.
+  * debian/gbp.conf: restored master-worthy configuration.
+  * Upload to current.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 05 Sep 2013 15:03:58 +0200
+
 linstaller (4.99.6-1) devel; urgency=low
 
   * partdisks: use path instead of mapper_path on LUKS devices to do checking and locking.
