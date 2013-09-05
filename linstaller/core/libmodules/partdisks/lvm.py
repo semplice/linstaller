@@ -460,10 +460,10 @@ def return_vg():
 	
 	result = {}
 	
-	for line in commands.getoutput("vgs --noheadings --units M -o vg_name").split("\n"):
+	for line in commands.getoutput("LANG=C vgs --noheadings --units M -o vg_name").split("\n"):
 		line = line.replace(" ","")
 		
-		if not line.startswith("Filedescriptor") and not line.startswith("Novolmegroupsfound"):
+		if not line.startswith("Filedescriptor") and not line.startswith("Novolumegroupsfound"):
 			# Ensure we skip filedescriptors
 			result[line] = VolumeGroup(line)
 	

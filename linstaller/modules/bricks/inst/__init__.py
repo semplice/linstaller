@@ -10,13 +10,14 @@ class Install(module.Install):
 	def run(self, InstallProgress):
 
 		import libbricks.engine as engine
+		from libbricks.features import features
 
 		atleastone = False
-
 		for feature, choice in self.moduleclass.modules_settings["bricks"]["features"].items():
 			
 			status, packages, allpackages = engine.status(feature)
-			
+			dic = features[feature]			
+
 			if not choice:
 				# remove!
 				atleastone = True
@@ -25,13 +26,18 @@ class Install(module.Install):
 				# We should really, really, really ensure that no
 				# dependency remains. We do this by marking too the
 				# meta-package's dependencies as to be removed.
+
+				pkgs = []
+				for typ in dic["enable_selection"]:
+					dps = engine.dependencies_loop_simplified(dic[typ])
+					
+					for dep in dps:
+						if dep.name.startswith("meta-") or dep.name in pkgs:
+							continue
+						pkgs.append(dep.name)
 				
-				for pkg in packages:
-					pkgs = []
-					for _pkg in engine.dependencies_loop_simplified(pkg):
-						if _pkg in engine.cache and not _pkg.marked_delete:
-							pkgs.append(_pkg)
-					engine.remove(pkgs, auto=False)
+				
+				engine.remove(pkgs, auto=False)
 		
 		# Commit
 		if atleastone:
