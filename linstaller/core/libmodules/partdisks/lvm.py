@@ -463,7 +463,7 @@ def return_vg():
 	for line in commands.getoutput("vgs --noheadings --units M -o vg_name").split("\n"):
 		line = line.replace(" ","")
 		
-		if not line.startswith("Filedescriptor"):
+		if not line.startswith("Filedescriptor") and not line.startswith("Novolmegroupsfound"):
 			# Ensure we skip filedescriptors
 			result[line] = VolumeGroup(line)
 	
@@ -537,6 +537,9 @@ def enable_all_vgs():
 	""" Enables every VG on the system. """
 	
 	for vg in VolumeGroups:
-		VolumeGroups[vg].enable()
+		try:
+			VolumeGroups[vg].enable()
+		except m.CmdError:
+			m.verbose("Unable to enable %s. Ensure it's not contained in a locked device." % vg)
 
 refresh()
