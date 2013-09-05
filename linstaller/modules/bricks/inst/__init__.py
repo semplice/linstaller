@@ -6,10 +6,10 @@
 
 import linstaller.core.module as module
 
-import libbricks.engine as engine
-
 class Install(module.Install):
 	def run(self, InstallProgress):
+
+		import libbricks.engine as engine
 
 		atleastone = False
 
@@ -21,6 +21,17 @@ class Install(module.Install):
 				# remove!
 				atleastone = True
 				engine.remove(packages)
+				
+				# We should really, really, really ensure that no
+				# dependency remains. We do this by marking too the
+				# meta-package's dependencies as to be removed.
+				
+				for pkg in packages:
+					pkgs = []
+					for _pkg in engine.dependencies_loop_simplified(pkg):
+						if _pkg in engine.cache and not _pkg.marked_delete:
+							pkgs.append(_pkg)
+					engine.remove(pkgs, auto=False)
 		
 		# Commit
 		if atleastone:
@@ -29,7 +40,12 @@ class Install(module.Install):
 class Module(module.Module):
 	def start(self):
 		""" Start module. """
-		
+
+		# FIXME: supportrepo clashes with libbricks's apt.cache object.
+		# This workaround fixes that.
+		if "supportrepo.inst" in self.modules_settings and self.modules_settings["supportrepo.inst"]["cache"]:
+			self.modules_settings["supportrepo.inst"]["cache"].change_rootdir("/")		
+
 		self.install = Install(self)
 		
 		module.Module.start(self)

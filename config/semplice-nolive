@@ -14,3 +14,7 @@ image = /linstaller/source/live/filesystem.squashfs
 [module:debian]
 # This only works if using the mount_nolive.sh script
 remove = /linstaller/source/live/filesystem.packages-remove
+
+[module:supportrepo]
+# This only works if using the mount_nolive.sh script
+path = file:///linstaller/source/support

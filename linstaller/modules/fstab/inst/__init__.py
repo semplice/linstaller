@@ -10,6 +10,10 @@ import os
 import commands
 import shutil
 
+import linstaller.core.libmodules.partdisks.library as lib
+import linstaller.core.libmodules.partdisks.crypt as crypt
+import linstaller.core.libmodules.partdisks.lvm as lvm
+
 class Install(module.Install):
 	def generate(self):
 		""" Generates /etc/fstab. """
@@ -96,6 +100,31 @@ proc   /proc   proc   defaults   0   0
 			#CDROMDRIVE = commands.getoutput("cat /proc/mounts | grep \"/live/image\" | awk '{print $1}'")
 			#fstab.write("# cdrom drive (%s)\n%s   /media/cdrom   udf,iso9660   user,noauto,exec,utf8   0   0\n" % (CDROMDRIVE,CDROMDRIVE))
 
+	def crypttab(self):
+		""" Generates /etc/crypttab. """
+		
+		if len(crypt.LUKSdevices) == 0:
+			return
+		
+		with open("/etc/crypttab", "w") as f:
+			for device, obj in crypt.LUKSdevices.items():
+				# See if the device is a physical volume, otherwise
+				# we will not touch it...
+				if not obj.mapper_path in lvm.PhysicalVolumes:
+					continue
+				
+				UUID = lib.get_UUID(device)
+				
+				f.write("%(name)s UUID=%(UUID)s none luks\n" % {"name":obj.crypt_name, "UUID":UUID})
+		
+		# Set proper owner and permissions on the file
+		os.chown("/etc/crypttab", 0, 0)
+		os.chmod("/etc/crypttab", 0744)
+		
+		# Also update-initramfs to make sure we include cryptsetup & family
+		# into the initramfs
+		m.sexec("update-initramfs -u -k all")
+
 
 class Module(module.Module):
 	def _associate_(self):
@@ -113,6 +142,8 @@ class Module(module.Module):
 		try:
 			# FSTAB: set.
 			self.install.generate()
+			# Also set-up crypttab...
+			self.install.crypttab()
 		finally:
 			# Exit
 			self.install.close()

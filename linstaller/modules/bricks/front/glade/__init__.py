@@ -109,7 +109,7 @@ class Frontend(glade.Frontend):
 		""" Initialize the GUI. """
 
 		if self.is_module_virgin:
-			self.set_header("info", _("Feature selection"), _("Select features."), appicon="preferences-desktop-default-applications")
+			self.set_header("info", _("Feature selection"), _("You can further customize those after the installation."), appicon="preferences-desktop-default-applications")
 
 			self._objects = {}
 			self.settings["_objects"] = self._objects # workaround for non_virgin mode

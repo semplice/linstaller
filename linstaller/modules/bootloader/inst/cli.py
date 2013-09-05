@@ -14,25 +14,40 @@ class Frontend(cli.Frontend):
 	def start(self):
 		""" Start the frontend """
 
+		# Should we skip?
+		if self.moduleclass.modules_settings["bootloader"]["skip"]:
+			return
+
 		# Get bootloader
 		bootloader = self.moduleclass.modules_settings["bootloader"]["bootloader"]
 
 		verbose("Installing %s bootloader..." % bootloader)
 		
 		# Get a progressbar
-		progress = self.progressbar(_("Installing bootloader:"), 2)
+		progress = self.progressbar(_("Installing bootloader:"), 4)
 
 		# Start progressbar
 		progress.start()
+		
+		# PASS 1: FETCHING THE ARCHIVES
+		self.moduleclass._pkgs_fetch[bootloader]()
+		progress.update(1)
+		
+		# Now, enter into the chroot...
+		self.moduleclass.install_phase()
 
 		try:
-			# PASS 1: INSTALL
-			self.moduleclass._install[bootloader]()
-			progress.update(1)
-			
-			# PASS 2: UPDATE
-			self.moduleclass._update[bootloader]()
+			# PASS 2: INSTALLING THE PACKAGES
+			self.moduleclass._pkgs_install[bootloader]()
 			progress.update(2)
+					
+			# PASS 3: INSTALL
+			self.moduleclass._install[bootloader]()
+			progress.update(3)
+			
+			# PASS 4: UPDATE
+			self.moduleclass._update[bootloader]()
+			progress.update(4)
 		finally:
 			# Exit
 			self.moduleclass.install.close()

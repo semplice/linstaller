@@ -15,12 +15,12 @@ import os, shutil
 
 class Module(module.Module):
 	def create(self):
-		""" Creates the persistent filesystem at /linstaller/target/PATH/TYP-SUFFIX. """
+		""" Creates the persistent filesystem at TARGET/PATH/TYP-SUFFIX. """
 				
 		if not self.settings["size"]:
 			self.settings["size"] = self.modules_settings["echo.partusb"]["size"]
 		
-		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
+		path = self.main_settings["target"] + self.settings["path"] # os.path.join doesn't work if second argument begins with /
 		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
 		
 		# Create path if it doesn't exist
@@ -38,7 +38,7 @@ class Module(module.Module):
 	def format(self):
 		""" Formats the previously created persistent filesystem. """
 			
-		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
+		path = self.main_settings["target"] + self.settings["path"] # os.path.join doesn't work if second argument begins with /
 		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
 		
 		# Format
@@ -47,7 +47,7 @@ class Module(module.Module):
 	def configure(self):
 		""" Configures the previously formatted persistent filesystem. """
 		
-		path = "/linstaller/target" + self.settings["path"] # os.path.join doesn't work if second argument begins with /
+		path = self.main_settings["target"] + self.settings["path"] # os.path.join doesn't work if second argument begins with /
 		image = os.path.join(path, "persistence-%s" % (self.settings["suffix"]))
 		
 		# Mount

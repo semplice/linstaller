@@ -11,14 +11,14 @@ class Module(module.Module):
 	def start(self):
 		""" Start override to unsquash. """
 
-		self.unsquash = lib.Unsquash(self.settings["image"])
+		self.unsquash = lib.Unsquash(self.settings["image"], target=self.main_settings["target"])
 
 		module.Module.start(self)
 	
 	def revert(self):
 		""" Revert mounts """
 		
-		self.unsquash = lib.Unsquash(self.settings["image"])
+		self.unsquash = lib.Unsquash(self.settings["image"], target=self.main_settings["target"])
 		
 		try:
 			self.unsquash.revert()

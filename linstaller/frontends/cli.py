@@ -58,7 +58,10 @@ class Frontend(linstaller.core.frontend.Frontend):
 		""" Displays the installer's header (new page) """
 		
 		# First, running "clear"
-		os.system("clear")
+		if not self.frontend_settings["follow"]:
+			os.system("clear")
+		else:
+			sys.stdout.write("\n")
 		
 		# Second, write the header
 		print(_pass)
@@ -203,4 +206,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 		
 		return actions[result]
 
-			
+	def seedpre(self):
+		""" Seed settings. """
+		
+		self.cache("follow")

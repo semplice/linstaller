@@ -68,3 +68,4 @@ class Module(module.Module):
 		""" Caches variables used by this module. """
 		
 		self.cache("packages", "linstaller linstaller-modules-base linstaller-frontend-cli")
+		self.cache("disable")

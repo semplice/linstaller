@@ -29,29 +29,17 @@ class Module(module.Module):
 		root = settings["root"]
 		
 		# Ensure that is unmounted
-		if os.path.ismount("/linstaller/target"):
+		if os.path.ismount(self.main_settings["target"]):
 			# Target mounted. Unmount
-			lib.umount(path="/linstaller/target")
+			lib.umount(path=self.main_settings["target"])
 		if lib.is_mounted(root):
 			# Partition mounted. Unmount
 			lib.umount(path=root)
 		
 		# Then mount at TARGET
-		lib.mount_partition(path=root, target="/linstaller/target")
+		lib.mount_partition(path=root, target=self.main_settings["target"])
 
 		used = []
-
-
-		# Bind-mount /dev, /sys and /proc (if no_virtual_partitions is not True):
-		if not self.settings["no_virtual_partitions"]:
-			for point in ("/dev","/sys","/proc"):
-				fullpath = os.path.join("/linstaller/target",os.path.basename(point))
-				if lib.is_mounted(fullpath):
-					lib.umount(path=fullpath)
-				
-				# We can go?
-				lib.mount_partition(path=point, opts="bind", target=fullpath, check=False)
-				used.append(fullpath)
 		
 		# Mount every partition which has "useas" on it
 		# Get changed.
@@ -89,13 +77,18 @@ class Module(module.Module):
 				continue
 			
 			# Create mountpoint
-			mountpoint = "/linstaller/target" + useas # useas begins with a /, so os.path.join doesn't work
+			mountpoint = self.main_settings["target"] + useas # useas begins with a /, so os.path.join doesn't work
 			os.makedirs(mountpoint)
 			
 			# Mount key to mountpoint
 			if lib.is_mounted(key):
 				# Umount
 				lib.umount(path=key)
+			if useas == "/boot/efi":
+				# If this is going to be the /boot/efi partition
+				# we should make sure that it's going to have the
+				# proper partition type set to EFI System Partition
+				lib.prepareforEFI(lib.return_partition(key))
 			lib.mount_partition(path=key, target=mountpoint)
 			
 			# Ok, it is mounted. Now let's see if it is empty
@@ -130,13 +123,14 @@ class Module(module.Module):
 		""" Umounts TARGET. """
 		
 		# Ensure that is mounted
-		if not os.path.ismount("/linstaller/target"):
+		if not os.path.ismount(self.main_settings["target"]):
 			# Umounted. pass.
 			pass
 		
 		# See if "used" was... used :)
 		if "partdisks.inst" in self.modules_settings and "used" in self.modules_settings["partdisks.inst"]:
-			_used = self.modules_settings["partdisks.inst"]["used"].reverse()
+			_used = self.modules_settings["partdisks.inst"]["used"]
+			_used.reverse()
 			if _used:
 				for part in _used:
 					if lib.is_mounted(part):
@@ -147,12 +141,11 @@ class Module(module.Module):
 		
 		# Umount target, finally.
 		try:
-			lib.umount(path="/linstaller/target", tries=5)
+			lib.umount(path=self.main_settings["target"], tries=5)
 		except:
 			pass
 	
 	def seedpre(self):
 		""" Cache settings """
 		
-		self.cache("no_virtual_partitions")
 		self.cache("used")

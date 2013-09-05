@@ -10,5 +10,9 @@ class Module(module.Module):
 	def seedpre(self):
 		""" Caches variables used by this module. """
 		
+		self.cache("skip")
+		
 		self.cache("bootloader")
 		self.cache("device")
+		
+		self.cache("forcedevice")

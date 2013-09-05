@@ -5,7 +5,7 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 ####
-VERSION = "4.0.4"
+VERSION = "5.0.0"
 ####
 
 import os, sys, traceback
@@ -166,3 +166,10 @@ def handle_exception(function):
 		print("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
 		verbose("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
 		sys.exit(1)
+
+def enum(*sequential, **named):
+	
+	# Thanks to http://stackoverflow.com/a/1695250
+	
+    enums = dict(zip(sequential, range(len(sequential))), **named)
+    return type('Enum', (), enums)

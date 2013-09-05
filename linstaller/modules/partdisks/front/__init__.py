@@ -20,5 +20,9 @@ class Module(module.Module):
 		self.cache("onlyusb")
 		self.cache("is_echo", False)
 		
+		# Encryption
+		self.cache("cipher", "aes-xts-plain64")
+		self.cache("keysize", "512")
+		
 		# Internal
 		self.cache("changed")

@@ -48,13 +48,13 @@ def search_for_glade():
 data, symlinks = search_for_glade()
 data_files = [
 	("/usr/bin", ["linstaller_wrapper.sh", "linstaller_crash_wrapper.sh", "mount_nolive.sh"]),
-	("/etc/linstaller", ["config/semplice", "config/semplice.glade", "config/semplice-base", "config/semplice-nolive", "config/semplice-nolive.glade", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi"]),
+	("/etc/linstaller", ["config/semplice", "config/semplice.glade", "config/semplice-base", "config/semplice-nolive", "config/semplice-nolive.glade", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi", "config/semplice-fullscreen", "config/semplice-fullscreen.glade"]),
 	("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
 ]
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='4.0.4',
+      version='5.0.0',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
@@ -161,6 +161,12 @@ distrib = setup(name='linstaller',
       "linstaller.modules.bricks.front.glade",
       "linstaller.modules.bricks.inst",
       "linstaller.modules.bricks.inst.glade",
+      
+      "linstaller.modules.supportrepo",
+      "linstaller.modules.supportrepo.inst",
+      
+      "linstaller.modules.virtualpartitions",
+      "linstaller.modules.virtualpartitions.inst",
       
       "linstaller.modules.echo",
       "linstaller.modules.echo.bootloader",

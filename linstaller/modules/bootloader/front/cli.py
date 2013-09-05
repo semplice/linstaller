@@ -16,6 +16,9 @@ class Frontend(cli.Frontend):
 		
 		self.header(_("Bootloader"))
 
+		# Should we skip?
+		if self.settings["skip"]:
+			return
 						
 		print(_("The bootloader is that piece of software that lets you boot your %(distroname)s system.") % {"distroname":self.moduleclass.main_settings["distro"]})
 		print(_("Without the bootloader, you can't boot %(distroname)s.") % {"distroname":self.moduleclass.main_settings["distro"]})
@@ -40,11 +43,14 @@ class Frontend(cli.Frontend):
 			print(_("If you choose 'No', it will be installed on your root partition.") + "\n")
 			
 			result = self.question(_("Do you want to install the bootloader into the MBR?"), default=True)
-			if result:
+			if result and not self.settings["forcedevice"]:
 				# Yay
 				self.settings["device"] = "mbr"
-			else:
+			elif not self.settings["forcedevice"]:
 				# Root
 				self.settings["device"] = "root"
+			else:
+				# Forced
+				self.settings["device"] = self.settings["forcedevice"]
 		
 		verbose("Bootloader %s will be installed in %s" % (self.settings["bootloader"], self.settings["device"]))
