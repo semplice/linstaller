@@ -1,3 +1,10 @@
+linstaller (5.0.1-1) unstable; urgency=low
+
+  * Fix for systems without VirtualGroups.
+  * bricks/inst: finally fixed full-removal of features.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 05 Sep 2013 23:05:01 +0200
+
 linstaller (5.0.0-1) unstable; urgency=low
 
   * Fixed full removal of features introduced in 2a95e429b15a7d760e8dda9a5a09778ced89c14d.
