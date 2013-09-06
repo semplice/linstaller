@@ -1,3 +1,11 @@
+linstaller (5.0.2-1) unstable; urgency=low
+
+  * modules/partdisks: library/lvm: added LogicalVolume.{enable,disable)(),
+    ensure we enable/disable every LV accordingly when enabling/disabling VGs.
+  * modules/partdisks: front/glade: various fixes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 06 Sep 2013 20:40:39 +0200
+
 linstaller (5.0.1-1) unstable; urgency=low
 
   * Fix for systems without VirtualGroups.
