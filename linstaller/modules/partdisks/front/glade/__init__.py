@@ -1341,6 +1341,13 @@ class Frontend(glade.Frontend):
 			
 			path = LVMcontainer.path
 			
+			# If we are editing, we are for sure talking about something
+			# that exists, but for some strange reason if we have just
+			# unlocked an encrypted PV of this VolumeGroup we get non-existant
+			# object. This workaround solves that.
+			if not LVMcontainer.infos["exists"]:
+				LVMcontainer.reload_infos()
+						
 			# Show the lv_frame
 			self.lv_frame.show()
 
@@ -2564,7 +2571,7 @@ class Frontend(glade.Frontend):
 		for child in self.harddisk_container.get_children():
 			self.idle_add(child.destroy)
 
-		# First loop create the lvm frames
+		# First loop creates the lvm frames
 		for name, obj in lvm.VolumeGroups.items():
 			
 			if not obj.infos["exists"]: continue
@@ -2633,7 +2640,16 @@ class Frontend(glade.Frontend):
 		if device.path:
 			# Unlocked, lock
 			try:
+				# See if there are VGs to shut down...
+				for vg, pvs in lvm.return_vg_with_pvs().items():
+					for pv in pvs:
+						if pv["volume"].pv == device.path:
+							# Yeah
+							lvm.VolumeGroups[vg].disable()
+							break
+				
 				device.close()
+				self.set_header("info", _("Manual partitioning"), _("Powerful tools for powerful pepole."), appicon="drive-harddisk")
 			except CmdError:
 				# Failed :(
 				self.set_header("error", _("Unable to lock the volume."), _("Please ensure that the volume is not used by another application."))

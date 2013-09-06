@@ -211,12 +211,26 @@ class VolumeGroup:
 		
 		if not os.path.exists(self.path):
 			m.sexec("vgchange -a y %s" % self.name)
+			
+			# Enable every LV...
+			for lv in self.logicalvolumes:
+				lv.enable()
+				#lv.reload_infos()
+			
+			#self.reload_infos()
 
 	def disable(self):
 		""" Disables the VolumeGroup. """
 		
 		if os.path.exists(self.path):
 			m.sexec("vgchange -a n %s" % self.name)
+
+			# Disable every LV...
+			for lv in self.logicalvolumes:
+				lv.disable()
+				#lv.reload_infos()
+			
+			#self.reload_infos()
 
 	@property
 	def path(self):
@@ -369,6 +383,18 @@ class LogicalVolume:
 		
 		m.sexec("lvresize --force --size %(size)s %(path)s" % {"size":size, "path":self.path})
 		self.reload_infos()
+
+	def enable(self):
+		""" Enables the LogicalVolume. """
+		
+		if not os.path.exists(self.path):
+			m.sexec("lvchange -a y %s" % self.name)
+
+	def disable(self):
+		""" Disables the LogicalVolume. """
+		
+		if os.path.exists(self.path):
+			m.sexec("lvchange -a n %s" % self.name)
 		
 	@property
 	def path(self):
