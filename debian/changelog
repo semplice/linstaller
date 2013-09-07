@@ -1,3 +1,10 @@
+linstaller (5.0.3-1) unstable; urgency=low
+
+  * modules/partdisks: front/glade: ensure we properly disable eventual
+    LUKS devices if we are touching parent hard drive.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 07 Sep 2013 14:01:30 +0200
+
 linstaller (5.0.2-1) unstable; urgency=low
 
   * modules/partdisks: library/lvm: added LogicalVolume.{enable,disable)(),
