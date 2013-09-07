@@ -140,6 +140,23 @@ class Apply(glade.Progress):
 			#	self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
 			#
 			#	return False
+			
+			# If the volume to change contains an encrypted volume, we want to lock it...
+			try:
+				for path in crypt.LUKSdevices:	
+					if obj.path in path and crypt.LUKSdevices[path].path:
+						# See if there are VGs to shut down...
+						for vg, pvs in lvm.return_vg_with_pvs().items():
+							for pv in pvs:
+								if pv["volume"].pv == crypt.LUKSdevices[path].path:
+									# Yeah
+									lvm.VolumeGroups[vg].disable()
+									break
+						
+						crypt.LUKSdevices[path].close()
+			except:
+				pass
+			
 			try:
 				res = lib.commit(obj, self.parent.touched)
 				if res == False:
