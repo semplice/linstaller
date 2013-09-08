@@ -2504,7 +2504,7 @@ class Frontend(glade.Frontend):
 				if not self.changed[path]["obj"]: self.changed[path]["obj"] = part
 
 				name = []
-				if path in self.distribs:
+				if path in self.distribs and not path in self.previously_changed and not self.changed[path]["changes"] != {}:
 					name.append(self.distribs[path])
 				if (path in crypt.LUKSdevices or "crypt" in self.changed[path]["changes"]) and not "format" in self.changed[path]["changes"] and not ("PVcreate" in self.changed[path]["changes"] and not "crypt" in self.changed[path]["changes"]):
 					name.append("Encrypted partition")
