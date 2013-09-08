@@ -141,22 +141,6 @@ class Apply(glade.Progress):
 			#
 			#	return False
 			
-			# If the volume to change contains an encrypted volume, we want to lock it...
-			try:
-				for path in crypt.LUKSdevices:	
-					if obj.path in path and crypt.LUKSdevices[path].path:
-						# See if there are VGs to shut down...
-						for vg, pvs in lvm.return_vg_with_pvs().items():
-							for pv in pvs:
-								if pv["volume"].pv == crypt.LUKSdevices[path].path:
-									# Yeah
-									lvm.VolumeGroups[vg].disable()
-									break
-						
-						crypt.LUKSdevices[path].close()
-			except:
-				pass
-			
 			try:
 				res = lib.commit(obj, self.parent.touched)
 				if res == False:
@@ -1986,7 +1970,23 @@ class Frontend(glade.Frontend):
 					if parts == part.path:
 						del self.mountpoints_added[mpoint]
 						break
-				
+
+				# Ensure we lock here eventual devices otherwise bad things will happen...
+				refreshlvm = False
+				if part.path in crypt.LUKSdevices:
+					# See if there are VGs to shut down...
+					for vg, pvs in lvm.return_vg_with_pvs().items():
+						if not vg: continue
+						for pv in pvs:
+							if pv["volume"].pv == crypt.LUKSdevices[part.path].path:
+								# Yeah
+								lvm.VolumeGroups[vg].disable()
+								break
+							
+					crypt.LUKSdevices[part.path].close()
+					refreshlvm = True			
+
+				if refreshlvm: lvm.refresh()
 				self.manual_populate()
 		
 		# Restore sensitivity
@@ -2031,6 +2031,7 @@ class Frontend(glade.Frontend):
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes
 				val = lib.return_device(self.current_selected["value"])
+				refreshlvm = False
 				for dev, content in self.changed.items():
 					if not dev == val and dev.startswith(val):
 						del self.changed[dev]
@@ -2042,7 +2043,23 @@ class Frontend(glade.Frontend):
 							if parts == dev:
 								del self.mountpoints_added[mpoint]
 								break
+						
+						# Ensure we lock here eventual devices otherwise bad things will happen...
+						if dev in crypt.LUKSdevices:
+							# See if there are VGs to shut down...
+							for vg, pvs in lvm.return_vg_with_pvs().items():
+								if not vg: continue
+								for pv in pvs:
+									if pv["volume"].pv == crypt.LUKSdevices[dev].path:
+										# Yeah
+										lvm.VolumeGroups[vg].disable()
+										break
+							
+							crypt.LUKSdevices[dev].close()
+							refreshlvm = True
+							
 
+				if refreshlvm: lvm.refresh()
 				self.manual_populate()
 		
 		# Restore sensitivity
@@ -2659,6 +2676,7 @@ class Frontend(glade.Frontend):
 			try:
 				# See if there are VGs to shut down...
 				for vg, pvs in lvm.return_vg_with_pvs().items():
+					if not vg: continue
 					for pv in pvs:
 						if pv["volume"].pv == device.path:
 							# Yeah
