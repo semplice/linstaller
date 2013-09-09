@@ -62,7 +62,7 @@ class Module(module.Module):
 			changeslist[value["changes"]["useas"]] = key
 		
 		mountpo.sort()
-
+		
 		for point in mountpo:
 			# Get correct partition
 			key = changeslist[point]
@@ -75,10 +75,10 @@ class Module(module.Module):
 			if useas in ("/","swap"):
 				# Root or swap, do not use it
 				continue
-			
+						
 			# Create mountpoint
 			mountpoint = self.main_settings["target"] + useas # useas begins with a /, so os.path.join doesn't work
-			os.makedirs(mountpoint)
+			if not os.path.exists(mountpoint): os.makedirs(mountpoint)
 			
 			# Mount key to mountpoint
 			if lib.is_mounted(key):
@@ -90,7 +90,7 @@ class Module(module.Module):
 				# proper partition type set to EFI System Partition
 				lib.prepareforEFI(lib.return_partition(key))
 			lib.mount_partition(path=key, target=mountpoint)
-			
+						
 			# Ok, it is mounted. Now let's see if it is empty
 			count = len(os.listdir(mountpoint))
 			drop = False
@@ -104,7 +104,7 @@ class Module(module.Module):
 				drop = True
 			
 			# If we mount_on_install, simply set drop to False, as we should use it anyway
-			if "mount_on_install" in value["changes"] and value["changes"]["mount_on_install"]:
+			if ("mount_on_install" in value["changes"] and value["changes"]["mount_on_install"]) or useas in ("/boot","/boot/efi"):
 				drop = False
 			
 			if drop:
