@@ -1,3 +1,11 @@
+linstaller (5.0.5-1) unstable; urgency=low
+
+  * modules/partdisks: inst: do not crash if mountpoint already exists.
+  * modules/partdisks: inst: ensure we don't unmount /boot and /boot/efi
+    (so there is a forced mount_on_install)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 09 Sep 2013 11:20:22 +0200
+
 linstaller (5.0.4-1) unstable; urgency=low
 
   * modules/partdisks: ensure we disable relevant LUKS devices *directly*
