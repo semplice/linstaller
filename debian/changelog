@@ -1,3 +1,9 @@
+linstaller (5.0.6-1) unstable; urgency=low
+
+  * New effort 'Let's fix this shit'
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Sep 2013 14:43:32 +0200
+
 linstaller (5.0.5-1) unstable; urgency=low
 
   * modules/partdisks: inst: do not crash if mountpoint already exists.
