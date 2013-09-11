@@ -1,3 +1,10 @@
+linstaller (5.0.7-1) unstable; urgency=low
+
+  * modules/partdisks: simplified the mount_on_install code a bit
+    (including partdisks.inst)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 11 Sep 2013 18:53:08 +0200
+
 linstaller (5.0.6-1) unstable; urgency=low
 
   * New effort 'Let's fix this shit'
