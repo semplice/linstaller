@@ -1301,6 +1301,9 @@ class Frontend(glade.Frontend):
 		
 		# mount_on_install unsensitive
 		self.idle_add(self.mount_on_install.set_sensitive, False)
+		self.mount_on_install_prepare = True
+		self.mount_on_install.set_active(True)
+		self.mount_on_install_prepare = False
 		self.idle_add(self.crypting_password_alignment.hide)
 		
 		# Clear mountpoint
