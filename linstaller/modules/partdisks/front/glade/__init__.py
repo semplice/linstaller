@@ -1808,9 +1808,10 @@ class Frontend(glade.Frontend):
 			# Make the combobox sensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, True)
 			
-			# mount_on_install unsensitive and disabled
-			self.idle_add(self.mount_on_install.set_sensitive, False)
-			self.mount_on_install.set_active(False)
+			# mount_on_install active
+			self.mount_on_install_prepare = True
+			self.mount_on_install.set_active(True)
+			self.mount_on_install_prepare = False
 			
 		else:
 			# Make it unsensitive
