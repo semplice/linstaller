@@ -793,6 +793,27 @@ class Frontend(glade.Frontend):
 		self.previously_changed = []
 		self.mountpoints_added = {}
 		
+		# If we are clearing a disk, we should ensure that eventual LVM
+		# and LUKS partitions are disabled...
+		refreshlvm = False
+		if self.automatic_buttons_reverse[obj].startswith("clear"):
+			for _dev in lib.disk_partitions(dis):
+				_dev = _dev.path
+				if _dev in crypt.LUKSdevices:
+					# See if there are VGs to shut down...
+					for vg, pvs in lvm.return_vg_with_pvs().items():
+						if not vg: continue
+						for pv in pvs:
+							if pv["volume"].pv == crypt.LUKSdevices[_dev].path:
+								# Yeah
+								lvm.VolumeGroups[vg].disable()
+								break
+								
+					crypt.LUKSdevices[_dev].close()
+					refreshlvm = True
+				
+			if refreshlvm: lvm.refresh()
+		
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
 		self.change_mountpoint(partpath, "/")
@@ -827,7 +848,7 @@ class Frontend(glade.Frontend):
 			efipath = res["result"]["efi"].path
 			self.changed[efipath] = {"changes": {}, "obj":res["result"]["efi"]}
 			self.change_mountpoint(efipath, "/boot/efi")
-			self.queue_for_format(efipath, "fat32")
+			self.queue_for_format(efipath, "fat16")
 			self.touched.append(efipath)
 			self.previously_changed.append(efipath)
 		
