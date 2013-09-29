@@ -1630,8 +1630,26 @@ class Frontend(glade.Frontend):
 					# the partition a LVM physical volume
 					targetfs = None
 
+				# We need to ugly-loop all part.disk's partitions to determine
+				# if we are going to be in an extended partition.
+				# This is really UGLY, but I didn't find a better way to
+				# do it.
+				isExtended = False
+				for partition in lib.disk_partitions(part.disk):
+					if partition.type & lib.p.PARTITION_EXTENDED:
+						# Found one! See if the freespace partition's
+						# start sector is here.
+						if partition.geometry.containsSector(part.geometry.start):
+							# Yeah! We are extended!
+							isExtended = True
+							break
+				
+				if isExtended:
+					partitionType = lib.p.PARTITION_LOGICAL
+				else:
+					partitionType = lib.p.PARTITION_NORMAL
 				try:
-					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
+					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=partitionType, filesystem=targetfs)
 				except:
 					# Failed! Ouch!
 					self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
@@ -2535,7 +2553,7 @@ class Frontend(glade.Frontend):
 					name.append("Encrypted partition")
 				elif name and part.name:
 					name.append(part.name)
-				elif not path in self.distribs:
+				elif not path in self.distribs or path in self.previously_changed or self.changed[path]["changes"] != {}:
 					name.append("Normal partition")
 				else:
 					name.append("")
