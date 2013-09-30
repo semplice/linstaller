@@ -1400,7 +1400,7 @@ class Frontend(glade.Frontend):
 			
 			self.LVname = False
 			
-			self.size_adjustment.set_upper(lib.maxGrow(device))
+			self.size_adjustment.set_upper(round(lib.maxGrow(device), 3))
 		
 		self.current_length = round(device.getLength("MB"), 3)
 		
