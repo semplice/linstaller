@@ -299,11 +299,40 @@ def maxGrow(partition):
 
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """
+	
+	size -= 1
+	
+	# Get disk alignment
+	if obj.partitionAlignment:
+		disk_alignment = obj.partitionAlignment
+	else:
+		disk_alignment = p.Alignment(offset=0, grainSize=1)
+
+	# Get the right alignment
+	if obj.device.optimumAlignment:
+		alignment = obj.device.optimumAlignment
+	elif obj.device.minimumAlignment:
+		alignment = obj.device.minimumAlignment
+	
+	try:
+		alignment = alignment.intersect(disk_alignment)
+	except (ArithmeticError, AttributeError):
+		alignment = disk_alignment
 
 	# Create Geometry and Constraint
 	cons = p.Constraint(device=obj.device)
-	geom = p.Geometry(device=obj.device, start=start+2048, length=size-2048)
-	
+	geom = p.Geometry(device=obj.device, start=start, length=size)
+
+	# Align
+	if not alignment.isAligned(geom, start):
+		start = alignment.alignNearest(geom, start)
+	# Align end
+	if not alignment.isAligned(geom, size):
+		size = alignment.alignNearest(geom, size)
+		
+	# Regenerate geometry (FIXME? Could we do this only one time?)
+	geom = p.Geometry(device=obj.device, start=start, length=size)
+
 	if filesystem:
 		filesystem = p.FileSystem(type=filesystem, geometry=geom)
 	else:
