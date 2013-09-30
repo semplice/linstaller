@@ -1012,6 +1012,14 @@ class Frontend(glade.Frontend):
 			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(True)
 			self.delete_button.set_sensitive(False)
+		elif description == "wholedriveLVM":
+			# whole-drive LVM PV. We can't do much here. Make everything unsensitive.
+			self.add_button.set_sensitive(False)
+			self.remove_button.set_sensitive(False)
+			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
+			self.newtable_button.set_sensitive(False)
+			self.delete_button.set_sensitive(False)
 		elif description == "empty":
 			# empty, we need to make unsensitive everything but the "Add partition button"
 			self.add_button.set_sensitive(True)
@@ -1055,7 +1063,7 @@ class Frontend(glade.Frontend):
 			else:
 				is_encrypted = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
-			if not description == "notable":
+			if not description in ("notable","wholedriveLVM"):
 				if "-" in self.current_selected["value"]:
 					self.add_button.set_sensitive(True)
 					self.remove_button.set_sensitive(False)
@@ -2517,9 +2525,16 @@ class Frontend(glade.Frontend):
 		if disk == "notable":
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Informations"), Gtk.CellRendererText(), text=1, cell_background=2))
 			
-			# Need to add an item to say: this drive hasn't got a proper table yet!
-			container["notable"] = container["model"].append((device.path, _("No partition table yet!")))
-			container["description"] = "notable" # description.
+			# Check if it's really notable or it's a whole-drive LVM PV...
+			if device.path in lvm.PhysicalVolumes:
+				# Yeah!
+				# Add things accordingly
+				container["wholedriveLVM"] = container["model"].append((device.path, _("LVM Physical Volume")))
+				container["description"] = "wholedriveLVM"
+			else:
+				# Need to add an item to say: this drive hasn't got a proper table yet!
+				container["notable"] = container["model"].append((device.path, _("No partition table yet!")))
+				container["description"] = "notable" # description.
 		elif len(partitions) > 0:
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Partition"), Gtk.CellRendererText(), text=0, cell_background=6))
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Type"), Gtk.CellRendererText(), text=1, cell_background=6))
