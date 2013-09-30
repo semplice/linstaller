@@ -2,7 +2,7 @@
 
 [linstaller]
 distribution = Semplice
-modules = uefidetect.inst welcome.front language.front update.front timezone.front userhost.front partdisks.front bootloader.front bricks.front mirrorselect.front summary.front partdisks.inst unsquash.inst virtualpartitions.inst language.inst timezone.inst network.inst mirrorselect.inst supportrepo.inst bootloader.inst bricks.inst userhost.inst debian.inst semplice.inst clean.inst fstab.inst end.front
+modules = uefidetect.inst welcome.front language.front update.front timezone.front userhost.front partdisks.front bootloader.front bricks.front mirrorselect.front summary.front partdisks.inst unsquash.inst virtualpartitions.inst language.inst timezone.inst network.inst supportrepo.inst bootloader.inst bricks.inst userhost.inst debian.inst semplice.inst mirrorselect.inst clean.inst fstab.inst end.front
 special = partdisks.inst unsquash.inst virtualpartitions.inst supportrepo.inst
 
 [module:language]
