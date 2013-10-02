@@ -793,6 +793,27 @@ class Frontend(glade.Frontend):
 		self.previously_changed = []
 		self.mountpoints_added = {}
 		
+		# If we are clearing a disk, we should ensure that eventual LVM
+		# and LUKS partitions are disabled...
+		refreshlvm = False
+		if self.automatic_buttons_reverse[obj].startswith("clear"):
+			for _dev in lib.disk_partitions(dis):
+				_dev = _dev.path
+				if _dev in crypt.LUKSdevices:
+					# See if there are VGs to shut down...
+					for vg, pvs in lvm.return_vg_with_pvs().items():
+						if not vg: continue
+						for pv in pvs:
+							if pv["volume"].pv == crypt.LUKSdevices[_dev].path:
+								# Yeah
+								lvm.VolumeGroups[vg].disable()
+								break
+								
+					crypt.LUKSdevices[_dev].close()
+					refreshlvm = True
+				
+			if refreshlvm: lvm.refresh()
+		
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
 		self.change_mountpoint(partpath, "/")
@@ -827,7 +848,7 @@ class Frontend(glade.Frontend):
 			efipath = res["result"]["efi"].path
 			self.changed[efipath] = {"changes": {}, "obj":res["result"]["efi"]}
 			self.change_mountpoint(efipath, "/boot/efi")
-			self.queue_for_format(efipath, "fat32")
+			self.queue_for_format(efipath, "fat16")
 			self.touched.append(efipath)
 			self.previously_changed.append(efipath)
 		
@@ -991,6 +1012,14 @@ class Frontend(glade.Frontend):
 			self.lock_button.set_sensitive(False)
 			self.newtable_button.set_sensitive(True)
 			self.delete_button.set_sensitive(False)
+		elif description == "wholedriveLVM":
+			# whole-drive LVM PV. We can't do much here. Make everything unsensitive.
+			self.add_button.set_sensitive(False)
+			self.remove_button.set_sensitive(False)
+			self.edit_button.set_sensitive(False)
+			self.lock_button.set_sensitive(False)
+			self.newtable_button.set_sensitive(False)
+			self.delete_button.set_sensitive(False)
 		elif description == "empty":
 			# empty, we need to make unsensitive everything but the "Add partition button"
 			self.add_button.set_sensitive(True)
@@ -1034,7 +1063,7 @@ class Frontend(glade.Frontend):
 			else:
 				is_encrypted = False
 			# We need to see if the selected partition is a freespace partition (can add, can't remove). Enable/Disable buttons accordingly
-			if not description == "notable":
+			if not description in ("notable","wholedriveLVM"):
 				if "-" in self.current_selected["value"]:
 					self.add_button.set_sensitive(True)
 					self.remove_button.set_sensitive(False)
@@ -1371,7 +1400,7 @@ class Frontend(glade.Frontend):
 			
 			self.LVname = False
 			
-			self.size_adjustment.set_upper(lib.maxGrow(device))
+			self.size_adjustment.set_upper(round(lib.maxGrow(device), 3))
 		
 		self.current_length = round(device.getLength("MB"), 3)
 		
@@ -1609,8 +1638,26 @@ class Frontend(glade.Frontend):
 					# the partition a LVM physical volume
 					targetfs = None
 
+				# We need to ugly-loop all part.disk's partitions to determine
+				# if we are going to be in an extended partition.
+				# This is really UGLY, but I didn't find a better way to
+				# do it.
+				isExtended = False
+				for partition in lib.disk_partitions(part.disk):
+					if partition.type & lib.p.PARTITION_EXTENDED:
+						# Found one! See if the freespace partition's
+						# start sector is here.
+						if partition.geometry.containsSector(part.geometry.start):
+							# Yeah! We are extended!
+							isExtended = True
+							break
+				
+				if isExtended:
+					partitionType = lib.p.PARTITION_LOGICAL
+				else:
+					partitionType = lib.p.PARTITION_NORMAL
 				try:
-					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=lib.p.PARTITION_NORMAL, filesystem=targetfs)
+					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=partitionType, filesystem=targetfs)
 				except:
 					# Failed! Ouch!
 					self.set_header("error", _("Unable to add partition."), _("You shouldn't get here."))
@@ -1808,9 +1855,10 @@ class Frontend(glade.Frontend):
 			# Make the combobox sensitive
 			self.idle_add(self.filesystem_combo.set_sensitive, True)
 			
-			# mount_on_install unsensitive and disabled
-			self.idle_add(self.mount_on_install.set_sensitive, False)
-			self.mount_on_install.set_active(False)
+			# mount_on_install active
+			self.mount_on_install_prepare = True
+			self.mount_on_install.set_active(True)
+			self.mount_on_install_prepare = False
 			
 		else:
 			# Make it unsensitive
@@ -2477,9 +2525,16 @@ class Frontend(glade.Frontend):
 		if disk == "notable":
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Informations"), Gtk.CellRendererText(), text=1, cell_background=2))
 			
-			# Need to add an item to say: this drive hasn't got a proper table yet!
-			container["notable"] = container["model"].append((device.path, _("No partition table yet!")))
-			container["description"] = "notable" # description.
+			# Check if it's really notable or it's a whole-drive LVM PV...
+			if device.path in lvm.PhysicalVolumes:
+				# Yeah!
+				# Add things accordingly
+				container["wholedriveLVM"] = container["model"].append((device.path, _("LVM Physical Volume")))
+				container["description"] = "wholedriveLVM"
+			else:
+				# Need to add an item to say: this drive hasn't got a proper table yet!
+				container["notable"] = container["model"].append((device.path, _("No partition table yet!")))
+				container["description"] = "notable" # description.
 		elif len(partitions) > 0:
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Partition"), Gtk.CellRendererText(), text=0, cell_background=6))
 			container["treeview"].append_column(Gtk.TreeViewColumn(_("Type"), Gtk.CellRendererText(), text=1, cell_background=6))
@@ -2513,7 +2568,7 @@ class Frontend(glade.Frontend):
 					name.append("Encrypted partition")
 				elif name and part.name:
 					name.append(part.name)
-				elif not path in self.distribs:
+				elif not path in self.distribs or path in self.previously_changed or self.changed[path]["changes"] != {}:
 					name.append("Normal partition")
 				else:
 					name.append("")
