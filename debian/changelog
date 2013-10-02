@@ -1,3 +1,21 @@
+linstaller (5.0.8-1) unstable; urgency=low
+
+  * partdisks: front/glade: ensure mount_on_install is active when formatting
+  * modules/partdisks: front/glade: ensure we disable eventual encrypted
+    devices when in automatic.
+    Also, as the automatic EFI partition is ~40 MB, ensure we use
+    fat16 instead of fat32.
+  * Properly declare partitions as LOGICAL if we are going to create in
+    an extended partition.
+  * Handle whole-drive LVM Physical Volumes.
+  * partdisks/library: properly align new partitions.
+  * config/semplice-base: ensure we execute mirrorselect.inst AFTER
+    other modules which work with packages.
+  * partdisks: ensure we properly round the maximum value of the
+    size_adjustment when preparing the partition window for editing
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 02 Oct 2013 22:19:31 +0200
+
 linstaller (5.0.7-1) unstable; urgency=low
 
   * modules/partdisks: simplified the mount_on_install code a bit
