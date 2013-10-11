@@ -96,7 +96,14 @@ class Apply(glade.Progress):
 				
 		for key in lst:
 			try:
-				obj = dct[key]["obj"]
+				# The following is a pseudo-workaround to ensure we
+				# work on the same disk object the user has modified.
+				# Note to self: implement a proper object pool in the
+				# next partdisks rewrite.
+				if "disk" in dct[key]:
+					obj = dct[key]["disk"]
+				else:
+					obj = dct[key]["obj"]
 				cng = dct[key]["changes"]
 				if "LVMcontainer" in dct[key]:
 					LVMcontainer = dct[key]["LVMcontainer"]
@@ -1090,8 +1097,8 @@ class Frontend(glade.Frontend):
 
 		# If there is an existing object in changed, we want to return that
 		# instead of getting a new one
-		if self.current_selected["value"].replace("/dev/","") in self.changed and self.changed[self.current_selected["value"].replace("/dev/","")]["obj"]:
-			return self.changed[self.current_selected["value"].replace("/dev/","")]["obj"]
+		if lib.return_device(self.current_selected["value"]) in self.changed and self.changed[lib.return_device(self.current_selected["value"])]["obj"]:
+			return self.changed[lib.return_device(self.current_selected["value"])]["obj"]
 
 		return self.devices[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 
@@ -1102,6 +1109,11 @@ class Frontend(glade.Frontend):
 		path = self.current_selected["value"].replace("/dev/","").split("/")[0]
 		if path in lvm.VolumeGroups:
 			return lvm.VolumeGroups[path]
+
+		# If there is an existing object in changed, we want to return that
+		# instead of getting a new one
+		if lib.return_device(self.current_selected["value"]) in self.changed and self.changed[lib.return_device(self.current_selected["value"])]["disk"]:
+			return self.changed[lib.return_device(self.current_selected["value"])]["disk"]
 
 		return self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 	
@@ -2485,7 +2497,7 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "changes":{}}
+		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "disk":disk, "changes":{}}
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()

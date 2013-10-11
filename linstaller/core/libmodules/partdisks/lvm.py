@@ -10,7 +10,7 @@ import os
 
 import parted as pa
 
-from linstaller.core.libmodules.partdisks.library import ResizeAction
+from linstaller.core.libmodules.partdisks.library import ResizeAction, is_mounted, umount
 
 #import lvm as lvm_library
 #lvm = lvm_library.Liblvm() # Needed to get it to work on non-GIT version of pylvm2.
@@ -223,12 +223,13 @@ class VolumeGroup:
 		""" Disables the VolumeGroup. """
 		
 		if os.path.exists(self.path):
-			m.sexec("vgchange -a n %s" % self.name)
 
 			# Disable every LV...
 			for lv in self.logicalvolumes:
 				lv.disable()
 				#lv.reload_infos()
+
+			m.sexec("vgchange -a n %s" % self.name)
 			
 			#self.reload_infos()
 
@@ -388,19 +389,29 @@ class LogicalVolume:
 		""" Enables the LogicalVolume. """
 		
 		if not os.path.exists(self.path):
-			m.sexec("lvchange -a y %s" % self.name)
+			m.sexec("lvchange -a y %s" % self.path)
 
 	def disable(self):
 		""" Disables the LogicalVolume. """
 		
 		if os.path.exists(self.path):
-			m.sexec("lvchange -a n %s" % self.name)
+			
+			# Ensure it is umounted...
+			if is_mounted(self.mapper_path): umount(path=self.mapper_path)
+			
+			m.sexec("lvchange -a n %s" % self.path)
 		
 	@property
 	def path(self):
 		"""Returns the path of the Logical Volume."""
 		
 		return os.path.join("/dev", self.vgroup.name, self.name)
+	
+	@property
+	def mapper_path(self):
+		"""Returns the mapper path of the Logical Volume."""
+		
+		return os.path.join("/dev/mapper", "%s-%s" % (self.vgroup.name, self.name))
 	
 	def getLength(self, unit="MB"):
 		"""Returns the size in the unit specified."""
