@@ -1,3 +1,11 @@
+linstaller (5.0.9-1) unstable; urgency=low
+
+  * partdisks: If the LUKS device is mounted, umount it before closing.
+  * partdisks: try to get the same disk, too. Also some bugfixes in the LVM LV/VG disable methods.
+  * bootloader: inst: fixed forced device installation.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 12 Oct 2013 22:42:19 +0200
+
 linstaller (5.0.8-1) unstable; urgency=low
 
   * partdisks: front/glade: ensure mount_on_install is active when formatting
