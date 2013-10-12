@@ -74,6 +74,13 @@ class LUKSdrive:
 	def close(self):
 		""" Closes the device. """
 		
+		# Bugfix
+		if not self.path: return
+		
+		# Ensure we have it unmounted...
+		if lib.is_mounted(self.path): lib.umount(path=self.path)
+		
+		# Then close...
 		m.sexec("cryptsetup luksClose %s" % self.path)
 	
 	def get_partition(self):
