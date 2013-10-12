@@ -16,3 +16,5 @@ class Module(module.Module):
 		self.cache("device")
 		
 		self.cache("forcedevice")
+
+		self.cache("should_hide_menu", True)

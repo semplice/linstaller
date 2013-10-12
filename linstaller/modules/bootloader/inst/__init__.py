@@ -9,6 +9,8 @@ import linstaller.core.main as m
 
 from linstaller.core.main import warn,info,verbose
 
+from linstaller.core.libmodules.partdisks.library import check_distributions
+
 import os, sys, fileinput
 import commands
 
@@ -99,21 +101,36 @@ class Install(module.Install):
 			
 		m.sexec("grub-install %(args)s '%(location)s'" % {"args":args,"location":location})
 		
+		should_hide_menu = self.moduleclass.modules_settings["bootloader"]["should_hide_menu"]
+		# Let's see if we can hide the GRUB menu...
+		if should_hide_menu:
+			distribs = check_distributions()
+			
+			if distribs:
+				# Found other system, disable should_hide_menu
+				should_hide_menu = False
+		
 		# Adjust config in order to enable hibernate...
 		if "partdisks" in self.moduleclass.modules_settings and "swap" in self.moduleclass.modules_settings["partdisks"]:
 			swap = self.moduleclass.modules_settings["partdisks"]["swap"]
 			#UUID = commands.getoutput("blkid -s UUID %s | awk '{ print $2 }' | cut -d \"=\" -f2 | sed -e 's/\"//g'" % (swap))
 			
 			# Edit grub config
-			if swap:
+			if swap or should_hide_menu:
 				for line in fileinput.input("/etc/default/grub",inplace=1):
 					# WARNING: Ugly-ness excess in this for
 					if line[0] != "#":
 						splitted = line.split("=")
-						if splitted[0] == "GRUB_CMDLINE_LINUX_DEFAULT":
+						if splitted[0] == "GRUB_CMDLINE_LINUX_DEFAULT" and swap:
 							sys.stdout.write("GRUB_CMDLINE_LINUX_DEFAULT=\"quiet resume=%s\"\n" % swap)
 							# FIXME: The above line overwrites the entire CMDLINE_DEFAULT. Also, 'swap' is used.
 							# We should decide if use it or its UUID.
+						elif splitted[0] == "GRUB_TIMEOUT" and should_hide_menu:
+							sys.stdout.write("# As there aren't other systems installed, the menu is disabled by default.")
+							sys.stdout.write("# Hold SHIFT during boot to open it.")
+							sys.stdout.write("GRUB_TIMEOUT=0 # Set to a value != 0 to show the menu.")
+							sys.stdout.write("GRUB_HIDDEN_TIMEOUT=2 # Comment this to show the menu.")
+							sys.stdout.write("GRUB_HIDDEN_TIMEOUT_QUIET=true # Comment this to show the menu.")
 						else:
 							sys.stdout.write(line)
 					else:
