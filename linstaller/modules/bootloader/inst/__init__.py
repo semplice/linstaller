@@ -85,7 +85,7 @@ class Install(module.Install):
 			args = "--no-floppy"
 		else:
 			# Forced
-			location = self.moduleclass.modules_settings["partdisks"]["device"]
+			location = self.moduleclass.modules_settings["bootloader"]["device"]
 			args = "--no-floppy"
 
 		if not "uefidetect.inst" in self.moduleclass.modules_settings or self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == False:
