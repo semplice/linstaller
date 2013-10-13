@@ -18,6 +18,11 @@ class Install(module.Install):
 			status, packages, allpackages = engine.status(feature)
 			dic = features[feature]			
 
+			# Get things to purge, if any
+			to_purge = ()
+			if "purge" in dic:
+				to_purge = dic["purge"]
+
 			if not choice:
 				# remove!
 				atleastone = True
@@ -37,7 +42,7 @@ class Install(module.Install):
 						pkgs.append(dep.name)
 				
 				
-				engine.remove(pkgs, auto=False)
+				engine.remove(pkgs, auto=False, purge=to_purge)
 		
 		# Commit
 		if atleastone:
