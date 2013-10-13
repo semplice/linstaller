@@ -1,3 +1,9 @@
+linstaller (5.0.10-1) unstable; urgency=low
+
+  * modules/bricks: inst: ensure we purge things here in linstaller, too.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 13 Oct 2013 13:59:29 +0200
+
 linstaller (5.0.9-1) unstable; urgency=low
 
   * partdisks: If the LUKS device is mounted, umount it before closing.
