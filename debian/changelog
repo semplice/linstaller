@@ -1,3 +1,12 @@
+linstaller (5.0.11-1) unstable; urgency=low
+
+  * partdisks: front: as we currently do not support LV renaming,
+    simply disable sensitiveness in Edit mode on the lv_name textbox.
+  * partdisks: library: handle EFI paths in check_distributions().
+  * partdisks: library: correctly handle LVM LVs in return_device().
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 17 Oct 2013 18:41:30 +0200
+
 linstaller (5.0.10-1) unstable; urgency=low
 
   * modules/bricks: inst: ensure we purge things here in linstaller, too.
