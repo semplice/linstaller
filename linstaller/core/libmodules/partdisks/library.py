@@ -144,6 +144,15 @@ def return_memory():
 def return_device(dev):
 	""" Returns a device from a partition (str) """
 	
+	# Remove trailing slash, if any
+	if dev[-1] == '/': dev = dev[:-1]
+	
+	# Handle LVM LVs
+	splitted = dev.split("/")
+	if len(splitted) > 3:
+		# LVM LV.
+		return "/".join(splitted[:-1])
+	
 	while dev[-1] in ("-","-1","1","2","3","4","5","6","7","8","9","0"):
 		dev = dev[:-1]
 	
