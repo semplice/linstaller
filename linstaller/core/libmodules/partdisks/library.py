@@ -755,8 +755,13 @@ def check_distributions(obj=False):
 			# We should limit results to the ones that are relevant in obj.device.path.
 			if not obj.path in line[0]:
 				continue # Not a partition on obj.device; skip.
+		
+		# Handle EFI paths
+		location = line[0]
+		if "@" in location:
+			location = location.split("@")[0]
 
-		distribs[line[0]] = line[1] # Add.
+		distribs[location] = line[1] # Add.
 	
 	#distribs = {"/dev/sdb1": "Inter Linux"}
 	
