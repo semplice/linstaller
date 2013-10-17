@@ -1290,6 +1290,7 @@ class Frontend(glade.Frontend):
 			
 			# Set the LV name
 			self.lv_name.set_text("")
+			self.lv_name.set_sensitive(True)
 			self.change_entry_status(self.lv_name, "hold")
 			self.size_manual_entry.grab_focus()
 			
@@ -1401,6 +1402,7 @@ class Frontend(glade.Frontend):
 
 			# Set the LV name
 			self.lv_name.set_text(LVMcontainer.name)
+			self.lv_name.set_sensitive(False)
 			self.size_manual_entry.grab_focus()
 
 			self.size_adjustment.set_upper(round(device.getLength("MB"), 3) + round(device.vgroup.infos["free"],3))
