@@ -1,3 +1,18 @@
+linstaller (5.20.0-1) devel; urgency=low
+
+  * Hello, devel!
+  * bootloader: inst: added GRUB menu hiding.
+    If :bootloader:should_hide_menu:True, the GRUB menu will not be shown during boot
+    if the distribution is the only operating system installed.
+    This resolves project-breathe's issue #6.
+  * Fixed that ugly lastres warning.
+  * modulehelper: switched to importlib.
+  * bootloader: custom init support.
+    Use :bootloader:custom_init:/path/to/init/replacement to let the module set CMDLINE_LINUX accordingly.
+  * debian/gbp.conf: restore devel-worthy things.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 02 Nov 2013 01:06:47 +0100
+
 linstaller (5.0.11-1) unstable; urgency=low
 
   * partdisks: front: as we currently do not support LV renaming,
