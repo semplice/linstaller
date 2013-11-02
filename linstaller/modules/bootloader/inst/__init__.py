@@ -134,11 +134,11 @@ class Install(module.Install):
 						sys.stdout.write("GRUB_CMDLINE_LINUX=\"init=%s\"\n" % custom_init)
 						# FIXME: The above line overwrites the entire CMDLINE_LINUX.
 					elif splitted[0] == "GRUB_TIMEOUT" and should_hide_menu:
-						sys.stdout.write("# As there aren't other systems installed, the menu is disabled by default.")
-						sys.stdout.write("# Hold SHIFT during boot to open it.")
-						sys.stdout.write("GRUB_TIMEOUT=0 # Set to a value != 0 to show the menu.")
-						sys.stdout.write("GRUB_HIDDEN_TIMEOUT=2 # Comment this to show the menu.")
-						sys.stdout.write("GRUB_HIDDEN_TIMEOUT_QUIET=true # Comment this to show the menu.")
+						sys.stdout.write("# As there aren't other systems installed, the menu is disabled by default.\n")
+						sys.stdout.write("# Hold SHIFT during boot to open it.\n")
+						sys.stdout.write("GRUB_TIMEOUT=0 # Set to a value != 0 to show the menu.\n")
+						sys.stdout.write("GRUB_HIDDEN_TIMEOUT=2 # Comment this to show the menu.\n")
+						sys.stdout.write("GRUB_HIDDEN_TIMEOUT_QUIET=true # Comment this to show the menu.\n")
 					else:
 						sys.stdout.write(line)
 				else:
