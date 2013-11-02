@@ -27,9 +27,12 @@ packages = linstaller linstaller-frontend-cli linstaller-frontend-glade linstall
 enable_sources = False
 sets = debian semplice changes
 
-# We support only grub currently
 [module:bootloader]
 bootloader = grub
+# Workaround to get systemd working, see
+# https://github.com/semplice/meta/commit/e5399d0523761eec3505da24add52cebc44f5452
+# for more details.
+custom_init = /lib/systemd/systemd
 
 [module:supportrepo]
 path = file:///lib/live/mount/medium/support

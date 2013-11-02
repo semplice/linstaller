@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 # linstaller main executable - (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
 # All rights reserved. Work released under the GNU GPL license, version 3 or later.
@@ -120,6 +120,8 @@ def loop_modules(startfrom=1):
 	
 	If startfrom is used, the loop will start at that specific module. (int)
 	"""
+	
+	global lastres
 
 	if startfrom < 1:
 		startfrom = 1
@@ -173,7 +175,6 @@ def loop_modules(startfrom=1):
 				
 				res = lastres
 			else:
-				global lastres
 				lastres = res
 			
 			if res in ("exit", "exit1", "kthxbye", "fullrestart"):

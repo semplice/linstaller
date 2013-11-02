@@ -4,13 +4,10 @@
 #
 # This is a module of linstaller, should not be executed as a standalone application.
 
+import importlib
+
 import linstaller.core.main as main
 from linstaller.core.main import info,warn,verbose
-
-def list():
-	""" Lists all available modules. Usage: core.modulehelper.list(). """
-	
-	pass
 
 class Module():
 	def __init__(self, modulename):
@@ -20,12 +17,9 @@ class Module():
 	
 	def load(self, main_settings, modules_settings, service_started, cfg):
 		verbose("\nLoading module %s..." % self.modulename)
-		# This http://stackoverflow.com/questions/951124/dynamic-loading-of-python-modules/951846#951846 is very helpful! Thanks!
+		
 		module = "linstaller.modules.%s" % self.modulename
-		self.module = __import__(module)
-		components = module.split(".")
-		for comp in components[1:]:
-			self.module = getattr(self.module, comp)
+		self.module = importlib.import_module(module)
 		
 		self.mloaded = self.module.Module(main_settings, modules_settings, service_started, cfg, module)
 		return self.mloaded

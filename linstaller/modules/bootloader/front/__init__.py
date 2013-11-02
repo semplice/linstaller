@@ -16,3 +16,7 @@ class Module(module.Module):
 		self.cache("device")
 		
 		self.cache("forcedevice")
+
+		# seeds used by bootloader.inst
+		self.cache("should_hide_menu", True)
+		self.cache("custom_init", None)
