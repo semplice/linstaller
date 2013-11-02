@@ -143,6 +143,11 @@ class Install(module.Install):
 						sys.stdout.write(line)
 				else:
 					sys.stdout.write(line)
+		
+		# FIXME: This isn't the best place to but the following here, is it?
+		# If /bin/systemd-machine-id-setup exists, generate /etc/machine-id
+		if os.path.exists("/bin/systemd-machine-id-setup"):
+			m.sexec("/bin/systemd-machine-id-setup")
 	
 	def grub_update(self):
 		""" Updates grub menu list """
