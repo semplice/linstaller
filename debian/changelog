@@ -1,3 +1,10 @@
+linstaller (5.20.1-1) devel; urgency=low
+
+  * bootloader: inst: I forgot the newlines :)
+  * bootloader: inst: ensure we create /etc/machine-id if systemd is installed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 03 Nov 2013 16:15:10 +0100
+
 linstaller (5.20.0-1) devel; urgency=low
 
   * Hello, devel!
