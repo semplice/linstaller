@@ -85,7 +85,7 @@ def launch_module(module, special):
 		# Now raise the original exception	
 		excp = sys.exc_info()
 		verbose("".join(traceback.format_exception(excp[0],excp[1],excp[2])))
-		print excp[0]
+		print(excp[0])
 		raise
 		
 	# Update modules_settings
@@ -253,27 +253,27 @@ for arg in sys.argv:
 		preseeds[__module][__option] = __value
 
 if not _action:
-	print _("You have to pass at least an action!")
+	print(_("You have to pass at least an action!"))
 	_action = "help"
 
 if _action == "help":
-	print _("SYNTAX: %s <options> [ACTION] <:seed:option:value>") % sys.argv[0]
+	print(_("SYNTAX: %s <options> [ACTION] <:seed:option:value>") % sys.argv[0])
 	print
-	print _("Recognized options:")
-	print _(" -c|--config		- Selects the configuration file to read")
-	print _(" -p|--configpath	- Selects the directory to look for configuration files")
-	print _(" -t|--target		- Selects the target directory (def: /linstaller/target)")
-	print _(" -f|--frontend		- Selects the frontend to use (def: cli)")
-	print _(" -m|--modules		- Overrides the modules to be executed")
-	print _(" -s|--services		- Overrides the services to be executed")
-	print _(" -r|--remove		- Removes the specified modules from the modules list")
+	print(_("Recognized options:"))
+	print(_(" -c|--config		- Selects the configuration file to read"))
+	print(_(" -p|--configpath	- Selects the directory to look for configuration files"))
+	print(_(" -t|--target		- Selects the target directory (def: /linstaller/target)"))
+	print(_(" -f|--frontend		- Selects the frontend to use (def: cli)"))
+	print(_(" -m|--modules		- Overrides the modules to be executed"))
+	print(_(" -s|--services		- Overrides the services to be executed"))
+	print(_(" -r|--remove		- Removes the specified modules from the modules list"))
 	print
-	print _("Recognized actions:")
-	print _(" help			- Displays this help message, then exits.")
-	print _(" start			- Starts the installer.")
+	print(_("Recognized actions:"))
+	print(_(" help			- Displays this help message, then exits."))
+	print(_(" start			- Starts the installer."))
 	print
-	print _("Preseeding:")
-	print _(""" linstaller supports preseeding. Seeds can be specified into the
+	print(_("Preseeding:"))
+	print(_(""" linstaller supports preseeding. Seeds can be specified into the
  configuration file of the distribution, or with the notation below:
  
  :module:option:value
@@ -283,7 +283,7 @@ if _action == "help":
  :userhost:root:True		- Enables root
  :language:ask:True		- Asks for language
  :partdisks:swap_noformat:True	- Does not format swap partition
-""")
+"""))
 
 	sys.exit(0)
 elif _action == "start":	

@@ -663,7 +663,7 @@ class Frontend(glade.Frontend):
 		# Create the button objects
 		if by == "freespace":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1000, 2), "drive":info["drive"]}))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1000, 2), "drive":str(info["drive"])}))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This installs the distribution on the free space on the drive."))
@@ -697,10 +697,10 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-remove", 6)
 		elif by == "clear":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (info["model"])))
-			
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (str(info["model"]))))
+						
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":info["drive"], "model":info["model"], "distro": self.moduleclass.main_settings["distro"]})
+			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":str(info["drive"]), "model":str(info["model"]), "distro": self.moduleclass.main_settings["distro"]})
 
 			container["text2"] = Gtk.Label()
 			if info["swapwarning"] == "exist":
@@ -714,7 +714,7 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-delete", 6)
 		elif by == "echo":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":info["path"], "model":info["model"]}))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":str(info["path"]), "model":str(info["model"])}))
 			
 			container["text"] = Gtk.Label()
 			if info["shouldformat"]:
@@ -729,10 +729,10 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_icon_name("drive-removable-media", 6)
 		elif by == "notable":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Initialize %s") % (info["model"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Initialize %s") % (str(info["model"]))))
 			
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This initializes the drive (<b>%s</b>) for usage by creating a partition table.") % info["drive"])
+			container["text"].set_markup(_("This initializes the drive (<b>%s</b>) for usage by creating a partition table.") % str(info["drive"]))
 			
 			container["text2"] = None
 			
@@ -2499,15 +2499,16 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed: self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed: print "EMBEH"
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
 		if on_lvm:
 			_model = _("LVM Volume Group")
 		else:
-			_model = device.model
-		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, _model, round(device.getLength(unit="GB"), 2)))
+			_model = str(device.model)
+		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (str(device.path), _model, round(device.getLength(unit="GB"), 2)))
 		container["frame"] = Gtk.Frame()
 		container["frame"].set_label_widget(container["frame_label"])
 		## Create the TreeView 
@@ -2566,7 +2567,7 @@ class Frontend(glade.Frontend):
 					
 					path = LVMcontainer.path
 				else:
-					path = part.path
+					path = str(part.path)
 
 					# Let's see if we can reuse objects in changed to avoid nasty bugs...
 					if not "-1" in path and path in self.changed and self.changed[path]["obj"]:

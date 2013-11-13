@@ -48,8 +48,9 @@ class Frontend(glade.Frontend):
 			final_text = []
 			
 			for obj, value in changed.items():
+				obj = str(obj)
 				try:
-					fs = value["obj"].fileSystem.type
+					fs = str(value["obj"].fileSystem.type)
 					mountpoint = value["changes"]["useas"]
 					
 					# If /, tell the user that the distribution will be installed here
