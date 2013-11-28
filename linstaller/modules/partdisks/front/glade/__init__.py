@@ -516,6 +516,8 @@ class Frontend(glade.Frontend):
 		self.on_steps_hold() # Disable now the next button.
 		
 		self.objects["main"].destroy() # We need to destroy the old container
+		
+		self.objects["parent"].show_spinner() # Show the spinner
 				
 		# Re-initialize builder, a complex module like this needs a virgin state everytime.
 		current = self.objects["parent"].pages.get_current_page()
@@ -530,7 +532,20 @@ class Frontend(glade.Frontend):
 		self.objects = self.objects["parent"].get_module_object("partdisks.front")
 		
 		self.idle_add(self.real_ready)
+	
+	def finish_ready(self, parent):
+		""" AWFUL hack to not get the spinner frozen when retrieving the distributions list. """
 		
+		# Cache distribs
+		parent.distribs = lib.check_distributions()
+		#self.distribs = {}
+
+		# If is_echo, we need to deploy the automatic page... automatically.
+		if parent.settings["is_echo"]:
+			parent.on_automatic_button_clicked(obj=None)
+
+		parent.objects["parent"].hide_spinner()
+	
 	def real_ready(self):
 
 		self.onlyusb = False
@@ -547,19 +562,13 @@ class Frontend(glade.Frontend):
 		# Get pages
 		self.main_page = self.objects["builder"].get_object("main_page")
 				
-		### SOME TIME-CONSUMING THINGS
-		if True:
-			# Cache distribs
-			self.distribs = lib.check_distributions()
-			#self.distribs = {}
+		# Get devices
+		self.devices, self.disks = lib.devices, lib.disks
 
-			self.devices, self.disks = lib.devices, lib.disks
-
-			if self.settings["onlyusb"]:
-				self.onlyusb = True # Keep track of onlyusb
-				# Only usb, we need to rebuild devices.
-				lib.restore_devices(onlyusb=True)
-		### END
+		if self.settings["onlyusb"]:
+			self.onlyusb = True # Keep track of onlyusb
+			# Only usb, we need to rebuild devices.
+			lib.restore_devices(onlyusb=True)	
 		
 		# Get buttons of the first page
 		self.automatic_button = self.objects["builder"].get_object("automatic_button")
@@ -573,9 +582,9 @@ class Frontend(glade.Frontend):
 		# Disable next button
 		self.on_steps_hold()
 		
-		# If is_echo, we need to deploy the automatic page... automatically.
-		if self.settings["is_echo"]:
-			self.on_automatic_button_clicked(obj=None)
+		# Finish
+		threading.Thread(target=self.finish_ready, args=(self,)).start()
+		
 	
 	def refresh(self):
 		""" Refreshes the devices and disks list. """
@@ -2826,7 +2835,7 @@ class Frontend(glade.Frontend):
 		
 		self.LVname = ""
 		self.VGname = ""
-		
+	
 		if clean:			
 			self.changed = {}
 			self.touched = []
@@ -3142,7 +3151,7 @@ class Frontend(glade.Frontend):
 		
 		# Switch to page 3
 		self.pages_notebook.set_current_page(3)
-		
+
 		self.manual_ready()
 
 	def on_back_button_click(self):
