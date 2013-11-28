@@ -158,18 +158,20 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(m.handle_exception, self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
-			GObject.idle_add(self.main.set_sensitive, True)
+			#GObject.idle_add(self.main.set_sensitive, True)
 			
 			GObject.idle_add(self.current_frontend.process)
+			self.hide_spinner()
+			#GObject.idle_add(self.header_eventbox.show)
 	
 	def build_pages(self, single=None, replacepage=None, onsuccess=None):
 		""" Searches for support glade files and adds them to the pages object.
 		
 		If single is a string, only the module matching that string will be builded.
 		If replacepage is an int, the single page will be positioned to the argument's value, removing the old page.
-		If onsuccess is True (and in single mode), the passed method will be called when the pages have been built.
+		If onsuccess is True (and in single mode), the supplied method will be called when the pages have been built.
 		
-		Note that the single mode does work ONLY on the passed module, other modules are not touched."""
+		Note that the single mode does work ONLY on the supplied module, other modules are not touched."""
 		
 		if not single:
 			self.modules_objects = {}
@@ -311,7 +313,7 @@ class Service(linstaller.core.service.Service):
 		self.progress_bar = self.builder.get_object("progress_bar")
 				
 		### PAGES
-		
+		self.pages_loading = self.builder.get_object("pages_loading")
 		self.pages = self.builder.get_object("pages")
 		
 		self.next_button = self.builder.get_object("next_button")
@@ -328,6 +330,7 @@ class Service(linstaller.core.service.Service):
 		self.build_pages()
 		self.pages_built = True
 		
+		GObject.idle_add(self.pages_loading.hide)
 		GObject.idle_add(self.main.show_all)
 
 		# Hide inst
@@ -429,6 +432,22 @@ class Service(linstaller.core.service.Service):
 		
 		self.exitw_show()
 
+	def show_spinner(self):
+		""" Shows the spinner. """
+		
+		GObject.idle_add(self.buttons_area.set_sensitive, False)
+		GObject.idle_add(self.header_eventbox.hide)
+		GObject.idle_add(self.pages.hide)
+		GObject.idle_add(self.pages_loading.show)
+	
+	def hide_spinner(self):
+		""" Reverts the changes done by show_spinner(). """
+
+		GObject.idle_add(self.buttons_area.set_sensitive, True)
+		GObject.idle_add(self.header_eventbox.show)
+		GObject.idle_add(self.pages.show)
+		GObject.idle_add(self.pages_loading.hide)
+
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
 
@@ -439,8 +458,10 @@ class Service(linstaller.core.service.Service):
 		self.current_frontend.on_module_change()
 		
 		# Make sure everything is not sensitive until the frontend is up and running
-		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-		
+		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+		#self.set_header("info", "Loading...", "Loading.")
+		if not self.on_inst: self.show_spinner()
+				
 		GObject.idle_add(self.next_module)
 		if not self.on_inst: GObject.idle_add(self.pages.next_page)
 		
@@ -457,8 +478,9 @@ class Service(linstaller.core.service.Service):
 		self.current_frontend.on_module_change()
 
 		# Make sure everything is not sensitive until the frontend is up and running
-		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-
+		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+		if not self.on_inst: self.show_spinner()
+		
 		GObject.idle_add(self.prev_module)
 		if not self.on_inst: GObject.idle_add(self.pages.prev_page)
 		
