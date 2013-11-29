@@ -1,3 +1,22 @@
+linstaller (5.21.0-1) devel; urgency=low
+
+  * pyparted 3.10 support.
+  * services/glade: show a spinner instead of setting sensitiveness to False.
+    New methods show_spinner() and hide_spinner() implemented.
+  * partdisks: front/glade: use spinner when (re)building the page
+  * modules/bootloader: front/glade: casper module in pre_ready() to avoid showing the page when not needed
+  * glade frontend: created new status area in the buttonarea. Refactored set_header() to properly handle these style changes.
+    The colors will not be used anymore in the header.
+    Note: status updating when opening already touched pages is broken, as is the on_inst mode.
+  * glade frontend: show notifications when doing set_header() if the window is not focused.
+  * glade frontend: implemented a standard way to set the "info" header.
+    The module developer now only needs to set the variables "header_title", "header_subtitle" and
+    "header_icon" (all strings) to make the frontend set the header automatically.
+    All .front modules have been updated to reflect this new feature.
+  * glade frontend: assume defaults header to 'installing'.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 29 Nov 2013 18:13:33 +0100
+
 linstaller (5.20.1-1) devel; urgency=low
 
   * bootloader: inst: I forgot the newlines :)
