@@ -7,6 +7,8 @@
 import linstaller.core.service
 import linstaller.core.main as m
 
+import notify2
+
 import os
 import time
 
@@ -256,6 +258,14 @@ class Service(linstaller.core.service.Service):
 		
 		self.is_fullscreen = False
 		
+		## NOTIFICATIONS
+		notify2.init("linstaller")
+		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
+												"linstaller is awesome <3",
+												"gtk-save"   # Icon name
+		)
+		## END NOTIFICATIONS
+		
 		self.builder = Gtk.Builder()
 		self.builder.set_translation_domain("linstaller")
 		self.builder.add_from_file(uipath)
@@ -411,6 +421,13 @@ class Service(linstaller.core.service.Service):
 		
 		#self.header_message_subtitle.hide()
 
+	def update_and_show_notification(self, message, icon=None):
+		""" Updates and shows the notification. """
+		
+		self.notification.message = message
+		if icon: self.notification.icon = icon
+		if not self.main.is_active(): self.notification.show()
+
 	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 
@@ -427,12 +444,17 @@ class Service(linstaller.core.service.Service):
 			# Reset tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, None)
 			GObject.idle_add(self.status_icon.set_tooltip_text, None)
+
+			self.update_and_show_notification(title, appicon)
+
 		else:
 			# Change only subtitle (and set title there)
 			GObject.idle_add(self.header_message_subtitle.set_markup, title)
 			# Set the subtitle as the tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, subtitle)
 			GObject.idle_add(self.status_icon.set_tooltip_text, subtitle)
+			
+			self.update_and_show_notification(title)
 		
 		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 1)
 
