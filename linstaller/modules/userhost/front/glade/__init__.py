@@ -11,6 +11,11 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose,root_check		
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Users & Hostname")
+	header_subtitle = _("Set users and hostname")
+	header_icon = "system-users"
+	
 	def ready(self):
 		
 #		if not self.is_module_virgin:
@@ -157,8 +162,6 @@ class Frontend(glade.Frontend):
 			elif self.settings["root"] == True:
 				# Ensure the expander is opened
 				self.idle_add(self.root_expander.set_expanded, True)
-
-		self.set_header("info", _("Users & Hostname"), _("Set users and hostname"), appicon="system-users")
 		
 		# Determine if we should hide the main frame and/or go directly to the next module
 		if self.settings["userfullname"] and self.settings["username"] and self.settings["password"] and self.settings["hostname"]:

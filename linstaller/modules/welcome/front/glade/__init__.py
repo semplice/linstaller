@@ -13,10 +13,13 @@ from linstaller.core.main import warn,info,verbose,root_check
 #from gi.repository import Gtk
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Welcome!")
+	
+	def on_objects_ready(self):
+		self.header_subtitle = _("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"]
+	
 	def ready(self):
-		# Set header
-		self.set_header("info", _("Welcome!"), _("Welcome to the %s installation wizard!") % self.moduleclass.main_settings["distro"], appicon="gtk-save")
-		
 		# Disable back button, this MUST be the first page
 		self.idle_add(self.objects["parent"].back_button.set_sensitive, False)
 		

@@ -13,13 +13,15 @@ from linstaller.core.main import warn,info,verbose
 import threading, time
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Summary")
+	header_subtitle = _("Please review everything before continuing.")
+	header_icon = "emblem-default"
+	
 	def ready(self):
 				
 		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
-		else:
-			self.set_header("info", _("Summary"), _("Please review everything before continuing."), appicon="emblem-default")
-
 
 		# Get labels
 		partdisks_frame = self.objects["builder"].get_object("partdisks_frame")
@@ -48,8 +50,9 @@ class Frontend(glade.Frontend):
 			final_text = []
 			
 			for obj, value in changed.items():
+				obj = str(obj)
 				try:
-					fs = value["obj"].fileSystem.type
+					fs = str(value["obj"].fileSystem.type)
 					mountpoint = value["changes"]["useas"]
 					
 					# If /, tell the user that the distribution will be installed here

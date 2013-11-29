@@ -7,6 +7,8 @@
 import linstaller.core.service
 import linstaller.core.main as m
 
+import notify2
+
 import os
 import time
 
@@ -153,23 +155,35 @@ class Service(linstaller.core.service.Service):
 					time.sleep(0.3)
 						
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
-			GObject.idle_add(m.handle_exception, self.current_frontend.on_objects_ready)
+			
+			m.handle_exception(self.current_frontend.on_objects_ready)
+			
+			# Set header now.
+			self.set_header("info",
+							self.current_frontend.header_title,
+							self.current_frontend.header_subtitle,
+							self.current_frontend.header_icon
+			)
+			
+			
 			GObject.idle_add(m.handle_exception, self.current_frontend.pre_ready)
 			GObject.idle_add(m.handle_exception, self.current_frontend.ready)
 			
 			# Set sensitivity, the frontend is up and running
-			GObject.idle_add(self.main.set_sensitive, True)
+			#GObject.idle_add(self.main.set_sensitive, True)
 			
 			GObject.idle_add(self.current_frontend.process)
+			self.hide_spinner()
+			#GObject.idle_add(self.header_eventbox.show)
 	
 	def build_pages(self, single=None, replacepage=None, onsuccess=None):
 		""" Searches for support glade files and adds them to the pages object.
 		
 		If single is a string, only the module matching that string will be builded.
 		If replacepage is an int, the single page will be positioned to the argument's value, removing the old page.
-		If onsuccess is True (and in single mode), the passed method will be called when the pages have been built.
+		If onsuccess is True (and in single mode), the supplied method will be called when the pages have been built.
 		
-		Note that the single mode does work ONLY on the passed module, other modules are not touched."""
+		Note that the single mode does work ONLY on the supplied module, other modules are not touched."""
 		
 		if not single:
 			self.modules_objects = {}
@@ -254,6 +268,14 @@ class Service(linstaller.core.service.Service):
 		
 		self.is_fullscreen = False
 		
+		## NOTIFICATIONS
+		notify2.init("linstaller")
+		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
+												"linstaller is awesome <3",
+												"gtk-save"   # Icon name
+		)
+		## END NOTIFICATIONS
+		
 		self.builder = Gtk.Builder()
 		self.builder.set_translation_domain("linstaller")
 		self.builder.add_from_file(uipath)
@@ -303,6 +325,8 @@ class Service(linstaller.core.service.Service):
 		#self.header_alignment.reparent(self.header_eventbox)
 		#self.header_eventbox.add(self.header)
 		
+		self.status_icon = self.builder.get_object("status_icon")
+		
 		self.box.pack_start(self.header_eventbox, True, True, 0)
 		self.box.reorder_child(self.header_eventbox, 0)
 		
@@ -311,7 +335,7 @@ class Service(linstaller.core.service.Service):
 		self.progress_bar = self.builder.get_object("progress_bar")
 				
 		### PAGES
-		
+		self.pages_loading = self.builder.get_object("pages_loading")
 		self.pages = self.builder.get_object("pages")
 		
 		self.next_button = self.builder.get_object("next_button")
@@ -324,10 +348,22 @@ class Service(linstaller.core.service.Service):
 		
 		# Set back button as unsensitive, as we're in the first page
 		GObject.idle_add(self.back_button.set_sensitive, False)
+
+		# Get and set header color
+		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
+		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
+
+		# Set color
+		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
+		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
+		
+		# Set title
+		GObject.idle_add(self.main.set_title, _("%s Installer") % self.main_settings["distro"])
 		
 		self.build_pages()
 		self.pages_built = True
 		
+		GObject.idle_add(self.pages_loading.hide)
 		GObject.idle_add(self.main.show_all)
 
 		# Hide inst
@@ -335,7 +371,7 @@ class Service(linstaller.core.service.Service):
 
 		#self.main.set_resizable(True)
 		#self.main.fullscreen()
-	
+			
 	def fullscreen(self):
 		""" Makes the window fullscreen. """
 		
@@ -352,7 +388,7 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.main.unfullscreen)
 			self.is_fullscreen = False
 	
-	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
+	def set_header_deprecated(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 		
 		# Ensure the eventbox is sensitive
@@ -379,19 +415,58 @@ class Service(linstaller.core.service.Service):
 		if not appicon:
 			icon = head_ico[icon]
 			GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
-		elif icon == "info": # Show custom icon only on info status
+		else: # Show custom icon only on info status
 			GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
 			
 		# Set icon
 		#GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
 		# Set header message and window title
-		GObject.idle_add(self.header_message_title.set_markup, "<b><big>%s</big></b>" % title.replace("& ","&amp; "))
+		GObject.idle_add(self.header_message_title.set_markup, title.replace("& ","&amp; "))
 		GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
 		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
 		
 		# Set color
 		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
 		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
+		
+		#self.header_message_subtitle.hide()
+
+	def update_and_show_notification(self, message, icon=None):
+		""" Updates and shows the notification. """
+		
+		self.notification.message = message
+		if icon: self.notification.icon = icon
+		if not self.main.is_active(): self.notification.show()
+
+	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
+		""" Sets the header with the delcared icon, title and subtitle. """
+
+		if icon == "info":
+			# Header: title, Status: subtitle
+			GObject.idle_add(self.header_message_title.set_markup, title.replace("& ", "&amp; "))
+			GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
+			
+			# Icon: appicon (if any), Status icon: info
+			if appicon:
+				GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
+			else:
+				GObject.idle_add(self.header_icon.set_from_stock, head_ico[icon], 6)
+			# Reset tooltip
+			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, None)
+			GObject.idle_add(self.status_icon.set_tooltip_text, None)
+
+			self.update_and_show_notification(title, appicon)
+
+		else:
+			# Change only subtitle (and set title there)
+			GObject.idle_add(self.header_message_subtitle.set_markup, title)
+			# Set the subtitle as the tooltip
+			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, subtitle)
+			GObject.idle_add(self.status_icon.set_tooltip_text, subtitle)
+			
+			self.update_and_show_notification(title)
+		
+		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 1)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
@@ -429,6 +504,22 @@ class Service(linstaller.core.service.Service):
 		
 		self.exitw_show()
 
+	def show_spinner(self):
+		""" Shows the spinner. """
+		
+		GObject.idle_add(self.buttons_area.set_sensitive, False)
+		GObject.idle_add(self.header_eventbox.hide)
+		GObject.idle_add(self.pages.hide)
+		GObject.idle_add(self.pages_loading.show)
+	
+	def hide_spinner(self):
+		""" Reverts the changes done by show_spinner(). """
+
+		GObject.idle_add(self.buttons_area.set_sensitive, True)
+		GObject.idle_add(self.header_eventbox.show)
+		GObject.idle_add(self.pages.show)
+		GObject.idle_add(self.pages_loading.hide)
+
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
 
@@ -439,8 +530,10 @@ class Service(linstaller.core.service.Service):
 		self.current_frontend.on_module_change()
 		
 		# Make sure everything is not sensitive until the frontend is up and running
-		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-		
+		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+		#self.set_header("info", "Loading...", "Loading.")
+		if not self.on_inst: self.show_spinner()
+				
 		GObject.idle_add(self.next_module)
 		if not self.on_inst: GObject.idle_add(self.pages.next_page)
 		
@@ -457,8 +550,9 @@ class Service(linstaller.core.service.Service):
 		self.current_frontend.on_module_change()
 
 		# Make sure everything is not sensitive until the frontend is up and running
-		if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-
+		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
+		if not self.on_inst: self.show_spinner()
+		
 		GObject.idle_add(self.prev_module)
 		if not self.on_inst: GObject.idle_add(self.pages.prev_page)
 		

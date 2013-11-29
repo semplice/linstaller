@@ -47,6 +47,11 @@ class Progress(threading.Thread):
 		if self.quit: self.parent.objects["parent"].on_next_button_click()
 
 class Frontend(linstaller.core.frontend.Frontend):
+	
+	header_title = _("Installing")
+	header_subtitle = _("You will not wait long, we promise.")
+	header_icon = "gtk-save"
+	
 	def __init__(self, moduleclass):
 
 		linstaller.core.frontend.Frontend.__init__(self, moduleclass)

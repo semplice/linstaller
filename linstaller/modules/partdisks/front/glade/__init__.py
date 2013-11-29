@@ -504,7 +504,12 @@ class LVM_apply(glade.Progress):
 		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
 
-class Frontend(glade.Frontend):	
+class Frontend(glade.Frontend):
+	
+	header_title = _("Disk partitioning")
+	header_subtitle = _("Manage your drives")
+	header_icon = "drive-harddisk"
+
 	def ready(self):
 		""" partdisks is a really complex module which needs a fresh start every time.
 		Thus, we can't rely on the virgin state, but we need to destroy and recreate the entire interface.
@@ -516,6 +521,8 @@ class Frontend(glade.Frontend):
 		self.on_steps_hold() # Disable now the next button.
 		
 		self.objects["main"].destroy() # We need to destroy the old container
+		
+		self.objects["parent"].show_spinner() # Show the spinner
 				
 		# Re-initialize builder, a complex module like this needs a virgin state everytime.
 		current = self.objects["parent"].pages.get_current_page()
@@ -530,14 +537,25 @@ class Frontend(glade.Frontend):
 		self.objects = self.objects["parent"].get_module_object("partdisks.front")
 		
 		self.idle_add(self.real_ready)
+	
+	def finish_ready(self, parent):
+		""" AWFUL hack to not get the spinner frozen when retrieving the distributions list. """
 		
+		# Cache distribs
+		parent.distribs = lib.check_distributions()
+		#self.distribs = {}
+
+		# If is_echo, we need to deploy the automatic page... automatically.
+		if parent.settings["is_echo"]:
+			parent.on_automatic_button_clicked(obj=None)
+
+		parent.objects["parent"].hide_spinner()
+	
 	def real_ready(self):
 
 		self.onlyusb = False
 		self.has_manual_touched = False
 		self.is_automatic = None
-		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 
 		# Get the notebook
 		self.pages_notebook = self.objects["builder"].get_object("pages_notebook")
@@ -547,19 +565,13 @@ class Frontend(glade.Frontend):
 		# Get pages
 		self.main_page = self.objects["builder"].get_object("main_page")
 				
-		### SOME TIME-CONSUMING THINGS
-		if True:
-			# Cache distribs
-			self.distribs = lib.check_distributions()
-			#self.distribs = {}
+		# Get devices
+		self.devices, self.disks = lib.devices, lib.disks
 
-			self.devices, self.disks = lib.devices, lib.disks
-
-			if self.settings["onlyusb"]:
-				self.onlyusb = True # Keep track of onlyusb
-				# Only usb, we need to rebuild devices.
-				lib.restore_devices(onlyusb=True)
-		### END
+		if self.settings["onlyusb"]:
+			self.onlyusb = True # Keep track of onlyusb
+			# Only usb, we need to rebuild devices.
+			lib.restore_devices(onlyusb=True)	
 		
 		# Get buttons of the first page
 		self.automatic_button = self.objects["builder"].get_object("automatic_button")
@@ -573,9 +585,9 @@ class Frontend(glade.Frontend):
 		# Disable next button
 		self.on_steps_hold()
 		
-		# If is_echo, we need to deploy the automatic page... automatically.
-		if self.settings["is_echo"]:
-			self.on_automatic_button_clicked(obj=None)
+		# Finish
+		threading.Thread(target=self.finish_ready, args=(self,)).start()
+		
 	
 	def refresh(self):
 		""" Refreshes the devices and disks list. """
@@ -663,7 +675,7 @@ class Frontend(glade.Frontend):
 		# Create the button objects
 		if by == "freespace":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1000, 2), "drive":info["drive"]}))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to the %(size)s GB of free space in %(drive)s") % {"distro":self.moduleclass.main_settings["distro"], "size":round(info["freesize"] / 1000, 2), "drive":str(info["drive"])}))
 			
 			container["text"] = Gtk.Label()
 			container["text"].set_markup(_("This installs the distribution on the free space on the drive."))
@@ -697,10 +709,10 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-remove", 6)
 		elif by == "clear":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (info["model"])))
-			
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (str(info["model"]))))
+						
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":info["drive"], "model":info["model"], "distro": self.moduleclass.main_settings["distro"]})
+			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":str(info["drive"]), "model":str(info["model"]), "distro": self.moduleclass.main_settings["distro"]})
 
 			container["text2"] = Gtk.Label()
 			if info["swapwarning"] == "exist":
@@ -714,7 +726,7 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_stock("gtk-delete", 6)
 		elif by == "echo":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":info["path"], "model":info["model"]}))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":str(info["path"]), "model":str(info["model"])}))
 			
 			container["text"] = Gtk.Label()
 			if info["shouldformat"]:
@@ -729,10 +741,10 @@ class Frontend(glade.Frontend):
 			container["icon"].set_from_icon_name("drive-removable-media", 6)
 		elif by == "notable":
 			container["title"] = Gtk.Label()
-			container["title"].set_markup("<big><b>%s</b></big>" % (_("Initialize %s") % (info["model"])))
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Initialize %s") % (str(info["model"]))))
 			
 			container["text"] = Gtk.Label()
-			container["text"].set_markup(_("This initializes the drive (<b>%s</b>) for usage by creating a partition table.") % info["drive"])
+			container["text"].set_markup(_("This initializes the drive (<b>%s</b>) for usage by creating a partition table.") % str(info["drive"]))
 			
 			container["text2"] = None
 			
@@ -2499,15 +2511,16 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed: self.changed[device.path] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed: self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed: print "EMBEH"
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
 		if on_lvm:
 			_model = _("LVM Volume Group")
 		else:
-			_model = device.model
-		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (device.path, _model, round(device.getLength(unit="GB"), 2)))
+			_model = str(device.model)
+		container["frame_label"].set_markup("<b>%s - %s (%s GB)</b>" % (str(device.path), _model, round(device.getLength(unit="GB"), 2)))
 		container["frame"] = Gtk.Frame()
 		container["frame"].set_label_widget(container["frame_label"])
 		## Create the TreeView 
@@ -2566,7 +2579,7 @@ class Frontend(glade.Frontend):
 					
 					path = LVMcontainer.path
 				else:
-					path = part.path
+					path = str(part.path)
 
 					# Let's see if we can reuse objects in changed to avoid nasty bugs...
 					if not "-1" in path and path in self.changed and self.changed[path]["obj"]:
@@ -2825,7 +2838,7 @@ class Frontend(glade.Frontend):
 		
 		self.LVname = ""
 		self.VGname = ""
-		
+	
 		if clean:			
 			self.changed = {}
 			self.touched = []
@@ -3141,7 +3154,7 @@ class Frontend(glade.Frontend):
 		
 		# Switch to page 3
 		self.pages_notebook.set_current_page(3)
-		
+
 		self.manual_ready()
 
 	def on_back_button_click(self):
