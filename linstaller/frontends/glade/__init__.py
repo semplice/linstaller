@@ -48,8 +48,8 @@ class Progress(threading.Thread):
 
 class Frontend(linstaller.core.frontend.Frontend):
 	
-	header_title = "Semplice installation"
-	header_subtitle = "How great."
+	header_title = _("Installing")
+	header_subtitle = _("You will not wait long, we promise.")
 	header_icon = "gtk-save"
 	
 	def __init__(self, moduleclass):

@@ -26,6 +26,8 @@ class Frontend(glade.Frontend):
 	def ready(self):
 		""" Ready! (to wait...) """
 
+		self.set_header("hold", "A test!", "How great.")
+
 		verbose("Testing install...")
 		
 		self.target = 50
