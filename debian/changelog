@@ -14,6 +14,7 @@ linstaller (5.21.0-1) devel; urgency=low
     "header_icon" (all strings) to make the frontend set the header automatically.
     All .front modules have been updated to reflect this new feature.
   * glade frontend: assume defaults header to 'installing'.
+  * debian/control: make linstaller-frontend-glade depend on python-notify2.
 
  -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 29 Nov 2013 18:13:33 +0100
 
