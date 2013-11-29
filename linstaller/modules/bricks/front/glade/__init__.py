@@ -14,6 +14,11 @@ from linstaller.core.main import warn,info,verbose,root_check
 from libbricks.features import features, features_order
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Feature selection")
+	header_subtitle = _("You can further customize those after the installation.")
+	header_icon = "preferences-desktop-default-applications"
+
 	def build_feature_objects(self):
 		""" Builds GTK+ elements to list the features onto the GUI. """
 		
@@ -109,8 +114,6 @@ class Frontend(glade.Frontend):
 		""" Initialize the GUI. """
 
 		if self.is_module_virgin:
-			self.set_header("info", _("Feature selection"), _("You can further customize those after the installation."), appicon="preferences-desktop-default-applications")
-
 			self._objects = {}
 			self.settings["_objects"] = self._objects # workaround for non_virgin mode
 			

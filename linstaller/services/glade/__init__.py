@@ -155,7 +155,17 @@ class Service(linstaller.core.service.Service):
 					time.sleep(0.3)
 						
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
-			GObject.idle_add(m.handle_exception, self.current_frontend.on_objects_ready)
+			
+			m.handle_exception(self.current_frontend.on_objects_ready)
+			
+			# Set header now.
+			self.set_header("info",
+							self.current_frontend.header_title,
+							self.current_frontend.header_subtitle,
+							self.current_frontend.header_icon
+			)
+			
+			
 			GObject.idle_add(m.handle_exception, self.current_frontend.pre_ready)
 			GObject.idle_add(m.handle_exception, self.current_frontend.ready)
 			

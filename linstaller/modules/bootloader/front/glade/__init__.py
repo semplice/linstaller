@@ -11,6 +11,11 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Bootloader")
+	header_subtitle = _("Bootloader settings")
+	header_icon = "drive-harddisk"
+	
 	def pre_ready(self):
 
 		if (self.is_module_virgin and self.settings["device"] != False) or ("uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True) or self.settings["skip"] or self.settings["caspered"] == True:
@@ -22,8 +27,6 @@ class Frontend(glade.Frontend):
 	
 	def ready(self):
 		
-		self.set_header("info", _("Bootloader"), _("Bootloader settings"), appicon="drive-harddisk")
-
 		# Get the checkbox
 		self.onmbr = self.objects["builder"].get_object("onmbr")
 

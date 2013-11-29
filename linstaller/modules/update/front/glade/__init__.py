@@ -71,14 +71,17 @@ class Update(threading.Thread):
 
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Installer updates")
+	header_subtitle = _("Ensure you have the installer up-to-date.")
+	header_icon = "system-software-update"
+	
 	def ready(self):
 				
 		self.has_the_update_process_ran = False
 		
 		verbose("packages are: %s" % self.settings["packages"])
 		
-		self.set_header("info", _("Installer updates"), _("Ensure you have the installer up-to-date."), appicon="system-software-update")
-
 		# Get the checkbox
 		self.check = self.objects["builder"].get_object("check")
 

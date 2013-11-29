@@ -504,7 +504,12 @@ class LVM_apply(glade.Progress):
 		if self.parent.is_automatic: self.parent.is_automatic = "done"
 
 
-class Frontend(glade.Frontend):	
+class Frontend(glade.Frontend):
+	
+	header_title = _("Disk partitioning")
+	header_subtitle = _("Manage your drives")
+	header_icon = "drive-harddisk"
+
 	def ready(self):
 		""" partdisks is a really complex module which needs a fresh start every time.
 		Thus, we can't rely on the virgin state, but we need to destroy and recreate the entire interface.
@@ -551,8 +556,6 @@ class Frontend(glade.Frontend):
 		self.onlyusb = False
 		self.has_manual_touched = False
 		self.is_automatic = None
-		
-		self.set_header("info", _("Disk partitioning"), _("Manage your drives"), appicon="drive-harddisk")
 
 		# Get the notebook
 		self.pages_notebook = self.objects["builder"].get_object("pages_notebook")

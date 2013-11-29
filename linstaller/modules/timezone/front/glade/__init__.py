@@ -14,6 +14,11 @@ from linstaller.core.main import warn,info,verbose,root_check
 from keeptalking import TimeZone as timezone
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Timezone selection")
+	header_subtitle = _("Select your timezone here.")
+	header_icon = "time-admin"
+	
 	def ready(self):
 
 		if not self.settings["ask"]:
@@ -22,9 +27,7 @@ class Frontend(glade.Frontend):
 			
 			self.module_casper()
 
-		if self.is_module_virgin:
-			self.set_header("info", _("Timezone selection"), _("Select your timezone here."), appicon="time-admin")
-		else:
+		if not self.is_module_virgin:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 
 		self.notebook = self.objects["builder"].get_object("notebook")

@@ -14,6 +14,21 @@ from linstaller.core.main import warn,info,verbose,root_check
 from keeptalking import TimeZone as timezone
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Language selection")
+	header_subtitle = _("Select your language here.")
+	header_icon = "preferences-desktop-locale"
+	
+	def on_objects_ready(self):
+		# We use this method to properly see if we need to set header to the keyboard page.
+		
+		self.notebook = self.objects["builder"].get_object("notebook")
+		
+		if not self.is_module_virgin and self.notebook.get_current_page() == 1:
+			self.header_title = _("Keyboard selection")
+			self.header_subtitle = _("Select your keyboard settings here.")
+			self.header_icon = "input-keyboard"
+	
 	def ready(self):
 
 		self.is_building = False
@@ -28,15 +43,12 @@ class Frontend(glade.Frontend):
 			self.module_casper()
 		
 		if self.is_module_virgin:
-			self.set_header("info", _("Language selection"), _("Select your language here."), appicon="preferences-desktop-locale")
 			self.has_keyboard_header_shown = False
 			self.is_rerun = None
 		else:
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			self.has_keyboard_header_shown = True
 			self.is_rerun = True
-
-		self.notebook = self.objects["builder"].get_object("notebook")
 
 		# Hide things not needed in linstaller ;)
 		self.objects["builder"].get_object("live_box").hide()
@@ -461,15 +473,15 @@ class Frontend(glade.Frontend):
 	def on_next_button_click(self):
 		""" Ensure we show the keyboard page if we should. """
 		
-		self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
-		
 		if self.notebook.get_current_page() == 0:
 			# We should
 			self.notebook.set_current_page(1)
 			
+			self.set_header("info", _("Keyboard selection"), _("Select your keyboard settings here."), appicon="input-keyboard")
 			if not self.has_keyboard_header_shown:
-				self.set_header("info", _("Keyboard selection"), _("Select your keyboard settings here."), appicon="input-keyboard")
 				self.has_keyboard_header_shown = True
+			else:
+				self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			
 			return True
 	
@@ -489,11 +501,12 @@ class Frontend(glade.Frontend):
 	def on_back_button_click(self):
 		""" Ensure we show the locale page if we should. """
 
-		self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
-
 		if self.notebook.get_current_page() == 1:
 			# We should
+			self.set_header("info", _("Language selection"), _("Select your language here."), "preferences-desktop-locale")
 			self.notebook.set_current_page(0)
+			
+			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return True
 		else:
 			return None

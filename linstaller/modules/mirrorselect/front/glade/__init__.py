@@ -11,10 +11,13 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose,root_check		
 
 class Frontend(glade.Frontend):
+	
+	header_title = _("Mirror selection")
+	header_subtitle = _("Select the best mirror")
+	header_icon = "stock_internet"
+	
 	def ready(self):
-		
-		self.set_header("info", _("Mirror selection"), _("Select the best mirror"), appicon="stock_internet")
-		
+				
 		if (self.is_module_virgin and self.settings["check"] != False) or self.settings["caspered"] == True:
 			# None or True, do not prompt.
 			if self.is_module_virgin:

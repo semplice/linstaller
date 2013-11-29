@@ -12,10 +12,13 @@ _ = t9n.library.translation_init("linstaller")
 from linstaller.core.main import warn,info,verbose
 		
 class Frontend(glade.Frontend):
+	
+	header_title = _("Installation finished")
+	header_subtitle = _("Press Reboot to restart to the installed system.")
+	header_icon = "gtk-ok"
+	
 	def ready(self):
 		""" Ready! (to wait...) """
-
-		self.set_header("ok", _("Already finished?"), _("It seems so."))
 
 		main_notebook = self.objects["builder"].get_object("main_notebook")
 		main_notebook.set_current_page(1)
