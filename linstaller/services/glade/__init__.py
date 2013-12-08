@@ -234,7 +234,7 @@ class Service(linstaller.core.service.Service):
 			
 			# Get main object
 			objects_list["main"] = objects_list["builder"].get_object("main")
-			objects_list["main"].reparent(self.main)
+			objects_list["main"].get_parent().remove(objects_list["main"])
 			objects_list["main"].show_all()
 			
 			# Add to pages
