@@ -156,6 +156,7 @@ class Service(linstaller.core.service.Service):
 						
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
 			
+			m.handle_exception(self.current_frontend.on_objects_ready_internal)
 			m.handle_exception(self.current_frontend.on_objects_ready)
 			
 			# Set header now.
