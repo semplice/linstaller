@@ -1,3 +1,13 @@
+linstaller (5.22.0-1) devel; urgency=low
+
+  * services/glade: use a saner way to reparent modules' main objects.
+  * alan and live-config/: migrated to alan2 (the live-config script *dosen't* work currently)
+  * glade frontend: put the settings management (fullscreen, etc.) in another method.
+  * Added linstaller-session.
+  * debian/: added linstaller-session package.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 21 Dec 2013 18:46:02 +0100
+
 linstaller (5.21.0-1) devel; urgency=low
 
   * pyparted 3.10 support.
