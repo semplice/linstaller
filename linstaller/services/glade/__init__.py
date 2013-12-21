@@ -156,6 +156,7 @@ class Service(linstaller.core.service.Service):
 						
 			self.current_frontend.objects = self.modules_objects[self.current_module.package.replace("linstaller.modules.","")]
 			
+			m.handle_exception(self.current_frontend.on_objects_ready_internal)
 			m.handle_exception(self.current_frontend.on_objects_ready)
 			
 			# Set header now.
@@ -234,7 +235,7 @@ class Service(linstaller.core.service.Service):
 			
 			# Get main object
 			objects_list["main"] = objects_list["builder"].get_object("main")
-			objects_list["main"].reparent(self.main)
+			objects_list["main"].get_parent().remove(objects_list["main"])
 			objects_list["main"].show_all()
 			
 			# Add to pages

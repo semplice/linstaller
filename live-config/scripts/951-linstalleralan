@@ -48,31 +48,27 @@ Configure_linstalleralan ()
 		
 		# We should first copy tree.conf from /etc/alan to /home/$LIVE_USERNAME/.config/alan.
 		mkdir -p /home/$LIVE_USERNAME/.config/alan # create directories
-		cp /etc/alan/tree.conf /home/$LIVE_USERNAME/.config/alan/tree.conf # copy file
 		chown -R $LIVE_USERNAME:$LIVE_USERNAME /home/$LIVE_USERNAME/.config/alan # change owner of alan directory in .config
 		
 		# Now we can simply add a new category, say installer and specify the extension linstaller_alan.
-		cat >> /home/$LIVE_USERNAME/.config/alan/tree.conf <<EOF
+		cat >> /home/$LIVE_USERNAME/.config/alan/alan.conf <<EOF
 ### ADDED BY linstalleralan LIVE-CONFIG SCRIPT FROM LIVE-CONFIG-LINSTALLER PACKAGE ###
-[cat:installer]
-name = STOCK_NULL
-extensions = linstalleralan
+[extension:main]
+linstaller_alan_label = STOCK_INSTALL_SEMPLICE
+linstaller_alan_icon = document-save
 
-[ext:linstalleralan]
-ext = linstaller_alan
-name = STOCK_INSTALL_SEMPLICE
-icon = document-save
-persistent_disabled = True # Disable persistent in RC1
+[extension:linstaller_alan]
+persistent_disabled = True
 EOF
 
 		if [ "$LIVE_FRONTEND" ]; then
-			cat >> /home/$LIVE_USERNAME/.config/alan/tree.conf <<EOF
+			cat >> /home/$LIVE_USERNAME/.config/alan/alan.conf <<EOF
 frontend = $LIVE_FRONTEND
 EOF
 		fi
-		echo "### END ADDED ###" >> /home/$LIVE_USERNAME/.config/alan/tree.conf
+		echo "### END ADDED ###" >> /home/$LIVE_USERNAME/.config/alan/alan.conf
 
-		# We should enable new category by add it to the categories list in [Alan].
+		# We should enable new category by adding it to the categories list in [Alan].
 		categories="`grep \"categories =\"  /home/$LIVE_USERNAME/.config/alan/tree.conf`"
 		sed -i "s/$categories/$categories - @installer/g"  /home/$LIVE_USERNAME/.config/alan/tree.conf
 	fi

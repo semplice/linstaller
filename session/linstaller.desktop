@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Installation
+Comment=Launch the installation wizard
+Exec=/usr/bin/linstaller_session.sh
+TryExec=/usr/bin/linstaller_session.sh
+Icon=gtk-save
+Type=Application

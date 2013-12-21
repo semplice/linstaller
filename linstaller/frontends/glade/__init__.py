@@ -193,8 +193,8 @@ class Frontend(linstaller.core.frontend.Frontend):
 		# Set next button sensitivity to False
 		self.idle_add(self.objects["parent"].next_button.set_sensitive, False)
 
-	def on_objects_ready(self):
-		""" Called when the module objects are ready. """
+	def on_objects_ready_internal(self):
+		""" Called when the module objects are ready. (for internal use)"""
 
 		# Set fullscreen if we should
 		if self.frontend_settings["fullscreen"] and not self.objects["parent"].is_fullscreen:
@@ -202,6 +202,11 @@ class Frontend(linstaller.core.frontend.Frontend):
 
 		# Set next button sensitivity to True
 		if not self.objects["parent"].on_inst: self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
+
+	def on_objects_ready(self):
+		""" Called when the module objects are ready. """
+
+		pass
 
 	def start(self):
 		""" This function, the one that other frontends normally override, will only wait.

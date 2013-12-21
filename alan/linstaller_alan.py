@@ -1,43 +1,45 @@
 # -*- coding: utf-8 -*-
 #
 # Alan: Semplice Menu Extension Framework
-# Copyright (C) 2011 Eugenio "g7" Paolantonio and the Semplice Team.
+# Copyright (C) 2011-2013 Eugenio "g7" Paolantonio and the Semplice Team.
 # Work released under the terms of the GNU GPL License, version 3 or later.
 #
 # This file cointain the laiv_installer extension
 
-import alan.core.structure as struct
-import alan.core.objects.core as core
-import alan.core.actions.glob as ga
-
-import alan.core.extension
+import alan.core.extension as extension
+from alan.core.objects.separator import Separator
+from alan.core.objects.item import Item
+from alan.core.objects.actions import ExecuteAction
 
 import t9n.library as trans
 
 _ = trans.translation_init("linstaller")
 
-# Informations about extension ;)
-coders = { "Eugenio Paolantonio":"http://blog.medesimo.eu" }
-infos = {"Coders":coders}
-
-class Extension(alan.core.extension.Extension):
-	def run(self):
-		# Initiate pipemenu
-		self.menu = struct.PipeMenu()
-		self.menu.start() # add initial tag
+class Extension(extension.Extension):
+	
+	extensionName = "linstaller"
+	
+	def generate(self):
 
 		# Get linstaller configuration file, if any
-		config = self.cfg.printv("config")
-		if not config:
+		if "config" in self.extension_settings:
+			config = self.extension_settings["config"]
+		else:
 			config = "default"
-		persistent_disabled = self.cfg.printv("persistent_disabled")
+		
+		if "persistent_disabled" in self.extension_settings:
+			persistent_disabled = self.extension_settings["persistent_disabled"]
+		else:
+			persistent_disabled = False
 
-		config_persistent = self.cfg.printv("config_persistent")
-		if not config_persistent:
+		if "config_persistent" in self.extension_settings:
+			config_persistent = self.extension_settings["config_persistent"]
+		else:
 			config_persistent = "semplice-persistent"
 		
-		frontend = self.cfg.printv("frontend")
-		if not frontend:
+		if "frontend" in self.extension_settings:
+			frontend = self.extension_settings["frontend"]
+		else:
 			frontend = "glade"
 
 		if frontend == "cli":
@@ -49,20 +51,27 @@ class Extension(alan.core.extension.Extension):
 			install_ex = "sudo /usr/bin/linstaller_crash_wrapper.sh -c=%s -f=glade start" % config
 			persistent_ex = "roxterm --hide-menubar -T \"Install Semplice in USB\" -n \"Semplice Live USB Installer\" -e /usr/bin/linstaller_wrapper.sh -c=%s -f=cli start" % config_persistent
 
-		# Alias self.menu.insert() to i()
-		i = self.menu.insert
+		# Alias self.add() to i()
+		i = self.add
 
 		### Begin!
 
-		install = core.item(_("Start installer"), ga.execute(install_ex))
+		install = self.return_executable_item(_("Start installer"), install_ex)
 		
-		persistent = core.item(_("Start USB persistent installer"), ga.execute(persistent_ex))
+		persistent = self.return_executable_item(_("Start USB persistent installer"), persistent_ex)
 
 		i(install)
 		if not persistent_disabled:
-			i(core.separator)
+			i(Separator())
 			i(persistent)
 
-		# End
-		self.menu.end()
+	def return_executable_item(self, label, command):
+		""" Returns an executable item. """
+				
+		item = Item(label=label)
+		action = ExecuteAction(command)
+		item.append(action)
+		
+		return item
+
 
