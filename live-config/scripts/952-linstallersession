@@ -1,0 +1,47 @@
+#!/bin/sh
+
+## linstallersession - Sets the linstaller session
+## Copyright (C) 2011 Eugenio "g7" Paolantonio <me@medesimo.eu>
+##
+## live-config-semplice comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
+## This is free software, and you are welcome to redistribute it
+## under certain conditions; see COPYING for details.
+
+
+linstallersession ()
+{
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/linstaller.list ] || \
+	   [ -e /var/lib/live/config/linstallersession ]
+	then
+		return
+	fi
+
+	echo -n " linstallersession"
+
+	# Get username
+	for _PARAMETER in ${_CMDLINE}
+	do
+		case "${_PARAMETER}" in
+			live-config.linstallersession|linstallersession)
+				CONFIG="y"
+				;;
+		esac
+	done
+	
+
+	Configure_linstallersession
+}
+
+Configure_linstallersession ()
+{
+	
+	if [ "$CONFIG" == "y" ]; then
+		update-alternatives --set x-session-manager /usr/bin/linstaller_session.sh
+	fi
+
+	# Creating state file
+	touch /var/lib/live/config/linstallersession
+}
+
+linstallersession
