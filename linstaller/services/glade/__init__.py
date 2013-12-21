@@ -268,14 +268,7 @@ class Service(linstaller.core.service.Service):
 		self.pages_built = False
 		
 		self.is_fullscreen = False
-		
-		## NOTIFICATIONS
-		notify2.init("linstaller")
-		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
-												"linstaller is awesome <3",
-												"gtk-save"   # Icon name
-		)
-		## END NOTIFICATIONS
+		self.notifications_enabled = False
 		
 		self.builder = Gtk.Builder()
 		self.builder.set_translation_domain("linstaller")
@@ -389,6 +382,17 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.main.unfullscreen)
 			self.is_fullscreen = False
 	
+	def enable_notifications(self):
+		""" Enables the notifications. """
+
+		notify2.init("linstaller")
+		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
+												"linstaller is awesome <3",
+												"gtk-save"   # Icon name
+		)
+		
+		self.notifications_enabled = True
+	
 	def set_header_deprecated(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
 		
@@ -434,6 +438,8 @@ class Service(linstaller.core.service.Service):
 
 	def update_and_show_notification(self, message, icon=None):
 		""" Updates and shows the notification. """
+		
+		if not self.notifications_enabled: return
 		
 		self.notification.message = message
 		if icon: self.notification.icon = icon
