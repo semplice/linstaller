@@ -1,3 +1,12 @@
+linstaller (5.22.1-1) devel; urgency=low
+
+  * glade frontend: added new frontend option 'notifications':
+    if True (default), the notifications are enabled.
+  * live-config: added linstallersession.
+  * linstaller-session: add x-session-manager alternative.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 21 Dec 2013 21:59:38 +0100
+
 linstaller (5.22.0-1) devel; urgency=low
 
   * services/glade: use a saner way to reparent modules' main objects.
