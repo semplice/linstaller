@@ -200,6 +200,10 @@ class Frontend(linstaller.core.frontend.Frontend):
 		if self.frontend_settings["fullscreen"] and not self.objects["parent"].is_fullscreen:
 			self.objects["parent"].fullscreen()
 
+		# Enable notifications if we should
+		if not self.objects["parent"].notifications_enabled and self.frontend_settings["notifications"]:
+			self.objects["parent"].enable_notifications()
+
 		# Set next button sensitivity to True
 		if not self.objects["parent"].on_inst: self.idle_add(self.objects["parent"].next_button.set_sensitive, True)
 
@@ -303,3 +307,4 @@ class Frontend(linstaller.core.frontend.Frontend):
 		""" Seed settings """
 		
 		self.cache("fullscreen",False)
+		self.cache("notifications",True)

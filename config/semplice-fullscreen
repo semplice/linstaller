@@ -5,3 +5,4 @@ source = semplice
 
 [frontend:glade]
 fullscreen = True
+notifications = False

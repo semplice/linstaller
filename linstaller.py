@@ -407,7 +407,7 @@ elif _action == "start":
 		options = cfg.config.options(sect)
 		
 		for opt in options:
-			main_settings["frontend_settings"][opt] = cfg.get(sect, opt)
+			main_settings["frontend_settings"][opt] = cfg.printv(opt, sect)
 
 	# Start services
 	service_started = {} # started services
