@@ -63,6 +63,17 @@ class Service(linstaller.core.service.Service):
 		else:
 			return None
 	
+	def free_previous_modules(self, limit):
+		""" Removes GUI objects of modules ranging from 0 to limit.
+		
+		limit should be the name of the module which should be leaved as-is."""
+		
+		for module in self.main_settings["modules"]:
+			if module == limit: break
+			
+			verbose("Freeing up stuff of %s..." % module)
+			del self.modules_objects[module]
+	
 	def on_module_change(self):
 		""" Handle modules. """
 				
@@ -85,6 +96,8 @@ class Service(linstaller.core.service.Service):
 				except ZeroDivisionError:
 					self.possible = 0.0
 				self.current = 0.0
+				
+				self.free_previous_modules(self.current_module.package.replace("linstaller.modules.",""))
 				
 				self.on_inst = True
 			elif self.on_inst and moduletype == "front":

@@ -33,16 +33,19 @@ class Unsquash(glade.Progress):
 		self.parent.progress_set_text(_("Uncompressing system..."))
 		
 		num = 0
+		buf = 0
 		lastfile = None
 		while unsquashfs.process.poll() == None:
 			
 			for line in iter(unsquashfs.process.stdout.readline, b''):
 				num += 1
+				buf += 1
 				lastfile = line.rstrip("\n")
 				
 				# If num > filenum, the progressbar will crash.
-				if not num > filenum:
+				if not num > filenum and buf == 10:
 					self.parent.progress_set_percentage(num)
+					buf = 0
 			
 			#time.sleep(0.2)
 		

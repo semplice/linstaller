@@ -47,15 +47,12 @@ class Install(module.Install):
 		# Commit
 		if atleastone:
 			engine.cache.commit(install_progress=InstallProgress)
+		
+		engine.cache = None
 
 class Module(module.Module):
 	def start(self):
 		""" Start module. """
-
-		# FIXME: supportrepo clashes with libbricks's apt.cache object.
-		# This workaround fixes that.
-		if "supportrepo.inst" in self.modules_settings and self.modules_settings["supportrepo.inst"]["cache"]:
-			self.modules_settings["supportrepo.inst"]["cache"].change_rootdir("/")		
 
 		self.install = Install(self)
 		

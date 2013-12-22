@@ -45,6 +45,14 @@ class Install(module.Install):
 		
 		# Now we can commit.
 		self.moduleclass.cache.commit()
+		
+		
+		# WORKAROUND! This makes supportrepo unusable by other modules,
+		# so it needs to be fixed ASAP!
+		# FIXME: supportrepo clashes with libbricks's apt.cache object.
+		# This workaround fixes that.
+		self.moduleclass.cache.change_rootdir("/")		
+		self.moduleclass.cache = None
 	
 	def grub_install(self):
 		""" Installs grub. """
