@@ -606,22 +606,24 @@ class Service(linstaller.core.service.Service):
 		if status == None:
 			# Forward
 			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-			
-			if not self.on_inst: GObject.idle_add(self.pages.next_page)
-			
-			# Ensure the back button is clickable
-			if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
+			if not self.on_inst:
+				self.show_spinner()
+				GObject.idle_add(self.pages.next_page)
+				self.hide_spinner()
+							
+				# Ensure the back button is clickable
+				GObject.idle_add(self.back_button.set_sensitive, True)
 		elif status == "back":
 			# Back
 			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-
-			if not self.on_inst: GObject.idle_add(self.pages.prev_page)
+			if not self.on_inst:
+				self.show_spinner()
+				GObject.idle_add(self.pages.prev_page)
+				self.hide_spinner()
 			
-			# If this is the first page, make unsensitive the button.
-			if not self.on_inst and self.pages.get_current_page() in (0, -1):
-				GObject.idle_add(self.back_button.set_sensitive, False)
+				# If this is the first page, make unsensitive the button.
+				if not self.on_inst and self.pages.get_current_page() in (0, -1):
+					GObject.idle_add(self.back_button.set_sensitive, False)
 
 	def ready(self):
 		
