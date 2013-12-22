@@ -3249,7 +3249,7 @@ class Frontend(glade.Frontend):
 				# Warning!
 				if not self.has_swap_warning_showed and not self.is_automatic:
 					# Show it
-					self.set_header("hold", _("Are you sure?"), _("It seems you haven't selected a swap partition.\nSelect one now, or press Forward to continue without one."))
+					self.set_header("hold", _("No swap selected (press Forward to continue without one)."), _("It seems you haven't selected a swap partition.\nSelect one now, or press Forward to continue without one."))
 					self.has_swap_warning_showed = True
 					return True
 				else:
