@@ -85,7 +85,7 @@ class Frontend(glade.Frontend):
 				locale.hide()
 				keyboard.hide()
 			elif not "timezone" in self.moduleclass.modules_settings:
-				timezione.hide()
+				timezone.hide()
 			
 			if "language" in self.moduleclass.modules_settings:
 				locale.set_text(self.moduleclass.modules_settings["language"]["language"])

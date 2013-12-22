@@ -36,8 +36,9 @@ MODULESDIR = os.path.join(MAINDIR, "modules/")
 uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
-head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+#head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 #head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
+head_col = {"error":"#a40000","info":"#204a87","ok":"#4e9a06","hold":"#ce5c00"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
@@ -63,6 +64,17 @@ class Service(linstaller.core.service.Service):
 		else:
 			return None
 	
+	def free_previous_modules(self, limit):
+		""" Removes GUI objects of modules ranging from 0 to limit.
+		
+		limit should be the name of the module which should be leaved as-is."""
+		
+		for module in self.main_settings["modules"]:
+			if module == limit: break
+			
+			verbose("Freeing up stuff of %s..." % module)
+			del self.modules_objects[module]
+	
 	def on_module_change(self):
 		""" Handle modules. """
 				
@@ -85,6 +97,8 @@ class Service(linstaller.core.service.Service):
 				except ZeroDivisionError:
 					self.possible = 0.0
 				self.current = 0.0
+				
+				self.free_previous_modules(self.current_module.package.replace("linstaller.modules.",""))
 				
 				self.on_inst = True
 			elif self.on_inst and moduletype == "front":
@@ -466,14 +480,14 @@ class Service(linstaller.core.service.Service):
 
 		else:
 			# Change only subtitle (and set title there)
-			GObject.idle_add(self.header_message_subtitle.set_markup, title)
+			GObject.idle_add(self.header_message_subtitle.set_markup, "<span color=\"%s\">%s</span>" % (head_col[icon], title))
 			# Set the subtitle as the tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, subtitle)
 			GObject.idle_add(self.status_icon.set_tooltip_text, subtitle)
 			
 			self.update_and_show_notification(title)
 		
-		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 1)
+		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 2)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
@@ -572,14 +586,20 @@ class Service(linstaller.core.service.Service):
 		
 		GObject.idle_add(self.next_button.set_label, _("Reboot"))
 		GObject.idle_add(self.next_button.disconnect, self.next_handler)
-		GObject.idle_add(self.next_button.connect, "clicked", self.kthxbye)
+		
+		# Using idle_add to do the following will make linstaller's RAM
+		# usage grow infinitely...
+		self.next_button.connect("clicked", self.kthxbye)
 
 	def change_next_button_to_fullrestart_button(self):
 		""" Changes the next button to a fullrestart button. """
 		
 		GObject.idle_add(self.next_button.set_label, _("Restart installer"))
 		GObject.idle_add(self.next_button.disconnect, self.next_handler)
-		GObject.idle_add(self.next_button.connect, "clicked", self.fullrestart)
+		
+		# Using idle_add to do the following will make linstaller's RAM
+		# usage grow infinitely...
+		self.next_button.connect("clicked", self.fullrestart)
 
 	def on_caspered(self, status):
 		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
@@ -587,22 +607,24 @@ class Service(linstaller.core.service.Service):
 		if status == None:
 			# Forward
 			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-			
-			if not self.on_inst: GObject.idle_add(self.pages.next_page)
-			
-			# Ensure the back button is clickable
-			if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
+			if not self.on_inst:
+				self.show_spinner()
+				GObject.idle_add(self.pages.next_page)
+				self.hide_spinner()
+							
+				# Ensure the back button is clickable
+				GObject.idle_add(self.back_button.set_sensitive, True)
 		elif status == "back":
 			# Back
 			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-
-			if not self.on_inst: GObject.idle_add(self.pages.prev_page)
+			if not self.on_inst:
+				self.show_spinner()
+				GObject.idle_add(self.pages.prev_page)
+				self.hide_spinner()
 			
-			# If this is the first page, make unsensitive the button.
-			if not self.on_inst and self.pages.get_current_page() in (0, -1):
-				GObject.idle_add(self.back_button.set_sensitive, False)
+				# If this is the first page, make unsensitive the button.
+				if not self.on_inst and self.pages.get_current_page() in (0, -1):
+					GObject.idle_add(self.back_button.set_sensitive, False)
 
 	def ready(self):
 		

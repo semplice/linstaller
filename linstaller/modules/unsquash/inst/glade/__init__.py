@@ -32,30 +32,27 @@ class Unsquash(glade.Progress):
 		
 		self.parent.progress_set_text(_("Uncompressing system..."))
 		
-		output = [None]
+		num = 0
+		buf = 0
+		lastfile = None
 		while unsquashfs.process.poll() == None:
-			try:
-				toappend = unsquashfs.process.stdout.readline()
-				if output[-1] != toappend:
-					output.append(toappend)
-					
-					num = len(output)
-					
-					# If num > filenum, the progressbar will crash.
-					if not num > filenum:
-						self.parent.progress_set_percentage(num)
-			except:
-				# It may fail when resizing the terminal window.
-				# This will cause unsync between the progressbar and the unsquashing process.
-				# But it's better than let the installer crash ;-)
-				pass
+			
+			for line in iter(unsquashfs.process.stdout.readline, b''):
+				num += 1
+				buf += 1
+				lastfile = line.rstrip("\n")
+				
+				# If num > filenum, the progressbar will crash.
+				if not num > filenum and buf == 10:
+					self.parent.progress_set_percentage(num)
+					buf = 0
 			
 			#time.sleep(0.2)
 		
 		if unsquashfs.process.returncode != 0:
 			# Write the output into the log file
-			for line in output:
-				verbose(str(line))
+			verbose("Last file processed:")
+			verbose(str(lastfile))
 			self.parent.set_header("error", _("An error occoured while uncompressing system to disk."), _("See /var/log/linstaller/linstaller_latest.log for details."))
 			self.parent.prepare_for_exit()
 			self.quit = False

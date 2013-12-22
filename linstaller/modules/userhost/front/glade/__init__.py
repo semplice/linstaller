@@ -170,6 +170,9 @@ class Frontend(glade.Frontend):
 			if self.settings["root"] == None or (self.settings["root"] != None and self.settings["rootpassword"]):
 				self.settings["caspered"] = True
 				self.module_casper()
+		
+		if self.is_module_virgin:
+			self.set_header("info", self.header_title, self.header_subtitle, self.header_icon)
 
 	#def on_switching_module(self):
 	#	""" Override on_switching_module. """

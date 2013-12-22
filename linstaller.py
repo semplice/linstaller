@@ -19,6 +19,8 @@ import os, sys
 
 import time
 
+import gc
+
 lastres = None
 
 def close_services():
@@ -132,6 +134,8 @@ def loop_modules(startfrom=1):
 		if module:
 			count += 1
 			if count < startfrom: continue
+			coll = gc.collect()
+			verbose("gc: collected %s items" % coll)
 			if module.startswith("!") and lastres != "back":
 				# This is a revert action for the supermodule!
 				smod = module[1:]

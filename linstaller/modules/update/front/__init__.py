@@ -46,6 +46,7 @@ class Install(module.Install):
 				verbose("Unable to find %s; skipping." % pkg)
 		
 		if not atleastone:
+			self.cac = None
 			return False
 		
 		return True
@@ -54,6 +55,7 @@ class Install(module.Install):
 		""" Upgrades previously selected packages. """
 		
 		self.cac.commit()
+		self.cac = None
 
 
 class Module(module.Module):

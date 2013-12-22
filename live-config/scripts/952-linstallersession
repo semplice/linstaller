@@ -36,7 +36,7 @@ linstallersession ()
 Configure_linstallersession ()
 {
 	
-	if [ "$CONFIG" == "y" ]; then
+	if [ "$CONFIG" = "y" ]; then
 		update-alternatives --set x-session-manager /usr/bin/linstaller_session.sh
 	fi
 
