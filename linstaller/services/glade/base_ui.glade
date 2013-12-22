@@ -271,7 +271,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">You can continue.</property>
                                     <attributes>
-                                      <attribute name="weight" value="light"/>
+                                      <attribute name="weight" value="normal"/>
                                     </attributes>
                                   </object>
                                 </child>

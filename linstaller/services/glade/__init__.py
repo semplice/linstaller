@@ -36,8 +36,9 @@ MODULESDIR = os.path.join(MAINDIR, "modules/")
 uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
-head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+#head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 #head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
+head_col = {"error":"#a40000","info":"#204a87","ok":"#4e9a06","hold":"#ce5c00"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
 
 class Service(linstaller.core.service.Service):
@@ -479,14 +480,14 @@ class Service(linstaller.core.service.Service):
 
 		else:
 			# Change only subtitle (and set title there)
-			GObject.idle_add(self.header_message_subtitle.set_markup, title)
+			GObject.idle_add(self.header_message_subtitle.set_markup, "<span color=\"%s\">%s</span>" % (head_col[icon], title))
 			# Set the subtitle as the tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, subtitle)
 			GObject.idle_add(self.status_icon.set_tooltip_text, subtitle)
 			
 			self.update_and_show_notification(title)
 		
-		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 1)
+		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 2)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
