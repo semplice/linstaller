@@ -1,3 +1,19 @@
+linstaller (5.22.2-1) devel; urgency=low
+
+  * glade frontend: fixed unexpected RAM usage growing when reconnecting the Next button where needed.
+  * modules/unsquashfs: glade: reworked a bit the progressbar handling in the glade frontend.
+  * Somewhat better general memory management.
+  * glade frontend: better(??) on_caspered() handling
+    (at least it doesn't leave the window unsensitive after the GUI changes
+    made with the spinner introduction...)
+  * glade frontend: increase user's situational awareness by using colors in the statusbar,
+    and by removing the light font to ensure better readability.
+  * modules/userhost: glade: ensure we reset header after checks
+  * fixed some strings to increase situational awareness of the user with the 'new' layout.
+  * live-config: fixed(?) linstallersession
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 22 Dec 2013 15:11:54 +0100
+
 linstaller (5.22.1-1) devel; urgency=low
 
   * glade frontend: added new frontend option 'notifications':
