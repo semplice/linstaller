@@ -572,14 +572,20 @@ class Service(linstaller.core.service.Service):
 		
 		GObject.idle_add(self.next_button.set_label, _("Reboot"))
 		GObject.idle_add(self.next_button.disconnect, self.next_handler)
-		GObject.idle_add(self.next_button.connect, "clicked", self.kthxbye)
+		
+		# Using idle_add to do the following will make linstaller's RAM
+		# usage grow infinitely...
+		self.next_button.connect("clicked", self.kthxbye)
 
 	def change_next_button_to_fullrestart_button(self):
 		""" Changes the next button to a fullrestart button. """
 		
 		GObject.idle_add(self.next_button.set_label, _("Restart installer"))
 		GObject.idle_add(self.next_button.disconnect, self.next_handler)
-		GObject.idle_add(self.next_button.connect, "clicked", self.fullrestart)
+		
+		# Using idle_add to do the following will make linstaller's RAM
+		# usage grow infinitely...
+		self.next_button.connect("clicked", self.fullrestart)
 
 	def on_caspered(self, status):
 		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
