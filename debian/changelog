@@ -1,3 +1,16 @@
+linstaller (5.23.0-1) devel; urgency=low
+
+  * live-config: linstallersession: ensure we redirect to /dev/null
+    update-alternatives' output.
+  * live-config: linstalleralan: still needs work, but while waiting
+    for workarounds on alan2's side, at least make it not fail.
+  * glade frontend: made Service.return_color() return the light
+    variants of the head_col.
+  * modules/fstab: inst: configure zramcfg if we should.
+  * Release 5.23.0
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 23 Dec 2013 12:51:12 +0100
+
 linstaller (5.22.2-1) devel; urgency=low
 
   * glade frontend: fixed unexpected RAM usage growing when reconnecting the Next button where needed.
