@@ -14,6 +14,8 @@ import linstaller.core.libmodules.partdisks.library as lib
 import linstaller.core.libmodules.partdisks.crypt as crypt
 import linstaller.core.libmodules.partdisks.lvm as lvm
 
+ZRAM_LIMIT = 2048 # If user's ram <= this value, zram will be configured.
+
 class Install(module.Install):
 	def generate(self):
 		""" Generates /etc/fstab. """
@@ -124,6 +126,18 @@ proc   /proc   proc   defaults   0   0
 		# Also update-initramfs to make sure we include cryptsetup & family
 		# into the initramfs
 		m.sexec("update-initramfs -u -k all")
+	
+	def zramcfg(self):
+		""" Configures zram via zramcfg. """
+		
+		# Get TotalMem size
+		with open("/proc/meminfo") as mem:
+			MemTotal = int(mem.readline().rstrip("\n").split(" ")[-2])/1024
+		
+		if not os.path.exists("/usr/bin/zramcfg") or not self.moduleclass.settings["zram"] or not MemTotal <= ZRAM_LIMIT:
+			return
+		
+		m.sexec("/usr/bin/zramcfg")
 
 
 class Module(module.Module):
@@ -144,7 +158,14 @@ class Module(module.Module):
 			self.install.generate()
 			# Also set-up crypttab...
 			self.install.crypttab()
+			# Also configure zram...
+			self.install.zramcfg()
 		finally:
 			# Exit
 			self.install.close()
+	
+	def seedpre(self):
+		""" Cache settings. """
+		
+		self.cache("zram",True)
 		
