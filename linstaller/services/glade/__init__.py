@@ -36,7 +36,7 @@ MODULESDIR = os.path.join(MAINDIR, "modules/")
 uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 
 ### HEADER TYPES ###
-#head_col = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
+head_col_light = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 #head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
 head_col = {"error":"#a40000","info":"#204a87","ok":"#4e9a06","hold":"#ce5c00"}
 head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
@@ -59,8 +59,8 @@ class Service(linstaller.core.service.Service):
 	def return_color(self, typ):
 		""" Returns color for typ. """
 		
-		if typ in head_col:
-			return head_col[typ]
+		if typ in head_col_light:
+			return head_col_light[typ]
 		else:
 			return None
 	

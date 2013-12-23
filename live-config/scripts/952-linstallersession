@@ -37,7 +37,7 @@ Configure_linstallersession ()
 {
 	
 	if [ "$CONFIG" = "y" ]; then
-		update-alternatives --set x-session-manager /usr/bin/linstaller_session.sh
+		update-alternatives --set x-session-manager /usr/bin/linstaller_session.sh &> /dev/null
 	fi
 
 	# Creating state file

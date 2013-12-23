@@ -69,7 +69,7 @@ EOF
 		echo "### END ADDED ###" >> /home/$LIVE_USERNAME/.config/alan/alan.conf
 
 		# We should enable new category by adding it to the categories list in [Alan].
-		categories="`grep \"categories =\"  /home/$LIVE_USERNAME/.config/alan/tree.conf`"
+		#categories="`grep \"categories =\"  /home/$LIVE_USERNAME/.config/alan/tree.conf`"
 		#sed -i "s/$categories/$categories - @installer/g"  /home/$LIVE_USERNAME/.config/alan/tree.conf
 	fi
 
