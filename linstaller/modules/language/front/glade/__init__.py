@@ -9,7 +9,10 @@ from gi.repository import GObject, Gtk
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
 
-from linstaller.core.main import warn,info,verbose,root_check		
+import locale as locale_module
+import os
+
+from linstaller.core.main import warn,info,verbose,root_check,sexec
 
 from keeptalking import TimeZone as timezone
 
@@ -472,7 +475,7 @@ class Frontend(glade.Frontend):
 	
 	def on_next_button_click(self):
 		""" Ensure we show the keyboard page if we should. """
-		
+				
 		if self.notebook.get_current_page() == 0:
 			# We should
 			self.notebook.set_current_page(1)
@@ -487,12 +490,43 @@ class Frontend(glade.Frontend):
 	
 	def on_module_change(self):
 		""" Seeds items when we change module. """
-						
+		
 		# Preseed changes
 		self.settings["language"] = self.get_selected_locale()
 		self.settings["layout"] = self.get_selected_layouts()
 		self.settings["model"] = self.get_selected_model()
 		self.settings["variant"] = self.get_selected_variant()
+
+		# Set language, if we should
+		norm = locale_module.normalize(self.settings["language"])
+		current = locale_module.getlocale()
+		if current == (None, None):
+			current = None
+		else:
+			".".join(current)
+		if current != norm:
+			try:
+				verbose("Setting installer language to %s (normalized: %s)" % (self.settings["language"], norm))
+				locale_module.setlocale(locale_module.LC_ALL, norm)
+
+				os.environ["LANG"] = ".".join(locale_module.getlocale())
+			except:
+				verbose("Unable to set locale to %s, leaving locale unchanged." % norm)
+			
+			# Also rebuild pages
+			self.objects["parent"].build_pages(replacepage=True)
+				
+		# Set keyboard layout
+		kargs = ["setxkbmap", self.settings["layout"][0]]
+		if self.settings["model"]: kargs.append("-model %s" % self.settings["model"])
+		if self.settings["variant"]: kargs.append("-variant %s" % self.settings["variant"])
+
+		try:
+			# Warning: this will change the keyboard layout *globally*
+			sexec(" ".join(kargs), shell=False)
+		except:
+			verbose("Unable to change the keyboard layout.")
+			
 			
 		verbose("Selected language: %s" % self.settings["language"])
 		verbose("Selected keyboard: %s (model %s, variant %s)" % (self.settings["layout"], self.settings["model"], self.settings["variant"]))

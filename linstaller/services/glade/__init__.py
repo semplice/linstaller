@@ -204,7 +204,10 @@ class Service(linstaller.core.service.Service):
 			self.modules_objects = {}
 			self.inst_modules = []
 
-			
+		if replacepage and not single:
+			current_page = self.pages.get_current_page()
+			counter = 0
+		
 		# Get modules
 		modules = self.main_settings["modules"]
 		
@@ -260,6 +263,12 @@ class Service(linstaller.core.service.Service):
 				
 				# Also enter into the new page
 				self.pages.set_current_page(replacepage)
+			elif replacepage:
+				if module in self.modules_objects:
+					self.modules_objects[module]["main"].destroy()
+				self.pages.remove_page(counter)
+				self.pages.insert_page(objects_list["main"], None, counter)
+				counter +=1
 			else:
 				self.pages.append_page(objects_list["main"], None)
 			#self.pages.next_page()
@@ -270,6 +279,9 @@ class Service(linstaller.core.service.Service):
 			
 			if single and onsuccess:
 				onsuccess(objects_list)
+			
+			if not single and replacepage:
+				self.pages.set_current_page(current_page)
 
 	def get_module_object(self, module):
 		""" Returns a module object for 'module'. """
