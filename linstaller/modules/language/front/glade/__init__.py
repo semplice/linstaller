@@ -222,7 +222,7 @@ class Frontend(glade.Frontend):
 
 	def on_savespace_checkbox_toggled(self, obj):
 		""" Triggered when the savespace checkbox has been toggled. """
-		
+	
 		if obj.get_active():
 			# Enabled. Display savespace_dialog
 			
@@ -475,7 +475,7 @@ class Frontend(glade.Frontend):
 	
 	def on_next_button_click(self):
 		""" Ensure we show the keyboard page if we should. """
-				
+
 		if self.notebook.get_current_page() == 0:
 			# We should
 			self.notebook.set_current_page(1)
@@ -503,10 +503,13 @@ class Frontend(glade.Frontend):
 		if current == (None, None):
 			current = None
 		else:
-			".".join(current)
+			current = ".".join(current)
 		if current != norm:
 			try:
-				verbose("Setting installer language to %s (normalized: %s)" % (self.settings["language"], norm))
+				verbose("Setting installer language to %s (normalized: %s, current: %s)" % (self.settings["language"], norm, current))
+				
+				locale.set(norm, generateonly=True)
+				
 				locale_module.setlocale(locale_module.LC_ALL, norm)
 
 				os.environ["LANG"] = ".".join(locale_module.getlocale())
@@ -542,5 +545,4 @@ class Frontend(glade.Frontend):
 			
 			self.set_header("ok", _("You can continue!"), _("Press forward to continue."))
 			return True
-		else:
-			return None
+		
