@@ -1,3 +1,9 @@
+linstaller (5.24.1-1) devel; urgency=low
+
+  * Fixes in the translation change.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 30 Dec 2013 15:49:11 +0100
+
 linstaller (5.24.0-1) devel; urgency=low
 
   * Implemented an ugly, hacky, awful way to change the installer's translation on-the-fly.
