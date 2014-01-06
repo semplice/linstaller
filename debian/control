@@ -154,19 +154,6 @@ Description: Modular GNU/Linux distribution installer -- ubuntu configuration
  This package contains the linstaller configuration files to
  install an Ubuntu-based distribution.
 
-Package: alan-ext-linstaller
-Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, alan
-Description: Modular GNU/Linux distribution installer -- alan extension
- linstaller is a modular and preseedable GNU/Linux distribution
- installer, written in python.
- .
- It is Semplice Linux-oriented, but thanks to its configuration
- system, can be adapted to many Live distributions.
- .
- This package contains the linstaller module for alan, Semplice's
- openbox menu framework.
-
 Package: live-config-linstaller
 Architecture: all
 Depends: ${misc:Depends}, live-config
