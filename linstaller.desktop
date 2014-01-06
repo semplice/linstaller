@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Install Semplice
+Name[it]=Installa Semplice
+Comment=Launch the Semplice installation wizard.
+Comment[it]=Lancia il programma di installazione di Semplice.
+Exec=linstaller_crash_wrapper.sh -f=glade
+Icon=gtk-save
+Terminal=false
+Type=Application
+Categories=System;

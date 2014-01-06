@@ -49,13 +49,13 @@ data, symlinks = search_for_glade()
 data_files = [
 	("/usr/bin", ["linstaller_wrapper.sh", "linstaller_crash_wrapper.sh", "session/linstaller_session.sh", "mount_nolive.sh"]),
 	("/etc/linstaller", ["config/semplice", "config/semplice.glade", "config/semplice-base", "config/semplice-nolive", "config/semplice-nolive.glade", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi", "config/semplice-fullscreen", "config/semplice-fullscreen.glade"]),
-	("/usr/share/alan/alan/ext", ["alan/linstaller_alan.py"]),
+	("/usr/share/applications", ["linstaller.desktop"]),
 	("/usr/share/xsessions", ["session/linstaller.desktop"]),
 ]
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='5.24.1',
+      version='5.80.0',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
