@@ -507,10 +507,10 @@ class Frontend(glade.Frontend):
 		if current != norm:
 			try:
 				verbose("Setting installer language to %s (normalized: %s, current: %s)" % (self.settings["language"], norm, current))
-				
-				locale.set(norm, generateonly=True)
-				
+								
 				locale_module.setlocale(locale_module.LC_ALL, norm)
+
+				locale.set(norm, generateonly=True)
 
 				os.environ["LANG"] = ".".join(locale_module.getlocale())
 			except:
