@@ -1,3 +1,11 @@
+linstaller (5.80.1-1) devel; urgency=low
+
+  * glade frontend: little increase on height to not display the scrllbar in bricks.
+  * Updated translations.
+  * language: glade: set locale AFTER generation.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Jan 2014 19:14:01 +0100
+
 linstaller (5.80.0-1) devel; urgency=low
 
   * Removed alan extension.
