@@ -1,3 +1,11 @@
+linstaller (5.80.2-1) devel; urgency=low
+
+  * linstaller.desktop: ensure we start the installer :-)
+  * glade frontend: fixed (hopefully) on-the-fly locale change.
+    Sorry in advance for the ugliness of the code.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 15 Jan 2014 19:14:50 +0100
+
 linstaller (5.80.1-1) devel; urgency=low
 
   * glade frontend: little increase on height to not display the scrllbar in bricks.
