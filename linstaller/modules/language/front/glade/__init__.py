@@ -498,7 +498,7 @@ class Frontend(glade.Frontend):
 		self.settings["variant"] = self.get_selected_variant()
 
 		# Set language, if we should
-		norm = locale_module.normalize(self.settings["language"])
+		norm = locale.get_best_locale(self.settings["language"])
 		current = locale_module.getlocale()
 		if current == (None, None):
 			current = None
@@ -507,17 +507,16 @@ class Frontend(glade.Frontend):
 		if current != norm:
 			try:
 				verbose("Setting installer language to %s (normalized: %s, current: %s)" % (self.settings["language"], norm, current))
-								
-				locale_module.setlocale(locale_module.LC_ALL, norm)
-
+				
 				locale.set(norm, generateonly=True)
 
-				os.environ["LANG"] = ".".join(locale_module.getlocale())
+				os.environ["LANG"] = norm
+
+				# Also rebuild pages
+				self.objects["parent"].build_pages(replacepage=True, newlocale=norm)
 			except:
 				verbose("Unable to set locale to %s, leaving locale unchanged." % norm)
 			
-			# Also rebuild pages
-			self.objects["parent"].build_pages(replacepage=True)
 				
 		# Set keyboard layout
 		kargs = ["setxkbmap", self.settings["layout"][0]]
