@@ -514,10 +514,11 @@ class Frontend(glade.Frontend):
 
 				# Also rebuild pages
 				self.objects["parent"].build_pages(replacepage=True, newlocale=norm)
+
 			except:
 				verbose("Unable to set locale to %s, leaving locale unchanged." % norm)
-			
-				
+
+	
 		# Set keyboard layout
 		kargs = ["setxkbmap", self.settings["layout"][0]]
 		if self.settings["model"]: kargs.append("-model %s" % self.settings["model"])
