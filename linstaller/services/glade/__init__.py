@@ -201,13 +201,16 @@ class Service(linstaller.core.service.Service):
 		Note that the single mode does work ONLY on the supplied module, other modules are not touched."""
 		
 		if newlocale:
-			import locale
 			os.environ["LANG"] = newlocale
-			locale.setlocale(locale.LC_ALL, newlocale)
+			os.environ["LC_ALL"]= newlocale
+			
+			import linstaller.core.changelocale as _cl
+			_cl.change(newlocale)
+			#locale.setlocale(locale.LC_ALL, newlocale)
 			
 			global _
 			_ = t9n.library.translation_init("linstaller")
-			
+						
 			# Reset title
 			GObject.idle_add(self.main.set_title, _("%s Installer") % self.main_settings["distro"])
 
@@ -277,7 +280,6 @@ class Service(linstaller.core.service.Service):
 			elif replacepage:
 				counter +=1
 				if counter > self.pages.get_current_page():
-					print "FACENDO",module
 					if module in self.modules_objects:
 						self.modules_objects[module]["main"].destroy()
 					self.pages.remove_page(counter)
