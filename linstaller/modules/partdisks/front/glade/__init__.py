@@ -147,26 +147,20 @@ class Apply(glade.Progress):
 			#	self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
 			#
 			#	return False
+						
+			res = lib.commit(obj, self.parent.touched)
+			if res == False:
+				self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
 			
-			try:
-				res = lib.commit(obj, self.parent.touched)
-				if res == False:
-					self.parent.set_header("error", _("Failed committing changes to %s..")  % key, _("See /var/log/linstaller/linstaller_latest.log for more details."))
-				
-					if self.parent.is_automatic:
-						self.parent.is_automatic = "fail"
-						self.parent.on_steps_ok()
+				if self.parent.is_automatic:
+					self.parent.is_automatic = "fail"
+					self.parent.on_steps_ok()
 										
-					# Restore sensitivity
-					self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
-					self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
-			except:
-				continue
+				# Restore sensitivity
+				self.parent.idle_add(self.parent.apply_window.set_sensitive, True)
+				self.parent.idle_add(self.parent.objects["parent"].main.set_sensitive, True)
 				
-				# Why we are continuing? Simple: some device which doesn't exist anymore may have still been on the list.
-				# We *can't* check for it exists as it prevents the creation of new partitions.
-				# So we use this.
-
+				return False
 			
 			# Should crypt?
 			is_crypt = False
@@ -724,6 +718,18 @@ class Frontend(glade.Frontend):
 
 			container["icon"] = Gtk.Image()
 			container["icon"].set_from_stock("gtk-delete", 6)
+		elif by == "clearNew":
+			container["title"] = Gtk.Label()
+			container["title"].set_markup("<big><b>%s</b></big>" % (_("Use the entire %s disk") % (str(info["model"]))))
+						
+			container["text"] = Gtk.Label()
+			container["text"].set_markup(_("This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs there %(distro)s.") % {"dev":str(info["drive"]), "model":str(info["model"]), "distro": self.moduleclass.main_settings["distro"]})
+
+			container["text2"] = Gtk.Label()
+			container["text2"].set_markup(_("After the deletion, you can use the space freed to install the distribution."))
+
+			container["icon"] = Gtk.Image()
+			container["icon"].set_from_stock("gtk-delete", 6)
 		elif by == "echo":
 			container["title"] = Gtk.Label()
 			container["title"].set_markup("<big><b>%s</b></big>" % (_("Install %(distro)s to %(path)s (%(model)s)") % {"distro":self.moduleclass.main_settings["distro"], "path":str(info["path"]), "model":str(info["model"])}))
@@ -764,11 +770,11 @@ class Frontend(glade.Frontend):
 			container["vbox"].pack_start(container["text2"], True, True, True)
 		
 		container["button"].add(container["hbox"])
-		container["button"].connect("clicked", self.automatic_calc)
+		container["button"].connect("clicked", self.automatic_calc, by)
 		container["button"].show_all()
 		return container
 
-	def automatic_calc(self, obj):
+	def automatic_calc(self, obj, by=None):
 		""" Adds/Removes/etc partitions. """
 		
 		# Get item
@@ -802,10 +808,21 @@ class Frontend(glade.Frontend):
 				self.on_automatic_button_clicked(obj=None)
 			
 			return
+		elif by == "clearNew":
+			dis.deleteAllPartitions()
+			dis.commit()
+			
+			# Run dialog
+			resp = self.clear_confirm_window.run()
+			self.clear_confirm_window.hide()
+			if resp == Gtk.ResponseType.YES:
+				self.on_automatic_button_clicked(obj=None)
+			
+			return
 
 		lib.devices[dev.path.replace("/dev/","")] = dev
 		lib.disks[dev.path.replace("/dev/","")] = dis
-		
+				
 		# Prepare for entering in manual page...
 		self.changed = {}
 		self.touched = []
@@ -832,6 +849,11 @@ class Frontend(glade.Frontend):
 					refreshlvm = True
 				
 			if refreshlvm: lvm.refresh()
+		
+		diskpath = res["device"].path
+		self.changed[diskpath] = {"changes":{}, "obj":res["disk"], "fromAutomatic":True}
+		self.touched.append(diskpath)
+		self.previously_changed.append(diskpath)
 		
 		partpath = res["result"]["part"].path
 		self.changed[partpath] = {"changes": {}, "obj":res["result"]["part"]}
@@ -889,7 +911,7 @@ class Frontend(glade.Frontend):
 		
 		# Enable next button
 		self.on_steps_ok()
-		
+				
 		# If is_echo, trigger next button.
 		if self.settings["is_echo"]:
 			self.on_next_button_click()
@@ -926,6 +948,8 @@ class Frontend(glade.Frontend):
 			child.destroy()
 		self.automatic_container.show()
 
+		self.clear_confirm_window = self.objects["builder"].get_object("clear_confirm_window")
+
 		### COSMETIC HIDES
 		self.automatic_scroller = self.objects["builder"].get_object("automatic_scroller")
 		self.automatic_nosolutions = self.objects["builder"].get_object("automatic_nosolutions")
@@ -949,6 +973,10 @@ class Frontend(glade.Frontend):
 					self.automatic_buttons_reverse[cont["button"]] = item
 				elif item.startswith("delete"):
 					cont = self.automatic_buttons_creator(by="delete", info={"drive":self.automatic_res[item]["device"].path, "swapwarning":self.automatic_res[item]["swapwarning"], "system":self.automatic_res[item]["system"]})
+					self.automatic_buttons[item] = cont
+					self.automatic_buttons_reverse[cont["button"]] = item
+				elif item.startswith("clearNew"):
+					cont = self.automatic_buttons_creator(by="clearNew", info={"drive":self.automatic_res[item]["device"].path, "model":self.automatic_res[item]["model"]})
 					self.automatic_buttons[item] = cont
 					self.automatic_buttons_reverse[cont["button"]] = item
 				elif item.startswith("clear"):
@@ -1124,8 +1152,11 @@ class Frontend(glade.Frontend):
 
 		# If there is an existing object in changed, we want to return that
 		# instead of getting a new one
-		if lib.return_device(self.current_selected["value"]) in self.changed and self.changed[lib.return_device(self.current_selected["value"])]["disk"]:
-			return self.changed[lib.return_device(self.current_selected["value"])]["disk"]
+		try:
+			if lib.return_device(self.current_selected["value"]) in self.changed and self.changed[lib.return_device(self.current_selected["value"])]["disk"]:
+				return self.changed[lib.return_device(self.current_selected["value"])]["disk"]
+		except:
+			pass
 
 		return self.disks[lib.return_device(self.current_selected["value"]).replace("/dev/","")]
 	
@@ -2512,7 +2543,6 @@ class Frontend(glade.Frontend):
 		""" Creates frames etc for the objects passed. """
 		
 		if not device.path in self.changed: self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
-		if not device.path in self.changed: print "EMBEH"
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
