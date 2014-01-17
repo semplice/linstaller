@@ -3200,7 +3200,7 @@ class Frontend(glade.Frontend):
 			
 			if not "/" in self.mountpoints_added:
 				# Error!
-				self.set_header("error", _("You can't continue!"), _("You need to specify the root (/) partition."))
+				self.set_header("error", _("You need to specify the root (/) partition."), _("You can't continue!"))
 				return True
 			else:
 				# Set root.
@@ -3215,7 +3215,7 @@ class Frontend(glade.Frontend):
 					for encrypted in crypt.LUKSdevices:
 						if pv["volume"].pv == crypt.LUKSdevices[encrypted].path and not "/boot" in self.mountpoints_added:
 							# Yeah
-							self.set_header("error", _("You can't continue!"), _("The root partition is on an encrypted device. You need a separated /boot partition on a non-encrypted device."))
+							self.set_header("error", _("The root partition is encrypted, and not /boot specified."), _("The root partition is on an encrypted device. You need a separated /boot partition on a non-encrypted device."))
 							return True
 			
 			# Do the same for /boot
@@ -3227,7 +3227,7 @@ class Frontend(glade.Frontend):
 					for encrypted in crypt.LUKSdevices:
 						if pv["volume"].pv == crypt.LUKSdevices[encrypted].path:
 							# Yeah
-							self.set_header("error", _("You can't continue!"), _("The /boot partition should not be on an encrypted device."))
+							self.set_header("error", _("The /boot partition should not be on an encrypted device."), _("You can't continue!"))
 							return True
 			
 			# If in UEFI mode, ensure /boot/efi is selected
@@ -3241,7 +3241,7 @@ class Frontend(glade.Frontend):
 			if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True and not part == "msdos":
 				if not "/boot/efi" in self.mountpoints_added:
 					# Error!
-					self.set_header("error", _("You can't continue!"), _("You need to specify the EFI System Partition (/boot/efi)."))
+					self.set_header("error", _("No EFI System Partition specified."), _("You need to specify the EFI System Partition (/boot/efi)."))
 					return True
 			
 			# Check for swap too...
