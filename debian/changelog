@@ -1,3 +1,16 @@
+linstaller (5.99.0-1) devel; urgency=low
+
+  * Ensure we automatically close the notification if we return in focus
+    (and another set_header call has been made).
+  * partdisks: glade frontend: reworded a bit the 'you can't continue' messages,
+    to make them straightforward also on the new installer style.
+  * Sorta-of fixed issues when deleting all partitions in automatic mode.
+  * core/servicehelper: use importlib to load the service.
+  * language: glade: on-the-fly locale changing 1 - Eugenio 0.
+    See you during the heaven+1 cycle.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 18 Jan 2014 20:22:50 +0100
+
 linstaller (5.80.3-1) devel; urgency=low
 
   * Fixed - ... - locale changing.
