@@ -497,26 +497,29 @@ class Frontend(glade.Frontend):
 		self.settings["model"] = self.get_selected_model()
 		self.settings["variant"] = self.get_selected_variant()
 
+		# The following is commented because it doesn't work fully.
+		# (Yeah, this is a subtler way to say FIXME!!!111!!one!!eleven!)
+		#
 		# Set language, if we should
-		norm = locale.get_best_locale(self.settings["language"])
-		current = locale_module.getlocale()
-		if current == (None, None):
-			current = None
-		else:
-			current = ".".join(current)
-		if current != norm:
-			try:
-				verbose("Setting installer language to %s (normalized: %s, current: %s)" % (self.settings["language"], norm, current))
-				
-				locale.set(norm, generateonly=True)
-
-				os.environ["LANG"] = norm
-
-				# Also rebuild pages
-				self.objects["parent"].build_pages(replacepage=True, newlocale=norm)
-
-			except:
-				verbose("Unable to set locale to %s, leaving locale unchanged." % norm)
+		#norm = locale.get_best_locale(self.settings["language"])
+		#current = locale_module.getlocale()
+		#if current == (None, None):
+		#	current = None
+		#else:
+		#	current = ".".join(current)
+		#if current != norm:
+		#	try:
+		#		verbose("Setting installer language to %s (normalized: %s, current: %s)" % (self.settings["language"], norm, current))
+		#		
+		#		locale.set(norm, generateonly=True)
+		#
+		#		os.environ["LANG"] = norm
+		#
+		#		# Also rebuild pages
+		#		self.objects["parent"].build_pages(replacepage=True, newlocale=norm)
+		#
+		#	except:
+		#		verbose("Unable to set locale to %s, leaving locale unchanged." % norm)
 
 	
 		# Set keyboard layout

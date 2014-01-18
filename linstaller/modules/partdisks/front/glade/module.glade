@@ -29,11 +29,9 @@
             <child>
               <object class="GtkButton" id="apply_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -45,11 +43,9 @@
             <child>
               <object class="GtkButton" id="apply_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -75,6 +71,46 @@
       <action-widget response="0">apply_no</action-widget>
       <action-widget response="0">apply_yes</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkMessageDialog" id="clear_confirm_window">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Delete all partitions</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">gtk-save</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="message_type">warning</property>
+    <property name="buttons">yes-no</property>
+    <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;Do you really want to delete everything on the drive?&lt;/b&gt;&lt;/big&gt;</property>
+    <property name="use_markup">True</property>
+    <property name="secondary_text" translatable="yes">You can't go back after pressing "Yes".
+&lt;b&gt;You have been warned.&lt;/b&gt;</property>
+    <property name="secondary_use_markup">True</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="messagedialog-vbox">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="messagedialog-action_area">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkMessageDialog" id="crypt_confirm_window">
     <property name="can_focus">False</property>
@@ -104,11 +140,9 @@
             <child>
               <object class="GtkButton" id="crypt_confirm_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -120,11 +154,9 @@
             <child>
               <object class="GtkButton" id="crypt_confirm_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -176,11 +208,9 @@
             <child>
               <object class="GtkButton" id="delete_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -192,11 +222,9 @@
             <child>
               <object class="GtkButton" id="delete_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -261,11 +289,9 @@
             <child>
               <object class="GtkButton" id="lvm_apply_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -277,11 +303,9 @@
             <child>
               <object class="GtkButton" id="lvm_apply_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -340,11 +364,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="mount_on_install_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -356,11 +378,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="mount_on_install_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -413,11 +433,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="newtable_no">
                 <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -429,11 +447,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="newtable_yes">
                 <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -456,83 +472,6 @@ If you are unsure, press No.</property>
       <action-widget response="0">newtable_no</action-widget>
       <action-widget response="0">newtable_yes</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkMessageDialog" id="remove_window">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Remove partition</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon_name">gtk-save</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="message_type">question</property>
-    <property name="use_markup">True</property>
-    <property name="secondary_text" translatable="yes">Use the "Refresh" button to undo this change.</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="messagedialog-vbox4">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="messagedialog-action_area4">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="remove_no">
-                <property name="label">gtk-no</property>
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="remove_yes">
-                <property name="label">gtk-yes</property>
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">remove_no</action-widget>
-      <action-widget response="0">remove_yes</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkAdjustment" id="size_adjustment">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="partition_window">
     <property name="width_request">400</property>
@@ -559,11 +498,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="partition_cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -575,11 +512,9 @@ If you are unsure, press No.</property>
             <child>
               <object class="GtkButton" id="partition_ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -663,11 +598,9 @@ If you are unsure, press No.</property>
                             <child>
                               <object class="GtkRadioButton" id="size_manual_radio">
                                 <property name="label" translatable="yes">Specify the size: </property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -717,11 +650,9 @@ If you are unsure, press No.</property>
                         <child>
                           <object class="GtkRadioButton" id="size_scale_radio">
                             <property name="label" translatable="yes">Specify the size:</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -795,12 +726,10 @@ If you are unsure, press No.</property>
                         <child>
                           <object class="GtkRadioButton" id="format_box">
                             <property name="label" translatable="yes">Format the partition</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="is_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -834,11 +763,9 @@ If you are unsure, press No.</property>
                         <child>
                           <object class="GtkRadioButton" id="lvm_box">
                             <property name="label" translatable="yes">Use as a LVM physical volume</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -853,11 +780,9 @@ If you are unsure, press No.</property>
                         <child>
                           <object class="GtkRadioButton" id="crypting_box">
                             <property name="label" translatable="yes">Use as an encrypted LVM physical volume</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -915,11 +840,9 @@ If you are unsure, press No.</property>
                                 <child>
                                   <object class="GtkCheckButton" id="crypting_random">
                                     <property name="label" translatable="yes">Fill the device with random data</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -932,11 +855,9 @@ If you are unsure, press No.</property>
                                 <child>
                                   <object class="GtkCheckButton" id="crypting_random_hq">
                                     <property name="label" translatable="yes">Use high quality random data (it will take a long time)</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -958,11 +879,9 @@ If you are unsure, press No.</property>
                         <child>
                           <object class="GtkRadioButton" id="do_not_format_box">
                             <property name="label" translatable="yes">Do not format</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -1090,11 +1009,9 @@ Ensure that the physical volume is unlinked from any volume group before attempt
                         <child>
                           <object class="GtkCheckButton" id="mount_on_install">
                             <property name="label" translatable="yes">Mount during the installation phase</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -1137,6 +1054,79 @@ Ensure that the physical volume is unlinked from any volume group before attempt
       <action-widget response="0">partition_ok</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkMessageDialog" id="remove_window">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Remove partition</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="icon_name">gtk-save</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="message_type">question</property>
+    <property name="use_markup">True</property>
+    <property name="secondary_text" translatable="yes">Use the "Refresh" button to undo this change.</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="messagedialog-vbox4">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="messagedialog-action_area4">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="remove_no">
+                <property name="label">gtk-no</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="remove_yes">
+                <property name="label">gtk-yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">remove_no</action-widget>
+      <action-widget response="0">remove_yes</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="size_adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkMessageDialog" id="unlock_window">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -1163,11 +1153,9 @@ Ensure that the physical volume is unlinked from any volume group before attempt
             <child>
               <object class="GtkButton" id="unlock_cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -1179,12 +1167,10 @@ Ensure that the physical volume is unlinked from any volume group before attempt
             <child>
               <object class="GtkButton" id="unlock_ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="is_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -1265,11 +1251,9 @@ Ensure that the physical volume is unlinked from any volume group before attempt
             <child>
               <object class="GtkButton" id="vg_manage_cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -1281,11 +1265,9 @@ Ensure that the physical volume is unlinked from any volume group before attempt
             <child>
               <object class="GtkButton" id="vg_manage_ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -1492,11 +1474,9 @@ You can move the contents of the physical volume to another using the &lt;i&gt;p
             <child>
               <object class="GtkButton" id="vg_close">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -1543,11 +1523,9 @@ You can move the contents of the physical volume to another using the &lt;i&gt;p
                 <child>
                   <object class="GtkButton" id="vg_add_button">
                     <property name="label">gtk-add</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -1559,11 +1537,9 @@ You can move the contents of the physical volume to another using the &lt;i&gt;p
                 <child>
                   <object class="GtkButton" id="vg_edit_button">
                     <property name="label">gtk-edit</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -1575,11 +1551,9 @@ You can move the contents of the physical volume to another using the &lt;i&gt;p
                 <child>
                   <object class="GtkButton" id="vg_remove_button">
                     <property name="label">gtk-remove</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -1706,11 +1680,9 @@ You can move the contents of the physical volume to another using the &lt;i&gt;p
                         <property name="layout_style">center</property>
                         <child>
                           <object class="GtkButton" id="automatic_button">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                             <child>
                               <object class="GtkBox" id="box7">
                                 <property name="visible">True</property>
@@ -1780,11 +1752,9 @@ option for your system.</property>
                         </child>
                         <child>
                           <object class="GtkButton" id="manual_button">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="use_action_appearance">False</property>
                             <child>
                               <object class="GtkBox" id="box9">
                                 <property name="visible">True</property>
@@ -2041,11 +2011,9 @@ option for your system.</property>
                     <property name="toolbar_style">both-horiz</property>
                     <child>
                       <object class="GtkToolButton" id="add_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Add partition</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Add partition</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-add</property>
@@ -2057,11 +2025,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="remove_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Remove partition</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Remove partition</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-remove</property>
@@ -2073,11 +2039,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="edit_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Edit partition</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Edit partition</property>
                         <property name="use_underline">True</property>
@@ -2090,11 +2054,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="back_to_normal_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Back</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Back</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-go-back</property>
@@ -2106,10 +2068,8 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkSeparatorToolItem" id="toolbar_separator">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2118,11 +2078,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="lock_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Lock/Unlock volume</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Lock/Unlock volume</property>
                         <property name="use_underline">True</property>
@@ -2135,11 +2093,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="advanced_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Advanced options</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Advanced options</property>
                         <property name="use_underline">True</property>
@@ -2152,11 +2108,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="newtable_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Add partition table</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Add partition table</property>
                         <property name="use_underline">True</property>
@@ -2169,11 +2123,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="delete_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Delete all partitions</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Delete all partitions</property>
                         <property name="use_underline">True</property>
@@ -2186,11 +2138,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="vgmanage_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Manage LVM volume groups</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Manage LVM volume groups</property>
                         <property name="use_underline">True</property>
@@ -2203,10 +2153,8 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolItem" id="coso_che_separa">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_action_appearance">False</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -2218,11 +2166,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="refresh_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Refresh</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Refresh</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-refresh</property>
@@ -2234,11 +2180,9 @@ option for your system.</property>
                     </child>
                     <child>
                       <object class="GtkToolButton" id="apply_button">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Apply</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Apply</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-apply</property>

@@ -385,7 +385,26 @@ def get_supported_filesystems():
 
 def commit(obj, touched):
 	""" Commits the changes at obj. """
-	
+		
+	if type(obj) == p.disk.Disk:
+		
+		# Check for item in touched
+		goahead = False
+		for item in touched:
+			if item.startswith(obj.device.path):
+				goahead = True
+				break
+		
+		if goahead:
+			try:
+				obj.commitToDevice()
+				obj.commitToOS()
+			except:
+				return False
+
+def commit_old(obj, touched):
+	""" Commits the changes at obj. """
+		
 	if type(obj) == p.partition.Partition:
 		if not obj.path in touched:
 			# Nothing to commit
@@ -415,7 +434,7 @@ def commit(obj, touched):
 		if not obj.device.path in touched:
 			# Nothing to commit
 			return
-	
+		
 	try:
 		obj.commit()
 	except:
@@ -1137,8 +1156,31 @@ class automatic_check_ng:
 							
 		return result_dict, order
 
-
 	def by_clear(self):
+		""" Returns possible solutions by looking only at hard disks to clear. """
+		
+		if self.is_echo:
+			# Disable on echo
+			return {}, []
+		
+		result_dict = {} # "zclearNewX" : (dev, dis)
+		order = []
+		
+		current = 0
+
+		for name, obj in self.dis.items():
+			if obj == "notable": continue
+
+			if len(obj.partitions) == 0:
+				continue # Skip empty hard disks
+
+			current += 1
+			order.append("clearNew%s" % current)
+			result_dict["clearNew%s" % current] = {"model":obj.device.model, "disk":obj, "device":obj.device}
+
+		return result_dict, order
+
+	def by_clear_old(self):
 		""" Returns possible solutions by looking only at hard disks to clear. """
 
 		if self.is_echo:
@@ -1156,13 +1198,17 @@ class automatic_check_ng:
 			# We need to retrieve fresh devices/disks lists and work on them
 			dev, dis = return_devices()
 			
-			obj = dis[obj.device.path.replace("/dev/","")] # Get the proper disk object
+			obj = dis[obj.device.path.replace("/dev/","")].duplicate() # Get the proper disk object
 			
 			if len(obj.partitions) == 0:
 				continue # Skip empty hard disks
 			
 			# Remove all partitions
-			obj.deleteAllPartitions()
+			for part in obj.partitions:
+				print("deleting", part.path)
+				obj.deletePartition(part)
+			
+			print "PARTITIONS", obj.partitions
 
 			part = obj.getFreeSpacePartitions()[0]
 			size = round(part.getLength("MB"), 2)
