@@ -119,6 +119,9 @@ class Install(module.Install):
 				should_hide_menu = False
 		
 		custom_init = self.moduleclass.modules_settings["bootloader"]["custom_init"]
+		if custom_init and not os.path.exists(custom_init):
+			# Semplice releases earlier than 6 do not ship a custom_init, so... hello kernel panics!
+			custom_init = None
 		
 		if "partdisks" in self.moduleclass.modules_settings and "swap" in self.moduleclass.modules_settings["partdisks"]:
 			swap = self.moduleclass.modules_settings["partdisks"]["swap"]
