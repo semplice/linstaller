@@ -1,3 +1,10 @@
+linstaller (6.0.0-1) unstable; urgency=low
+
+  * bootloader/inst: check for the existence of the custom_init.
+  * linstaller 6.0.0. YAY!
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 23 Jan 2014 16:45:16 +0100
+
 linstaller (5.99.0-1) devel; urgency=low
 
   * Ensure we automatically close the notification if we return in focus
