@@ -1,3 +1,10 @@
+linstaller (6.0.1-1) unstable; urgency=low
+
+  * Use old, ugly way to add new partitions.
+    The method we used since 5.1 has been a bit buggy.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 28 Jan 2014 21:16:46 +0100
+
 linstaller (6.0.0-1) unstable; urgency=low
 
   * bootloader/inst: check for the existence of the custom_init.
