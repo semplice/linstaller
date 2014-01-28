@@ -1713,6 +1713,7 @@ class Frontend(glade.Frontend):
 					partitionType = lib.p.PARTITION_LOGICAL
 				else:
 					partitionType = lib.p.PARTITION_NORMAL
+				
 				try:
 					res = lib.add_partition(part.disk, start=part.geometry.start, size=lib.MbToSector(float(self.size_adjustment.get_value())), type=partitionType, filesystem=targetfs)
 				except:

@@ -309,38 +309,47 @@ def maxGrow(partition):
 def add_partition(obj, start, size, type, filesystem):
 	""" Adds a new partition to the obj device. """
 	
+	## Commented items are the right way to do, but it seems buggy...
+	
 	size -= 1
 	
+	print "1 ", start, size
+	
 	# Get disk alignment
-	if obj.partitionAlignment:
-		disk_alignment = obj.partitionAlignment
-	else:
-		disk_alignment = p.Alignment(offset=0, grainSize=1)
+	#if obj.partitionAlignment:
+	#	disk_alignment = obj.partitionAlignment
+	#else:
+	#	disk_alignment = p.Alignment(offset=0, grainSize=1)
 
 	# Get the right alignment
-	if obj.device.optimumAlignment:
-		alignment = obj.device.optimumAlignment
-	elif obj.device.minimumAlignment:
-		alignment = obj.device.minimumAlignment
+	#if obj.device.optimumAlignment:
+	#	alignment = obj.device.optimumAlignment
+	#elif obj.device.minimumAlignment:
+	#	alignment = obj.device.minimumAlignment
 	
-	try:
-		alignment = alignment.intersect(disk_alignment)
-	except (ArithmeticError, AttributeError):
-		alignment = disk_alignment
+	#try:
+	#	alignment = alignment.intersect(disk_alignment)
+	#except (ArithmeticError, AttributeError):
+	#	alignment = disk_alignment
 
 	# Create Geometry and Constraint
 	cons = p.Constraint(device=obj.device)
-	geom = p.Geometry(device=obj.device, start=start, length=size)
+	#geom = p.Geometry(device=obj.device, start=start, length=size)
+	geom = p.Geometry(device=obj.device, start=start+4096, length=size-4096)
 
 	# Align
-	if not alignment.isAligned(geom, start):
-		start = alignment.alignNearest(geom, start)
+	#if not alignment.isAligned(geom, start):
+	#	#start = alignment.alignNearest(geom, start)
+	#	start = start
 	# Align end
-	if not alignment.isAligned(geom, size):
-		size = alignment.alignNearest(geom, size)
+	#if not alignment.isAligned(geom, size):
+	#	#size = alignment.alignNearest(geom, size)
+	#	size = size
+	
+	print "2 ", start, size
 		
 	# Regenerate geometry (FIXME? Could we do this only one time?)
-	geom = p.Geometry(device=obj.device, start=start, length=size)
+	#geom = p.Geometry(device=obj.device, start=start, length=size)
 
 	if filesystem:
 		filesystem = p.FileSystem(type=filesystem, geometry=geom)
