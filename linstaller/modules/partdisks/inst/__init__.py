@@ -107,7 +107,7 @@ class Module(module.Module):
 		# Ensure that is mounted
 		if not os.path.ismount(self.main_settings["target"]):
 			# Umounted. pass.
-			pass
+			return
 		
 		# See if "used" was... used :)
 		if "partdisks.inst" in self.modules_settings and "used" in self.modules_settings["partdisks.inst"]:
