@@ -11,6 +11,7 @@ import linstaller.core.servicehelper as sh
 from linstaller.core.main import warn, info, verbose
 
 import exceptions, traceback
+import subprocess
 
 import t9n.library
 _ = t9n.library.translation_init("linstaller")
@@ -451,7 +452,8 @@ elif _action == "start":
 	if res == "kthxbye":
 		# We should reboot?
 		verbose("KTHXBYE")
-		m.sexec("reboot")
+		subprocess.Popen("reboot")
+		sys.exit(0)
 	elif res == "exit1":
 		sys.exit(1)
 	elif res == "fullrestart":
