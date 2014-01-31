@@ -1,3 +1,9 @@
+linstaller (6.0.2-1) unstable; urgency=medium
+
+  * Try not to 'crash' when rebooting.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 31 Jan 2014 23:00:03 +0100
+
 linstaller (6.0.1-1) unstable; urgency=low
 
   * Use old, ugly way to add new partitions.
