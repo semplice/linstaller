@@ -504,6 +504,10 @@ class Frontend(glade.Frontend):
 	header_subtitle = _("Manage your drives")
 	header_icon = "drive-harddisk"
 
+	def on_objects_ready(self):
+		self.objects["builder"].get_object("manual_toolbar").hide()
+		
+
 	def ready(self):
 		""" partdisks is a really complex module which needs a fresh start every time.
 		Thus, we can't rely on the virgin state, but we need to destroy and recreate the entire interface.
@@ -514,12 +518,13 @@ class Frontend(glade.Frontend):
 		
 		self.on_steps_hold() # Disable now the next button.
 		
+		self.objects["parent"].pages.remove(self.objects["main"])
 		self.objects["main"].destroy() # We need to destroy the old container
 		
 		self.objects["parent"].show_spinner() # Show the spinner
 				
 		# Re-initialize builder, a complex module like this needs a virgin state everytime.
-		current = self.objects["parent"].pages.get_current_page()
+		current = self.objects["parent"].current_page
 		self.idle_add(self.objects["parent"].build_pages, "partdisks.front", current, self.can_continue)
 		
 	def can_continue(self, objects):
@@ -529,6 +534,7 @@ class Frontend(glade.Frontend):
 		
 		# Get new objects
 		self.objects = self.objects["parent"].get_module_object("partdisks.front")
+		self.objects["builder"].get_object("manual_toolbar").hide()
 		
 		self.idle_add(self.real_ready)
 	
@@ -3153,6 +3159,7 @@ class Frontend(glade.Frontend):
 		
 		# Trigger advanced buttons hiding by calling on_advanced_clicked
 		self.on_advanced_clicked(self.back_to_normal_button)
+		GObject.idle_add(self.manual_toolbar.show)
 		
 		# Change text of newtable_button
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
@@ -3200,6 +3207,8 @@ class Frontend(glade.Frontend):
 		# Return always to page 1, if we aren't already there
 		current = self.pages_notebook.get_current_page()
 		if not current == 1:
+			
+			self.objects["parent"].pages.set_transition_type(Gtk.StackTransitionType.SLIDE_RIGHT)
 			
 			# Restart
 			self.module_restart()

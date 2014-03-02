@@ -55,6 +55,7 @@ class Service(linstaller.core.service.Service):
 		self.on_inst = False
 		self.quota = None
 		self.old_module = None
+		self.current_page = 0
 	
 	def return_color(self, typ):
 		""" Returns color for typ. """
@@ -172,7 +173,9 @@ class Service(linstaller.core.service.Service):
 			
 			m.handle_exception(self.current_frontend.on_objects_ready_internal)
 			m.handle_exception(self.current_frontend.on_objects_ready)
-			
+
+			GObject.idle_add(self.pages.set_visible_child_name, self.pages_order[self.current_page])
+
 			# Set header now.
 			self.set_header("info",
 							self.current_frontend.header_title,
@@ -188,7 +191,6 @@ class Service(linstaller.core.service.Service):
 			#GObject.idle_add(self.main.set_sensitive, True)
 			
 			GObject.idle_add(self.current_frontend.process)
-			self.hide_spinner()
 			#GObject.idle_add(self.header_eventbox.show)
 	
 	def build_pages(self, single=None, replacepage=None, onsuccess=None, newlocale=None):
@@ -219,8 +221,11 @@ class Service(linstaller.core.service.Service):
 			self.inst_modules = []
 
 		if replacepage and not single:
-			current_page = self.pages.get_current_page()
+			current_page = self.current_page
 			counter = -1
+		
+		if not replacepage:
+			self.pages_order = []
 		
 		# Get modules
 		modules = self.main_settings["modules"]
@@ -271,13 +276,15 @@ class Service(linstaller.core.service.Service):
 			
 			# Add to pages
 			if single and replacepage:
-				# Due to some Gtk.Notebook wierdness, the calling module MUST destroy the old main container.
-				
-				self.pages.insert_page(objects_list["main"], None, replacepage)
+				# Due to some Gtk.Notebook wierdness, the calling module MUST destroy the old main container.				
+				self.pages.add_named(objects_list["main"], self.pages_order[replacepage])
 				
 				# Also enter into the new page
-				self.pages.set_current_page(replacepage)
+				self.pages.set_visible_child(objects_list["main"])
 			elif replacepage:
+				
+				return # Broken for now
+				
 				counter +=1
 				if counter > self.pages.get_current_page():
 					if module in self.modules_objects:
@@ -287,7 +294,8 @@ class Service(linstaller.core.service.Service):
 				else:
 					continue				
 			else:
-				self.pages.append_page(objects_list["main"], None)
+				self.pages_order.append(module)
+				self.pages.add_named(objects_list["main"], module)
 			#self.pages.next_page()
 			#self.pages.get_current_page()
 			
@@ -372,8 +380,12 @@ class Service(linstaller.core.service.Service):
 		self.progress_bar = self.builder.get_object("progress_bar")
 				
 		### PAGES
-		self.pages_loading = self.builder.get_object("pages_loading")
-		self.pages = self.builder.get_object("pages")
+		#self.pages_loading = self.builder.get_object("pages_loading")
+		#self.pages = self.builder.get_object("pages")
+		self.pages = Gtk.Stack()
+		self.pages.set_homogeneous(False)
+		self.pages.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+		self.box.pack_start(self.pages, True, True, 0)
 		
 		self.next_button = self.builder.get_object("next_button")
 		self.back_button = self.builder.get_object("back_button")
@@ -400,7 +412,7 @@ class Service(linstaller.core.service.Service):
 		self.build_pages()
 		self.pages_built = True
 		
-		GObject.idle_add(self.pages_loading.hide)
+		#GObject.idle_add(self.pages_loading.hide)
 		GObject.idle_add(self.main.show_all)
 
 		# Hide inst
@@ -564,18 +576,12 @@ class Service(linstaller.core.service.Service):
 	def show_spinner(self):
 		""" Shows the spinner. """
 		
-		GObject.idle_add(self.buttons_area.set_sensitive, False)
-		GObject.idle_add(self.header_eventbox.hide)
-		GObject.idle_add(self.pages.hide)
-		GObject.idle_add(self.pages_loading.show)
-	
+		GObject.idle_add(self.main.set_sensitive, False)
+			
 	def hide_spinner(self):
 		""" Reverts the changes done by show_spinner(). """
 
-		GObject.idle_add(self.buttons_area.set_sensitive, True)
-		GObject.idle_add(self.header_eventbox.show)
-		GObject.idle_add(self.pages.show)
-		GObject.idle_add(self.pages_loading.hide)
+		GObject.idle_add(self.main.set_sensitive, True)
 
 	def on_next_button_click(self, obj=None):
 		""" Executed when the Next button is clicked. """
@@ -589,10 +595,12 @@ class Service(linstaller.core.service.Service):
 		# Make sure everything is not sensitive until the frontend is up and running
 		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
 		#self.set_header("info", "Loading...", "Loading.")
-		if not self.on_inst: self.show_spinner()
 				
 		GObject.idle_add(self.next_module)
-		if not self.on_inst: GObject.idle_add(self.pages.next_page)
+		if not self.on_inst:
+			self.current_page += 1
+			self.pages.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT)
+
 		
 		# Ensure the back button is clickable
 		if not self.on_inst: GObject.idle_add(self.back_button.set_sensitive, True)
@@ -608,13 +616,15 @@ class Service(linstaller.core.service.Service):
 
 		# Make sure everything is not sensitive until the frontend is up and running
 		#if not self.on_inst: GObject.idle_add(self.main.set_sensitive, False)
-		if not self.on_inst: self.show_spinner()
+		#if not self.on_inst: self.show_spinner()
 		
 		GObject.idle_add(self.prev_module)
-		if not self.on_inst: GObject.idle_add(self.pages.prev_page)
+		if not self.on_inst:
+			self.current_page -= 1
+			self.pages.set_transition_type(Gtk.StackTransitionType.SLIDE_RIGHT)
 		
 		# If this is the first page, make unsensitive the button.
-		if not self.on_inst and self.pages.get_current_page() in (0, -1):
+		if not self.on_inst and self.current_page in (0, -1):
 			GObject.idle_add(self.back_button.set_sensitive, False)
 
 	def change_next_button_to_reboot_button(self):
@@ -640,28 +650,24 @@ class Service(linstaller.core.service.Service):
 	def on_caspered(self, status):
 		""" Override on_caspered to make sure we handle correctly back/forward jobs when a module has been caspered. """
 		
-		if status == None:
-			# Forward
-			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst:
-				self.show_spinner()
-				GObject.idle_add(self.pages.next_page)
-				self.hide_spinner()
-							
+		if not self.on_inst:
+			
+			#self.show_spinner()
+			
+			if status == None:
+				# Forward
+				self.current_page += 1
+
 				# Ensure the back button is clickable
 				GObject.idle_add(self.back_button.set_sensitive, True)
-		elif status == "back":
-			# Back
-			# Make sure everything is not sensitive until the frontend is up and running
-			if not self.on_inst:
-				self.show_spinner()
-				GObject.idle_add(self.pages.prev_page)
-				self.hide_spinner()
+			elif status == "back":
+				# Back
+				self.current_page -= 1
 			
 				# If this is the first page, make unsensitive the button.
-				if not self.on_inst and self.pages.get_current_page() in (0, -1):
+				if not self.on_inst and self.current_page in (0, -1):
 					GObject.idle_add(self.back_button.set_sensitive, False)
-
+	
 	def ready(self):
 		
 		# Check if the frontend is glade (or a derivative), otherwise it's useless ;-)
