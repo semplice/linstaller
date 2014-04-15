@@ -3153,6 +3153,8 @@ class Frontend(glade.Frontend):
 		
 		# Trigger advanced buttons hiding by calling on_advanced_clicked
 		self.on_advanced_clicked(self.back_to_normal_button)
+		# Revert to "Text beside icons" setting
+		self.idle_add(self.manual_toolbar.set_style, Gtk.ToolbarStyle.BOTH_HORIZ)
 		
 		# Change text of newtable_button
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
