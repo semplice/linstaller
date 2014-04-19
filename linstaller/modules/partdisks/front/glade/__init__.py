@@ -2136,7 +2136,7 @@ class Frontend(glade.Frontend):
 				else:
 					# Ok!
 					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
-
+					
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes
 				val = lib.return_device(self.current_selected["value"])
@@ -2543,7 +2543,17 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed: self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed:
+			self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		else:
+			# If the device is already in changed, we should take the objects
+			# directly from it, otherwise bad things will happen when
+			# committing things (e.g. new partitions will not be physically created)-
+			# Note to self: the next time you create a partition manager
+			# ensure to have an unique pool where store all device objects.
+			# Thanks.
+			device = self.changed[str(device.path)]["obj"]
+			disk = self.changed[str(device.path)]["disk"]
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
