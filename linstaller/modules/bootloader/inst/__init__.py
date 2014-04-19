@@ -97,7 +97,7 @@ class Install(module.Install):
 				# We workaround this by looping through all the lines
 				# and break when needed.
 				for line in f.readlines():
-					line = line.replace("\n","").split("	")[-1]
+					line = os.path.realpath(line.replace("\n","").split("	")[-1])
 					if "mmcblk" in line:
 						# Sd card, skip
 						continue
