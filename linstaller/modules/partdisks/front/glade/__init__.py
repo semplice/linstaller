@@ -809,13 +809,13 @@ class Frontend(glade.Frontend):
 			
 			return
 		elif by == "clearNew":
-			dis.deleteAllPartitions()
-			dis.commit()
-			
 			# Run dialog
 			resp = self.clear_confirm_window.run()
 			self.clear_confirm_window.hide()
 			if resp == Gtk.ResponseType.YES:
+				dis.deleteAllPartitions()
+				dis.commit()
+				
 				self.on_automatic_button_clicked(obj=None)
 			
 			return
