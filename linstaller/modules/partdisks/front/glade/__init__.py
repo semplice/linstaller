@@ -851,7 +851,7 @@ class Frontend(glade.Frontend):
 			if refreshlvm: lvm.refresh()
 		
 		diskpath = res["device"].path
-		self.changed[diskpath] = {"changes":{}, "obj":res["disk"], "fromAutomatic":True}
+		self.changed[diskpath] = {"changes":{}, "obj":res["device"], "disk":res["disk"], "fromAutomatic":True}
 		self.touched.append(diskpath)
 		self.previously_changed.append(diskpath)
 		
