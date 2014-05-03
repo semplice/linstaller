@@ -427,14 +427,20 @@ class Service(linstaller.core.service.Service):
 	
 	def enable_notifications(self):
 		""" Enables the notifications. """
-
-		notify2.init("linstaller")
-		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
-												"linstaller is awesome <3",
-												"gtk-save"   # Icon name
-		)
 		
-		self.notifications_enabled = True
+		try:
+			notify2.init("linstaller")
+			self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
+													"linstaller is awesome <3",
+													"gtk-save"   # Icon name
+			)
+			
+			self.notifications_enabled = True
+		except:
+			# If we can't enable notifications, almost no one cares.
+			# It's better to not have notifications than to have the
+			# (in)famous drunk dialog! ;)
+			self.notifications_enabled = False
 	
 	def set_header_deprecated(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
