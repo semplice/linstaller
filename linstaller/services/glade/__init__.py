@@ -427,14 +427,20 @@ class Service(linstaller.core.service.Service):
 	
 	def enable_notifications(self):
 		""" Enables the notifications. """
-
-		notify2.init("linstaller")
-		self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
-												"linstaller is awesome <3",
-												"gtk-save"   # Icon name
-		)
 		
-		self.notifications_enabled = True
+		try:
+			notify2.init("linstaller")
+			self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
+													"linstaller is awesome <3",
+													"gtk-save"   # Icon name
+			)
+			
+			self.notifications_enabled = True
+		except:
+			# If we can't enable notifications, almost no one cares.
+			# It's better to not have notifications than to have the
+			# (in)famous drunk dialog! ;)
+			self.notifications_enabled = False
 	
 	def set_header_deprecated(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """
@@ -486,14 +492,19 @@ class Service(linstaller.core.service.Service):
 		
 		self.notification.message = message
 		if icon: self.notification.icon = icon
-		if not self.main.is_active():
-			self.notification.show()
-		else:
-			# We need to ensure that the notification is closed to
-			# avoid displaying not up-to-date infos when an action
-			# has been a triggered by another window (e.g: partdisks'
-			# Apply dialog).
-			self.notification.close()
+		try:
+			if not self.main.is_active():
+				self.notification.show()
+			else:
+				# We need to ensure that the notification is closed to
+				# avoid displaying not up-to-date infos when an action
+				# has been a triggered by another window (e.g: partdisks'
+				# Apply dialog).
+				self.notification.close()
+		except:
+			# In some cases, a DBusException is raised randomly.
+			# We do not want that.
+			pass
 
 	def set_header(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
 		""" Sets the header with the delcared icon, title and subtitle. """

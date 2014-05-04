@@ -88,7 +88,23 @@ class Install(module.Install):
 			m.sexec("grub-mkdevicemap --no-floppy --device-map=/tmp/.linstaller")
 			
 			with open("/tmp/.linstaller","r") as f:
-				location = os.path.realpath(f.readline().replace("\n","").split("	")[-1])
+				# While previously we have simply read the first line of
+				# the devicemap, we discovered that in some cases grub
+				# sees as the first drive an eventual SD card, thus
+				# fucking up the entire grub install process (and the installation
+				# will fail because the first device is a partition)
+				#
+				# We workaround this by looping through all the lines
+				# and break when needed.
+				for line in f.readlines():
+					line = os.path.realpath(line.replace("\n","").split("	")[-1])
+					if "mmcblk" in line:
+						# Sd card, skip
+						continue
+					
+					# If we are here, the line we found is correct.
+					break
+				location = line
 					
 			args = "--no-floppy"
 		else:

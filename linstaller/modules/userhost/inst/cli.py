@@ -17,6 +17,7 @@ class Frontend(cli.Frontend):
 
 		# Get a progressbar
 		progress = self.progressbar(_("Creating user:"), 3)
+		progress.start()
 		
 		try:
 			verbose("Creating user")

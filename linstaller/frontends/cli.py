@@ -47,6 +47,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 				verbose("Progressbar crashed")
 				# Generate a new progressbar, and update to the given value
 				self.create_progressbar()
+				self.start()
 				self.update(num)
 		
 		def finish(self):

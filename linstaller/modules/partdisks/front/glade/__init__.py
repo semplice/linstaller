@@ -809,13 +809,13 @@ class Frontend(glade.Frontend):
 			
 			return
 		elif by == "clearNew":
-			dis.deleteAllPartitions()
-			dis.commit()
-			
 			# Run dialog
 			resp = self.clear_confirm_window.run()
 			self.clear_confirm_window.hide()
 			if resp == Gtk.ResponseType.YES:
+				dis.deleteAllPartitions()
+				dis.commit()
+				
 				self.on_automatic_button_clicked(obj=None)
 			
 			return
@@ -851,7 +851,7 @@ class Frontend(glade.Frontend):
 			if refreshlvm: lvm.refresh()
 		
 		diskpath = res["device"].path
-		self.changed[diskpath] = {"changes":{}, "obj":res["disk"], "fromAutomatic":True}
+		self.changed[diskpath] = {"changes":{}, "obj":res["device"], "disk":res["disk"], "fromAutomatic":True}
 		self.touched.append(diskpath)
 		self.previously_changed.append(diskpath)
 		
@@ -2136,7 +2136,7 @@ class Frontend(glade.Frontend):
 				else:
 					# Ok!
 					self.set_header("hold", _("You have some unsaved changes!"), _("Use the Apply button to save them."))
-
+					
 				if not self.get_device_from_selected().path in self.touched: self.touched.append(self.get_device_from_selected().path)
 				# Remove changes
 				val = lib.return_device(self.current_selected["value"])
@@ -2543,7 +2543,17 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed: self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		if not device.path in self.changed:
+			self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
+		else:
+			# If the device is already in changed, we should take the objects
+			# directly from it, otherwise bad things will happen when
+			# committing things (e.g. new partitions will not be physically created)-
+			# Note to self: the next time you create a partition manager
+			# ensure to have an unique pool where store all device objects.
+			# Thanks.
+			device = self.changed[str(device.path)]["obj"]
+			disk = self.changed[str(device.path)]["disk"]
 		
 		container = {}
 		container["frame_label"] = Gtk.Label()
@@ -3153,6 +3163,8 @@ class Frontend(glade.Frontend):
 		
 		# Trigger advanced buttons hiding by calling on_advanced_clicked
 		self.on_advanced_clicked(self.back_to_normal_button)
+		# Revert to "Text beside icons" setting
+		self.idle_add(self.manual_toolbar.set_style, Gtk.ToolbarStyle.BOTH_HORIZ)
 		
 		# Change text of newtable_button
 		if "uefidetect.inst" in self.moduleclass.modules_settings and self.moduleclass.modules_settings["uefidetect.inst"]["uefi"] == True:
