@@ -1,3 +1,22 @@
+linstaller (6.1.0-1) unstable; urgency=medium
+
+  * services/glade: on update_and_show_notification(),
+                    properly catch eventual Exceptions.
+  * linstaller.py: do not force garbage collection anymore (at least for now)
+  * modules/partdisks/front: fixed display issue.
+  * modules/bootloader.inst: ensure we skip eventual SD cards when installing to MBR.
+  * modules/userhost/inst: cli: ensure we actually start the progressbar,
+                                otherwise we will enter in a crash loop...
+  * modules/bootloader: inst: ensure we take the realpath of the device.
+  * modules/partdisks: front/glade: on manual_frame_creator() prefer device objects in self.changed.
+  * modules/partdisks/front/glade: automatic: actually delete the disk after the user has pressed Yes.
+  * modules/partdisks/front/glade: automatic_calc(): when setting up self.changed in order to switch to
+                                                     the manual summary scene, properly store the device
+                                                     and disk objects.
+  * glade service: properly catch eventual pynotify exceptions.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 04 May 2014 18:05:53 +0200
+
 linstaller (6.0.2-1) unstable; urgency=medium
 
   * Try not to 'crash' when rebooting.
