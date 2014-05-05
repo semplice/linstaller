@@ -3042,6 +3042,7 @@ class Frontend(glade.Frontend):
 			self.mountp_table[item] = mp_num
 			self.mountp_table_inverse[mp_num] = item
 		self.mountpoint_combo.set_model(point_store)
+		self.mountpoint_combo.set_entry_text_column(1)
 		#cell = Gtk.CellRendererText()
 		#self.mountpoint_combo.pack_start(cell, True)
 		#self.mountpoint_combo.add_attribute(cell, "text", 1)
