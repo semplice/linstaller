@@ -1,3 +1,12 @@
+linstaller (6.1.1-1) unstable; urgency=medium
+
+  * modules/partdisks/front/glade: Semplice 6.0 ships with GTK+3.8,
+                                   so lower the toolkit version limit.
+  * modules/partdisks/front/glade: ensure the mountpoint's entry_text_column
+                                   is the one containing the description.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 05 May 2014 23:12:54 +0200
+
 linstaller (6.1.0-1) unstable; urgency=medium
 
   * services/glade: on update_and_show_notification(),
