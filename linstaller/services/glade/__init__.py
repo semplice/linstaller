@@ -39,7 +39,7 @@ uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 head_col_light = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 #head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
 head_col = {"error":"#a40000","info":"#204a87","ok":"#4e9a06","hold":"#ce5c00"}
-head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
+head_ico = {"info":"info","error":"error","ok":"gtk-apply","hold":"system-run"}
 
 class Service(linstaller.core.service.Service):
 	""" The glade service is the core of the linstaller's glade frontend.
@@ -510,10 +510,10 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
 			
 			# Icon: appicon (if any), Status icon: info
-			if appicon:
-				GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
-			else:
-				GObject.idle_add(self.header_icon.set_from_stock, head_ico[icon], 6)
+			if not appicon:
+				appicon = head_ico[icon]
+			
+			GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
 			# Reset tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, None)
 			GObject.idle_add(self.status_icon.set_tooltip_text, None)
@@ -529,12 +529,12 @@ class Service(linstaller.core.service.Service):
 			
 			self.update_and_show_notification(title)
 		
-		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 2)
+		GObject.idle_add(self.status_icon.set_from_icon_name, head_ico[icon], 2)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
 				
-		GObject.idle_add(obj.set_icon_from_stock, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
+		GObject.idle_add(obj.set_icon_from_icon_name, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
 		GObject.idle_add(obj.set_icon_tooltip_text, Gtk.EntryIconPosition.SECONDARY, tooltip)
 
 	def exitw_show(self, obj=None, thing=None):
