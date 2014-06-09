@@ -427,7 +427,7 @@ class Service(linstaller.core.service.Service):
 			notify2.init("linstaller")
 			self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
 													"linstaller is awesome <3",
-													"gtk-save"   # Icon name
+													"info"   # Icon name
 			)
 			
 			self.notifications_enabled = True
