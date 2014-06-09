@@ -386,13 +386,8 @@ class Service(linstaller.core.service.Service):
 		# Set back button as unsensitive, as we're in the first page
 		GObject.idle_add(self.back_button.set_sensitive, False)
 
-		# Get and set header color
-		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
-		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
-
-		# Set color
-		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
-		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
+		# Header is a "toolbar"
+		self.header_eventbox.get_style_context().add_class("toolbar")
 		
 		# Set title
 		GObject.idle_add(self.main.set_title, _("%s Installer") % self.main_settings["distro"])
