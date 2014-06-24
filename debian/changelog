@@ -1,3 +1,14 @@
+linstaller (6.1.2-1) unstable; urgency=medium
+
+  * services/glade: theme the header by looking at the 'toolbar' CSS class.
+  * Some other design improvements.
+  * glade: switch status icons to icon names.
+  * services/glade: remove set_header_deprecated().
+  * glade frontend: default to 'info' icon name.
+  * Fixed live-config scripts executable bits.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Jun 2014 23:04:31 +0200
+
 linstaller (6.1.1-1) unstable; urgency=medium
 
   * modules/partdisks/front/glade: Semplice 6.0 ships with GTK+3.8,
