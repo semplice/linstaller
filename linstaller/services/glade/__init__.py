@@ -39,7 +39,7 @@ uipath = os.path.join(MAINDIR, "services/glade/base_ui.glade")
 head_col_light = {"error":"#F07568","info":"#729fcf","ok":"#73d216","hold":"#f57900"}
 #head_col = {"error":"#a40000", "info":"#204a87", "ok":"#4e9a06", "hold":"#ce5c00"}
 head_col = {"error":"#a40000","info":"#204a87","ok":"#4e9a06","hold":"#ce5c00"}
-head_ico = {"info":Gtk.STOCK_INFO,"error":Gtk.STOCK_DIALOG_ERROR,"ok":Gtk.STOCK_OK,"hold":Gtk.STOCK_EXECUTE}
+head_ico = {"info":"info","error":"error","ok":"gtk-apply","hold":"system-run"}
 
 class Service(linstaller.core.service.Service):
 	""" The glade service is the core of the linstaller's glade frontend.
@@ -386,13 +386,8 @@ class Service(linstaller.core.service.Service):
 		# Set back button as unsensitive, as we're in the first page
 		GObject.idle_add(self.back_button.set_sensitive, False)
 
-		# Get and set header color
-		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
-		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
-
-		# Set color
-		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
-		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
+		# Header is a "toolbar"
+		self.header_eventbox.get_style_context().add_class("toolbar")
 		
 		# Set title
 		GObject.idle_add(self.main.set_title, _("%s Installer") % self.main_settings["distro"])
@@ -432,7 +427,7 @@ class Service(linstaller.core.service.Service):
 			notify2.init("linstaller")
 			self.notification = notify2.Notification(_("%s Installer") % self.main_settings["distro"],
 													"linstaller is awesome <3",
-													"gtk-save"   # Icon name
+													"info"   # Icon name
 			)
 			
 			self.notifications_enabled = True
@@ -442,49 +437,6 @@ class Service(linstaller.core.service.Service):
 			# (in)famous drunk dialog! ;)
 			self.notifications_enabled = False
 	
-	def set_header_deprecated(self, icon, title, subtitle, appicon=None, toolbarinfo=True):
-		""" Sets the header with the delcared icon, title and subtitle. """
-		
-		# Ensure the eventbox is sensitive
-		GObject.idle_add(self.header_eventbox.set_sensitive, True)
-		GObject.idle_add(self.header_icon.set_sensitive, True)
-		GObject.idle_add(self.header_message_title.set_sensitive, True)
-		GObject.idle_add(self.header_message_subtitle.set_sensitive, True)
-		
-		# Get color
-		if icon == "info" and toolbarinfo:
-			color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
-			folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
-		else:
-			color = Gdk.RGBA()
-			color.parse(head_col[icon])
-			
-			folor = Gdk.RGBA()
-			folor.parse("#363636")
-
-#		color = self.main.get_style_context().lookup_color("toolbar_gradient_base")[1]
-#		folor = self.main.get_style_context().lookup_color("toolbar_fg_color")[1]
-
-		# Get and set icon
-		if not appicon:
-			icon = head_ico[icon]
-			GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
-		else: # Show custom icon only on info status
-			GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
-			
-		# Set icon
-		#GObject.idle_add(self.header_icon.set_from_stock, icon, 6)
-		# Set header message and window title
-		GObject.idle_add(self.header_message_title.set_markup, title.replace("& ","&amp; "))
-		GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
-		GObject.idle_add(self.main.set_title, title + " - " + _("%s Installer") % self.main_settings["distro"])
-		
-		# Set color
-		GObject.idle_add(self.header_eventbox.override_background_color, 0, color)
-		GObject.idle_add(self.header_eventbox.override_color, 0, folor)
-		
-		#self.header_message_subtitle.hide()
-
 	def update_and_show_notification(self, message, icon=None):
 		""" Updates and shows the notification. """
 		
@@ -515,10 +467,10 @@ class Service(linstaller.core.service.Service):
 			GObject.idle_add(self.header_message_subtitle.set_markup, subtitle)
 			
 			# Icon: appicon (if any), Status icon: info
-			if appicon:
-				GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
-			else:
-				GObject.idle_add(self.header_icon.set_from_stock, head_ico[icon], 6)
+			if not appicon:
+				appicon = head_ico[icon]
+			
+			GObject.idle_add(self.header_icon.set_from_icon_name, appicon, 6)
 			# Reset tooltip
 			GObject.idle_add(self.header_message_subtitle.set_tooltip_text, None)
 			GObject.idle_add(self.status_icon.set_tooltip_text, None)
@@ -534,12 +486,12 @@ class Service(linstaller.core.service.Service):
 			
 			self.update_and_show_notification(title)
 		
-		GObject.idle_add(self.status_icon.set_from_stock, head_ico[icon], 2)
+		GObject.idle_add(self.status_icon.set_from_icon_name, head_ico[icon], 2)
 
 	def change_entry_status(self, obj, status, tooltip=None):
 		""" Changes entry secondary icon for object. """
 				
-		GObject.idle_add(obj.set_icon_from_stock, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
+		GObject.idle_add(obj.set_icon_from_icon_name, Gtk.EntryIconPosition.SECONDARY, head_ico[status])
 		GObject.idle_add(obj.set_icon_tooltip_text, Gtk.EntryIconPosition.SECONDARY, tooltip)
 
 	def exitw_show(self, obj=None, thing=None):

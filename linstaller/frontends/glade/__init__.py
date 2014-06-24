@@ -50,7 +50,7 @@ class Frontend(linstaller.core.frontend.Frontend):
 	
 	header_title = _("Installing")
 	header_subtitle = _("You will not wait long, we promise.")
-	header_icon = "gtk-save"
+	header_icon = "info"
 	
 	def __init__(self, moduleclass):
 
