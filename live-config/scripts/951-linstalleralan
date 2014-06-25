@@ -1,26 +1,20 @@
 #!/bin/sh
 
 ## linstalleralan - Configure alan to add linstaller extension to user.
-## Copyright (C) 2011 Eugenio "g7" Paolantonio <morarossa@gmail.com>
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2011-2014 Eugenio "g7" Paolantonio <me@medesimo.eu>
 ##
 ## live-config-semplice comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
+set -e
 
-linstalleralan ()
+Cmdline()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/alan2.list ] || \
-	   [ -e /var/lib/live/config/linstalleralan ]
-	then
-		return
-	fi
-
-	echo -n " linstalleralan"
 
 	# Get username
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.username=*|username=*)
@@ -33,14 +27,23 @@ linstalleralan ()
 				LIVE_FRONTEND="${_PARAMETER#*linstallerfrontend=}"
 		esac
 	done
-	
 
-	if [ "$LIVE_USERNAME" ]; then
-		Configure_linstalleralan
-	fi
 }
 
-Configure_linstalleralan ()
+Init() {
+
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/alan2.list ] || \
+	   [ -e /var/lib/live/config/linstalleralan ]
+	then
+		exit 0
+	fi
+
+	echo -n " linstalleralan"
+
+}
+
+Config ()
 {
 	
 	if [ "$LIVE_ENABLE" != "disabled" ]; then
@@ -62,4 +65,6 @@ EOF
 	touch /var/lib/live/config/linstalleralan
 }
 
-linstalleralan
+Cmdline
+Init
+Config

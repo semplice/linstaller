@@ -1,26 +1,20 @@
 #!/bin/sh
 
 ## linstallersession - Sets the linstaller session
-## Copyright (C) 2011 Eugenio "g7" Paolantonio <me@medesimo.eu>
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2013-2014 Eugenio "g7" Paolantonio <me@medesimo.eu>
 ##
 ## live-config-semplice comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
+set -e
 
-linstallersession ()
+Cmdline()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/linstaller.list ] || \
-	   [ -e /var/lib/live/config/linstallersession ]
-	then
-		return
-	fi
-
-	echo -n " linstallersession"
 
 	# Get username
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.linstallersession|linstallersession)
@@ -29,11 +23,22 @@ linstallersession ()
 		esac
 	done
 	
-
-	Configure_linstallersession
 }
 
-Configure_linstallersession ()
+Init() {
+
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/linstaller.list ] || \
+	   [ -e /var/lib/live/config/linstallersession ]
+	then
+		exit 0
+	fi
+
+	echo -n " linstallersession"
+
+}
+
+Config()
 {
 	
 	if [ "$CONFIG" = "y" ]; then
@@ -44,4 +49,6 @@ Configure_linstallersession ()
 	touch /var/lib/live/config/linstallersession
 }
 
-linstallersession
+Cmdline
+Init
+Config
