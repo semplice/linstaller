@@ -1,26 +1,20 @@
 #!/bin/sh
 
 ## linstallerdefault - Sets the default linstaller configuration
-## Copyright (C) 2011 Eugenio "g7" Paolantonio <me@medesimo.eu>
+## Copyright (C) 2006-2014 Daniel Baumann <mail@daniel-baumann.ch>
+## Copyright (C) 2011-2014 Eugenio "g7" Paolantonio <me@medesimo.eu>
 ##
 ## live-config-semplice comes with ABSOLUTELY NO WARRANTY; for details see COPYING.
 ## This is free software, and you are welcome to redistribute it
 ## under certain conditions; see COPYING for details.
 
+set -e
 
-linstallerdefault ()
+Cmdline()
 {
-	# Checking if package is installed or already configured
-	if [ ! -e /var/lib/dpkg/info/linstaller.list ] || \
-	   [ -e /var/lib/live/config/linstallerdefault ]
-	then
-		return
-	fi
-
-	echo -n " linstallerdefault"
 
 	# Get username
-	for _PARAMETER in ${_CMDLINE}
+	for _PARAMETER in ${LIVE_CONFIG_CMDLINE}
 	do
 		case "${_PARAMETER}" in
 			live-config.linstallerdefault=*|linstallerdefault=*)
@@ -29,11 +23,22 @@ linstallerdefault ()
 		esac
 	done
 	
-
-	Configure_linstallerdefault
 }
 
-Configure_linstallerdefault ()
+Init() {
+
+	# Checking if package is installed or already configured
+	if [ ! -e /var/lib/dpkg/info/linstaller.list ] || \
+	   [ -e /var/lib/live/config/linstallerdefault ]
+	then
+		exit 0
+	fi
+
+	echo -n " linstallerdefault"
+
+}
+
+Config()
 {
 	
 	if [ -z "$CONFIG" ]; then
@@ -55,4 +60,6 @@ Configure_linstallerdefault ()
 	touch /var/lib/live/config/linstallerdefault
 }
 
-linstallerdefault
+Cmdline
+Init
+Config
