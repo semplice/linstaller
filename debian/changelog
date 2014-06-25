@@ -1,3 +1,10 @@
+linstaller (6.1.3-1) unstable; urgency=medium
+
+  * live-config: adapted the scripts to the new
+                 syntax used in live-config 4.x
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 25 Jun 2014 12:13:11 +0200
+
 linstaller (6.1.2-1) unstable; urgency=medium
 
   * services/glade: theme the header by looking at the 'toolbar' CSS class.
