@@ -14,7 +14,7 @@ import linstaller.core.libmodules.partdisks.library as lib
 import linstaller.core.libmodules.partdisks.crypt as crypt
 import linstaller.core.libmodules.partdisks.lvm as lvm
 
-ZRAM_LIMIT = 2048 # If user's ram <= this value, zram will be configured.
+ZRAM_LIMIT = 4096 # If user's ram <= this value, zram will be configured.
 
 class Install(module.Install):
 	def generate(self):
