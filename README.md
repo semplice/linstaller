@@ -1,6 +1,12 @@
 linstaller - a simple yet powerful GNU/linux installer
 ======================================================
 
+**linstaller is now in maintenance mode, that means that it won't be developed
+further if not to implement some feature related to Semplice Linux.
+
+There are plans to create a new installer from scratch, and that will be the
+focus of Semplice's installer-related projects.**
+
 linstaller is a modular and preseedable GNU/Linux distribution
 installer, written in python.
 
