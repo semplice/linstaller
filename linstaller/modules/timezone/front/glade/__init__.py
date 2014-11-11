@@ -17,7 +17,7 @@ class Frontend(glade.Frontend):
 	
 	header_title = _("Timezone selection")
 	header_subtitle = _("Select your timezone here.")
-	header_icon = "time-admin"
+	header_icon = "preferences-system-time"
 	
 	def ready(self):
 
