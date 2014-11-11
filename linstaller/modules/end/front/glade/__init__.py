@@ -15,7 +15,7 @@ class Frontend(glade.Frontend):
 	
 	header_title = _("Installation finished")
 	header_subtitle = _("Press Reboot to restart to the installed system.")
-	header_icon = "gtk-ok"
+	header_icon = "face-smile"
 	
 	def ready(self):
 		""" Ready! (to wait...) """

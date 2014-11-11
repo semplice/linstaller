@@ -14,7 +14,7 @@ import linstaller.core.libmodules.partdisks.library as lib
 import linstaller.core.libmodules.partdisks.crypt as crypt
 import linstaller.core.libmodules.partdisks.lvm as lvm
 
-ZRAM_LIMIT = 2048 # If user's ram <= this value, zram will be configured.
+ZRAM_LIMIT = 4096 # If user's ram <= this value, zram will be configured.
 
 class Install(module.Install):
 	def generate(self):
@@ -122,10 +122,6 @@ proc   /proc   proc   defaults   0   0
 		# Set proper owner and permissions on the file
 		os.chown("/etc/crypttab", 0, 0)
 		os.chmod("/etc/crypttab", 0744)
-		
-		# Also update-initramfs to make sure we include cryptsetup & family
-		# into the initramfs
-		m.sexec("update-initramfs -u -k all")
 	
 	def zramcfg(self):
 		""" Configures zram via zramcfg. """
