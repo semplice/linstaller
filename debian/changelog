@@ -1,3 +1,18 @@
+linstaller (6.2.0-1) devel; urgency=medium
+
+  * modules: added 'finish' module.
+  * modules/fstab: raise the ZRAM_LIMIT barrier to 4096 megabytes.
+  * modules/fstab: do not refresh the initramfs anymore.
+  * config/semplice-fullscreen: do not execute the update module.
+  * README.md: ensure that possible downstreams know that this project is in maintenance mode.
+  * bootloader/inst: check if /sbin/init is the specified init's symlink.
+  * timezone/front/glade: use preferences-system-time as header_icon
+  * modules/end/front: use face-smile as header_icon and main icon
+  * live-config: linstalleralan: modify the vera alan2 profile in ~/.config/vera/alan
+  * debian/gbp.conf: temporairly set debian branch to debian-devel.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 11 Nov 2014 08:03:37 +0100
+
 linstaller (6.1.3-1) unstable; urgency=medium
 
   * live-config: adapted the scripts to the new
