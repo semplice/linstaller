@@ -1,3 +1,9 @@
+linstaller (6.2.0-2) devel; urgency=medium
+
+  * debian/linstaller-modules-base.install: ship finish module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 21 Nov 2014 19:49:46 +0100
+
 linstaller (6.2.0-1) devel; urgency=medium
 
   * modules: added 'finish' module.
