@@ -55,7 +55,7 @@ data_files = [
 data_files += data
 
 distrib = setup(name='linstaller',
-      version='6.2.0',
+      version='6.2.1',
       description='Modular, preseedable, GNU/Linux distribution installer',
       author='Eugenio Paolantonio and the Semplice Team',
       author_email='me@medesimo.eu',
