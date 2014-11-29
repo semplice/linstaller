@@ -2543,7 +2543,7 @@ class Frontend(glade.Frontend):
 	def manual_frame_creator(self, device, disk, on_lvm=False):
 		""" Creates frames etc for the objects passed. """
 		
-		if not device.path in self.changed:
+		if on_lvm or not device.path in self.changed:
 			self.changed[str(device.path)] = {"obj":device, "disk":disk, "changes":{}}
 		else:
 			# If the device is already in changed, we should take the objects
