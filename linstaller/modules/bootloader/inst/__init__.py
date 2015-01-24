@@ -97,7 +97,12 @@ class Install(module.Install):
 				# We workaround this by looping through all the lines
 				# and break when needed.
 				for line in f.readlines():
-					line = os.path.realpath(line.replace("\n","").split("	")[-1])
+					line = line.replace("\n","").split("	")[-1]
+					if os.path.basename(line).startswith("lvm-pv"):
+						# LVM PV, skip
+						continue
+					
+					line = os.path.realpath(line)
 					if "mmcblk" in line:
 						# Sd card, skip
 						continue
