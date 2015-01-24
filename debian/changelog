@@ -1,3 +1,9 @@
+linstaller (6.2.2-1) devel; urgency=medium
+
+  * bootloader/inst: do not pick eventual LVM PVs when installing to the Master Boot Record.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 24 Jan 2015 15:46:35 +0100
+
 linstaller (6.2.1-1) devel; urgency=medium
 
   * partdisks: front/glade: force the given device and disk if on_lvm == True. (LB #4)
