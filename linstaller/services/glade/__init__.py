@@ -72,8 +72,11 @@ class Service(linstaller.core.service.Service):
 		for module in self.main_settings["modules"]:
 			if module == limit: break
 			
-			verbose("Freeing up stuff of %s..." % module)
-			del self.modules_objects[module]
+			try:
+				verbose("Freeing up stuff of %s..." % module)
+				del self.modules_objects[module]
+			except:
+				pass
 	
 	def on_module_change(self):
 		""" Handle modules. """
