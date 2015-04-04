@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Batuhan Büyükgüzel <bbuyukguzel@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
@@ -11,12 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
 "PO-Revision-Date: 2015-03-18 20:56+0000\n"
 "Last-Translator: g7 <me@medesimo.eu>\n"
-"Language-Team: Turkish (http://www.transifex.com/projects/p/linstaller/language/tr/)\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/linstaller/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: linstaller.py:260
 msgid "You have to pass at least an action!"
@@ -103,43 +102,43 @@ msgstr ""
 #: linstaller/core/cli_frontend.py:108 linstaller/frontends/gtk3.py:409
 #: linstaller/frontends/cli.py:107
 msgid "[Y/n]"
-msgstr "[E/h]"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:111 linstaller/frontends/gtk3.py:412
 #: linstaller/frontends/cli.py:110
 msgid "[y/N]"
-msgstr "[e/H]"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:114 linstaller/frontends/gtk3.py:415
 #: linstaller/frontends/cli.py:113
 msgid "[y/n]"
-msgstr "[e/h]"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:129 linstaller/frontends/gtk3.py:430
 #: linstaller/frontends/cli.py:128
 msgid "y"
-msgstr "e"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:132 linstaller/frontends/gtk3.py:433
 #: linstaller/frontends/cli.py:131
 msgid "n"
-msgstr "h"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:135 linstaller/frontends/gtk3.py:436
 #: linstaller/frontends/cli.py:134
 msgid "yes"
-msgstr "evet"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:138 linstaller/frontends/gtk3.py:439
 #: linstaller/frontends/cli.py:137
 msgid "no"
-msgstr "hayır"
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:143 linstaller/frontends/gtk3.py:444
 #: linstaller/frontends/cli.py:142
 #, python-format
 msgid "Unknown value %s. Please re-try."
-msgstr "Bilinmeyen değer %s. Lütfen tekrar deneyin."
+msgstr ""
 
 #: linstaller/core/cli_frontend.py:155
 #: linstaller/modules/partdisks/front/cli.py:490
@@ -349,7 +348,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:736
 #: linstaller/modules/partdisks/front/cli.py:923
 msgid "Not enough space!"
-msgstr "Yeterli alan yok!"
+msgstr ""
 
 #: linstaller/modules/debian/inst/glade/__init__.py:21
 #: linstaller/modules/debian/inst/glade/__init__.py:41
@@ -384,7 +383,7 @@ msgstr ""
 
 #: linstaller/modules/end/front/cli.py:23
 msgid "Do you want to reboot now?"
-msgstr "Şimdi yeniden başlatmak ister misiniz?"
+msgstr ""
 
 #: linstaller/modules/timezone/inst/glade/__init__.py:23
 #: linstaller/modules/timezone/inst/glade/__init__.py:36
@@ -433,7 +432,7 @@ msgstr ""
 
 #: linstaller/modules/timezone/front/cli.py:75
 msgid "Select city"
-msgstr "Şehir seçin"
+msgstr ""
 
 #: linstaller/modules/timezone/front/cli.py:82
 msgid "Please specify the timezone"
@@ -478,7 +477,7 @@ msgstr ""
 
 #: linstaller/modules/mirrorselect/inst/cli.py:23
 msgid "Selecting mirrors:"
-msgstr "Yansılar seçiliyor:"
+msgstr ""
 
 #: linstaller/modules/mirrorselect/inst/cli.py:46
 msgid "Mirrorselect crashed. Please check sources.list(.d) later."
@@ -487,7 +486,7 @@ msgstr ""
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:15
 #: linstaller/modules/mirrorselect/front/cli.py:18
 msgid "Mirror selection"
-msgstr "Yansı seçimi"
+msgstr ""
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:16
 msgid "Select the best mirror"
@@ -509,11 +508,11 @@ msgstr ""
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:44
 #: linstaller/modules/mirrorselect/front/cli.py:25
 msgid "This requires a working internet connection."
-msgstr "Bu işlem bir internet bağlantısı gerektirmektedir."
+msgstr ""
 
 #: linstaller/modules/mirrorselect/front/cli.py:29
 msgid "Do you want to check for the fastest mirror?"
-msgstr "En hızlı yansılar için için kontrol etmek ister misiniz?"
+msgstr ""
 
 #: linstaller/modules/mirrorselect/front/cli.py:37
 msgid "Do you want to enable deb-src entries?"
@@ -656,7 +655,7 @@ msgstr ""
 #: linstaller/modules/update/front/glade/__init__.py:38
 #: linstaller/modules/update/front/cli.py:42
 msgid "No updates found."
-msgstr "Güncelleştirme bulunamadı."
+msgstr ""
 
 #: linstaller/modules/update/front/gtk3.py:66
 #: linstaller/modules/update/front/glade/__init__.py:52
@@ -779,7 +778,7 @@ msgstr ""
 
 #: linstaller/modules/language/inst/cli.py:19
 msgid "Setting Language & Keyboard:"
-msgstr "Dili ve klavyeyi ayarlayın: "
+msgstr ""
 
 #: linstaller/modules/language/front/glade/__init__.py:21
 #: linstaller/modules/language/front/glade/__init__.py:546
@@ -808,7 +807,7 @@ msgstr ""
 
 #: linstaller/modules/language/front/cli.py:18
 msgid "Language & Keyboard selection"
-msgstr "Dil ve klavye seçimi"
+msgstr ""
 
 #: linstaller/modules/language/front/cli.py:25
 msgid "Please insert your locale here (e.g. it, or it_IT, or it_IT.UTF-8)"
@@ -907,7 +906,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:346
 #, python-format
 msgid "Formatting %s..."
-msgstr "Biçimlendiriliyor %s..."
+msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:226
 #: linstaller/modules/partdisks/front/glade/__init__.py:443
@@ -1263,7 +1262,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:412
 #: linstaller/modules/partdisks/front/cli.py:1050
 msgid "free space"
-msgstr "boş alan"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2672
 #: linstaller/modules/partdisks/front/cli.py:415
@@ -1403,7 +1402,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:231
 msgid "Do you want to continue?"
-msgstr "Devam etmek istiyor musunuz?"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:260
 msgid "Go back"
@@ -1447,7 +1446,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:286
 msgid "WARNING"
-msgstr "UYARI"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
@@ -1472,7 +1471,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:353
 #, python-format
 msgid "FAILED: formatting %s"
-msgstr "Başarısız: biçimlendirme %s"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:379
 msgid "Edit Partition structure"
@@ -1517,7 +1516,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:454
 #: linstaller/modules/partdisks/front/cli.py:849
 msgid "Use as..."
-msgstr "Olarak kullan..."
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:455
 #: linstaller/modules/partdisks/front/cli.py:470
@@ -1531,11 +1530,11 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:627
 #: linstaller/modules/partdisks/front/cli.py:1131
 msgid "<- Back"
-msgstr "<- Geri"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:469
 msgid "Delete all partitions on the disk"
-msgstr "Disk üzerindeki tüm bölümleri sil"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:481
 msgid "Create MBR partition table"
@@ -1573,12 +1572,12 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:762
 #: linstaller/modules/partdisks/front/glade/module.glade.h:5
 msgid "Delete all partitions"
-msgstr "Tüm bölümleri sil"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:545
 #: linstaller/modules/partdisks/front/glade/module.glade.h:66
 msgid "Back"
-msgstr "Geri"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:556
 #: linstaller/modules/partdisks/front/cli.py:558
@@ -1587,7 +1586,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:570
 msgid "Too little free space"
-msgstr "Çok az boş alan"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:573
 msgid "Failed to add partition (AUTOMATIC)"
@@ -1625,16 +1624,16 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:696
 msgid "Successfully added partitions."
-msgstr "Disk bölümleri başarıyla eklendi."
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:701
 msgid "Add a partition"
-msgstr "Bir disk bölümü ekle"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:703
 #, python-format
 msgid "Current free space size: %s"
-msgstr "Şimdiki boş alan boyutu: %s"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:704
 msgid ""
@@ -1672,7 +1671,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:858
 #, python-format
 msgid "[press ENTER for '%s']"
-msgstr "['%s' için ENTER'a basın]"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:820
 #, python-format
@@ -1686,7 +1685,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:833
 msgid "You can't delete freespace!"
-msgstr "Boş alanı silemezsiniz!"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:838
 msgid "The disk containing this partitions is already marked as deleted."
@@ -1765,11 +1764,11 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:983
 #: linstaller/modules/partdisks/front/cli.py:1116
 msgid "Write to memory"
-msgstr "Hafızaya yaz"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:985
 msgid "Do you want to write to memory your changes?"
-msgstr "Yaptığınız değişiklikleri hafızaya yazmak ister misiniz?"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:986
 msgid "This will let you continue to manage the partitioning scheme."
@@ -1808,7 +1807,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:998
 msgid "Ok! You can continue."
-msgstr "Tamam! Devam edebilirsiniz."
+msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:1121
 msgid "Reload original structure"
@@ -1836,7 +1835,7 @@ msgstr ""
 
 #: linstaller/modules/userhost/inst/cli.py:19
 msgid "Creating user:"
-msgstr "Kullanıcı oluşturuluyor:"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:21
 #: linstaller/modules/userhost/front/glade/__init__.py:15
@@ -1847,13 +1846,13 @@ msgstr ""
 #: linstaller/modules/userhost/front/gtk3.py:21
 #: linstaller/modules/userhost/front/glade/__init__.py:16
 msgid "Set users and hostname"
-msgstr "Kullanıcıları ve bilgisayar adını ayarlayın"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:28
 #: linstaller/modules/userhost/front/cli.py:22
 #: linstaller/modules/userhost/front/glade/module.glade.h:1
 msgid "New user's full name (e.g. John Doe)"
-msgstr "Yeni kullanıcının tam ismi (örn: Batuhan Büyükgüzel)"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:29
 #: linstaller/modules/userhost/front/glade/module.glade.h:2
@@ -1868,23 +1867,23 @@ msgstr ""
 #: linstaller/modules/userhost/front/gtk3.py:43
 #: linstaller/modules/userhost/front/cli.py:39
 msgid "Do you want to enable root account?"
-msgstr "Root hesabını etkinleştirmek ister misiniz?"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:44
 #: linstaller/modules/userhost/front/cli.py:43
 msgid "root's password"
-msgstr "root'un parolası"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:50
 #: linstaller/modules/userhost/front/cli.py:57
 #: linstaller/modules/userhost/front/glade/module.glade.h:5
 msgid "Computer's name (e.g. johndesktop)"
-msgstr "Bilgisayarın ismi (örn: batuhanbilgisayar)"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:121
 #, python-format
 msgid "You can't use %s in the username"
-msgstr "Kullanıcı adında %s kullanamazsınız"
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:149
 #: linstaller/modules/userhost/front/cli.py:78
@@ -1895,7 +1894,7 @@ msgstr ""
 #: linstaller/modules/userhost/front/gtk3.py:151
 #: linstaller/modules/userhost/front/cli.py:84
 msgid "The passwords doesn't match! Please retry."
-msgstr "Şifreler uyuşmuyor! Lütfen tekrar deneyin."
+msgstr ""
 
 #: linstaller/modules/userhost/front/gtk3.py:186
 #, python-format
@@ -1958,27 +1957,27 @@ msgstr ""
 #: linstaller/modules/userhost/front/cli.py:24
 #, python-format
 msgid "%s's username (no spaces; e.g: john)"
-msgstr "%s'in kullanıcı adı (boşluklar olmadan; örn: batuhan)"
+msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:31
 #, python-format
 msgid "%s's password"
-msgstr "%s'in parolası"
+msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:70
 #, python-format
 msgid "You can't use these chars in the %s, please re-try: "
-msgstr "%s içinde bu karakterleri kullanamazsınız, lütfen tekrar deneyin:"
+msgstr ""
 
 #: linstaller/modules/userhost/front/cli.py:80
 #: linstaller/frontends/gtk3.py:218
 msgid " (again)"
-msgstr "(tekrar)"
+msgstr ""
 
 #: linstaller/modules/summary/front/glade/__init__.py:17
 #: linstaller/modules/summary/front/cli.py:17
 msgid "Summary"
-msgstr "Özet"
+msgstr ""
 
 #: linstaller/modules/summary/front/glade/__init__.py:18
 msgid "Please review everything before continuing."
@@ -1988,7 +1987,7 @@ msgstr ""
 #: linstaller/modules/summary/front/cli.py:29
 #, python-format
 msgid "%(distroname)s will be installed here."
-msgstr "%(distroname)s buraya kurulacaktır."
+msgstr ""
 
 #: linstaller/modules/summary/front/glade/__init__.py:64
 #: linstaller/modules/summary/front/cli.py:33
@@ -2011,7 +2010,7 @@ msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:20
 msgid "These partitions will be used:"
-msgstr "Bu bölümler kullanılacaktır:"
+msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:44
 #, python-format
@@ -2055,13 +2054,13 @@ msgstr ""
 
 #: linstaller/modules/summary/front/cli.py:86
 msgid "Installing..."
-msgstr "Kuruluyor..."
+msgstr ""
 
 #: linstaller/modules/welcome/front/gtk3.py:21
 #: linstaller/modules/welcome/front/glade/__init__.py:17
 #: linstaller/modules/welcome/front/cli.py:20
 msgid "Welcome!"
-msgstr "Hoşgeldiniz!"
+msgstr ""
 
 #: linstaller/modules/welcome/front/gtk3.py:23
 #: linstaller/modules/welcome/front/glade/__init__.py:20
