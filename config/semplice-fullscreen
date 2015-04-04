@@ -4,7 +4,7 @@
 source = semplice
 
 [linstaller]
-modules = <old> <remove:update.front>
+modules = <old> <remove:update.front> <remove:mirrorselect.front> <remove:mirrorselect.inst>
 
 [frontend:glade]
 fullscreen = True
