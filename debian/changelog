@@ -1,3 +1,11 @@
+linstaller (6.2.3-1) devel; urgency=medium
+
+  * Catch eventual exceptions when freeing up previous modules.
+  * semplice-fullscreen: remove mirrorselect feature.
+  * Updated translations.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 04 Apr 2015 13:46:29 +0200
+
 linstaller (6.2.2-1) devel; urgency=medium
 
   * bootloader/inst: do not pick eventual LVM PVs when installing to the Master Boot Record.
