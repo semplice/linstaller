@@ -58,7 +58,7 @@ Description: Modular GNU/Linux distribution installer -- gtk3 frontend
  
 Package: linstaller-modules-base
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, python-keeptalking, python-libbricks, python-t9n, python-parted, python-apt,
+Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, python-keeptalking, python-libbricks, python-t9n (>= 6.0.2), python-parted, python-apt,
  squashfs-tools,
  user-setup,
  imvirt,
