@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-04-04 08:01+0000\n"
+"PO-Revision-Date: 2015-04-06 11:12+0000\n"
 "Last-Translator: Puskas-Kolozsvari Frederic <pkfric@yahoo.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/linstaller/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -33,32 +33,32 @@ msgstr "Felismert opciók:"
 
 #: linstaller.py:267
 msgid " -c|--config\t\t- Selects the configuration file to read"
-msgstr ""
+msgstr "-c|--config⇥⇥- Kiválasztja olvasásra a konfigurációs fájlt"
 
 #: linstaller.py:268
 msgid ""
 " -p|--configpath\t- Selects the directory to look for configuration files"
-msgstr ""
+msgstr "-p|--configpath⇥- Kiválasztja a könyvtárat amelyben a konfigurációs fájlokat kell keresni"
 
 #: linstaller.py:269
 msgid " -t|--target\t\t- Selects the target directory (def: /linstaller/target)"
-msgstr ""
+msgstr "-t|--target⇥⇥- Kiválasztja a célkönyvtárat (alapértelmezett: /linstaller/target)"
 
 #: linstaller.py:270
 msgid " -f|--frontend\t\t- Selects the frontend to use (def: cli)"
-msgstr ""
+msgstr "-f|--frontend⇥⇥- Kiválasztja a használandó felületet (alapértelmezett: cli)"
 
 #: linstaller.py:271
 msgid " -m|--modules\t\t- Overrides the modules to be executed"
-msgstr ""
+msgstr "-m|--modules⇥⇥- Felülírja a végrehajtandó modulokat"
 
 #: linstaller.py:272
 msgid " -s|--services\t\t- Overrides the services to be executed"
-msgstr ""
+msgstr "-s|--services⇥⇥- Felülírja a végrehajtandó szolgáltatásokat"
 
 #: linstaller.py:273
 msgid " -r|--remove\t\t- Removes the specified modules from the modules list"
-msgstr ""
+msgstr "-r|--remove⇥⇥- Eltávolítja a megadott modulokat a modulok listájáról"
 
 #: linstaller.py:275
 msgid "Recognized actions:"
@@ -66,11 +66,11 @@ msgstr "Felismert műveletek:"
 
 #: linstaller.py:276
 msgid " help\t\t\t- Displays this help message, then exits."
-msgstr ""
+msgstr "help⇥⇥⇥- Megjeleníti ezt a súgót, aztán kilép."
 
 #: linstaller.py:277
 msgid " start\t\t\t- Starts the installer."
-msgstr ""
+msgstr "start⇥⇥⇥- Elindítja a telepítőt."
 
 #: linstaller.py:279
 msgid "Preseeding:"
@@ -954,7 +954,7 @@ msgstr "Lemezek kezelése"
 #: linstaller/modules/partdisks/front/glade/__init__.py:2802
 #: linstaller/modules/partdisks/front/glade/__init__.py:2928
 msgid "Manual partitioning"
-msgstr "Kézi partícionálás"
+msgstr "Kézi particionálás"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:600
 #: linstaller/modules/partdisks/front/glade/__init__.py:2507
@@ -976,7 +976,7 @@ msgstr "Ez a lemezen található szabad helyre telepíti a disztribúciót."
 #: linstaller/modules/partdisks/front/glade/__init__.py:696
 #: linstaller/modules/partdisks/front/glade/__init__.py:713
 msgid "<b>Note:</b> an existing virtual memory (swap) partition will be used."
-msgstr ""
+msgstr "<b>Megjegyzés:</b> egy létező virtuális memória (swap) partíció lesz felhasználva."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:681
 #: linstaller/modules/partdisks/front/glade/__init__.py:698
@@ -984,13 +984,13 @@ msgstr ""
 msgid ""
 "<b>Note:</b> due to the few space, it's not possible to create a virtual "
 "memory (swap) partition."
-msgstr ""
+msgstr "<b>Megjegyzés:</b> a kevés hely miatt nem lehet egy virtuális memória (swap) partícót létrehozni."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:683
 #: linstaller/modules/partdisks/front/glade/__init__.py:700
 #: linstaller/modules/partdisks/front/glade/__init__.py:717
 msgid "<b>Note:</b> a virtual memory (swap) partition will be created."
-msgstr ""
+msgstr "<b>Megjegyzés:</b> egy virtuális memória (swap) partíció létre lesz hozva."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:689
 #, python-format
@@ -1115,7 +1115,7 @@ msgstr "Kérjük várjon."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1720
 msgid "Unable to add partition."
-msgstr ""
+msgstr "A partíció hozzáadása nem sikerült."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1720
 msgid "You shouldn't get here."
@@ -1126,7 +1126,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/glade/__init__.py:2069
 #: linstaller/modules/partdisks/front/glade/__init__.py:2137
 msgid "Use the Apply button to save them."
-msgstr ""
+msgstr "Használja az Alkalmaz gombot a mentésükre."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1757
 #: linstaller/modules/partdisks/front/glade/__init__.py:1893
@@ -1139,7 +1139,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/glade/__init__.py:2069
 #: linstaller/modules/partdisks/front/glade/__init__.py:2137
 msgid "You have some unsaved changes!"
-msgstr ""
+msgstr "Önnek van néhány nem mentett változtatása!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1807
 msgid "Failed to resize partition."
@@ -1155,24 +1155,24 @@ msgstr "A jelszavak nem egyeznek meg."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2017
 msgid "New table created successfully!"
-msgstr ""
+msgstr "Sikeresen elkészült az új tábla!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2017
 msgid "The new table has been created."
-msgstr ""
+msgstr "Az új tábla elkészült."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2066
 msgid "Unable to remove the partition."
-msgstr ""
+msgstr "A partíció eltávolítása nem sikerült."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2066
 #: linstaller/modules/partdisks/front/glade/__init__.py:2134
 msgid "Why did it happen?!"
-msgstr ""
+msgstr "Miért történt ez?!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2134
 msgid "Unable to delete all partitions."
-msgstr ""
+msgstr "Nem sikerült minden partíciót törölni."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2261
 msgid "Volume group name already used!"
@@ -1180,11 +1180,11 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2318
 msgid "Currently used"
-msgstr ""
+msgstr "Jelenleg használt"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2351
 msgid "Available"
-msgstr ""
+msgstr "Rendelkezésre áll"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2382
 msgid "Add a new volume group"
@@ -1218,7 +1218,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2593
 msgid "No partition table yet!"
-msgstr ""
+msgstr "Még nincs partíciós tábla!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2596
 msgid "Partition"
@@ -1281,15 +1281,15 @@ msgstr "Üres lemez!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2805
 msgid "Unable to lock the volume."
-msgstr ""
+msgstr "A kötet zárolása nem sikerült."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2805
 msgid "Please ensure that the volume is not used by another application."
-msgstr ""
+msgstr "Kérjük bizonyosodjon meg arról, hogy a kötetet nem használja más alkalmazás."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2930
 msgid "Press the Apply button and then Forward to continue."
-msgstr ""
+msgstr "Kattintson az Alkalmaz gombra majd a Tovább-ra a folytatáshoz."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3107
 msgid "Name"
@@ -1332,11 +1332,11 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3274
 msgid "No EFI System Partition specified."
-msgstr ""
+msgstr "Nincs EFI Rendszer Partíció meghatározva."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3274
 msgid "You need to specify the EFI System Partition (/boot/efi)."
-msgstr ""
+msgstr "Meg kell határoznia az EFI Rendszer Partíciót (/boot/efi)."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3282
 msgid "No swap selected (press Forward to continue without one)."
@@ -1359,7 +1359,7 @@ msgstr "Meg akarja változtatni a partíciós táblát?"
 
 #: linstaller/modules/partdisks/front/cli.py:131
 msgid "Select distribution specific drives"
-msgstr ""
+msgstr "Disztribúció specifikus meghajtók kiválasztása"
 
 #: linstaller/modules/partdisks/front/cli.py:142
 msgid "Select your root partition"
@@ -1369,15 +1369,15 @@ msgstr "Válassza ki az Ön root partícióját."
 #: linstaller/modules/partdisks/front/cli.py:152
 #: linstaller/modules/partdisks/front/cli.py:190
 msgid "Wrong partition selected!"
-msgstr ""
+msgstr "A partíció kiválasztása hibás!"
 
 #: linstaller/modules/partdisks/front/cli.py:172
 msgid "No swap partition available. Continuing without."
-msgstr ""
+msgstr "Nincs elérhető partíciós tábla. Folytatás anélkül."
 
 #: linstaller/modules/partdisks/front/cli.py:176
 msgid "Select your swap partition (press ENTER to not use swap)"
-msgstr ""
+msgstr "Válassza ki a cserehelyet (kattintson az ENTER-re ha nem akar cserehelyet használni)"
 
 #: linstaller/modules/partdisks/front/cli.py:205
 #: linstaller/modules/partdisks/front/cli.py:290
@@ -1412,7 +1412,7 @@ msgstr "Menjen vissza"
 #: linstaller/modules/partdisks/front/cli.py:262
 msgid ""
 "It appears that you have uncommited changes to the partitioning scheme."
-msgstr ""
+msgstr "Úgy tűnik Önnek végre nem hajtott változtatásai vannak a partíciós sémán."
 
 #: linstaller/modules/partdisks/front/cli.py:263
 msgid ""
@@ -1451,16 +1451,16 @@ msgstr "FIGYELMEZTETÉS"
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
-msgstr ""
+msgstr "Ez az utolsó alkalom amikor ellenőrizheti az új partíciós táblát."
 
 #: linstaller/modules/partdisks/front/cli.py:288
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
-msgstr ""
+msgstr "Ha folytatja, NEM LEHET VISSZAÁLLÍTANI A RÉGI TÁBLÁT!"
 
 #: linstaller/modules/partdisks/front/cli.py:323
 #, python-format
 msgid "Creating new partition table on %s..."
-msgstr ""
+msgstr "Új partíciós tábla létrehozása ezen: %s..."
 
 #: linstaller/modules/partdisks/front/cli.py:328
 #: linstaller/modules/partdisks/front/cli.py:330
@@ -1476,7 +1476,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:379
 msgid "Edit Partition structure"
-msgstr ""
+msgstr "Partíció struktúra szerkesztése"
 
 #: linstaller/modules/partdisks/front/cli.py:389
 #: linstaller/modules/partdisks/front/cli.py:393
@@ -1487,43 +1487,43 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:403
 msgid "Editing disk/partition"
-msgstr ""
+msgstr "Lemez/partíció szerkesztése"
 
 #: linstaller/modules/partdisks/front/cli.py:405
 msgid "You've selected:"
-msgstr ""
+msgstr "Ön kiválasztotta:"
 
 #: linstaller/modules/partdisks/front/cli.py:448
 #: linstaller/modules/partdisks/front/glade/module.glade.h:65
 msgid "Add partition"
-msgstr ""
+msgstr "Partíció hozzáadása"
 
 #: linstaller/modules/partdisks/front/cli.py:451
 #: linstaller/modules/partdisks/front/cli.py:800
 msgid "Format partition"
-msgstr ""
+msgstr "Partíció formázása"
 
 #: linstaller/modules/partdisks/front/cli.py:452
 #: linstaller/modules/partdisks/front/cli.py:831
 #: linstaller/modules/partdisks/front/glade/module.glade.h:9
 msgid "Delete partition"
-msgstr ""
+msgstr "Partíció törlése"
 
 #: linstaller/modules/partdisks/front/cli.py:453
 #: linstaller/modules/partdisks/front/cli.py:877
 msgid "Resize partition"
-msgstr ""
+msgstr "Partíció átméretezése"
 
 #: linstaller/modules/partdisks/front/cli.py:454
 #: linstaller/modules/partdisks/front/cli.py:849
 msgid "Use as..."
-msgstr ""
+msgstr "Használja mint..."
 
 #: linstaller/modules/partdisks/front/cli.py:455
 #: linstaller/modules/partdisks/front/cli.py:470
 #: linstaller/modules/partdisks/front/cli.py:936
 msgid "Unmark changes"
-msgstr ""
+msgstr "Változtatások elvetése"
 
 #: linstaller/modules/partdisks/front/cli.py:458
 #: linstaller/modules/partdisks/front/cli.py:471
@@ -1531,11 +1531,11 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:627
 #: linstaller/modules/partdisks/front/cli.py:1131
 msgid "<- Back"
-msgstr ""
+msgstr "<- Vissza"
 
 #: linstaller/modules/partdisks/front/cli.py:469
 msgid "Delete all partitions on the disk"
-msgstr ""
+msgstr "Töröljön minden partíciót a lemezen"
 
 #: linstaller/modules/partdisks/front/cli.py:481
 msgid "Create MBR partition table"
@@ -1555,7 +1555,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:513
 #: linstaller/modules/partdisks/front/cli.py:539
 msgid "Automatic partitioner"
-msgstr "Automatikus partícionáló"
+msgstr "Automatikus particionáló"
 
 #: linstaller/modules/partdisks/front/cli.py:525
 msgid "Available disks:"
@@ -1596,7 +1596,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:577
 #: linstaller/modules/partdisks/front/cli.py:607
 msgid "Automatic partitioner choices"
-msgstr ""
+msgstr "Automatikus particionáló választásai"
 
 #: linstaller/modules/partdisks/front/cli.py:603
 msgid "No distribution to delete!"
@@ -1604,11 +1604,11 @@ msgstr "Nincs törölhető disztribúció!"
 
 #: linstaller/modules/partdisks/front/cli.py:632
 msgid "Whatever will be the selection, this swap partition will be used:"
-msgstr ""
+msgstr "Bármi legyen kiválasztva, ez a cserehely partíció lesz felhasználva:"
 
 #: linstaller/modules/partdisks/front/cli.py:637
 msgid "A swap partition, if all conditions are meet, will be created."
-msgstr ""
+msgstr "A cserehely partíció, ha minden feltétel teljesített, létre lesz hozva."
 
 #: linstaller/modules/partdisks/front/cli.py:641
 msgid "Please insert your value here"
@@ -1640,16 +1640,16 @@ msgstr "Szabad terület jelenlegi mérete: %s"
 msgid ""
 "You can insert the percentage of the partition (e.g: 50%) or the full size "
 "of the new partition, in MB."
-msgstr ""
+msgstr "Beállíthatja a partíció méretét százalékban (pl. 50%), vagy az új partíció teljes méretét, MB-ban."
 
 #: linstaller/modules/partdisks/front/cli.py:706
 #: linstaller/modules/partdisks/front/cli.py:884
 msgid "Insert the value here [press ENTER to go back]"
-msgstr ""
+msgstr "Adja meg az értéket itt [nyomjon ENTER-t a visszalépéshez]"
 
 #: linstaller/modules/partdisks/front/cli.py:757
 msgid "Done. Now add a filesystem to the partition."
-msgstr ""
+msgstr "Kész. Most adjon egy fájlrendszert a partícióhoz."
 
 #: linstaller/modules/partdisks/front/cli.py:772
 msgid "Changes marked succesfully. Now write the changes to memory."
@@ -1662,22 +1662,22 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:804
 msgid "Available Filesystems:"
-msgstr ""
+msgstr "Rendelkezésre álló Fájlrendszerek:"
 
 #: linstaller/modules/partdisks/front/cli.py:809
 msgid "Insert the filesystem you want to use here"
-msgstr ""
+msgstr "Adja meg a használni akart fájlrendszert itt"
 
 #: linstaller/modules/partdisks/front/cli.py:811
 #: linstaller/modules/partdisks/front/cli.py:858
 #, python-format
 msgid "[press ENTER for '%s']"
-msgstr ""
+msgstr "[nyomjon ENTER-t ehhez: '%s']"
 
 #: linstaller/modules/partdisks/front/cli.py:820
 #, python-format
 msgid "%s is not a supported filesystem!"
-msgstr ""
+msgstr "%s nem támogatott fájlrendszer!"
 
 #: linstaller/modules/partdisks/front/cli.py:826
 #: linstaller/modules/partdisks/front/cli.py:872
@@ -1686,7 +1686,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:833
 msgid "You can't delete freespace!"
-msgstr ""
+msgstr "Nem lehet törölni a szabad helyet!"
 
 #: linstaller/modules/partdisks/front/cli.py:838
 msgid "The disk containing this partitions is already marked as deleted."
@@ -1726,7 +1726,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:881
 #, python-format
 msgid "Current partition size: %s"
-msgstr ""
+msgstr "Partíció jelenlegi mérete: %s"
 
 #: linstaller/modules/partdisks/front/cli.py:882
 msgid ""
@@ -1751,7 +1751,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:948
 msgid "Unmark all changes"
-msgstr ""
+msgstr "Minden változtatás elvetése"
 
 #: linstaller/modules/partdisks/front/cli.py:951
 #, python-format
@@ -1765,7 +1765,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:983
 #: linstaller/modules/partdisks/front/cli.py:1116
 msgid "Write to memory"
-msgstr ""
+msgstr "Memóriába írás"
 
 #: linstaller/modules/partdisks/front/cli.py:985
 msgid "Do you want to write to memory your changes?"
@@ -1785,11 +1785,11 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:987
 msgid "NOTE"
-msgstr ""
+msgstr "MEGJEGYZÉS"
 
 #: linstaller/modules/partdisks/front/cli.py:987
 msgid "not"
-msgstr ""
+msgstr "nem"
 
 #: linstaller/modules/partdisks/front/cli.py:988
 msgid ""
@@ -1808,15 +1808,15 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:998
 msgid "Ok! You can continue."
-msgstr ""
+msgstr "Oké! Folytathatja!"
 
 #: linstaller/modules/partdisks/front/cli.py:1121
 msgid "Reload original structure"
-msgstr ""
+msgstr "Eredeti struktúra újratöltése"
 
 #: linstaller/modules/partdisks/front/cli.py:1126
 msgid "Commit"
-msgstr ""
+msgstr "Végrehajtás"
 
 #: linstaller/modules/partdisks/front/cli.py:1135
 msgid "Enter the number of the partition(s)/device(s) you want to edit here"
@@ -1900,7 +1900,7 @@ msgstr "A jelszavak nem egyeznek meg! Kérjük próbálja meg újra."
 #: linstaller/modules/userhost/front/gtk3.py:186
 #, python-format
 msgid "The root password should be composed of at least %s charchters."
-msgstr ""
+msgstr "A rendszergazda jelszava legalább %s karakterből kellene álljon."
 
 #: linstaller/modules/userhost/front/gtk3.py:188
 msgid "The root passwords doesn't match! Please retry."
@@ -1909,7 +1909,7 @@ msgstr "A rendszergazda jelszavak nem egyeznek meg! Kérjük próbálja meg újr
 #: linstaller/modules/userhost/front/gtk3.py:206
 #, python-format
 msgid "You can't use %s in the hostname"
-msgstr ""
+msgstr "Nem használható %s a gépnévben."
 
 #: linstaller/modules/userhost/front/glade/__init__.py:27
 msgid "The user full name"
@@ -1930,7 +1930,7 @@ msgstr "A számítógép neve"
 #: linstaller/modules/userhost/front/glade/__init__.py:210
 #, python-format
 msgid "The username must not contain these characters: %s"
-msgstr ""
+msgstr "A felhasználónév nem tartalmazhatja ezeket a karaktereket: %s"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:231
 #: linstaller/modules/userhost/front/glade/__init__.py:275
@@ -1949,7 +1949,7 @@ msgstr "A rendszergazda jelszavak nem egyeznek meg!"
 #: linstaller/modules/userhost/front/glade/__init__.py:319
 #, python-format
 msgid "The hostname must not contain these characters: %s"
-msgstr ""
+msgstr "A gépnév nem tartalmazhatja ezeket a karaktereket: %s"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:333
 msgid "The root password"
@@ -1958,7 +1958,7 @@ msgstr "A rendszergazda jelszava"
 #: linstaller/modules/userhost/front/cli.py:24
 #, python-format
 msgid "%s's username (no spaces; e.g: john)"
-msgstr ""
+msgstr "%s felhasználóneve (szünetek nélkül; pl. john)"
 
 #: linstaller/modules/userhost/front/cli.py:31
 #, python-format
@@ -1978,17 +1978,17 @@ msgstr "(újra)"
 #: linstaller/modules/summary/front/glade/__init__.py:17
 #: linstaller/modules/summary/front/cli.py:17
 msgid "Summary"
-msgstr ""
+msgstr "Összefoglalás"
 
 #: linstaller/modules/summary/front/glade/__init__.py:18
 msgid "Please review everything before continuing."
-msgstr ""
+msgstr "Kérjük, nézzen át mindent, mielőtt folytatná."
 
 #: linstaller/modules/summary/front/glade/__init__.py:60
 #: linstaller/modules/summary/front/cli.py:29
 #, python-format
 msgid "%(distroname)s will be installed here."
-msgstr ""
+msgstr "%(distroname)s telepítve lesz ide."
 
 #: linstaller/modules/summary/front/glade/__init__.py:64
 #: linstaller/modules/summary/front/cli.py:33
@@ -1999,19 +1999,19 @@ msgstr ""
 #: linstaller/modules/summary/front/glade/__init__.py:92
 #, python-format
 msgid "(model %s; variant %s)"
-msgstr ""
+msgstr "(%s modell; %s változat)"
 
 #: linstaller/modules/summary/front/glade/__init__.py:103
 msgid "Yes"
-msgstr ""
+msgstr "Igen"
 
 #: linstaller/modules/summary/front/glade/__init__.py:105
 msgid "No"
-msgstr ""
+msgstr "Nem"
 
 #: linstaller/modules/summary/front/cli.py:20
 msgid "These partitions will be used:"
-msgstr ""
+msgstr "Ezek a partíciók lesznek felhasználva:"
 
 #: linstaller/modules/summary/front/cli.py:44
 #, python-format
@@ -2021,41 +2021,41 @@ msgstr ""
 #: linstaller/modules/summary/front/cli.py:50
 #, python-format
 msgid "The default locale will be %(locale)s."
-msgstr ""
+msgstr "Az alapértelmezett nyelv %(locale)s lesz."
 
 #: linstaller/modules/summary/front/cli.py:54
 #, python-format
 msgid "The default keyboard layout will be %(layout)s."
-msgstr ""
+msgstr "Az alapértelmezett billentyűzetkiosztás %(layout)s lesz."
 
 #: linstaller/modules/summary/front/cli.py:60
 #, python-format
 msgid "The main user will be %(userfullname)s (%(username)s)."
-msgstr ""
+msgstr "A fő felhasználó %(userfullname)s (%(username)s) lesz."
 
 #: linstaller/modules/summary/front/cli.py:63
 msgid "Root account is enabled."
-msgstr ""
+msgstr "Az adminisztrátor fiók engedélyezve van."
 
 #: linstaller/modules/summary/front/cli.py:64
 #, python-format
 msgid "The computer hostname will be %(hostname)s."
-msgstr ""
+msgstr "A számítógép neve %(hostname)s lesz."
 
 #: linstaller/modules/summary/front/cli.py:69
 #, python-format
 msgid "The machine will use this timezone: %(timezone)s."
-msgstr ""
+msgstr "A gép ezt az időzónát fogja használni: %(timezone)s."
 
 #: linstaller/modules/summary/front/cli.py:75
 #, python-format
 msgid ""
 "The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s."
-msgstr ""
+msgstr "A rendszerbetöltő (%(bootloader)s)  ide lesz telepítve: %(bootloaderpath)s."
 
 #: linstaller/modules/summary/front/cli.py:86
 msgid "Installing..."
-msgstr ""
+msgstr "Telepítés..."
 
 #: linstaller/modules/welcome/front/gtk3.py:21
 #: linstaller/modules/welcome/front/glade/__init__.py:17
@@ -2075,7 +2075,7 @@ msgstr ""
 msgid ""
 "This wizard will help you with the installation of the distribution into "
 "your Hard Disk or another removable media."
-msgstr ""
+msgstr "Ez a varázsló segíteni fog Önnek a disztribúció merevlemezre vagy más cserélhető adathordozóra való telepítésében."
 
 #: linstaller/modules/welcome/front/gtk3.py:26
 #: linstaller/modules/welcome/front/cli.py:25
@@ -2093,7 +2093,7 @@ msgstr "El akarja kezdeni a telepítést?"
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:23
 msgid "Configuring kernel..."
-msgstr ""
+msgstr "Kernel beállítása..."
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:28
 msgid "Recompiling python modules..."
@@ -2101,11 +2101,11 @@ msgstr ""
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:39
 msgid "Configuring the final system..."
-msgstr ""
+msgstr "Végleges rendszer beállítása..."
 
 #: linstaller/modules/ubuntu/inst/cli.py:20
 msgid "Configuring the final system:"
-msgstr ""
+msgstr "Végleges rendszer beállítása:"
 
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:19
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:38
@@ -2118,16 +2118,16 @@ msgstr ""
 
 #: linstaller/frontends/gtk3.py:323 linstaller/frontends/gtk3.py:328
 msgid "You can't continue."
-msgstr ""
+msgstr "Nem folytathatja."
 
 #: linstaller/frontends/gtk3.py:326
 #: linstaller/services/glade/base_ui.glade.h:5
 msgid "You can continue."
-msgstr ""
+msgstr "Folytathatja."
 
 #: linstaller/frontends/gtk3.py:326
 msgid "Press the next button to continue."
-msgstr ""
+msgstr "Kattintson a tovább gombra a folytatáshoz."
 
 #: linstaller/frontends/gtk3.py:328
 msgid "Please set"
@@ -2135,11 +2135,11 @@ msgstr ""
 
 #: linstaller/frontends/glade/__init__.py:51
 msgid "Installing"
-msgstr ""
+msgstr "Telepítés"
 
 #: linstaller/frontends/glade/__init__.py:52
 msgid "You will not wait long, we promise."
-msgstr ""
+msgstr "Ön nem fog sokáig várni, ígérjük."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some incomplete items (hover to see)."
@@ -2151,17 +2151,17 @@ msgstr ""
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some errors (hover to see)."
-msgstr ""
+msgstr "Van néhány hiba (nyissa le hogy láthassa)."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to fix these errors before continuing:"
-msgstr ""
+msgstr "A folytatás előtt Önnek ezeket a hibákat javítania kell:"
 
 #: linstaller/frontends/glade/__init__.py:244
 #: linstaller/modules/timezone/front/glade/module.glade.h:22
 #: linstaller/modules/language/front/glade/module.glade.h:22
 msgid "Please wait..."
-msgstr ""
+msgstr "Kérjük várjon..."
 
 #: linstaller/frontends/cli.py:86
 msgid "You need to insert a number!"
@@ -2173,24 +2173,24 @@ msgstr ""
 #: linstaller/services/glade/__init__.py:474
 #, python-format
 msgid "%s Installer"
-msgstr ""
+msgstr "%s Telepítő"
 
 #: linstaller/services/glade/__init__.py:248
 #, python-format
 msgid "Module path %s does not exist! Skipping..."
-msgstr ""
+msgstr "%s modul útvonal nem létezik! Kihagyva..."
 
 #: linstaller/services/glade/__init__.py:623
 msgid "Reboot"
-msgstr ""
+msgstr "Újraindítás"
 
 #: linstaller/services/glade/__init__.py:633
 msgid "Restart installer"
-msgstr ""
+msgstr "Telepítő újraindítása"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:1
 msgid "<big><b>An error occurred.</b></big>"
-msgstr ""
+msgstr "<big><b>Hiba történt.</b></big>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:2
 msgid "Manage Semplice features"
@@ -2212,7 +2212,7 @@ msgstr ""
 #: linstaller/modules/bricks/front/glade/module.glade.h:6
 #: linstaller/services/glade/base_ui.glade.h:4
 msgid "<i>Please wait...</i>"
-msgstr ""
+msgstr "<i>Kérjük várjon...</i>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:7
 msgid "Customize features"
@@ -2221,11 +2221,11 @@ msgstr ""
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:1
 #: linstaller/modules/partdisks/front/glade/module.glade.h:27
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:2
 msgid "- or -"
-msgstr ""
+msgstr "- vagy -"
 
 #: linstaller/modules/end/front/glade/module.glade.h:1
 msgid "<big><b>Relax.</b></big>"
@@ -2242,11 +2242,11 @@ msgstr ""
 
 #: linstaller/modules/end/front/glade/module.glade.h:4
 msgid "<big><b>We've finished!</b></big>"
-msgstr ""
+msgstr "<big><b>Befejeztük!</b></big>"
 
 #: linstaller/modules/end/front/glade/module.glade.h:5
 msgid "The installation wizard has just finished!"
-msgstr ""
+msgstr "A telepítővarázsló épp most végezett!"
 
 #: linstaller/modules/end/front/glade/module.glade.h:6
 #: linstaller/modules/partdisks/front/glade/module.glade.h:64
@@ -2261,12 +2261,12 @@ msgstr ""
 #: linstaller/modules/timezone/front/glade/module.glade.h:1
 #: linstaller/modules/language/front/glade/module.glade.h:1
 msgid "Changes applied."
-msgstr ""
+msgstr "Változtatások alkalmazva."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:2
 #: linstaller/modules/language/front/glade/module.glade.h:2
 msgid "<big><b>Changes applied.</b></big>"
-msgstr ""
+msgstr "<big><b>Változtatások alkalmazva.</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:3
 #: linstaller/modules/language/front/glade/module.glade.h:3
@@ -2276,12 +2276,12 @@ msgstr ""
 #: linstaller/modules/timezone/front/glade/module.glade.h:4
 #: linstaller/modules/language/front/glade/module.glade.h:4
 msgid "An error occoured."
-msgstr ""
+msgstr "Hiba történt."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:5
 #: linstaller/modules/language/front/glade/module.glade.h:5
 msgid "<big><b>An error occoured.</b></big>"
-msgstr ""
+msgstr "<big><b>Hiba történt.</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:6
 #: linstaller/modules/language/front/glade/module.glade.h:6
@@ -2336,7 +2336,7 @@ msgstr ""
 #: linstaller/modules/timezone/front/glade/module.glade.h:16
 #: linstaller/modules/language/front/glade/module.glade.h:16
 msgid "Keyboard"
-msgstr ""
+msgstr "Billentyűzet"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:17
 #: linstaller/modules/language/front/glade/module.glade.h:17
@@ -2348,12 +2348,12 @@ msgstr ""
 #: linstaller/modules/timezone/front/glade/module.glade.h:18
 #: linstaller/modules/language/front/glade/module.glade.h:18
 msgid "<b>Timezone</b>"
-msgstr ""
+msgstr "<b>Időzóna</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:19
 #: linstaller/modules/language/front/glade/module.glade.h:19
 msgid "Timezone"
-msgstr ""
+msgstr "Időzóna"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:20
 #: linstaller/modules/language/front/glade/module.glade.h:20
@@ -2401,7 +2401,7 @@ msgstr ""
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:1
 msgid "Yes, check for the fastest mirror."
-msgstr ""
+msgstr "Igen, ellenőrizze a leggyorsabb letöltési tükröt."
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:2
 msgid "Enable deb-src entries"
@@ -2409,19 +2409,19 @@ msgstr ""
 
 #: linstaller/modules/bootloader/front/glade/module.glade.h:1
 msgid "Yes, install the bootloader into the Master Boot Record (MBR)."
-msgstr ""
+msgstr "Igen, telepítse a rendszerbetöltőt a Master Boot Record-ba (MBR)."
 
 #: linstaller/modules/update/front/glade/module.glade.h:1
 msgid "Yes, check for installer updates"
-msgstr ""
+msgstr "Igen, ellenőrizze a telepítő frissítéseket"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:1
 msgid "Apply changes"
-msgstr ""
+msgstr "Változtatások alkalmazása"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:2
 msgid "<big><b>Do you really want to apply the changes?</b></big>"
-msgstr ""
+msgstr "<big><b>Valóban alkalmazni akarja a változtatásokat?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:3
 msgid ""
@@ -2445,7 +2445,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:11
 msgid "Master Boot Record (MBR)"
-msgstr ""
+msgstr "Master Boot Record (MBR)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:12
 msgid ""
@@ -2455,7 +2455,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:13
 msgid "Edit partition"
-msgstr ""
+msgstr "Partíció szerkesztése"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:14
 msgid ""
@@ -2476,7 +2476,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:22
 msgid "Add partition table"
-msgstr ""
+msgstr "Partíciós tábla hozzáadása"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:23
 msgid "<big><b>Do you really want to create a table on this disk?</b></big>"
@@ -2504,7 +2504,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:30
 msgid "Format the partition"
-msgstr ""
+msgstr "Formázza a partíciót"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:31
 msgid "Use as a LVM physical volume"
@@ -2524,7 +2524,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:35
 msgid "Do not format"
-msgstr ""
+msgstr "Ne formázza"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:36
 msgid ""
@@ -2534,7 +2534,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:38
 msgid "<b>File System</b>"
-msgstr ""
+msgstr "<b>Fájl Rendszer</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:39
 msgid "Mount during the installation phase"
@@ -2546,7 +2546,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:41
 msgid "Remove partition"
-msgstr ""
+msgstr "Partíció eltávolítása"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:42
 msgid "Unlock volume"
@@ -2595,7 +2595,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:53
 msgid "<big><b>Please wait.</b></big>"
-msgstr ""
+msgstr "<big><b>Kérjük várjon.</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:54
 msgid ""
@@ -2604,7 +2604,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:56
 msgid "<big><b>Automatic partitioning</b></big>"
-msgstr ""
+msgstr "<big><b>Automatikus particionálás</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:57
 msgid ""
@@ -2614,17 +2614,17 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:59
 msgid "<big><b>Manual partitioning</b></big>"
-msgstr ""
+msgstr "<big><b>Kézi particionálás</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:60
 msgid "The geek's paradise."
-msgstr ""
+msgstr "A számítógépesek paradicsoma."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:61
 msgid ""
 "<i>To use advanced features such as encryption and LVM, you must use the "
 "manual partitioning page.</i>"
-msgstr ""
+msgstr "<i>Ahhoz, hogy fejlett funkciókat használhasson, mint a titkosítás és az LVM, kézi particionálást kell használnia.</i>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:62
 msgid "<big><b>No solution found.</b></big>"
@@ -2634,7 +2634,7 @@ msgstr ""
 msgid ""
 "Unfortunately, we didn't find solutions for this system. Please use the "
 "manual partitioner."
-msgstr ""
+msgstr "Sajnos nem találtunk megfelelő megoldást ehhez a rendszerhez. Kérjük használja a kézi particionálást."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:67
 msgid "Lock/Unlock volume"
@@ -2642,7 +2642,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:68
 msgid "Advanced options"
-msgstr ""
+msgstr "Fejlett opciók"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:69
 msgid "Manage LVM volume groups"
@@ -2650,11 +2650,11 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:70
 msgid "Refresh"
-msgstr ""
+msgstr "Frissítés"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:71
 msgid "Apply"
-msgstr ""
+msgstr "Alkalmazás"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:4
 msgid "New user's password (confirm)"
@@ -2673,7 +2673,7 @@ msgstr ""
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:10
 msgid "Root account"
-msgstr ""
+msgstr "Adminisztrátor fiók"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:11
 msgid "Root password"
@@ -2689,11 +2689,11 @@ msgstr "<b>Rendszergazda jelszava</b>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:14
 msgid "<b>Root account</b>"
-msgstr ""
+msgstr "<b>Adminisztrátor fiók</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:1
 msgid "<b>These partitions will be used:</b>"
-msgstr ""
+msgstr "<b>Ezek a partíciók lesznek felhasználva:</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:2
 msgid "Locale:"
@@ -2701,11 +2701,11 @@ msgstr ""
 
 #: linstaller/modules/summary/front/glade/module.glade.h:3
 msgid "Keyboard:"
-msgstr ""
+msgstr "Billentyűzet:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:4
 msgid "Timezone:"
-msgstr ""
+msgstr "Időzóna:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:5
 msgid "<b>Internationalization &amp; Localization</b>"
@@ -2713,19 +2713,19 @@ msgstr ""
 
 #: linstaller/modules/summary/front/glade/module.glade.h:6
 msgid "Name:"
-msgstr ""
+msgstr "Név:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:7
 msgid "Username:"
-msgstr ""
+msgstr "Felhasználónév:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:8
 msgid "Root enabled:"
-msgstr ""
+msgstr "Adminisztrátor fiók engedélyezve:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:9
 msgid "Hostname:"
-msgstr ""
+msgstr "Gépnév:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:10
 msgid "<b>Users &amp; hostname</b>"
@@ -2733,15 +2733,15 @@ msgstr ""
 
 #: linstaller/modules/summary/front/glade/module.glade.h:11
 msgid "Bootloader:"
-msgstr ""
+msgstr "Rendszerbetöltő:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:12
 msgid "Target:"
-msgstr ""
+msgstr "Cél:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:13
 msgid "<b>Bootloader</b>"
-msgstr ""
+msgstr "<b>Rendszerbetöltő</b>"
 
 #: linstaller/modules/welcome/front/glade/module.glade.h:1
 msgid "<big><b>Welcome.</b></big>"
@@ -2753,19 +2753,19 @@ msgstr "Kattintson a Tovább gombra a telepítés elkezdéséhez."
 
 #: linstaller/services/glade/base_ui.glade.h:1
 msgid "Exit?"
-msgstr ""
+msgstr "Kilépés?"
 
 #: linstaller/services/glade/base_ui.glade.h:2
 msgid "<big><b>Do you really want to quit installation?</b></big>"
-msgstr ""
+msgstr "<big><b>Valóban ki akar lépni a telepítésből?</b></big>"
 
 #: crash/ui.glade.h:1
 msgid ":-("
-msgstr ""
+msgstr ":-("
 
 #: crash/ui.glade.h:2
 msgid "<big><b>Drunk people should not write software.</b></big>"
-msgstr ""
+msgstr "<big><b>Részeg embereknek nem szabadna programot írniuk.</b></big>"
 
 #: crash/ui.glade.h:3
 msgid ""
@@ -2780,7 +2780,7 @@ msgstr ""
 
 #: crash/ui.glade.h:10
 msgid "Take me away"
-msgstr ""
+msgstr "Vigyél el innen"
 
 #: crash/ui.glade.h:11
 msgid "Pastebin it!"
