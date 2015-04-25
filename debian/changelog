@@ -1,3 +1,11 @@
+linstaller (7.0.1-1) unstable; urgency=medium
+
+  * Updated translations.
+  * 7.0.1
+  * debian/control: linstaller-modules-base: pull python-t9n version 6.0.2 or greater.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 26 Apr 2015 00:42:29 +0200
+
 linstaller (7.0.0-1) unstable; urgency=medium
 
   * linstaller 7.0.0.
