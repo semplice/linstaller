@@ -3,6 +3,9 @@
 [linstaller:extends]
 source = semplice-base
 
+[linstaller]
+modules = <old> <remove:mirrorselect.front> <remove:mirrorselect.inst>
+
 # Do not ask for language, use the system's one instead.
 [module:language]
 ask = False
