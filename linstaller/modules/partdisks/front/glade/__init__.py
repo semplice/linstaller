@@ -1622,6 +1622,12 @@ class Frontend(glade.Frontend):
 			# Not used! yay!
 			self.change_entry_status(self.mountpoint_entry, "ok")
 			self.partition_ok.set_sensitive(True)
+			
+			# Preset mount on install if the mpoint is /usr, /boot or /home
+			if mpoint in ("/usr", "/boot", "/home"):
+				self.mount_on_install_prepare = True
+				self.mount_on_install.set_active(True)
+				self.mount_on_install_prepare = False
 		
 		# Also check the lv_name
 		self.on_lv_name_change(self.lv_name)
