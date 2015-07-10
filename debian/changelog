@@ -1,0 +1,1453 @@
+linstaller (7.0.1-1) unstable; urgency=medium
+
+  * Updated translations.
+  * 7.0.1
+  * debian/control: linstaller-modules-base: pull python-t9n version 6.0.2 or greater.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 26 Apr 2015 00:42:29 +0200
+
+linstaller (7.0.0-1) unstable; urgency=medium
+
+  * linstaller 7.0.0.
+  * debian/gbp.conf: we aren't in devel anymore.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 05 Apr 2015 20:20:19 +0200
+
+linstaller (6.2.3-1) devel; urgency=medium
+
+  * Catch eventual exceptions when freeing up previous modules.
+  * semplice-fullscreen: remove mirrorselect feature.
+  * Updated translations.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 04 Apr 2015 13:46:29 +0200
+
+linstaller (6.2.2-1) devel; urgency=medium
+
+  * bootloader/inst: do not pick eventual LVM PVs when installing to the Master Boot Record.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 24 Jan 2015 15:46:35 +0100
+
+linstaller (6.2.1-1) devel; urgency=medium
+
+  * partdisks: front/glade: force the given device and disk if on_lvm == True. (LB #4)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 29 Nov 2014 17:07:26 +0100
+
+linstaller (6.2.0-2) devel; urgency=medium
+
+  * debian/linstaller-modules-base.install: ship finish module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 21 Nov 2014 19:49:46 +0100
+
+linstaller (6.2.0-1) devel; urgency=medium
+
+  * modules: added 'finish' module.
+  * modules/fstab: raise the ZRAM_LIMIT barrier to 4096 megabytes.
+  * modules/fstab: do not refresh the initramfs anymore.
+  * config/semplice-fullscreen: do not execute the update module.
+  * README.md: ensure that possible downstreams know that this project is in maintenance mode.
+  * bootloader/inst: check if /sbin/init is the specified init's symlink.
+  * timezone/front/glade: use preferences-system-time as header_icon
+  * modules/end/front: use face-smile as header_icon and main icon
+  * live-config: linstalleralan: modify the vera alan2 profile in ~/.config/vera/alan
+  * debian/gbp.conf: temporairly set debian branch to debian-devel.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 11 Nov 2014 08:03:37 +0100
+
+linstaller (6.1.3-1) unstable; urgency=medium
+
+  * live-config: adapted the scripts to the new
+                 syntax used in live-config 4.x
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 25 Jun 2014 12:13:11 +0200
+
+linstaller (6.1.2-1) unstable; urgency=medium
+
+  * services/glade: theme the header by looking at the 'toolbar' CSS class.
+  * Some other design improvements.
+  * glade: switch status icons to icon names.
+  * services/glade: remove set_header_deprecated().
+  * glade frontend: default to 'info' icon name.
+  * Fixed live-config scripts executable bits.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Jun 2014 23:04:31 +0200
+
+linstaller (6.1.1-1) unstable; urgency=medium
+
+  * modules/partdisks/front/glade: Semplice 6.0 ships with GTK+3.8,
+                                   so lower the toolkit version limit.
+  * modules/partdisks/front/glade: ensure the mountpoint's entry_text_column
+                                   is the one containing the description.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 05 May 2014 23:12:54 +0200
+
+linstaller (6.1.0-1) unstable; urgency=medium
+
+  * services/glade: on update_and_show_notification(),
+                    properly catch eventual Exceptions.
+  * linstaller.py: do not force garbage collection anymore (at least for now)
+  * modules/partdisks/front: fixed display issue.
+  * modules/bootloader.inst: ensure we skip eventual SD cards when installing to MBR.
+  * modules/userhost/inst: cli: ensure we actually start the progressbar,
+                                otherwise we will enter in a crash loop...
+  * modules/bootloader: inst: ensure we take the realpath of the device.
+  * modules/partdisks: front/glade: on manual_frame_creator() prefer device objects in self.changed.
+  * modules/partdisks/front/glade: automatic: actually delete the disk after the user has pressed Yes.
+  * modules/partdisks/front/glade: automatic_calc(): when setting up self.changed in order to switch to
+                                                     the manual summary scene, properly store the device
+                                                     and disk objects.
+  * glade service: properly catch eventual pynotify exceptions.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 04 May 2014 18:05:53 +0200
+
+linstaller (6.0.2-1) unstable; urgency=medium
+
+  * Try not to 'crash' when rebooting.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 31 Jan 2014 23:00:03 +0100
+
+linstaller (6.0.1-1) unstable; urgency=low
+
+  * Use old, ugly way to add new partitions.
+    The method we used since 5.1 has been a bit buggy.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 28 Jan 2014 21:16:46 +0100
+
+linstaller (6.0.0-1) unstable; urgency=low
+
+  * bootloader/inst: check for the existence of the custom_init.
+  * linstaller 6.0.0. YAY!
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 23 Jan 2014 16:45:16 +0100
+
+linstaller (5.99.0-1) devel; urgency=low
+
+  * Ensure we automatically close the notification if we return in focus
+    (and another set_header call has been made).
+  * partdisks: glade frontend: reworded a bit the 'you can't continue' messages,
+    to make them straightforward also on the new installer style.
+  * Sorta-of fixed issues when deleting all partitions in automatic mode.
+  * core/servicehelper: use importlib to load the service.
+  * language: glade: on-the-fly locale changing 1 - Eugenio 0.
+    See you during the heaven+1 cycle.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 18 Jan 2014 20:22:50 +0100
+
+linstaller (5.80.3-1) devel; urgency=low
+
+  * Fixed - ... - locale changing.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 16 Jan 2014 22:51:12 +0100
+
+linstaller (5.80.2-1) devel; urgency=low
+
+  * linstaller.desktop: ensure we start the installer :-)
+  * glade frontend: fixed (hopefully) on-the-fly locale change.
+    Sorry in advance for the ugliness of the code.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 15 Jan 2014 19:14:50 +0100
+
+linstaller (5.80.1-1) devel; urgency=low
+
+  * glade frontend: little increase on height to not display the scrllbar in bricks.
+  * Updated translations.
+  * language: glade: set locale AFTER generation.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Jan 2014 19:14:01 +0100
+
+linstaller (5.80.0-1) devel; urgency=low
+
+  * Removed alan extension.
+  * live-config: linstalleralan: use the LauncherPool to add the linstaller item.
+  * Add and ship the linstaller desktop launcher.
+  * debian/: removed alan-ext-linstaller.
+  * linstaller-frontend-glade: ship the launchers in /usr/share/applications.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 06 Jan 2014 13:06:33 +0100
+
+linstaller (5.24.1-1) devel; urgency=low
+
+  * Fixes in the translation change.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 30 Dec 2013 15:49:11 +0100
+
+linstaller (5.24.0-1) devel; urgency=low
+
+  * Implemented an ugly, hacky, awful way to change the installer's translation on-the-fly.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 29 Dec 2013 19:55:16 +0100
+
+linstaller (5.23.0-1) devel; urgency=low
+
+  * live-config: linstallersession: ensure we redirect to /dev/null
+    update-alternatives' output.
+  * live-config: linstalleralan: still needs work, but while waiting
+    for workarounds on alan2's side, at least make it not fail.
+  * glade frontend: made Service.return_color() return the light
+    variants of the head_col.
+  * modules/fstab: inst: configure zramcfg if we should.
+  * Release 5.23.0
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 23 Dec 2013 12:51:12 +0100
+
+linstaller (5.22.2-1) devel; urgency=low
+
+  * glade frontend: fixed unexpected RAM usage growing when reconnecting the Next button where needed.
+  * modules/unsquashfs: glade: reworked a bit the progressbar handling in the glade frontend.
+  * Somewhat better general memory management.
+  * glade frontend: better(??) on_caspered() handling
+    (at least it doesn't leave the window unsensitive after the GUI changes
+    made with the spinner introduction...)
+  * glade frontend: increase user's situational awareness by using colors in the statusbar,
+    and by removing the light font to ensure better readability.
+  * modules/userhost: glade: ensure we reset header after checks
+  * fixed some strings to increase situational awareness of the user with the 'new' layout.
+  * live-config: fixed(?) linstallersession
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 22 Dec 2013 15:11:54 +0100
+
+linstaller (5.22.1-1) devel; urgency=low
+
+  * glade frontend: added new frontend option 'notifications':
+    if True (default), the notifications are enabled.
+  * live-config: added linstallersession.
+  * linstaller-session: add x-session-manager alternative.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 21 Dec 2013 21:59:38 +0100
+
+linstaller (5.22.0-1) devel; urgency=low
+
+  * services/glade: use a saner way to reparent modules' main objects.
+  * alan and live-config/: migrated to alan2 (the live-config script *dosen't* work currently)
+  * glade frontend: put the settings management (fullscreen, etc.) in another method.
+  * Added linstaller-session.
+  * debian/: added linstaller-session package.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 21 Dec 2013 18:46:02 +0100
+
+linstaller (5.21.0-1) devel; urgency=low
+
+  * pyparted 3.10 support.
+  * services/glade: show a spinner instead of setting sensitiveness to False.
+    New methods show_spinner() and hide_spinner() implemented.
+  * partdisks: front/glade: use spinner when (re)building the page
+  * modules/bootloader: front/glade: casper module in pre_ready() to avoid showing the page when not needed
+  * glade frontend: created new status area in the buttonarea. Refactored set_header() to properly handle these style changes.
+    The colors will not be used anymore in the header.
+    Note: status updating when opening already touched pages is broken, as is the on_inst mode.
+  * glade frontend: show notifications when doing set_header() if the window is not focused.
+  * glade frontend: implemented a standard way to set the "info" header.
+    The module developer now only needs to set the variables "header_title", "header_subtitle" and
+    "header_icon" (all strings) to make the frontend set the header automatically.
+    All .front modules have been updated to reflect this new feature.
+  * glade frontend: assume defaults header to 'installing'.
+  * debian/control: make linstaller-frontend-glade depend on python-notify2.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 29 Nov 2013 18:13:33 +0100
+
+linstaller (5.20.1-1) devel; urgency=low
+
+  * bootloader: inst: I forgot the newlines :)
+  * bootloader: inst: ensure we create /etc/machine-id if systemd is installed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 03 Nov 2013 16:15:10 +0100
+
+linstaller (5.20.0-1) devel; urgency=low
+
+  * Hello, devel!
+  * bootloader: inst: added GRUB menu hiding.
+    If :bootloader:should_hide_menu:True, the GRUB menu will not be shown during boot
+    if the distribution is the only operating system installed.
+    This resolves project-breathe's issue #6.
+  * Fixed that ugly lastres warning.
+  * modulehelper: switched to importlib.
+  * bootloader: custom init support.
+    Use :bootloader:custom_init:/path/to/init/replacement to let the module set CMDLINE_LINUX accordingly.
+  * debian/gbp.conf: restore devel-worthy things.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 02 Nov 2013 01:06:47 +0100
+
+linstaller (5.0.11-1) unstable; urgency=low
+
+  * partdisks: front: as we currently do not support LV renaming,
+    simply disable sensitiveness in Edit mode on the lv_name textbox.
+  * partdisks: library: handle EFI paths in check_distributions().
+  * partdisks: library: correctly handle LVM LVs in return_device().
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 17 Oct 2013 18:41:30 +0200
+
+linstaller (5.0.10-1) unstable; urgency=low
+
+  * modules/bricks: inst: ensure we purge things here in linstaller, too.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 13 Oct 2013 13:59:29 +0200
+
+linstaller (5.0.9-1) unstable; urgency=low
+
+  * partdisks: If the LUKS device is mounted, umount it before closing.
+  * partdisks: try to get the same disk, too. Also some bugfixes in the LVM LV/VG disable methods.
+  * bootloader: inst: fixed forced device installation.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 12 Oct 2013 22:42:19 +0200
+
+linstaller (5.0.8-1) unstable; urgency=low
+
+  * partdisks: front/glade: ensure mount_on_install is active when formatting
+  * modules/partdisks: front/glade: ensure we disable eventual encrypted
+    devices when in automatic.
+    Also, as the automatic EFI partition is ~40 MB, ensure we use
+    fat16 instead of fat32.
+  * Properly declare partitions as LOGICAL if we are going to create in
+    an extended partition.
+  * Handle whole-drive LVM Physical Volumes.
+  * partdisks/library: properly align new partitions.
+  * config/semplice-base: ensure we execute mirrorselect.inst AFTER
+    other modules which work with packages.
+  * partdisks: ensure we properly round the maximum value of the
+    size_adjustment when preparing the partition window for editing
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 02 Oct 2013 22:19:31 +0200
+
+linstaller (5.0.7-1) unstable; urgency=low
+
+  * modules/partdisks: simplified the mount_on_install code a bit
+    (including partdisks.inst)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 11 Sep 2013 18:53:08 +0200
+
+linstaller (5.0.6-1) unstable; urgency=low
+
+  * New effort 'Let's fix this shit'
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Sep 2013 14:43:32 +0200
+
+linstaller (5.0.5-1) unstable; urgency=low
+
+  * modules/partdisks: inst: do not crash if mountpoint already exists.
+  * modules/partdisks: inst: ensure we don't unmount /boot and /boot/efi
+    (so there is a forced mount_on_install)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 09 Sep 2013 11:20:22 +0200
+
+linstaller (5.0.4-1) unstable; urgency=low
+
+  * modules/partdisks: ensure we disable relevant LUKS devices *directly*
+    when the user decides to do so.
+  * modules/partdisks: front/glade: do not show (former?) distribution
+    name in changed partitions.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 08 Sep 2013 22:17:02 +0200
+
+linstaller (5.0.3-1) unstable; urgency=low
+
+  * modules/partdisks: front/glade: ensure we properly disable eventual
+    LUKS devices if we are touching parent hard drive.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 07 Sep 2013 14:01:30 +0200
+
+linstaller (5.0.2-1) unstable; urgency=low
+
+  * modules/partdisks: library/lvm: added LogicalVolume.{enable,disable)(),
+    ensure we enable/disable every LV accordingly when enabling/disabling VGs.
+  * modules/partdisks: front/glade: various fixes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 06 Sep 2013 20:40:39 +0200
+
+linstaller (5.0.1-1) unstable; urgency=low
+
+  * Fix for systems without VirtualGroups.
+  * bricks/inst: finally fixed full-removal of features.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 05 Sep 2013 23:05:01 +0200
+
+linstaller (5.0.0-1) unstable; urgency=low
+
+  * Fixed full removal of features introduced in 2a95e429b15a7d760e8dda9a5a09778ced89c14d.
+    For some strange reason, python-apt won't find the package in cache, even if the changes are still not commited.
+    This commit workarounds that, but the issue should be inspected in detail.
+  * libmodules/partdisks: lvm: added methods VolumeGroup.enable(), VolumeGroup.disable() and enable_all_vgs().
+    enable_all_vgs() are now called after every lvm refresh to ensure that there aren't any disabled volumegroups.
+  * debian/gbp.conf: restored master-worthy configuration.
+  * Upload to current.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 05 Sep 2013 15:03:58 +0200
+
+linstaller (4.99.6-1) devel; urgency=low
+
+  * partdisks: use path instead of mapper_path on LUKS devices to do checking and locking.
+    This may be slower, but now linstaller can lock and properly check mountpoints on
+    an encrypted partition unlocked by foreign applications.
+  * partdisks: warn the user if LUKSdrive.close() failed.
+  * bricks: inst: ensure we remove every dependencies of the features' meta-packages.
+  * userhost: inst: set groups if root is disabled.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Aug 2013 17:26:11 +0200
+
+linstaller (4.99.5-1) devel; urgency=low
+
+  * Mount virtual partitions via new module virtualpartitions.inst, AFTER unsquash.
+    This avoids overwriting on some virtual /dev devices such as /dev/shm.
+    Also *FINALLY* fixed that stupid revert bug in partdisks.inst. I'm a moron.
+  * debian/linstaller-modules-base.install: ship virtualpartitions.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 21 Aug 2013 14:41:46 +0200
+
+linstaller (4.99.4-1) devel; urgency=low
+
+  * config/semplice-base: changed order, again.
+    modules/bricks: inst: workaround to not make it clash with supportrepo.inst.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 23:41:34 +0200
+
+linstaller (4.99.3-1) devel; urgency=low
+
+  * Bug fixes...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 19:49:31 +0200
+
+linstaller (4.99.2-1) devel; urgency=low
+
+  * config/semplice-base: modified a bit the .isnt modules order:
+    we should ensure that bricks is executed before user creation.
+  * services/glade: height of base_ui is now at 510 px.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 19 Aug 2013 15:38:11 +0200
+
+linstaller (4.99.1-1) devel; urgency=low
+
+  * Ensure we follow the symlink to get the right GRUB location.
+  * Updated translations.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 20:08:22 +0200
+
+linstaller (4.99.0-1) devel; urgency=low
+
+  * Removed deprecated encrypting code.
+  * modules/update: new seed 'disable', used to disable the checkbox when doing fullrestart.
+    Also, ensure we update if the user wants to even if we aren't at the first run
+    (of the module, not after fullrestart)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 16 Aug 2013 20:36:09 +0200
+
+linstaller (4.91.0-1) devel; urgency=low
+
+  * Added LUKS Unlock dialog.
+    Also, bug fixeeeeeeeeeeeeeeeeeeeeeeeeeeeees.
+  * partdisks: add cipher and key-size selection for the to-be-encrypted volumes (using seeds).
+    partdisks: default to aes-xts-plain64 (cipher) and 512 (key-size)
+    linstaller.py: resolved a seed parsing bug which involves values with an :
+  * partdisks: made the fill checkboxes working
+  * bootloader: now the user can force a device or skip the bootloader installation (via seeds)
+    bootloader/front: glade: if LVM, assume root = /boot if it's isn't a LV, or skip installation
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 14 Aug 2013 19:20:51 +0200
+
+linstaller (4.90.3-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEES...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 19:44:35 +0200
+
+linstaller (4.90.2-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEES
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 15:39:05 +0200
+
+linstaller (4.90.1-1) devel; urgency=low
+
+  * BUG FIXEEEEEEEEEEEES
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 09 Aug 2013 14:02:05 +0200
+
+linstaller (4.90.0-1) devel; urgency=low
+
+  * LVM Physical Volume encryption
+  * modules/fstab: added /etc/crypttab generation
+  * debian/control: linstaller-modules-base: depend on cryptsetup and util-linux
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 07 Aug 2013 13:03:55 +0200
+
+linstaller (4.72.3-1) devel; urgency=low
+
+  * (upstream) Ship semplice-fullscreen configuration.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 02 Aug 2013 13:43:09 +0200
+
+linstaller (4.72.2-1) devel; urgency=low
+
+  * partdisks: library: do not count as freespace the partition offsets
+    partdisks: front/glade: new statuses in LVM-related things
+  * debian/control: linstaller-modules-base: depend on  lvm2, ntfs-3g and fatresize.
+    debian/linstaller-config-semplice.install: ship fullscreen configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 22:48:35 +0200
+
+linstaller (4.72.1-0) devel; urgency=low
+
+  * The famous after-many-changes bug squashing phase!
+    - core/aptlib: set DEBIAN_FRONTEND to noninteractive
+    - modules/partdisks: library: 1MB offset when adding partitions
+    - modules/partdisks: lvm: force pvcreate when creating a PV
+    - modules/bootloader: properly get the device and seed grub-pc
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 20:45:12 +0200
+
+linstaller (4.72.0-1) devel; urgency=low
+
+  * linstaller can now create LVM Volume Groups.
+  * Some fine tuning and plumbing for the Edit VG mode
+  * linstaller can now rename, extend and reduce existing VGs.
+  * linstaller can now remove VGs.
+  * linstaller can now create LVM physical volumes.
+  * partdisks: front/glade: do not fail if part.name in manual_frame_creator() is None
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 13:07:37 +0200
+
+linstaller (4.71.0-1) devel; urgency=low
+
+  * Ensure we properly prepare the /boot/efi partition
+  * Support for markup in header's subtext, which is now properly resizes too long texts
+    modules/bricks: frontend/glade: changed subtext.
+  * Ensure we try to umount boot/efi in the wrappers.
+  * frontends/glade: added support for fullscreen (set frontends:glade.fullscreen to True)
+    config/: added semplice-fullscreen config which uses the newly implemented fullscreen function
+  * Ensure the apply window is sensitive before showing it
+  * Improved resize actions, some bugfixes
+  * Added LVM Logical Volume modification support, along with resizing.
+    In a LV, rely on pyparted only to get the fileSystem.
+    If a LV exists but has a None filesystem, assume it's fat32.
+    Migration to standard kilobytes (SI).
+  * Disable 'Use for LVM' box if we are in a LV
+  * Move newtable and delete buttons to the new 'advanced options'
+  * Preliminary VG manage GUI
+  * Latest GRUB fucked up the (hd0) method, get the first drive by ourselves...
+  * More progress on the VGmanage window.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 22 Jul 2013 20:25:55 +0200
+
+linstaller (4.70.1-1) devel; urgency=low
+
+  * Improvements, workarounds, fixes on the APT handling inside and outside the chroot.
+    Cache() now (mostly) works in both situations, unlike the upstream apt.cache.Cache().
+    And that's so fuckin' great.
+    Also, grub-efi installation now works correctly.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 27 Jun 2013 19:12:41 +0200
+
+linstaller (4.70.0-1) devel; urgency=low
+
+  * Added settings support for frontends.
+  * Added new setting -p|--configpath to select the path where search for linstaller configurations
+  * config/thewall-test: added test thewall config.
+  * frontends/cli: added "follow" setting.
+  * Added supermodules support (a virtual module which calls a set of modules defined on the configuration file).
+  * Added some simple test modules.
+  * Added support for user-defined target directory (-t switch).
+  * Added seed_setup() function in module.py, override this to set-up things before seeding occours.
+  * Check for modu before revert.
+  * modules/partdisks: library: mount_partition added support for mount type.
+  * modules/timezone: front/glade: ensure we focus the timezone treeview.
+  * Added the basics of LVM and Crypting support.
+    Nothing works yet (as it is still not finished ;D) and the current GUI may be changed at any time.
+    Still, tracking it in GIT seems the best thing to do to avoid huge commits later.
+    I hope to get it finished soon!
+  * lvm.py: do not use python-lvm for now. Added LogicalVolume and and VolumeGroup classes.
+    The lvm library now does something useful.
+  * modules/partdisks: added base LVM view and modify (edit view and format) support.
+  * partdisks can now add a new LV.
+  * partdisks: properly set do_not_format_box if we should not format.
+  * partdisks can now delete LVs.
+  * partdisks can now clear entire VGs.
+  * Do not fail if LVM devices have some I/O errors and can't be used
+  * Ensure we idle_add the refresh action after we applied things
+  * Added a nice APT library along with the supportrepo module (set-ups the support repo present in latest snapshots)
+  * modules/bootloader: inst: fetch bootloader from supportrepo, if we can
+  * core/main: support for enums.
+  * debian/control:
+    - linstaller: depend on python-apt
+    - linstaller-modules-base: remove dependency on grub (or firmware-raspberrypi), bootloaders are now in iso
+    - Changed URL of the project
+  * debian/linstaller-modules-base.install: ship supportrepo
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 25 Jun 2013 11:43:18 +0200
+
+linstaller (4.0.4-1) unstable; urgency=low
+
+  * Without os we can't do much.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 11:59:58 +0200
+
+linstaller (4.0.3-1) unstable; urgency=low
+
+  * Ensure we follow the symlink to get the right GRUB location.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 17 Aug 2013 11:54:40 +0200
+
+linstaller (4.0.2-1) unstable; urgency=low
+
+  * modules/bootloader: inst: correctly retrieve the first
+    hard disk, as seen in the devel branch
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Aug 2013 22:53:27 +0200
+
+linstaller (4.0.1-1) unstable; urgency=low
+
+  * modules/timezone: front/glade: ensure we focus the timezone treeview.
+  * Latest GRUB fucked up the (hd0) method, get the first drive by ourselves...
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 10 Jul 2013 01:08:35 +0200
+
+linstaller (4.0.0-1) unstable; urgency=low
+
+  * modules/partdisks: do not leave sensitivity to False when closing child windows.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 02 Apr 2013 12:16:32 +0200
+
+linstaller (3.71.2-1) unstable; urgency=low
+
+  * modules/bricks: some bug-fixing.
+  * config/semplice-base: mirrorselect: add changes to the sets.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Mar 2013 18:13:13 +0100
+
+linstaller (3.71.1-1) unstable; urgency=low
+
+  * modules/partdisks: front/glade: ensure mount_on_install is not sensitive if we should format.
+  * debian/: linstaller-modules-base: depend on keeptalking and bricks.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 22 Mar 2013 00:20:27 +0100
+
+linstaller (3.71.0-1) unstable; urgency=low
+
+  * Added mount_on_install support in partdisks(glade):
+    An user can now force partition mounting at partdisks.inst even if the partition is not clean.
+  * Added support for using custom icons on "info" status.
+    Added custom icons for the frontend modules.
+    New colors for the status bar. Also ensure we set text color.
+  * frontends/glade: Ensure we correctly parse &.
+  * frontend/glade: get info color from toolbar (and relative fg color)
+    frontend/glade: moved to a Gtk.Window(), with a full-width status bar.
+  * modules/welcome: refactored.
+    Other cosmetic changes.
+  * modules/partdisks: speedup reverting by trying to umount only one time.
+  * modules/ubuntu: changed to support 13.04.
+  * modules/bricks: added.
+  * modules/bricks: changed library to libbricks.
+    Ship the bricks module.
+  * debian/: ship bricks module.
+  * config/semplice: execute bricks.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 20 Mar 2013 12:25:10 +0100
+
+linstaller (3.70.0-3) unstable; urgency=low
+
+  * linstaller-modules-echo: depend on syslinux-themes-semplice-atom
+    instead of syslinux-themes-semplice-pulse.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 02 Mar 2013 21:42:31 +0100
+
+linstaller (3.70.0-2) unstable; urgency=low
+
+  * Target to unstable.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 16 Feb 2013 18:15:21 +0100
+
+linstaller (3.70.0-1) pulse; urgency=low
+
+  * Switched to upstream-branch master and debian-branch debian.
+  * 3.70.0 (initial current release)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 16 Feb 2013 18:15:10 +0100
+
+linstaller (3.0.0.4-1) pulse; urgency=low
+
+  * modules/partdisks: Added "support"(workaround) for the "root" seed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 04 Jan 2013 14:10:28 +0100
+
+linstaller (3.0.0.3-1) pulse; urgency=low
+
+  * Disable virtualclean in semplice-base.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 01 Jan 2013 23:36:41 +0100
+
+linstaller (3.0.0.2-1) pulse; urgency=low
+
+  * linstaller*wrapper.sh: fixed argument handling
+    modules/virtualclean: should work now.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 24 Dec 2012 19:32:53 +0100
+
+linstaller (3.0.0.1-1) pulse; urgency=low
+
+  * modules/virtualclean: added.
+    config/semplice-base: added virtualclean to the module list.
+    setup.py: ship virtualclean.
+  * debian/control: linstaller-modules-base: depend on imvirt.
+    debian/linstaller-modules-base.install: ship virtualclean.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 24 Dec 2012 17:55:19 +0100
+
+linstaller (3.0.0-1) pulse; urgency=low
+
+  * 3.0.0 'The End Of The World' release :)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 20 Dec 2012 23:07:31 +0100
+
+linstaller (2.99.0-1) pulse; urgency=low
+
+  * Synced translations.
+    services/glade: added translation support.
+    modules/userhost: ensure we disable *password_initial if module is not virgin
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 17 Dec 2012 11:20:05 +0100
+
+linstaller (2.92.1-1) pulse; urgency=low
+
+  * modules/bootloader: inst: hopefully fixed grub config changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Dec 2012 21:57:49 +0100
+
+linstaller (2.92.0-1) pulse; urgency=low
+
+  * modules/bootloader: inst: configure GRUB for hibernation. modules/summary: front/glade: do not show bootloader informations if UEFI.
+  * config/semplice: commented the root preseed, the user will be asked if he wants the root account.
+    modules/userhost: front/glade: do not scary the user with error messages when inserting for the first time the password
+  * modules/userhost: front/glade: added short description for the root account dropdown.
+  * linstaller_*wrapper.sh: ensure we umount target.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Dec 2012 18:46:49 +0100
+
+linstaller (2.91.0-1) pulse; urgency=low
+
+  * modules/echo: partusb/inst: import shutil; currently force 'root' as the only type possible.
+  * modules/partdisks: library and front/glade: added by_notable() check: shows solutions for table-less drives.
+  * live-config/: temporairly disable persistent, at least for RC.
+  * Some cosmetic changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Dec 2012 20:20:39 +0100
+
+linstaller (2.90.2.1-1) pulse; urgency=low
+
+  * setup.py: do not actually ship echo.configure.inst.glade, as configure.inst is a frontend-less module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 26 Nov 2012 18:54:10 +0100
+
+linstaller (2.90.2-1) pulse; urgency=low
+
+  * modules/echo: partusb/inst: ensure we do not overwrite self.settings["type"].
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 26 Nov 2012 18:46:07 +0100
+
+linstaller (2.90.1-1) pulse; urgency=low
+
+  * modules/echo: partusb/front: adapted to latest live-boot versions.
+    It still doesn't work, because of [0].
+    [0] http://lists.debian.org/debian-live/2012/11/msg00141.html
+  * setup.py: ship echo's glade frontends.
+  * services/glade: do not display the Quit dialog if an installation is running, just do not do anything.
+  * modules/partdisks: library: automatic_check_ng: do not return solution if partition is None.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 26 Nov 2012 13:03:12 +0100
+
+linstaller (2.90.0-1) pulse; urgency=low
+
+  * modules/ubuntu: inst/glade: added.
+  * Split main_settings["modules"] at the origin. Physically remove from list the modules the user asked us to remove.
+  * services/glade: implemented Quit dialog.
+  * config/semplice-base: updated image and remove file paths.
+    This breaks the installation on images built with the old live-build (Semplice 3.0 Beta1 and lower).
+  * live-config/linstallerdefault: symlink instead to make an extended configuration.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 21 Nov 2012 18:03:43 +0100
+
+linstaller (2.74.0-1) pulse; urgency=low
+
+  * Ensure we pass onlyusb at the automatic partitioner, too.
+  * modules/partdisks: front: added is_echo seed.
+    modules/partdisks: front/glade: added echo "support".
+    config/semplice-persistent: seed is_echo to True.
+  * modules/partdisks: front/glade: if is_echo, ensure we handle well the back button.
+  * modules/partdisks: front/glade: properly set header if is_echo.
+  * modules/partdisks: frontend/glade: some cosmetic changes to echo mode.
+  * modules/partdisks (front/glade and library): check for freespace partitions in order to grow a partition before to it modules/partdisks: front/glade: partitions are now ordered by looking at the partition table.
+  * modules/partdisks: changed all calls to pyparted's getLength() with getSize().
+  * modules/partusb: frontend/glade: added.
+  * modules/partdisks: library: if an umount fails, retry. (maximum 5 times)
+    modules/partdisks: front/glade and library: if USB key is empty, create an ext2 partition.
+    modules/userhost: front/glade: properly set step statuses if items are preseeded.
+  * modules/echo: configure/inst: added quickreboot, fixed keyboard layout, added support for newer live-boot versions.
+    modules/echo: partusb/inst: added support for newer live-boot versions.
+  * modules/echo: partusb/inst: handle full-ov type
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 02 Nov 2012 14:53:44 +0100
+
+linstaller (2.73.1-1) pulse; urgency=low
+
+  * modules/language: inst/glade: fixed savespace retrieving
+  * Ship glade frontend configuratons and make -frontend-glade depend on keeptalking >= 2.21.0
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 11 Oct 2012 22:01:45 +0200
+
+linstaller (2.73.0-1) pulse; urgency=low
+
+  * modules/echo: partdisks.inst: ported to glade frontend.
+  * modules/echo: copy.inst: ported to glade frontend.
+  * modules/echo: bootloader.inst: ported to glade frontend (by Luca)
+  * core/config.py: per-frontend configuration file support.
+  * config/: added semplice.glade configuration file. core/config.py: some fixes, if the configuration file is a link, use the target.
+  * modules/language: ported the keeptalking savespace feature.
+    config/semplice-nolive.glade: the same as config/semplice.glade
+  * modules/partdisks: library: added new-generation automatic partitioner, some bug fixes.
+    modules/partdisks: front/glade: some cosmetic changes, added automatic partitioner support. New waiting page.
+    modules/fstab: inst: skip entry creation if fileSystem is None.
+  * modules/partdisks: front/glade: disable the next button before showing the please wait tab
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 07 Oct 2012 16:30:11 +0200
+
+linstaller (2.72.5-1) pulse; urgency=low
+
+  * modules/partdisks: properly seed swap to None if no swap has been selected.
+  * modules/partdisks: some bits of automatic partitioning.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Sep 2012 00:53:27 +0200
+
+linstaller (2.72.4-1) pulse; urgency=low
+
+  * Some changes to the crash dialog.
+  * linstaller-frontend-glade: depend on pastebinit.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Sep 2012 18:29:52 +0200
+
+linstaller (2.72.3-1) pulse; urgency=low
+
+  * Install linstaller_crash_wrapper.sh
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Sep 2012 18:08:31 +0200
+
+linstaller (2.72.2-2) pulse; urgency=low
+
+  * Ship crash wrapper.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Sep 2012 17:55:35 +0200
+
+linstaller (2.72.2-1) pulse; urgency=low
+
+  * alan: use the new crash_wrapper to launch the graphical frontend.
+  * crash/: added GTK+ crash window
+  * linstaller.py: ensure we log the final exception before raising it.
+  * linstaller_crash_wrapper.sh: added.
+  * Handle exceptions on Threads and Glade frontend: now when an exception
+    is raised the installer does not hang anymore but it writes the traceback
+    on the log and then exit with status 1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Sep 2012 15:33:26 +0200
+
+linstaller (2.72.1-1) pulse; urgency=low
+
+  * removed some debug code.
+  * added module_restart() function in frontend.py and module.py
+  * tweaked some glade files
+  * modules/partdisks: library: fixed (?) reiserfs partition creation
+  * some bug fixes in keeptalking-related modules
+  * modules/partdisks: front/glade: properly set a new fileSystem object when we should format.
+  * modules/partdisks: front/glade: instead of going to main page, restart the entire module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 23 Aug 2012 22:52:14 +0200
+
+linstaller (2.72.0-1) pulse; urgency=low
+
+  * modules/partdisks: handle failed umount.
+  * modules/partdisks: front/glade: rebuild graphical module at every launch.
+  * modules/partdisks: front/glade: ensure we pass the right filesystem during partition creation    
+  * glade frontend: build_pages() improvements to rebuild a single module; added get_module_object() which returns the objects of a passed module.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 21 Aug 2012 23:54:55 +0200
+
+linstaller (2.71.4-1) pulse; urgency=low
+
+  * modules/partdisks: front/glade: hide /boot/efi when not in UEFI mode.
+  * config/semplice-base: update linstaller-frontend-glade, too.
+  * modules/partdisks: library: properly return the resize action.
+  * modules/partdisks: front/glade: Add partition is (re)working, some minor changes.
+  * removed some debug code.
+  * glade frontend: ensure the status box is sensitive (does not work, damn!)
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 18 Aug 2012 11:58:16 +0200
+
+linstaller (2.71.3-2) pulse; urgency=low
+
+  * debian/linstaller-modules-base.install: properly install uefidetect
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 18:18:13 +0200
+
+linstaller (2.71.3-1) pulse; urgency=low
+
+  * config/semplice: ask = False for timezone too, moved grub seed to -base.
+  * core/frontend.py: KTHXBYE -> kthxbye
+  * core/service.py: do not trigger on_module_change()
+  * modules/language and modules/timezone: front: ask by default is True   
+  * setup.py: ship uefidetect
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 18:04:38 +0200
+
+linstaller (2.71.2-1) pulse; urgency=low
+
+  * linstaller: added UEFI detection (modules/uefidetect); adjusted modules to properly handle UEFI.
+  * config/semplice-base: execute uefidetect.
+  * modules/partdisks: library: added support for gpt
+  * modules/partdisks: front/glade: ensure we get the SUPPORTED (in system) filesystems.
+  * services/glade: handle ZeroDivisionError when calculating inst modules.
+  * linstaller.py: ensure we properly parse value before setting the seeds in modules_settings.
+  * modules/fstab: if filesystem is fat32 or fat16, use 'vfat' in fstab.
+  * alan: launch installer with sudo.
+  * modules/welcome: always disable the back button in glade frontend.
+  * core/service.py: send the module change signal to the frontend.
+  * services/glade: ensure we ONLY change the page (thus not sending the entire on_*_button_click() signal)
+  * modules/language: front/glade: added caspered support.
+  * config/semplice-base: ensure the various asks are = True
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 14 Aug 2012 00:29:01 +0200
+
+linstaller (2.71.1-1) pulse; urgency=low
+
+  * modules/{update,mirrorselect,bootloader}: ensure we get the proper checkboxes BEFORE checking if it is a fresh start or not.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 04 Aug 2012 00:45:18 +0200
+
+linstaller (2.71.0-1) pulse; urgency=low
+
+  * modules/summary: added glade frontend (not the best, but hey.)
+  * modules/userhost: front/glade: ensure the first time the next button is insensitive.
+  * modules/partdisks: front/glade: ensure we can go back; do not show duplicate filesystem cells.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 02 Aug 2012 18:00:54 +0200
+
+linstaller (2.70.1.3-1) pulse; urgency=low
+
+  * modules/partdisks: inst: fallback to self.settings if frontend has not been executed to obtain root partition.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 22:34:56 +0200
+
+linstaller (2.70.1.2-1) pulse; urgency=low
+
+  * setup.py: recreate symlinks if any on the glade files
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 19:45:15 +0200
+
+linstaller (2.70.1.1-2) pulse; urgency=low
+
+  * setup.py: search (and include) for glade files.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 15:39:34 +0200
+
+linstaller (2.70.1-1) pulse; urgency=low
+
+  * setup.py: ship base_ui.glade
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 01 Aug 2012 13:26:15 +0200
+
+linstaller (2.70.0-1) pulse; urgency=low
+
+  * Start always the glade service if the frontend is glade. The module can now override the Back/Forward buttons: if they do not return None, the module is not changed.
+  * partdisks: front/glade: added edit, remove and delete windows. Fixes here and there. Added TODO.
+  * partdisks: front/glade: check if a mountpoint is already used.
+  * partdisks: front/glade: Skip too small partitions; Reset header on refreshes; ensure the button are made unsensitive when populating.
+  * partdisks: front/glade: implemented apply.
+  * glade frontend: increased use of idle_add, thus reducing GUI crashes ;), added progressbar (and support for .inst modules)
+  * modules/userhost: inst: added glade frontend.
+  * modules/partdisks: library: added swap sample mountpoint
+  * front/glade: moved the apply() function to a Progress-derivative class.
+  * modules/welcome: front/glade: center the info box
+  * linstaller.py: fixed revert.
+  * modules/network: now is frontend-indep.
+  * modules/fstab: made frontend-indep.
+  * modules/clean: made frontend-indep.
+  * modules/bootloader: ported to the glade frontend.
+  * modules/mirrorselect: front/glade: properly set settings.
+  * modules/mirroselect: do not update APT database if we aren't on the last set.
+  * modules/mirrorselect: inst/glade: added.
+  * some fixes
+  * modules/language and modules/timezone: switched to keeptalking.
+  * modules/language and modules/timezone: Added glade frontends for front, basing on keeptalking (I <3 KEEPTALKING)
+  * core/module.py: ensure we properly save and reload module's settings when reopening an already opened module.
+  * modules/language and modules/timezone: added inst.
+  * linstaller.py: handle arguments with spaces when doing fullrestart.
+  * frontends/glade and services/glade: ensure the next button is insensitive on inst.
+  * setup.py: changed to install glade frontend/services; now at 2.70.0!
+  * added glade frontend.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 31 Jul 2012 23:15:19 +0200
+
+linstaller (2.14.1-1) pulse; urgency=low
+
+  * linstaller.py: added arguments to pass services via command-line; added services support in config file; fixed revert.
+  * config/semplice-raspberrypi: ask for language; no_virtual_partitions in partdisks; removed summary and network.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 25 Jun 2012 00:55:30 +0200
+
+linstaller (2.14.0-3) pulse; urgency=low
+
+  * debian/control: make linstaller-modules-base depend on firmware-raspberrypi if
+    grub-pc is not available.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Jun 2012 20:10:35 +0200
+
+linstaller (2.14.0-2) pulse; urgency=low
+
+  * debian/: Every package is supported by all architectures.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Jun 2012 17:38:29 +0200
+
+linstaller (2.14.0-1) pulse; urgency=low
+
+  * Services support (Modules which runs on threads)
+  * New glade frontend (gtk3, every module has its own glade file)
+  * Glade service (preloads the glade files and shows the gtk3 window)
+  * Other minor things
+  * modules/userhost: added and completed glade frontend.
+  * linstaller.py: if module is preseeded, add _preexecuted to its seeds
+  * linstaller.py: "casper" return status: it returns the old module's return status
+  * frontends/glade: implemented steps, some more signals
+  * services/glade: added header.
+  * services/glade: change_entry_status() which changes an entry's secondary icon with icons that matches the header.
+  * modules/mirrorselect: added glade frontend.
+  * modules/welcome: glade: added the "how to use this application" section
+  * frontends/glade and services/glade (and core/): support on_caspered signal.
+  * modules/: made the glade frontends less crashy and faster
+  * Moved README to README.md
+  * Updated README.md
+  * modules/partdisks/front: added some bits of the glade frontend.
+  * modules/raspberrypi: added
+  * config/: added semplice-raspberrypi configuration. setup.py: ship raspberrypi config and module.
+  
+  * debian/:
+    - added linstaller-config-semplice-raspberrypi and linstaller-modules-raspberrypi packages.
+    - Bumped to Standards-Version: 3.9.3.1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 24 Jun 2012 15:46:02 +0200
+
+linstaller (2.13.3-1) pulse; urgency=low
+
+  * do not format swap partition by default.
+  * debian/:
+    - make echo depend on extlinux, too.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 30 Apr 2012 18:07:58 +0200
+
+linstaller (2.13.2-1) pulse; urgency=low
+
+  * alan: Added an item to start echo. mouldes/fstab: correctly sort partitions before generating the fstab.
+  * Some changes to gtk3 frontend.
+  * fixed fstab loop.
+  * partdisks: library: do not crash if we reach partition limit in automatic.
+  * as above.
+  * partdisks: library: fixed indentation error, try/except in swap, too.
+  * modules/echo.partusb: frontend: removed useless seeds. linstaller.py: new -r|--remove argument which specifies the modules to remove from list.
+  * modules/echo.partusb: frontend: added new seed "allfreespace", does not calculate the freespace by checking the freespace and removing the image's files
+  * modules/echo.partusb: added support for 'type'
+  * config/semplice-persistent: removed erroneous preseed to syslinux
+  * modules/echo.bootloader: inst: some changes to bootloader installation, still to refine.
+  * modules/mirrorselect: install: do not crash if mirrorselect crashes.
+  * modules/echo.bootloader: install: fixed extlinux installation
+  * release 2.13.2.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 24 Apr 2012 19:10:23 +0200
+
+linstaller (2.13.1-2) pulse; urgency=low
+
+  * debian/control: fixed dependencies in the linstaller-modules-echo package.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 20:38:46 +0100
+
+linstaller (2.13.1-1) pulse; urgency=low
+
+  * config/semplice-persistent-nolive: removed isolinux seed.
+  * setup.py: ship echo.
+  * debian/: new package linstaller-modules-echo; ship semplice-persistent configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 19:25:05 +0100
+
+linstaller (2.13.0-2) pulse; urgency=low
+
+  * config/: added semplice-persistent and semplice-persistent-nolive configurations. 
+  * linstaller.py: handle submodules as well.
+  * partdisks: library: added return_partition, setFlag, unsetFlag functions.
+  * modules/echo: preleminary release of echo.
+  * config/semplice-persistent: partdisks: disable swap, enable skip_to_selection and onlyusb.
+  * partdisks: added onlyusb and skip_to_selection seeds; do not tell the use that we're are
+               formatting partitions if root_noformat is True (as we are not formatting root,
+               which is the partition that user don't want to be wiped).
+  * modules/echo: added fake module where store shared things.
+  * linstaller.py: remove last word after last dot only if it's "inst" or "front".
+  * modules/echo/partusb: use a pythonic-way to create the empty file.
+  * modules/partdisks: added ability to not mount virtual (/proc, /dev, /sys) partitions.
+  * modules/summary: do not crash if something is missing, usb-persistence support.
+  * modules/echo/partusb: added frontend.
+  * config/semplice-persistent: some changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 10 Mar 2012 18:56:03 +0100
+
+linstaller (2.11.2-1) pulse; urgency=low
+
+  * Switched to GIT.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 26 Feb 2012 23:26:27 +0100
+
+linstaller (2.11.1-1) pulse; urgency=low
+
+  * setup.py: ship ubuntu and ubuntu-nolive configs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:22:31 +0100
+
+linstaller (2.11.0-1) pulse; urgency=low
+
+  * fstab: fixed automounting of vfat partitions.
+  * config/: added ubuntu and ubuntu-nolive configurations.
+  * modules/clean: search for /linstaller in target and, if any, delete it
+  * modules/debian: ensure dpkg is configured before starting removing pkgs
+  * modules/ubuntu: added, recompiles python modules and copies the kernel
+    from the image.
+  * setup.py: ship the ubuntu module.
+  * debian/:
+    - Added linstaller-config-ubuntu package
+    - Added linstaller-modules-ubuntu package
+    - linstaller-config-semplice now depends on linstaller and modules-base
+  * modules/summary: print all changed partitions instead of only / and swap
+  * modules/fstab: handle mountpoints not handled by partdisks
+  * modules/partdisks: inst: sort partition list by mountpoint; when revert(),
+    use the reverse of "used".
+  * config/semplice-base and config/ubuntu: moved fstab.inst before end.front.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 19 Feb 2012 16:16:11 +0100
+
+linstaller (2.10.7-1) pulse; urgency=low
+
+  * config/semplice-base: execute network.inst too
+  * modules/network: copy host's resolv.conf to the target
+  * modules/mirrorselect: correctly close the chroot if the prechecks
+    returns False.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 05 Feb 2012 19:47:04 +0100
+
+linstaller (2.10.6-1) pulse; urgency=low
+
+  * linstaller.py: populate modules_settings from the inline
+    preseeds.
+  * partdisks: library: mount_partition can now skip mountpoint check
+    if check == False.
+  * partdisks: library: fixed opts handling if remounting.
+  * partdisks: inst: do not require "changed" from frontend.
+  * partdisks: inst: bind-mount /dev, /sys and /proc (moved from
+    unsquash).
+  * frontends/gtk3: errors and steps handling.
+  * userhost: gtk3 frontend: completed.
+  * frontends/gtk3: exit from the loop via a thread; fixed button sequence;
+    line_wrap on new text; new section object (doesn't work); fixed
+    reset_position; override start action: modules should use the gtk_start
+    function instead.
+  * userhost: gtk3 frontend: use section (doesn't work).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 28 Jan 2012 22:23:30 +0100
+
+linstaller (2.10.5-1) pulse; urgency=low
+
+  * Fixed setup.py
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 19 Jan 2012 17:12:24 +0100
+
+linstaller (2.10.4-1) pulse; urgency=low
+
+  * Added mirrorselect module.
+  * Begin work on the gtk3 frontend.
+  * Fixed crash if some updates are found.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 15 Jan 2012 16:34:21 +0100
+
+linstaller (2.10.3-1) pulse; urgency=low
+
+  * userhost: renamed the password_max_chars preseed to password_min_chars:
+    should sleep a bit more.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 20:04:08 +0100
+
+linstaller (2.10.2-1) pulse; urgency=low
+
+  * setup.py: do not ship semplice inst module, as it doesn't exist.
+  * userhost: lowered minimum password charchters to 4, now
+    configurable via the password_max_chars preseed.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 10 Jan 2012 19:52:07 +0100
+
+linstaller (2.10.1-1) pulse; urgency=low
+
+  * Added linstaller.frontends where store frontends core files.
+  * core/:
+    - ported cli_frontend to linstaller.frontends.cli
+    - added frontend auto-discovery feature (default for 3.x modules)
+    - pass the package path to Module
+  * modules/:
+    - Ported welcome and userhost to 3.x-style modules package structure.
+  * debian/: new package linstaller-frontend-cli which ships the cli frontend.
+  * setup.py: updated to install frontends and modules inst/front.
+  * linstaller: moved the loop code to new function loop_modules().
+  * linstaller: support "back" res (restarts a loop starting from the module
+    before the current)
+  * modules/update: translate "Updating APT cache..." string.
+  * modules/: ported everything to 3.x, except widget_test.
+  * core/module.py: onchroot support on Install (default == True).
+    Specifies if the install phase should be done in chroot or not.
+  * partdisks: handle KeyErrors in commit
+  * core/module.py: load frontend before entering in chroot
+  * linstaller.py: revert too if a frontend does not exist.
+  * partdisks: library: do not raise an exception if AttributeError when
+    checking for swap partitions.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 29 Dec 2011 21:38:47 +0100
+
+linstaller (2.10.0-1) pulse; urgency=low
+
+  * Initial upload to pulse.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 25 Dec 2011 11:38:30 +0100
+
+linstaller (2.0.0-1) emily; urgency=low
+
+  * Final 2.0.0 release.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 24 Dec 2011 10:22:48 +0100
+
+linstaller (2.0.0~pre3.1-1) emily; urgency=low
+
+  * Rebuild which adds mount_nolive.sh.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 12:11:09 +0100
+
+linstaller (2.0.0~pre3-1) emily; urgency=low
+
+  * modules/unsquash: fixed the crash on window resizing.
+  * modules/partdisks: inst: do not raise an exception when umount
+    fails in revert.
+  * mount_nolive.sh: added.
+  * setup.py and debian/: ship the clean module and mount_nolive.sh.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 11:49:45 +0100
+
+linstaller (2.0.0~pre2-1) emily; urgency=low
+
+  * linstaller: added ability to preseed from command-line;
+  * core/config: support initial (file-less) configurations;
+  * modules/widget_test: splitted tests; added sequence, progressbar_val,
+    progressbar_sleep seeds;
+  * core/module: support default items in cache().
+  * modules/update: specify default when calling cache().
+  * core/config: return booleans instead of strings if True, False or None.
+    (not case-sensitive).
+  * modules/*: some logic changes due to the above modification.
+    swap (partdisks) and root (userhost) requires None to disable.
+  * config/semplice: changed root = False to root = None, due to the change
+    above.
+  * modules/: added new clean module; cleans /etc/linstaller if custom
+    configurations are manually shipped during an ipothetical remaster.
+  * config/semplice-base: added the clean frontend to modules.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 18 Dec 2011 10:58:42 +0100
+
+linstaller (2.0.0~pre1-1) emily; urgency=low
+
+  * core/cli_frontend: new progressbar wrapper (class __ProgressBar).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 13 Dec 2011 18:01:39 +0100
+
+linstaller (1.52.4-1) emily; urgency=low
+
+  * modules/partdisks: frontend: preseed root_noformat and swap_noformat
+    if already formatted via edit_partitions.
+    Reduces disk stress and should fix a crash when starting from an empty
+    disk.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 14:09:06 +0100
+
+linstaller (1.52.3-1) emily; urgency=low
+
+  * modules/partdisks: library: fixed going back after a partition
+    table is created.
+  * modules/partdisks: library: fixed object processing when writing
+    to RAM.
+  * modules/partdisks: frontend: do not show tableless disks in the
+    automatic partitioner.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 08 Dec 2011 11:59:46 +0100
+
+linstaller (1.52.2.2-2) emily; urgency=low
+
+  * debian/control: do not restrict grub-pc: emily supports only i386 and amd64.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 19:45:59 +0100
+
+linstaller (1.52.2.2-1) emily; urgency=low
+
+  * debian/control: linstaller-modules-base: depend on parted.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 19:12:21 +0100
+
+linstaller (1.52.2.1-1) emily; urgency=low
+
+  * modules/partdisks: always declare choices[num] while printing
+    partitions; pull self.changed obj from choices[num] instead of
+    hardcoding to disk; do the partition table creation *before*
+    committing in the object (and before that, remove the device
+    from touched).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 18:47:09 +0100
+
+linstaller (1.52.2-1) emily; urgency=low
+
+  * core/cli_frontend: new action_list widget
+  * modules/: new module, widget_test (the widget factory
+    for linstaller! :D)
+  * linstaller.py: modules overriding supported via the
+    -m and --modules flags.
+  * modules/partdisks: creating a new MBR partition table is
+    now supported.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 28 Nov 2011 18:12:33 +0100
+
+linstaller (1.52.1-1) emily; urgency=low
+
+  * partdisks: library: fixed failed return if no disks are
+    available.
+  * setup.py and debian/: ship update module; depend on apt.cache
+    (python-apt).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 03 Nov 2011 21:28:26 +0100
+
+linstaller (1.52.0-1) emily; urgency=low
+
+  * partdisks: use the correct partition in the "delete a system"
+               option in the automatic partitioner.
+  * modules: added new update module: checks for linstaller updates.
+             Seeds: 'packages' in [module:update].
+             Type: frontend only.
+  * linstaller: support for full application restart
+  * linstaller: some syntax changes for restart,reboot,fullrestart
+                actions.
+  * config/semplice-base: updated to match inclusion of update
+                          module.
+  * core/main: support for shell=False on sexec.
+  * debian/control: linstaller: depend on modules = ${binary:Version}
+  * linstalleralan: Renamed "Go Classic!" to "Launch linstaller", as
+                    in emily only the CLI ("Classic") frontend will
+                    be available, and this only confuses people ;)
+  * debian/source/format: this is a not native package.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 28 Oct 2011 12:02:52 +0200
+
+linstaller (1.51.1-1) emily; urgency=low
+
+  * partdisks: deal with invalid partition tables
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 24 Oct 2011 11:20:52 +0200
+
+linstaller (1.51.0-1) emily; urgency=low
+
+  * linstalleralan: ported to alan 0.4.0, support for "config" option
+                    in order to specify configuration file from the
+                    tree.conf.
+  * Release for Beta1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 03 Oct 2011 12:48:14 +0200
+
+linstaller (1.51.0~pre5-1) emily; urgency=low
+
+  * Added preseed support for "root_noformat": if True, it will not format
+    the partition that should be used as /.
+    Works only via preseed and only into the root/swap selection dialog.
+  * live-config-linstaller: linstalleralan: copy config from /etc/alan,
+    added menu item icon.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 25 Sep 2011 11:35:36 +0200
+
+linstaller (1.51.0~pre4-1) emily; urgency=low
+
+  [ tuxpenguin ]
+  * Translated some spaghetti-English periods into English.
+
+  [ Eugenio Paolantonio (g7) ]
+  * debian/, setup.cfg:
+    - Ship to /usr/share/linstaller.
+  * debian/alan-ext-linstaller.install, setup.py:
+    - Install alan extension in /usr/share/alan.
+  * setup.py:
+    - Do not ship playground configuration anymore. 
+    - Ship semplice-nolive configuration.
+  * debian/linstaller-config-semplice.install:
+    - Ship semplice-nolive.
+  * debian/rules:
+    - Install MOs
+  * debian/linstaller.install:
+    - Ship /usr/share/locale.
+  * Make translatable some more strings.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 01 Sep 2011 14:27:05 +0200
+
+linstaller (1.51.0~pre3-1) emily; urgency=low
+
+  * partdisks: library: added is_disk() and device_sort() functions
+  * partdisks: library: return_device() correctly works on freespace
+    partitions.
+  * partdisks: use device_sort() to return a sorted list of what we
+    should commit.
+  * partdisks: set touched in automatic partitioning.
+  * partdisks: do not format if, in interactive editor, swap is selected
+    but swap_noformat preseed is true.
+  * partdisks: inst: in revert, check for key "partdisks.inst" AND if any,
+    revert used.
+  * partdisks: inst: fixed get of "changed".
+  * partdisks: "Go back" is now fixed.
+  * partdisks: do not clear touched and changes when returning to self.main()
+  * partdisks: in main() reload structure, but not remove "useas".
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sat, 20 Aug 2011 11:31:04 +0200
+
+linstaller (1.51.0~pre2-1) emily; urgency=low
+
+  * linstaller_wrapper.sh: launch linstaller with sudo
+  * partdisks: added a missing )
+  * linstaller_alan.py: fixed command
+  * partdisks: do not process freespace (/dev/sdx-1) partitions
+  * partdisks: do not ask for filesystem when adding a partition; the user
+    should add one later.
+  * partdisks: library: support for partitions with None filesystem.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 18 Aug 2011 17:21:38 +0200
+
+linstaller (1.51.0~pre1-1) emily; urgency=low
+
+  * Added alan extension and its relevant alan-ext-linstaller package
+  * New wrapper for linstaller that displays "Press ENTER to close" if
+    linstaller has failed (prevents the immediate destroy of the
+    terminal window)
+  * Added copyright (python-stdeb didn't have created one :/)
+  * Added new live-config-linstaller package.
+  * partdisks: do not fail if no swap is available/selected
+  * partdisks: mount empty partitions that have "useas" correctly defined
+  * linstaller.py: read frontend from command-line args, do not use the
+    frontend variable on configuration anymore.
+    If -f|--frontend is not specified, default to 'cli'
+  * config/semplice-base: removed 'frontend' variable
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Sun, 14 Aug 2011 17:39:58 +0200
+
+linstaller (1.50.0-1) emily; urgency=low
+
+  * Build-Depend too on python2.7
+
+ -- Eugenio (g7) <morarossa@gmail.com>  Thu, 11 Aug 2011 18:00:29 +0200
+
+linstaller (1.50.0) emily; urgency=low
+
+  * Initial release.
+
+ -- Eugenio (g7) <morarossa@gmail.com>  Mon, 01 Aug 2011 11:27:24 +0200

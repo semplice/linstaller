@@ -1,0 +1,164 @@
+Source: linstaller
+Maintainer: Eugenio Paolantonio (g7) <me@medesimo.eu>
+Section: python
+Priority: optional
+Build-Depends: python (>= 2.6.6-3), python2.7, debhelper (>= 7.4.3)
+Standards-Version: 3.9.4
+X-Python-Version: >= 2.7
+Vcs-Git: git://github.com/semplice/linstaller.git
+Vcs-Browser: https://github.com/semplice/linstaller
+Homepage: http://semplice.github.io/linstaller/
+
+Package: linstaller
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, linstaller-modules-base (= ${binary:Version}), linstaller-frontend-cli (= ${binary:Version}), python-apt
+Description: Modular GNU/Linux distribution installer
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the main executable and the core libraries.
+
+Package: linstaller-session
+Architecture: all
+Description: Modular GNU/Linux distribution installer -- xsession
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the xsession.
+
+Package: linstaller-frontend-cli
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-progressbar
+Description: Modular GNU/Linux distribution installer -- command line frontend
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the command-line frontend.
+
+Package: linstaller-frontend-glade
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, keeptalking (>= 2.21.0), pastebinit, python-gi, gir1.2-gtk-3.0, python-notify2
+Description: Modular GNU/Linux distribution installer -- gtk3 frontend
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the GTK+3 frontend.
+ 
+Package: linstaller-modules-base
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, python-keeptalking, python-libbricks, python-t9n (>= 6.0.2), python-parted, python-apt,
+ squashfs-tools,
+ user-setup,
+ imvirt,
+ lvm2,
+ cryptsetup,
+ util-linux,
+ ntfs-3g, fatresize, dosfstools, hfsprogs, reiser4progs, e2fsprogs, parted
+Description: Modular GNU/Linux distribution installer -- base modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the base modules needed to install a Semplice
+ System.
+
+Package: linstaller-modules-ubuntu
+Architecture: all
+Depends: linstaller (= ${binary:Version}), python-apt
+Description: Modular GNU/Linux distribution installer -- ubuntu support modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the modules needed to install an ubuntu-based
+ distribution.
+
+Package: linstaller-modules-echo
+Architecture: all
+Depends: linstaller (= ${binary:Version}), syslinux, extlinux, syslinux-themes-semplice-atom
+Description: Modular GNU/Linux distribution installer -- persistent usb creator
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the modules needed to create a persistent debian-live system
+ in an USB device.
+
+Package: linstaller-modules-raspberrypi
+Architecture: all
+Depends: linstaller (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- raspberrypi support modules
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the modules needed to install semplice on a
+ Raspberry Pi(TM).
+
+Package: linstaller-config-semplice
+Architecture: all
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- semplice configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install Semplice Linux.
+
+Package: linstaller-config-semplice-raspberrypi
+Architecture: all
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-raspberrypi (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- raspberrypi configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install Semplice Linux on a Raspberry Pi(TM).
+
+Package: linstaller-config-ubuntu
+Architecture: all
+Depends: linstaller (= ${binary:Version}), linstaller-modules-base (= ${binary:Version}), linstaller-modules-ubuntu (= ${binary:Version})
+Description: Modular GNU/Linux distribution installer -- ubuntu configuration
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the linstaller configuration files to
+ install an Ubuntu-based distribution.
+
+Package: live-config-linstaller
+Architecture: all
+Depends: ${misc:Depends}, live-config
+Description: Additional Configuration Scripts for Debian Live (linstaller)
+ live-config contains the scripts needed to perform late-userspace actions
+ on Debian Live systems.
+ .
+ This package contains the additional linstaller scripts.
