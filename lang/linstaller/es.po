@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-04-23 20:31+0000\n"
+"PO-Revision-Date: 2015-04-27 20:07+0000\n"
 "Last-Translator: seacat <seacat.linux@gmail.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/linstaller/language/es/)\n"
+"Language-Team: Spanish (http://www.transifex.com/p/linstaller/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -93,7 +93,7 @@ msgstr ""
 #: linstaller.py:295
 #, python-format
 msgid "%s does not exist! Adjust --config accordingly."
-msgstr ""
+msgstr "¡%s no existe! Ajuste --config en consecuencia."
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/gtk3.py:391
 #: linstaller/frontends/cli.py:89
@@ -179,7 +179,7 @@ msgstr "Partición de arranque EFI (/boot/efi)"
 
 #: linstaller/modules/bricks/inst/glade/__init__.py:53
 msgid "Configuring features..."
-msgstr ""
+msgstr "Configurando funcionalidades..."
 
 #: linstaller/modules/bricks/inst/glade/__init__.py:53
 #: linstaller/modules/echo/copy/inst/glade/__init__.py:36
@@ -199,12 +199,12 @@ msgstr "Esto puede tardar un rato."
 
 #: linstaller/modules/bricks/inst/cli.py:39
 msgid "Configuring features:"
-msgstr ""
+msgstr "Configurar funcionalidades:"
 
 #: linstaller/modules/bricks/front/glade/__init__.py:18
 #: linstaller/modules/bricks/front/cli.py:20
 msgid "Feature selection"
-msgstr ""
+msgstr "Selección de funcionalidad"
 
 #: linstaller/modules/bricks/front/glade/__init__.py:19
 msgid "You can further customize those after the installation."
@@ -846,7 +846,7 @@ msgstr "¡Esperemos que todo salga bien! :)"
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #, python-format
 msgid "Failed resizing %s."
-msgstr ""
+msgstr "Falló el redimensionamiento de %s."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #: linstaller/modules/partdisks/front/glade/__init__.py:153
@@ -885,7 +885,7 @@ msgstr "Llenando %s con datos al azar..."
 #: linstaller/modules/partdisks/front/glade/__init__.py:171
 msgid ""
 "This may take a while, depending by the quality of random data selected."
-msgstr ""
+msgstr "Esto puede tardar un rato, dependiendo de la calidad de los datos al azar seleccionados."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:176
 #, python-format
@@ -913,7 +913,7 @@ msgstr "Formateando %s..."
 #: linstaller/modules/partdisks/front/glade/__init__.py:443
 #, python-format
 msgid "Failed formatting %s."
-msgstr ""
+msgstr "Falló el formateo de %s."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:244
 #, python-format
@@ -1026,7 +1026,7 @@ msgstr "Después de la eliminación, Ud puede usar el espacio liberado para inst
 #: linstaller/modules/partdisks/front/glade/__init__.py:735
 #, python-format
 msgid "Install %(distro)s to %(path)s (%(model)s)"
-msgstr ""
+msgstr "Instalar %(distro)s en %(path)s (%(model)s)"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:740
 msgid "As the Disk is currently empty, this partition will be created."
@@ -1046,7 +1046,7 @@ msgstr "Inicializar %s."
 msgid ""
 "This initializes the drive (<b>%s</b>) for usage by creating a partition "
 "table."
-msgstr ""
+msgstr "Esto inicializa la unidad (<b>%s</b>) para su uso al crear una tabla de particiones."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:805
 #: linstaller/modules/partdisks/front/glade/__init__.py:2014
@@ -1451,7 +1451,7 @@ msgstr "ADVERTENCIA"
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
-msgstr ""
+msgstr "Esta es la última vez que Ud puede verificar la nueva tabla de particiones."
 
 #: linstaller/modules/partdisks/front/cli.py:288
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
@@ -1949,7 +1949,7 @@ msgstr "¡Las contraseñas de root no coinciden!"
 #: linstaller/modules/userhost/front/glade/__init__.py:319
 #, python-format
 msgid "The hostname must not contain these characters: %s"
-msgstr ""
+msgstr "El nombre del host no puede contener estos caracteres: %s"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:333
 msgid "The root password"
@@ -1968,7 +1968,7 @@ msgstr ""
 #: linstaller/modules/userhost/front/cli.py:70
 #, python-format
 msgid "You can't use these chars in the %s, please re-try: "
-msgstr ""
+msgstr "No se pueden usar estos caracteres en %s, por favor reinténtelo nuevamente:"
 
 #: linstaller/modules/userhost/front/cli.py:80
 #: linstaller/frontends/gtk3.py:218
@@ -1988,13 +1988,13 @@ msgstr "Por favor revise todo antes de continuar."
 #: linstaller/modules/summary/front/cli.py:29
 #, python-format
 msgid "%(distroname)s will be installed here."
-msgstr ""
+msgstr "%(distroname)s se instalará aquí."
 
 #: linstaller/modules/summary/front/glade/__init__.py:64
 #: linstaller/modules/summary/front/cli.py:33
 #, python-format
 msgid " - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s"
-msgstr ""
+msgstr " - %(part)s (%(filesystem)s, se monta en %(mountpoint)s)%(text)s"
 
 #: linstaller/modules/summary/front/glade/__init__.py:92
 #, python-format
@@ -2016,22 +2016,22 @@ msgstr "Se usarán estas particiones:"
 #: linstaller/modules/summary/front/cli.py:44
 #, python-format
 msgid "The persistence partion will be of %s MB."
-msgstr ""
+msgstr "La partición de persistencia será de %s MB."
 
 #: linstaller/modules/summary/front/cli.py:50
 #, python-format
 msgid "The default locale will be %(locale)s."
-msgstr ""
+msgstr "La configuración regional por defecto será %(locale)s."
 
 #: linstaller/modules/summary/front/cli.py:54
 #, python-format
 msgid "The default keyboard layout will be %(layout)s."
-msgstr ""
+msgstr "La distribución por defecto del teclado será %(layout)s."
 
 #: linstaller/modules/summary/front/cli.py:60
 #, python-format
 msgid "The main user will be %(userfullname)s (%(username)s)."
-msgstr ""
+msgstr "El usuario principal será %(userfullname)s (%(username)s)."
 
 #: linstaller/modules/summary/front/cli.py:63
 msgid "Root account is enabled."
@@ -2040,7 +2040,7 @@ msgstr "La cuenta de root está habilitada."
 #: linstaller/modules/summary/front/cli.py:64
 #, python-format
 msgid "The computer hostname will be %(hostname)s."
-msgstr ""
+msgstr "El nombre del host será %(hostname)s."
 
 #: linstaller/modules/summary/front/cli.py:69
 #, python-format
@@ -2051,7 +2051,7 @@ msgstr "La máquina usará esta zona horaria: %(timezone)s."
 #, python-format
 msgid ""
 "The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s."
-msgstr ""
+msgstr "El cargador de arranque (%(bootloader)s) se instalará en %(bootloaderpath)s."
 
 #: linstaller/modules/summary/front/cli.py:86
 msgid "Installing..."
@@ -2075,7 +2075,7 @@ msgstr "¡Bienvenido al asistente de instalación de %s!"
 msgid ""
 "This wizard will help you with the installation of the distribution into "
 "your Hard Disk or another removable media."
-msgstr ""
+msgstr "Este asistente le ayudará a instalar la distribución en su disco rígido u otro medio removible."
 
 #: linstaller/modules/welcome/front/gtk3.py:26
 #: linstaller/modules/welcome/front/cli.py:25
@@ -2110,11 +2110,11 @@ msgstr "Configurar el sistema final:"
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:19
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:38
 msgid "Removing virtual machine specific packages..."
-msgstr ""
+msgstr "Eliminando paquetes específicos de la máquina virtual..."
 
 #: linstaller/modules/virtualclean/inst/cli.py:20
 msgid "Removing virtual machine specific packages:"
-msgstr ""
+msgstr "Eliminar paquetes específicos de la máquina virtual:"
 
 #: linstaller/frontends/gtk3.py:323 linstaller/frontends/gtk3.py:328
 msgid "You can't continue."
@@ -2127,7 +2127,7 @@ msgstr "Ud no puede continuar."
 
 #: linstaller/frontends/gtk3.py:326
 msgid "Press the next button to continue."
-msgstr ""
+msgstr "Presione el botón Siguiente para continuar."
 
 #: linstaller/frontends/gtk3.py:328
 msgid "Please set"
@@ -2139,7 +2139,7 @@ msgstr "Instalando"
 
 #: linstaller/frontends/glade/__init__.py:52
 msgid "You will not wait long, we promise."
-msgstr ""
+msgstr "Ud no va a esperar mucho tiempo, se lo prometemos."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some incomplete items (hover to see)."
@@ -2147,7 +2147,7 @@ msgstr ""
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to complete the following items:"
-msgstr ""
+msgstr "Ud tiene que completar los siguientes ítems:"
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some errors (hover to see)."
@@ -2165,7 +2165,7 @@ msgstr "Por favor espere..."
 
 #: linstaller/frontends/cli.py:86
 msgid "You need to insert a number!"
-msgstr ""
+msgstr "¡Ud tiene que ingresar un número!"
 
 #: linstaller/services/glade/__init__.py:215
 #: linstaller/services/glade/__init__.py:398
@@ -2173,12 +2173,12 @@ msgstr ""
 #: linstaller/services/glade/__init__.py:474
 #, python-format
 msgid "%s Installer"
-msgstr ""
+msgstr "Instalador de %s"
 
 #: linstaller/services/glade/__init__.py:248
 #, python-format
 msgid "Module path %s does not exist! Skipping..."
-msgstr ""
+msgstr "¡La ruta del módulo %s no existe! Salteando..."
 
 #: linstaller/services/glade/__init__.py:623
 msgid "Reboot"
@@ -2190,24 +2190,24 @@ msgstr "Reiniciar el instalador"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:1
 msgid "<big><b>An error occurred.</b></big>"
-msgstr ""
+msgstr "<big><b>Ocurrió un error.</b></big>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:2
 msgid "Manage Semplice features"
-msgstr ""
+msgstr "Gestionar funcionalidades de Semplice"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:3
 #: linstaller/services/glade/base_ui.glade.h:3
 msgid "label"
-msgstr ""
+msgstr "rótulo"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:4
 msgid "Enable"
-msgstr ""
+msgstr "Habilitar"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:5
 msgid "<b>Features</b>"
-msgstr ""
+msgstr "<b>Funcionalidades</b>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:6
 #: linstaller/services/glade/base_ui.glade.h:4
@@ -2216,16 +2216,16 @@ msgstr "<i>Por favor espere...</i>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:7
 msgid "Customize features"
-msgstr ""
+msgstr "Personalizar funcionalidades"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:1
 #: linstaller/modules/partdisks/front/glade/module.glade.h:27
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:2
 msgid "- or -"
-msgstr ""
+msgstr "- o - "
 
 #: linstaller/modules/end/front/glade/module.glade.h:1
 msgid "<big><b>Relax.</b></big>"
@@ -2233,7 +2233,7 @@ msgstr ""
 
 #: linstaller/modules/end/front/glade/module.glade.h:2
 msgid "We are working for you."
-msgstr ""
+msgstr "Estamos trabajando para Ud."
 
 #: linstaller/modules/end/front/glade/module.glade.h:3
 #: linstaller/modules/partdisks/front/glade/module.glade.h:55
@@ -2242,11 +2242,11 @@ msgstr "página 1"
 
 #: linstaller/modules/end/front/glade/module.glade.h:4
 msgid "<big><b>We've finished!</b></big>"
-msgstr ""
+msgstr "<big><b>¡Hemos terminado!</b></big>"
 
 #: linstaller/modules/end/front/glade/module.glade.h:5
 msgid "The installation wizard has just finished!"
-msgstr ""
+msgstr "¡El asistente de instalación acaba de terminar!"
 
 #: linstaller/modules/end/front/glade/module.glade.h:6
 #: linstaller/modules/partdisks/front/glade/module.glade.h:64
@@ -2360,7 +2360,7 @@ msgstr "Zona horaria"
 msgid ""
 "<big><b>Welcome to Semplice Live!</b></big>\n"
 "Please select your locale below."
-msgstr ""
+msgstr "<big><b>¡Bienvenido a Semplice Live!</b></big>\nPor favor seleccione debajo su configuración regional."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:23
 #: linstaller/modules/language/front/glade/module.glade.h:23
@@ -2559,7 +2559,7 @@ msgstr "<big><b>Por favor ingrese la contraseña del volumen.</b></big>"
 #: linstaller/modules/partdisks/front/glade/module.glade.h:44
 msgid ""
 "In order to unlock this encrypted volume, you need to insert its password."
-msgstr ""
+msgstr "Para desbloquear este volumen encriptado, Ud tiene que ingresar su contraseña."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:45
 msgid "Prova"
@@ -2600,7 +2600,7 @@ msgstr "<big><b>Por favor espere.</b></big>"
 #: linstaller/modules/partdisks/front/glade/module.glade.h:54
 msgid ""
 "We are setting up things to offer an awesome partitioning experience ;)"
-msgstr ""
+msgstr "Estamos preparando las cosas para ofrecer una experiencia impresionante de particionado ;)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:56
 msgid "<big><b>Automatic partitioning</b></big>"
@@ -2610,7 +2610,7 @@ msgstr "<big><b>Particionado automático</b></big>"
 msgid ""
 "Press this button to make the installer search the best\n"
 "option for your system."
-msgstr ""
+msgstr "Presione este botón para hacer que el instalador busque la mejor\nopción para su sistema."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:59
 msgid "<big><b>Manual partitioning</b></big>"
@@ -2634,7 +2634,7 @@ msgstr "<big><b>No se encontró solución.</b></big>"
 msgid ""
 "Unfortunately, we didn't find solutions for this system. Please use the "
 "manual partitioner."
-msgstr ""
+msgstr "Desafortunadamente no encontramos una solución para este sistema. Por favor use el particionador manual."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:67
 msgid "Lock/Unlock volume"

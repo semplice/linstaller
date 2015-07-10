@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-03-21 19:38+0000\n"
+"PO-Revision-Date: 2015-06-01 11:22+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/linstaller/language/nl_NL/)\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/p/linstaller/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,61 +20,61 @@ msgstr ""
 
 #: linstaller.py:260
 msgid "You have to pass at least an action!"
-msgstr ""
+msgstr "U moet minstens één actie opgeven!"
 
 #: linstaller.py:264
 #, python-format
 msgid "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
-msgstr ""
+msgstr "SYNTAX: %s <options> [ACTIE] <:seed:option:value>"
 
 #: linstaller.py:266
 msgid "Recognized options:"
-msgstr ""
+msgstr "Erkende opties:"
 
 #: linstaller.py:267
 msgid " -c|--config\t\t- Selects the configuration file to read"
-msgstr ""
+msgstr " -c|--config\t\t- Selecteert het te lezen configuratiebestand"
 
 #: linstaller.py:268
 msgid ""
 " -p|--configpath\t- Selects the directory to look for configuration files"
-msgstr ""
+msgstr " -p|--configpath\t- Selecteert de map waarin moet worden gezocht naar configuratiebestanden"
 
 #: linstaller.py:269
 msgid " -t|--target\t\t- Selects the target directory (def: /linstaller/target)"
-msgstr ""
+msgstr " -t|--target\t\t- Selecteert de doelmap (standaard: /linstaller/target)"
 
 #: linstaller.py:270
 msgid " -f|--frontend\t\t- Selects the frontend to use (def: cli)"
-msgstr ""
+msgstr " -f|--frontend\t\t- Selecteert het te gebruiken frontend (standaard: cli)"
 
 #: linstaller.py:271
 msgid " -m|--modules\t\t- Overrides the modules to be executed"
-msgstr ""
+msgstr " -m|--modules\t\t- Overschrijft de uit te voeren modules"
 
 #: linstaller.py:272
 msgid " -s|--services\t\t- Overrides the services to be executed"
-msgstr ""
+msgstr " -s|--services\t\t- Overschrijft de uit te voeren diensten"
 
 #: linstaller.py:273
 msgid " -r|--remove\t\t- Removes the specified modules from the modules list"
-msgstr ""
+msgstr " -r|--remove\t\t- Verwijdert de opgegeven modules uit de moduleslijst"
 
 #: linstaller.py:275
 msgid "Recognized actions:"
-msgstr ""
+msgstr "Erkende acties:"
 
 #: linstaller.py:276
 msgid " help\t\t\t- Displays this help message, then exits."
-msgstr ""
+msgstr " help\t\t\t- Weergeeft dit hulpbericht en sluit dan af."
 
 #: linstaller.py:277
 msgid " start\t\t\t- Starts the installer."
-msgstr ""
+msgstr " start\t\t\t- Start de installatiewizard."
 
 #: linstaller.py:279
 msgid "Preseeding:"
-msgstr ""
+msgstr "Voorconfiguratie:"
 
 #: linstaller.py:280
 msgid ""
@@ -88,17 +88,17 @@ msgid ""
 " :userhost:root:True\t\t- Enables root\n"
 " :language:ask:True\t\t- Asks for language\n"
 " :partdisks:swap_noformat:True\t- Does not format swap partition\n"
-msgstr ""
+msgstr "linstaller ondersteunt preseeding. Seeds kunnen worden gespecificeerd in het\nconfiguratiebestand van de distributie of d.m.v. de notatie hieronder:\n\n:module:optie:waarde\n\nVoorbeelden:\n\n:userhost:root:True⇥⇥- Schakelt root in\n:language:ask:True⇥⇥- Vraagt naar de taalkeuze\n:partdisks:swap_noformat:True⇥- Formatteert de swap-partitie niet\n"
 
 #: linstaller.py:295
 #, python-format
 msgid "%s does not exist! Adjust --config accordingly."
-msgstr ""
+msgstr "%s bestaat niet! Wijzig --config zodanig."
 
 #: linstaller/core/cli_frontend.py:90 linstaller/frontends/gtk3.py:391
 #: linstaller/frontends/cli.py:89
 msgid "You must insert something!"
-msgstr ""
+msgstr "U moet iets invoeren!"
 
 #: linstaller/core/cli_frontend.py:108 linstaller/frontends/gtk3.py:409
 #: linstaller/frontends/cli.py:107
@@ -147,11 +147,11 @@ msgstr "Onebkende waarde %s. Probeer het opnieuw."
 #: linstaller/modules/partdisks/front/cli.py:958
 #: linstaller/frontends/gtk3.py:456 linstaller/frontends/cli.py:154
 msgid "Please insert your action here"
-msgstr ""
+msgstr "Voer uw actie hier in"
 
 #: linstaller/core/libmodules/partdisks/library.py:74
 msgid "Do not set a mountpoint."
-msgstr ""
+msgstr "Geen aankoppelpunt instellen."
 
 #: linstaller/core/libmodules/partdisks/library.py:75
 msgid "Swap"
@@ -241,308 +241,308 @@ msgstr "Klik op volgende om door te gaan."
 
 #: linstaller/modules/echo/copy/inst/glade/__init__.py:21
 msgid "Copying squashfs image..."
-msgstr ""
+msgstr "Bezig met het kopiëren van het squashfs-afbeeldingsbestand..."
 
 #: linstaller/modules/echo/copy/inst/glade/__init__.py:26
 msgid "Copying syslinux directory..."
-msgstr ""
+msgstr "Bezig met het kopiëren van de syslinux-map..."
 
 #: linstaller/modules/echo/copy/inst/glade/__init__.py:36
 msgid "Copying system to disk..."
-msgstr ""
+msgstr "Bezig met het kopiëren van het systeem naar de schijf..."
 
 #: linstaller/modules/echo/copy/inst/cli.py:18
 #: linstaller/modules/unsquash/inst/cli.py:22
 msgid "Copying system to disk:"
-msgstr ""
+msgstr "Bezig met het kopiëren van het systeem naar de schijf:"
 
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:17
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:26
 #: linstaller/modules/bootloader/inst/glade/__init__.py:43
 #: linstaller/modules/bootloader/inst/glade/__init__.py:60
 msgid "Installing bootloader..."
-msgstr ""
+msgstr "Bezig met het installeren van de opstartlader..."
 
 #: linstaller/modules/echo/bootloader/inst/cli.py:16
 #: linstaller/modules/bootloader/inst/cli.py:27
 msgid "Installing bootloader:"
-msgstr ""
+msgstr "Bezig met het installeren van de opstartlader:"
 
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:21
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:41
 msgid "Creating persistent filesystem..."
-msgstr ""
+msgstr "Bezig met het creëren van een persistent bestandssysteem..."
 
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:26
 msgid "Formatting filesystem..."
-msgstr ""
+msgstr "Bezig met het formatteren van het bestandssysteem..."
 
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:31
 msgid "Configuring filesystem..."
-msgstr ""
+msgstr "Bezig met het instellen van het bestandssysteem..."
 
 #: linstaller/modules/echo/partusb/inst/cli.py:18
 msgid "Creating persistent filesystem:"
-msgstr ""
+msgstr "Bezig met het creëren van een persistent bestandssysteem:"
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:18
 #: linstaller/modules/echo/partusb/front/cli.py:19
 msgid "Persistence partition"
-msgstr ""
+msgstr "Persistente partitie"
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:18
 msgid "Select the size of the persistence partition"
-msgstr ""
+msgstr "Selecteer de grootte van de persistente partitie"
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:78
 #: linstaller/modules/echo/partusb/front/cli.py:58
 msgid "You need to specify the size of the persistence partition."
-msgstr ""
+msgstr "U moet de grootte opgeven van de persistente partitie."
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:79
 #: linstaller/modules/echo/partusb/front/cli.py:59
 msgid ""
 "The persistence partition will be stored as a file into the USB key and will"
 " contain all changes done to the stock system."
-msgstr ""
+msgstr "De persistente partitie zal worden opgeslagen als een bestand op de USB-schijf en zal alle wijzigingen aan het standaard systeem bevatten."
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:84
 msgid ""
 "Partition is a FAT partition, so there is a limit to a maximum of 4GiB per-"
 "file."
-msgstr ""
+msgstr "De partitie is een FAT-partitie; dit betekent dat er een limiet is van 4 GiB per bestand."
 
 #: linstaller/modules/echo/partusb/front/cli.py:61
 #, python-format
 msgid "Usable freespace: %s MiB"
-msgstr ""
+msgstr "Bruikbare vrije ruimte: %s MiB"
 
 #: linstaller/modules/echo/partusb/front/cli.py:63
 msgid ""
 "Partition uses a FAT partition, so there is a limit to a maximum of 4GiB "
 "per-file."
-msgstr ""
+msgstr "De partitie is een FAT-partitie; dit betekent dat er een limiet is van 4 GiB per bestand."
 
 #: linstaller/modules/echo/partusb/front/cli.py:64
 msgid ""
 "You can insert the percentage of the partition (e.g: 50%) or the full size "
 "of the new partition, in megabytes."
-msgstr ""
+msgstr "U kunt het percentage (bijv.: 50%) of de volledige grootte in megabytes van de nieuwe partitie opgeven."
 
 #: linstaller/modules/echo/partusb/front/cli.py:66
 msgid "Insert the value here"
-msgstr ""
+msgstr "Voer hier de waarde in"
 
 #: linstaller/modules/echo/partusb/front/cli.py:75
 #: linstaller/modules/partdisks/front/cli.py:718
 #: linstaller/modules/partdisks/front/cli.py:896
 msgid "Wrong percentage specified!"
-msgstr ""
+msgstr "Er is een verkeerd percentage opgegeven!"
 
 #: linstaller/modules/echo/partusb/front/cli.py:88
 #: linstaller/modules/partdisks/front/cli.py:731
 #: linstaller/modules/partdisks/front/cli.py:909
 msgid "Wrong value specified!"
-msgstr ""
+msgstr "Er is een verkeerde waarde opgegeven!"
 
 #: linstaller/modules/echo/partusb/front/cli.py:96
 #: linstaller/modules/partdisks/front/cli.py:736
 #: linstaller/modules/partdisks/front/cli.py:923
 msgid "Not enough space!"
-msgstr ""
+msgstr "Er is niet genoeg vrije ruimte!"
 
 #: linstaller/modules/debian/inst/glade/__init__.py:21
 #: linstaller/modules/debian/inst/glade/__init__.py:41
 msgid "Removing live-specific packages..."
-msgstr ""
+msgstr "Bezig met het verwijderen van live-specifieke pakketten..."
 
 #: linstaller/modules/debian/inst/cli.py:22
 msgid "Removing live-specific packages:"
-msgstr ""
+msgstr "Bezig met het verwijderen van live-specifieke pakketten:"
 
 #: linstaller/modules/end/front/glade/__init__.py:16
 msgid "Installation finished"
-msgstr ""
+msgstr "De installatie is afgerond"
 
 #: linstaller/modules/end/front/glade/__init__.py:17
 msgid "Press Reboot to restart to the installed system."
-msgstr ""
+msgstr "Klik op Herstarten om de computer te herstarten naar het geïnstalleerde systeem."
 
 #: linstaller/modules/end/front/cli.py:15
 msgid "Enjoy"
-msgstr ""
+msgstr "Veel plezier"
 
 #: linstaller/modules/end/front/cli.py:17
 #, python-format
 msgid "Just finished the installation of %(distribution)s."
-msgstr ""
+msgstr "De installatie van %(distribution)s is zojuist afgerond."
 
 #: linstaller/modules/end/front/cli.py:18
 msgid ""
 "Please reboot and remove the install media to get the installed system."
-msgstr ""
+msgstr "Herstart het systeem en verwijder het installatiemedium om het geïnstalleerde systeem te bereiken."
 
 #: linstaller/modules/end/front/cli.py:23
 msgid "Do you want to reboot now?"
-msgstr ""
+msgstr "Wilt u nu herstarten?"
 
 #: linstaller/modules/timezone/inst/glade/__init__.py:23
 #: linstaller/modules/timezone/inst/glade/__init__.py:36
 msgid "Setting timezone..."
-msgstr ""
+msgstr "Bezig met het instellen van de tijdzone..."
 
 #: linstaller/modules/timezone/inst/cli.py:18
 msgid "Setting timezone:"
-msgstr ""
+msgstr "Bezig met het instellen van de tijdzone:"
 
 #: linstaller/modules/timezone/front/glade/__init__.py:18
 #: linstaller/modules/timezone/front/cli.py:18
 msgid "Timezone selection"
-msgstr ""
+msgstr "Tijdzone-selectie:"
 
 #: linstaller/modules/timezone/front/glade/__init__.py:19
 msgid "Select your timezone here."
-msgstr ""
+msgstr "Selecteer hier uw tijdzone."
 
 #: linstaller/modules/timezone/front/cli.py:27
 msgid "Default timezone is:"
-msgstr ""
+msgstr "De standaard tijdzone is:"
 
 #: linstaller/modules/timezone/front/cli.py:31
 msgid "Do you want to change it?"
-msgstr ""
+msgstr "Wilt u deze wijzigen?"
 
 #: linstaller/modules/timezone/front/cli.py:46
 msgid "Select the region where you live"
-msgstr ""
+msgstr "Selecteer het gebied waar u woont"
 
 #: linstaller/modules/timezone/front/cli.py:61
 #: linstaller/modules/timezone/front/cli.py:112
 msgid "Specify"
-msgstr ""
+msgstr "Opgeven"
 
 #: linstaller/modules/timezone/front/cli.py:67
 #: linstaller/modules/timezone/front/cli.py:118
 msgid "Please insert your choice"
-msgstr ""
+msgstr "Voer uw keuze in"
 
 #: linstaller/modules/timezone/front/cli.py:70
 #: linstaller/modules/timezone/front/cli.py:121
 msgid "Wrong choice!"
-msgstr ""
+msgstr "Verkeerde keuze!"
 
 #: linstaller/modules/timezone/front/cli.py:75
 msgid "Select city"
-msgstr ""
+msgstr "Selecteer uw stad"
 
 #: linstaller/modules/timezone/front/cli.py:82
 msgid "Please specify the timezone"
-msgstr ""
+msgstr "Geef alstublieft een tijdzone op"
 
 #: linstaller/modules/timezone/front/cli.py:88
 msgid "Invalid zone!"
-msgstr ""
+msgstr "Verkeerde zone!"
 
 #: linstaller/modules/timezone/front/cli.py:97
 msgid "Invalid zone or city!"
-msgstr ""
+msgstr "Verkeerde zone of stad!"
 
 #: linstaller/modules/timezone/front/cli.py:130
 msgid "Please specify the city"
-msgstr ""
+msgstr "Geef alstublieft een stad op"
 
 #: linstaller/modules/timezone/front/cli.py:134
 msgid "Invalid city!"
-msgstr ""
+msgstr "Verkeerde stad!"
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:38
 #, python-format
 msgid "Searching for the best %s mirror..."
-msgstr ""
+msgstr "Bezig met het zoeken naar de beste %s-spiegelserver..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Mirrorselect crashed."
-msgstr ""
+msgstr "De spiegelservermodule is gecrashed."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Please check sources.list(.d) later."
-msgstr ""
+msgstr "Controleer nadien sources.list.(d)."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "Selecting the fastest mirrors..."
-msgstr ""
+msgstr "Bezig met het selecteren van de snelste spiegelservers..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "The installer is checking for the fastest mirror for your zone."
-msgstr ""
+msgstr "De installatiewizard is bezig met het controleren van de snelste spiegelserver voor uw zone."
 
 #: linstaller/modules/mirrorselect/inst/cli.py:23
 msgid "Selecting mirrors:"
-msgstr ""
+msgstr "Bezig met het selecteren van spiegelservers:"
 
 #: linstaller/modules/mirrorselect/inst/cli.py:46
 msgid "Mirrorselect crashed. Please check sources.list(.d) later."
-msgstr ""
+msgstr "De spiegelservermodule is gecrashed. Controleer nadien sources.list.(d)."
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:15
 #: linstaller/modules/mirrorselect/front/cli.py:18
 msgid "Mirror selection"
-msgstr ""
+msgstr "Spiegelserverselectie"
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:16
 msgid "Select the best mirror"
-msgstr ""
+msgstr "Selecteer de beste spiegelserver"
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:41
 #: linstaller/modules/mirrorselect/front/cli.py:22
 #, python-format
 msgid "%(distroname)s has many mirrors worldwide."
-msgstr ""
+msgstr "%(distroname)s heeft wereldwijd vele spiegelservers."
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:42
 #: linstaller/modules/mirrorselect/front/cli.py:23
 msgid ""
 "You can let the installer to test all mirrors and to find the fastest for "
 "your zone."
-msgstr ""
+msgstr "U kunt de installatiewizard alle spiegelservers laten nalopen en de snelste selecteren voor uw zone."
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:44
 #: linstaller/modules/mirrorselect/front/cli.py:25
 msgid "This requires a working internet connection."
-msgstr ""
+msgstr "Dit vereist een werkende internetverbinding."
 
 #: linstaller/modules/mirrorselect/front/cli.py:29
 msgid "Do you want to check for the fastest mirror?"
-msgstr ""
+msgstr "Wilt u een controle uitvoeren om te zien wat de snelste spiegelserver is?"
 
 #: linstaller/modules/mirrorselect/front/cli.py:37
 msgid "Do you want to enable deb-src entries?"
-msgstr ""
+msgstr "Wilt u deb-src-pakketbronnen inschakelen?"
 
 #: linstaller/modules/bootloader/inst/glade/__init__.py:29
 msgid "Fetching bootloader packages..."
-msgstr ""
+msgstr "Bezig met het ophalen van de opstartlader-pakketten..."
 
 #: linstaller/modules/bootloader/inst/glade/__init__.py:38
 msgid "Installing bootloader packages..."
-msgstr ""
+msgstr "Bezig met het installeren van de opstartlader-pakketten..."
 
 #: linstaller/modules/bootloader/inst/glade/__init__.py:48
 msgid "Generating bootloader configuration..."
-msgstr ""
+msgstr "Bezig met het genereren van de opstartlader-configuratie..."
 
 #: linstaller/modules/bootloader/inst/glade/__init__.py:60
 msgid "Please wait during the installer is installing the bootloader..."
-msgstr ""
+msgstr "De installatiewizard is de opstartlader aan het installeren; een moment geduld a.u.b...."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:15
 #: linstaller/modules/bootloader/front/cli.py:17
 msgid "Bootloader"
-msgstr ""
+msgstr "Opstartlader"
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:16
 msgid "Bootloader settings"
-msgstr ""
+msgstr "Opstartlader-instellingen"
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:42
 #: linstaller/modules/bootloader/front/cli.py:23
@@ -550,89 +550,89 @@ msgstr ""
 msgid ""
 "The bootloader is that piece of software that lets you boot your "
 "%(distroname)s system."
-msgstr ""
+msgstr "De opstartlader is een stukje software dat u op laat starten in naar uw besturingssysteem %(distroname)s."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:43
 #: linstaller/modules/bootloader/front/cli.py:24
 #, python-format
 msgid "Without the bootloader, you can't boot %(distroname)s."
-msgstr ""
+msgstr "Zonder opstartlader kunt u niet opstarten naar %(distroname)s."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:45
 #: linstaller/modules/bootloader/front/cli.py:42
 msgid ""
 "You can choose to install the bootloader into the Master Boot Record of your"
 " hard disk. This is recommended."
-msgstr ""
+msgstr "U kunt ervoor kiezen om de opstartlader naar het Master Boot Record van uw harde schijf te installeren. Dit is de aanbevolen keuze."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:46
 msgid ""
 "If you do not want to install the bootloader into the MBR, it will be "
 "installed on your root partition."
-msgstr ""
+msgstr "Als u niet wilt dat de opstartlader naar het MBR wordt geïnstalleerd zal hij op uw root-partitie worden geïnstalleerd."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:47
 msgid ""
 "If the root partition is a LVM Logical Volume, you are strongly encouraged "
 "to install the bootloader into the MBR."
-msgstr ""
+msgstr "Als de root-partitie een LVM Logisch Volume is is het sterk aanbevolen om de opstartlader naar het MBR te installeren."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:48
 msgid ""
 "Otherwise, the installer will automatically install the bootloader into the "
 "/boot partition, if supplied."
-msgstr ""
+msgstr "Anders zal de opstartlader automatisch naar de /boot-partitie worden geïnstalleerd indien deze aanwezig is."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:49
 msgid ""
 "If the /boot partition is a LVM Logical Volume too, the bootloader "
 "installation will be skipped."
-msgstr ""
+msgstr "Als de /boot-partitie ook een LVM Logisch Volume is zal de opstartlader-installatie worden overgeslagen."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:51
 msgid ""
 "You can force the device where to install the bootloader by using the "
 ":bootloader:forcedevice seed."
-msgstr ""
+msgstr "U kunt het apparaat waarop de opstartlader moet worden geïnstalleerd forceren door de :bootloader:forcedevice-seed te gebruiken."
 
 #: linstaller/modules/bootloader/front/cli.py:29
 msgid "Which bootloader do you want to install? [press ENTER for 'grub']"
-msgstr ""
+msgstr "Welke opstartlader wilt u installeren? [druk op ENTER om 'grub' te kiezen]"
 
 #: linstaller/modules/bootloader/front/cli.py:36
 msgid "Invalid bootloader specified. [press ENTER to continue]"
-msgstr ""
+msgstr "Er is een verkeerde opstartlader opgegeven. [druk op ENTER om door te gaan]"
 
 #: linstaller/modules/bootloader/front/cli.py:43
 msgid "If you choose 'No', it will be installed on your root partition."
-msgstr ""
+msgstr "Als u 'Nee' kiest zal hij worden geïnstalleerd naar uw root-partitie."
 
 #: linstaller/modules/bootloader/front/cli.py:45
 msgid "Do you want to install the bootloader into the MBR?"
-msgstr ""
+msgstr "Wilt u de opstartlader naar het MBR installeren?"
 
 #: linstaller/modules/fstab/inst/__init__.py:91
 #, python-format
 msgid ""
 "mountpoint %s exists and it isn't a directory. Please change the mountpoint "
 "path."
-msgstr ""
+msgstr "Het aankoppelpunt %s bestaat en is geen map. Wijzig het aankoppelpuntpad."
 
 #: linstaller/modules/update/front/gtk3.py:24
 #: linstaller/modules/update/front/glade/__init__.py:75
 msgid "Installer updates"
-msgstr ""
+msgstr "Installatiewizard-bijwerkingen"
 
 #: linstaller/modules/update/front/gtk3.py:24
 msgid "Update the installer"
-msgstr ""
+msgstr "De installatiewizard bijwerken"
 
 #: linstaller/modules/update/front/gtk3.py:26
 #: linstaller/modules/update/front/glade/__init__.py:102
 #: linstaller/modules/update/front/cli.py:26
 #, python-format
 msgid "%(distroname)s's installer improves every day."
-msgstr ""
+msgstr "%(distroname)s's installatiewizard wordt elke dag verbeterd."
 
 #: linstaller/modules/update/front/gtk3.py:27
 #: linstaller/modules/update/front/glade/__init__.py:103
@@ -640,200 +640,200 @@ msgstr ""
 msgid ""
 "It is good measure to have the latest version before installing the "
 "distribution."
-msgstr ""
+msgstr "Het wordt aanbevolen om altijd de nieuwste versie te gebruiken voordat u het besturingssysteem gaat installeren."
 
 #: linstaller/modules/update/front/gtk3.py:29
 msgid "The installer should check for updates."
-msgstr ""
+msgstr "De installatiewizard zou moeten controleren op bijwerkingen."
 
 #: linstaller/modules/update/front/gtk3.py:38
 #: linstaller/modules/update/front/glade/__init__.py:29
 #: linstaller/modules/update/front/cli.py:33
 msgid "Updating APT cache..."
-msgstr ""
+msgstr "Bezig met het bijwerken van de APT-cache..."
 
 #: linstaller/modules/update/front/gtk3.py:47
 #: linstaller/modules/update/front/glade/__init__.py:38
 #: linstaller/modules/update/front/cli.py:42
 msgid "No updates found."
-msgstr ""
+msgstr "Er zijn geen bijwerkingen gevonden."
 
 #: linstaller/modules/update/front/gtk3.py:66
 #: linstaller/modules/update/front/glade/__init__.py:52
 #: linstaller/modules/update/front/cli.py:61
 msgid "Installer updated"
-msgstr ""
+msgstr "De installatiewizard is bijgewerkt"
 
 #: linstaller/modules/update/front/gtk3.py:66
 msgid "Everything went well"
-msgstr ""
+msgstr "Alles is goed gegaan"
 
 #: linstaller/modules/update/front/gtk3.py:68
 #: linstaller/modules/update/front/cli.py:63
 msgid "The installer packages have been updated successfully."
-msgstr ""
+msgstr "De installatiewizard-pakketten zijn succesvol bijgewerkt."
 
 #: linstaller/modules/update/front/gtk3.py:70
 #: linstaller/modules/update/front/cli.py:65
 msgid "Press ENTER to start the updated installer"
-msgstr ""
+msgstr "Druk op ENTER om de bijgewerkte installatiewizard te starten"
 
 #: linstaller/modules/update/front/glade/__init__.py:38
 msgid "It seems you are already up-to-date. Yay!"
-msgstr ""
+msgstr "Het lijkt erop dat u al bijgewerkt bent. Yay!"
 
 #: linstaller/modules/update/front/glade/__init__.py:42
 msgid "Upgrading packages..."
-msgstr ""
+msgstr "Bezig met het opwaarderen van de pakketten..."
 
 #: linstaller/modules/update/front/glade/__init__.py:47
 #: linstaller/modules/update/front/cli.py:51
 msgid "Something went wrong while updating packages."
-msgstr ""
+msgstr "Er ging iets mis tijdens het bijwerken van de pakketten."
 
 #: linstaller/modules/update/front/glade/__init__.py:47
 msgid "A reboot is needed in order to start a safe linstaller version."
-msgstr ""
+msgstr "Een herstart is vereist om een veilige linstaller-versie te starten."
 
 #: linstaller/modules/update/front/glade/__init__.py:52
 msgid "Press forward to start the updated installer."
-msgstr ""
+msgstr "Klik op Volgende om de bijgewerkte installatiewizard te starten."
 
 #: linstaller/modules/update/front/glade/__init__.py:76
 msgid "Ensure you have the installer up-to-date."
-msgstr ""
+msgstr "Zorg ervoor dat de installatiewizard bijgewerkt is."
 
 #: linstaller/modules/update/front/glade/__init__.py:105
 msgid ""
 "You can choose to check for installer updates before continuing the "
 "installation."
-msgstr ""
+msgstr "U kunt ervoor kiezen om te contoleren op installatiewizard-bijwerkingen voordat u aan de installatie begint."
 
 #: linstaller/modules/update/front/__init__.py:41
 #, python-format
 msgid "Found version %(version)s of %(package)s."
-msgstr ""
+msgstr "Versie %(version)s gevonden van %(package)s."
 
 #: linstaller/modules/update/front/cli.py:24
 msgid "Installer Updates"
-msgstr ""
+msgstr "Installatiewizard-bijwerkingen"
 
 #: linstaller/modules/update/front/cli.py:29
 msgid "Would you like to check for installer updates?"
-msgstr ""
+msgstr "Wilt u controleren op installatiewizard-bijwerkingen?"
 
 #: linstaller/modules/update/front/cli.py:45
 msgid "Upgrading packages... this may take a while."
-msgstr ""
+msgstr "Bezig met het opwaarderen van de pakketten... dit kan even duren."
 
 #: linstaller/modules/update/front/cli.py:52
 msgid "A reboot is recommended in order to start a safe linstaller version.\n"
-msgstr ""
+msgstr "Een herstart is vereist om een veilige linstaller-versie te starten.\n"
 
 #: linstaller/modules/update/front/cli.py:54
 msgid "Would you like to reboot now?"
-msgstr ""
+msgstr "Wilt u nu herstarten?"
 
 #: linstaller/modules/inst_test/inst/cli.py:25
 msgid "Testing:"
-msgstr ""
+msgstr "Bezig met testen:"
 
 #: linstaller/modules/unsquash/inst/glade/__init__.py:24
 msgid "Uncompressing system"
-msgstr ""
+msgstr "Bezig met het uitpakken van het systeem"
 
 #: linstaller/modules/unsquash/inst/glade/__init__.py:33
 msgid "Uncompressing system..."
-msgstr ""
+msgstr "Bezig met het uitpakken van het systeem..."
 
 #: linstaller/modules/unsquash/inst/glade/__init__.py:56
 #: linstaller/modules/unsquash/inst/cli.py:57
 msgid "An error occoured while uncompressing system to disk."
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens het uitpakken van het systeem naar de schijf."
 
 #: linstaller/modules/unsquash/inst/glade/__init__.py:56
 #: linstaller/modules/partdisks/front/glade/__init__.py:805
 #: linstaller/modules/partdisks/front/glade/__init__.py:2014
 msgid "See /var/log/linstaller/linstaller_latest.log for details."
-msgstr ""
+msgstr "Zie /var/log/linstaller/linstaller_latest.log voor de details."
 
 #: linstaller/modules/language/inst/glade/__init__.py:29
 msgid "Setting language..."
-msgstr ""
+msgstr "Bezig met het instellen van de taal..."
 
 #: linstaller/modules/language/inst/glade/__init__.py:35
 msgid "Enabling 'Save space' feature..."
-msgstr ""
+msgstr "Bezig met het inschakelen van de 'Ruimtebesparing'-mogelijkheid..."
 
 #: linstaller/modules/language/inst/glade/__init__.py:40
 msgid "Removing older translations... This may take a while."
-msgstr ""
+msgstr "Bezig met het verwijderen van oude(re) talen... Dit kan even duren."
 
 #: linstaller/modules/language/inst/glade/__init__.py:44
 msgid "Setting keyboard..."
-msgstr ""
+msgstr "Bezig met het instellen van het toetsenbord..."
 
 #: linstaller/modules/language/inst/glade/__init__.py:57
 msgid "Setting language and keyboard..."
-msgstr ""
+msgstr "Bezig met het instellen van de taal en het toetsenbord..."
 
 #: linstaller/modules/language/inst/cli.py:19
 msgid "Setting Language & Keyboard:"
-msgstr ""
+msgstr "Bezig met het instellen van de taal en het toetsenbord:"
 
 #: linstaller/modules/language/front/glade/__init__.py:21
 #: linstaller/modules/language/front/glade/__init__.py:546
 msgid "Language selection"
-msgstr ""
+msgstr "Taalkeuze"
 
 #: linstaller/modules/language/front/glade/__init__.py:22
 #: linstaller/modules/language/front/glade/__init__.py:546
 msgid "Select your language here."
-msgstr ""
+msgstr "Selecteer hier uw taal."
 
 #: linstaller/modules/language/front/glade/__init__.py:31
 #: linstaller/modules/language/front/glade/__init__.py:483
 msgid "Keyboard selection"
-msgstr ""
+msgstr "Toetsenbordkeuze"
 
 #: linstaller/modules/language/front/glade/__init__.py:32
 #: linstaller/modules/language/front/glade/__init__.py:483
 msgid "Select your keyboard settings here."
-msgstr ""
+msgstr "Selecteer hier uw toetsenbordinstellingen."
 
 #: linstaller/modules/language/front/glade/__init__.py:341
 #, python-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: linstaller/modules/language/front/cli.py:18
 msgid "Language & Keyboard selection"
-msgstr ""
+msgstr "Taal- en toetsenbordkeuze"
 
 #: linstaller/modules/language/front/cli.py:25
 msgid "Please insert your locale here (e.g. it, or it_IT, or it_IT.UTF-8)"
-msgstr ""
+msgstr "Vul hier uw taal in (bijv. nl, nl_NL of nl_NL.UTF-8)"
 
 #: linstaller/modules/language/front/cli.py:30
 msgid "Unknown locale. [press ENTER to continue]"
-msgstr ""
+msgstr "Onbekende taal. [druk op ENTER om door te gaan]"
 
 #: linstaller/modules/language/front/cli.py:44
 msgid "Please insert your keyboard layout (e.g: it; it us)"
-msgstr ""
+msgstr "Vul hier uw toetsenbordindeling in (bijv. nl; nl us)"
 
 #: linstaller/modules/language/front/cli.py:48
 msgid "Please insert your keyboard model (e.g: pc105, default is pc105)"
-msgstr ""
+msgstr "Vul hier uw toetsenbordmodel in (bijv. pc105 - de standaard indeling is pc105)"
 
 #: linstaller/modules/language/front/cli.py:54
 msgid "Please insert your keyboard variant (press ENTER to skip)"
-msgstr ""
+msgstr "Vul hier uw toetsenbordvariant in (druk op ENTER om dit over te slaan)"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:61
 #, python-format
 msgid "Resizing %s..."
-msgstr ""
+msgstr "Bezig met het herschalen van %s..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:61
 #: linstaller/modules/partdisks/front/glade/__init__.py:189
@@ -841,12 +841,12 @@ msgstr ""
 #: linstaller/modules/partdisks/front/glade/__init__.py:317
 #: linstaller/modules/partdisks/front/glade/__init__.py:439
 msgid "Let's hope everything goes well! :)"
-msgstr ""
+msgstr "Laten we hopen dat alles goed gaat! :)"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #, python-format
 msgid "Failed resizing %s."
-msgstr ""
+msgstr "Het herschalen van %s is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #: linstaller/modules/partdisks/front/glade/__init__.py:153
@@ -858,125 +858,125 @@ msgstr ""
 #: linstaller/modules/partdisks/front/glade/__init__.py:424
 #: linstaller/modules/partdisks/front/glade/__init__.py:443
 msgid "See /var/log/linstaller/linstaller_latest.log for more details."
-msgstr ""
+msgstr "Zie /var/log/linstaller/linstaller_latest.log voor de details."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #: linstaller/modules/partdisks/front/glade/__init__.py:326
 msgid "Maybe you shrinked too much the partition."
-msgstr ""
+msgstr "Misschien heeft u de partitie té klein gemaakt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:139
 #: linstaller/modules/partdisks/front/glade/__init__.py:350
 #, python-format
 msgid "Committing changes to %s..."
-msgstr ""
+msgstr "Bezig met het verwerken van uw wijzigingen aan %s..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:153
 #: linstaller/modules/partdisks/front/glade/__init__.py:424
 #, python-format
 msgid "Failed committing changes to %s.."
-msgstr ""
+msgstr "Het verwerken van uw wijzigingen aan %s is mislukt..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:171
 #, python-format
 msgid "Filling %s with random data..."
-msgstr ""
+msgstr "Bezig met het opvullen van %s met willekeurige gegevens..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:171
 msgid ""
 "This may take a while, depending by the quality of random data selected."
-msgstr ""
+msgstr "Dit kan even duren, afhankelijk van de geselecteerde kwaliteit."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:176
 #, python-format
 msgid "Failed filling %s with random data."
-msgstr ""
+msgstr "Het opvullen van %s met willekeurige gegevens is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:189
 #, python-format
 msgid "Encrypting %s..."
-msgstr ""
+msgstr "Bezig met het vergrendelen van %s..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:199
 #, python-format
 msgid "Failed encrypting %s."
-msgstr ""
+msgstr "Het vergrendelen van %s is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:220
 #: linstaller/modules/partdisks/front/glade/__init__.py:439
 #: linstaller/modules/partdisks/front/cli.py:346
 #, python-format
 msgid "Formatting %s..."
-msgstr ""
+msgstr "Bezig met het formatteren van %s..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:226
 #: linstaller/modules/partdisks/front/glade/__init__.py:443
 #, python-format
 msgid "Failed formatting %s."
-msgstr ""
+msgstr "Het formatteren van %s is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:244
 #, python-format
 msgid "Failed creating a LVM Physical Volume in %s."
-msgstr ""
+msgstr "Het creëren van een LVM Fysiek Volume op %s is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:281
 #: linstaller/modules/partdisks/front/glade/__init__.py:489
 msgid "Changes applied!"
-msgstr ""
+msgstr "De wijzigingen zijn toegepast!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:281
 #: linstaller/modules/partdisks/front/glade/__init__.py:489
 msgid "Press the Forward button to continue!"
-msgstr ""
+msgstr "Druk op de Volgende-knop om door te gaan."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:317
 msgid "Resizing LVM logical volume..."
-msgstr ""
+msgstr "Bezig met het herschalen van het LVM Logische Volume..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:326
 msgid "Failed resizing the LVM logical volume."
-msgstr ""
+msgstr "Het herschalen van het LVM Logische Volume is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:503
 #: linstaller/modules/partdisks/front/glade/__init__.py:3193
 #: linstaller/modules/partdisks/front/cli.py:43
 msgid "Disk partitioning"
-msgstr ""
+msgstr "Schijfpartitionering"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:504
 #: linstaller/modules/partdisks/front/glade/__init__.py:3193
 msgid "Manage your drives"
-msgstr ""
+msgstr "Beheer uw schijven"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:600
 #: linstaller/modules/partdisks/front/glade/__init__.py:2507
 #: linstaller/modules/partdisks/front/glade/__init__.py:2802
 #: linstaller/modules/partdisks/front/glade/__init__.py:2928
 msgid "Manual partitioning"
-msgstr ""
+msgstr "Handmatige partitionering"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:600
 #: linstaller/modules/partdisks/front/glade/__init__.py:2507
 #: linstaller/modules/partdisks/front/glade/__init__.py:2802
 #: linstaller/modules/partdisks/front/glade/__init__.py:2928
 msgid "Powerful tools for powerful pepole."
-msgstr ""
+msgstr "Krachtige hulpmiddelen voor krachtige mensen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:672
 #, python-format
 msgid "Install %(distro)s to the %(size)s GB of free space in %(drive)s"
-msgstr ""
+msgstr "%(distro)s installeren naar de %(size)s GB vrij ruimte op %(drive)s"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:675
 msgid "This installs the distribution on the free space on the drive."
-msgstr ""
+msgstr "Dit installeert de distributie in de vrije ruimte op de schijf."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:679
 #: linstaller/modules/partdisks/front/glade/__init__.py:696
 #: linstaller/modules/partdisks/front/glade/__init__.py:713
 msgid "<b>Note:</b> an existing virtual memory (swap) partition will be used."
-msgstr ""
+msgstr "<b>Opmerking:</b> er zal een bestaande virtuele geheugen (swap)-partitie worden gebruikt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:681
 #: linstaller/modules/partdisks/front/glade/__init__.py:698
@@ -984,31 +984,31 @@ msgstr ""
 msgid ""
 "<b>Note:</b> due to the few space, it's not possible to create a virtual "
 "memory (swap) partition."
-msgstr ""
+msgstr "<b>Opmerking:</b> omdat er te weinig ruimte is is het niet mogelijk om een virtuele geheugen (swap)-partitie te creëren."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:683
 #: linstaller/modules/partdisks/front/glade/__init__.py:700
 #: linstaller/modules/partdisks/front/glade/__init__.py:717
 msgid "<b>Note:</b> a virtual memory (swap) partition will be created."
-msgstr ""
+msgstr "<b>Opmerking:</b> er zal een virtuele geheugen (swap)-partitie worden gecreeërd."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:689
 #, python-format
 msgid "Replace %(system)s with %(distro)s"
-msgstr ""
+msgstr "%(system)s vervangen door %(distro)s"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:692
 #, python-format
 msgid ""
 "This replaces %(system)s with %(distro)s. <b>All data on %(system)s will be "
 "deleted.</b>"
-msgstr ""
+msgstr "Dit zal %(system)s vervangen door %(distro)s. <b>Alle gegevens op %(system)s zullen worden verwijderd.</b>"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:706
 #: linstaller/modules/partdisks/front/glade/__init__.py:723
 #, python-format
 msgid "Use the entire %s disk"
-msgstr ""
+msgstr "De gehele %s-schijf gebruiken"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:709
 #: linstaller/modules/partdisks/front/glade/__init__.py:726
@@ -1016,514 +1016,514 @@ msgstr ""
 msgid ""
 "This <b>destroys everything</b> on <b>%(dev)s</b> (%(model)s) and installs "
 "there %(distro)s."
-msgstr ""
+msgstr "Dit <b>vernietigt alles</b> op <b>%(dev)s</b> (%(model)s) en installeert %(distro)s."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:729
 msgid ""
 "After the deletion, you can use the space freed to install the distribution."
-msgstr ""
+msgstr "Na het verwijderen kunt u de vrijgemaakte ruimte gebruiken om de distributie te installeren."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:735
 #, python-format
 msgid "Install %(distro)s to %(path)s (%(model)s)"
-msgstr ""
+msgstr "%(distro)s installeren naar %(path)s (%(model)s)"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:740
 msgid "As the Disk is currently empty, this partition will be created."
-msgstr ""
+msgstr "Omdat de schijf momenteel leeg is zal deze partitie worden gecreëerd."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:742
 msgid "No data will be deleted."
-msgstr ""
+msgstr "Er zullen geen gegevens worden verwijderd."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:750
 #, python-format
 msgid "Initialize %s"
-msgstr ""
+msgstr "%s initialiseren"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:753
 #, python-format
 msgid ""
 "This initializes the drive (<b>%s</b>) for usage by creating a partition "
 "table."
-msgstr ""
+msgstr "Dit al de schijf (<b>%s</b>) initialiseren voor gebruik door een partitietabel te creëren."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:805
 #: linstaller/modules/partdisks/front/glade/__init__.py:2014
 msgid "Unable to create a new partition table."
-msgstr ""
+msgstr "Het is niet mogelijk om een nieuwe partitietabel te creëren."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:910
 msgid "Please review your changes."
-msgstr ""
+msgstr "Controleer uw wijzigingen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:910
 msgid ""
 "When done this, press the Next button to permanently write them to the disk."
-msgstr ""
+msgstr "Wanneer u dit heeft gedaan kunt u op de Volgende-knop klikken om ze permanent naar de schijf te schrijven."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:941
 #, python-format
 msgid "Select the partition where install %s"
-msgstr ""
+msgstr "Selecteer de partitie waarop %s moet worden geïnstalleerd"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:941
 msgid "No data will be touched."
-msgstr ""
+msgstr "Er zullen geen gegevens worden aangetast."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:943
 #: linstaller/modules/partdisks/front/cli.py:1111
 msgid "Automatic partitioning"
-msgstr ""
+msgstr "Automatische partitionering"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:943
 msgid "Let the magic manage your drives!"
-msgstr ""
+msgstr "Laat de magie uw schijven beheren!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1269
 #, python-format
 msgid "Do you really want to remove %s?"
-msgstr ""
+msgstr "Weet u zeker dat u %s wilt verwijderen?"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1273
 #: linstaller/modules/partdisks/front/glade/__init__.py:1291
 msgid "You cannot <b>go back!</b>"
-msgstr ""
+msgstr "U kunt niet <b>teruggaan!</b>"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1276
 #: linstaller/modules/partdisks/front/glade/__init__.py:1294
 #: linstaller/modules/partdisks/front/glade/module.glade.h:10
 msgid "Use the \"Refresh\" button to undo this change."
-msgstr ""
+msgstr "Gebruik de \"Herladen\"-knop om deze wijziging ongedaan te maken."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1287
 #, python-format
 msgid "Do you really want to delete all partitions on %s?"
-msgstr ""
+msgstr "Weet u zeker dat u alle partities op %s wilt verwijderen?"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1619
 msgid "Mountpoint already used!"
-msgstr ""
+msgstr "Dit aankoppelpunt is al in gebruik!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1691
 msgid "Creating the partition..."
-msgstr ""
+msgstr "Bezig met het creëren van de partitie..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1691
 msgid "Please wait."
-msgstr ""
+msgstr "Een moment geduld."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1720
 msgid "Unable to add partition."
-msgstr ""
+msgstr "Het toevoegen van de partitie is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1720
 msgid "You shouldn't get here."
-msgstr ""
+msgstr "U zou hier niet moeten wezen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1752
 #: linstaller/modules/partdisks/front/glade/__init__.py:1888
 #: linstaller/modules/partdisks/front/glade/__init__.py:2069
 #: linstaller/modules/partdisks/front/glade/__init__.py:2137
 msgid "Use the Apply button to save them."
-msgstr ""
+msgstr "Gebruik de Toepassen-knop om ze op te slaan."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1757
 #: linstaller/modules/partdisks/front/glade/__init__.py:1893
 msgid ""
 "You need to apply your changes in order to use the new LVM physical volume."
-msgstr ""
+msgstr "U moet uw wijzigingen toepassen voordat u het nieuwe LVM Fysieke Volume kunt gebruiken."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1758
 #: linstaller/modules/partdisks/front/glade/__init__.py:1894
 #: linstaller/modules/partdisks/front/glade/__init__.py:2069
 #: linstaller/modules/partdisks/front/glade/__init__.py:2137
 msgid "You have some unsaved changes!"
-msgstr ""
+msgstr "U heeft enkele niet-opgeslagen wijzigingen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1807
 msgid "Failed to resize partition."
-msgstr ""
+msgstr "Het herschalen van de partitie is mislukt."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1807
 msgid "Please double-check the inserted values."
-msgstr ""
+msgstr "Controleer nogmaals de ingevoerde waarden."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1991
 msgid "The passwords doesn't match."
-msgstr ""
+msgstr "De wachtwoorden komen niet overeen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2017
 msgid "New table created successfully!"
-msgstr ""
+msgstr "De nieuwe tabel is succesvol gecreëerd!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2017
 msgid "The new table has been created."
-msgstr ""
+msgstr "De nieuwe tabel is gecreëerd."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2066
 msgid "Unable to remove the partition."
-msgstr ""
+msgstr "Het is niet mogelijk om de partitie te verwijderen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2066
 #: linstaller/modules/partdisks/front/glade/__init__.py:2134
 msgid "Why did it happen?!"
-msgstr ""
+msgstr "Waarom is dit gebeurd?!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2134
 msgid "Unable to delete all partitions."
-msgstr ""
+msgstr "Het is niet mogelijk om alle partities te verwijderen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2261
 msgid "Volume group name already used!"
-msgstr ""
+msgstr "De naam van de volumegroep is al in gebruik!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2318
 msgid "Currently used"
-msgstr ""
+msgstr "Wordt momenteel gebruikt"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2351
 msgid "Available"
-msgstr ""
+msgstr "Beschikbaar"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2382
 msgid "Add a new volume group"
-msgstr ""
+msgstr "Een nieuwe volumegroep toevoegen"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2393
 #, python-format
 msgid "Edit %s"
-msgstr ""
+msgstr "%s bewerken"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2510
 msgid "Unable to unlock the volume."
-msgstr ""
+msgstr "Het is niet mogelijk het volume te ontgrendelen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2510
 msgid "You inserted the wrong password."
-msgstr ""
+msgstr "U heeft het verkeerde wachtwoord ingevoerd."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2550
 msgid "LVM Volume Group"
-msgstr ""
+msgstr "LVM-volumegroep"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2583
 #: linstaller/modules/partdisks/front/glade/__init__.py:2703
 msgid "Informations"
-msgstr ""
+msgstr "Informatie"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2589
 msgid "LVM Physical Volume"
-msgstr ""
+msgstr "LVM Fysiek Volume"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2593
 msgid "No partition table yet!"
-msgstr ""
+msgstr "Er is nog geen partitietabel!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2596
 msgid "Partition"
-msgstr ""
+msgstr "Partitie"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2597
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2598
 msgid "Filesystem"
-msgstr ""
+msgstr "Bestandssysteem"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2599
 msgid "Mountpoint"
-msgstr ""
+msgstr "Aankoppelpunt"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2600
 msgid "Format?"
-msgstr ""
+msgstr "Formatteren?"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2601
 msgid "Size"
-msgstr ""
+msgstr "Grootte"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2651
 #: linstaller/modules/partdisks/front/glade/__init__.py:2664
 msgid "LVM physical volume"
-msgstr ""
+msgstr "LVM Fysiek Volume"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2655
 msgid "Locked"
-msgstr ""
+msgstr "Vergrendeld"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2667
 #: linstaller/modules/partdisks/front/cli.py:410
 #: linstaller/modules/partdisks/front/cli.py:1048
 msgid "not formatted"
-msgstr ""
+msgstr "ongeformatteerd"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2669
 #: linstaller/modules/partdisks/front/cli.py:412
 #: linstaller/modules/partdisks/front/cli.py:1050
 msgid "free space"
-msgstr ""
+msgstr "vrije ruimte"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2672
 #: linstaller/modules/partdisks/front/cli.py:415
 #: linstaller/modules/partdisks/front/cli.py:1053
 msgid "extended"
-msgstr ""
+msgstr "uitgebreid"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2707
 msgid "Disk empty or Virtual Group not active!"
-msgstr ""
+msgstr "De schijf is leeg of de virtuele groep is niet actief!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2709
 msgid "Disk empty!"
-msgstr ""
+msgstr "De schijf is leeg!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2805
 msgid "Unable to lock the volume."
-msgstr ""
+msgstr "Het is niet mogelijk om het volume te vergrendelen."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2805
 msgid "Please ensure that the volume is not used by another application."
-msgstr ""
+msgstr "Zorg ervoor dat het volume niet in gebruik is door een andere applicatie."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2930
 msgid "Press the Apply button and then Forward to continue."
-msgstr ""
+msgstr "Klik op de Toepassen-knop en daarna op Volgende om door te gaan."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3107
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3108
 msgid "Physical Volumes"
-msgstr ""
+msgstr "Fysieke volumes"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3158
 msgid "Add GPT partition table"
-msgstr ""
+msgstr "GPT-partitietabel toevoegen"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3160
 msgid "Add MBR partition table"
-msgstr ""
+msgstr "MBR-partitietabel toevoegen"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3233
 msgid "You need to specify the root (/) partition."
-msgstr ""
+msgstr "U moet de root (/)-partitie opgeven."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3233
 #: linstaller/modules/partdisks/front/glade/__init__.py:3260
 msgid "You can't continue!"
-msgstr ""
+msgstr "U kunt niet doorgaan!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3248
 msgid "The root partition is encrypted, and not /boot specified."
-msgstr ""
+msgstr "De root-partitie is vergrendeld en /boot is niet opgegeven."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3248
 msgid ""
 "The root partition is on an encrypted device. You need a separated /boot "
 "partition on a non-encrypted device."
-msgstr ""
+msgstr "De root-partitie bevindt zich op een vergrendeld apparaat. U heeft een losse /boot-partitie nodig op een onvergrendeld apparaat."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3260
 msgid "The /boot partition should not be on an encrypted device."
-msgstr ""
+msgstr "De /boot-partitie mag zich niet bevinden op een vergrendeld apparaat."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3274
 msgid "No EFI System Partition specified."
-msgstr ""
+msgstr "Er is geen EFI-systeempartitie opgegeven."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3274
 msgid "You need to specify the EFI System Partition (/boot/efi)."
-msgstr ""
+msgstr "U moet een EFI-systeempartitie (/boot/efi) opgeven."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3282
 msgid "No swap selected (press Forward to continue without one)."
-msgstr ""
+msgstr "Er is geen swap geselecteerd (klik op Volgende om door te gaan zonder swap)."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3282
 msgid ""
 "It seems you haven't selected a swap partition.\n"
 "Select one now, or press Forward to continue without one."
-msgstr ""
+msgstr "Het lijkt erop dat u geen swap-partitie hebt geselecteerd.\nSelecteer er nu een of klik op Volgende om door te gaan zonder swap."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3288
 #: linstaller/modules/partdisks/front/cli.py:180
 msgid "No swap selected."
-msgstr ""
+msgstr "Er is geen swap geselecteerd."
 
 #: linstaller/modules/partdisks/front/cli.py:107
 msgid "Do you want to change the partition table?"
-msgstr ""
+msgstr "Wilt u de partitietabel wijzigen?"
 
 #: linstaller/modules/partdisks/front/cli.py:131
 msgid "Select distribution specific drives"
-msgstr ""
+msgstr "Selecteer de distributie-specifieke schijven"
 
 #: linstaller/modules/partdisks/front/cli.py:142
 msgid "Select your root partition"
-msgstr ""
+msgstr "Selecteer uw root-partitie"
 
 #: linstaller/modules/partdisks/front/cli.py:149
 #: linstaller/modules/partdisks/front/cli.py:152
 #: linstaller/modules/partdisks/front/cli.py:190
 msgid "Wrong partition selected!"
-msgstr ""
+msgstr "Er is een verkeerde partitie geselecteerd!"
 
 #: linstaller/modules/partdisks/front/cli.py:172
 msgid "No swap partition available. Continuing without."
-msgstr ""
+msgstr "Er is geen swap-partitie beschikbaar. We gaan door zonder swap."
 
 #: linstaller/modules/partdisks/front/cli.py:176
 msgid "Select your swap partition (press ENTER to not use swap)"
-msgstr ""
+msgstr "Selecteer uw swap-partitie (druk op ENTER om geen swap te gebruiken)"
 
 #: linstaller/modules/partdisks/front/cli.py:205
 #: linstaller/modules/partdisks/front/cli.py:290
 #: linstaller/modules/summary/front/cli.py:81
 msgid "Do you really want to continue?"
-msgstr ""
+msgstr "Weet u zeker dat u door wilt gaan?"
 
 #: linstaller/modules/partdisks/front/cli.py:207
 msgid "Do you really want to continue? This will destroy selected partitions."
-msgstr ""
+msgstr "Weet u zeker dat u door wilt gaan? Dit zal alle geselecteerde partities vernietigen."
 
 #: linstaller/modules/partdisks/front/cli.py:226
 msgid "Reload original table"
-msgstr ""
+msgstr "Originele tabel herladen"
 
 #: linstaller/modules/partdisks/front/cli.py:228
 msgid "This will reload the original partition table."
-msgstr ""
+msgstr "Dit zal de originele partitietabel herladen."
 
 #: linstaller/modules/partdisks/front/cli.py:229
 msgid "All changes you've done will be lost."
-msgstr ""
+msgstr "Al uw wijzigingen zullen verloren gaan."
 
 #: linstaller/modules/partdisks/front/cli.py:231
 msgid "Do you want to continue?"
-msgstr ""
+msgstr "Wilt u doorgaan?"
 
 #: linstaller/modules/partdisks/front/cli.py:260
 msgid "Go back"
-msgstr ""
+msgstr "Teruggaan"
 
 #: linstaller/modules/partdisks/front/cli.py:262
 msgid ""
 "It appears that you have uncommited changes to the partitioning scheme."
-msgstr ""
+msgstr "Het lijkt erop dat u onverwerkte wijzigingen heeft aan het partitieschema."
 
 #: linstaller/modules/partdisks/front/cli.py:263
 msgid ""
 "If you want to commit them, you need first to write to memory the changes "
 "and then to commit."
-msgstr ""
+msgstr "Als u deze wilt verwerken moet u ze eerst naar het geheugen schrijven en dan verwerken."
 
 #: linstaller/modules/partdisks/front/cli.py:264
 msgid ""
 "To do so, you should go to the 'edit partitions' page and select the "
 "relative options."
-msgstr ""
+msgstr "Om dit te doen moet u teruggaan naar de 'Partities bewerken'-pagina en de relatieve opties selecteren."
 
 #: linstaller/modules/partdisks/front/cli.py:266
 msgid "Do you really want to go back without saving changes?"
-msgstr ""
+msgstr "Weet u zeker dat u terug wilt gaan zonder de wijzigingen op te slaan?"
 
 #: linstaller/modules/partdisks/front/cli.py:277
 msgid "Commit changes"
-msgstr ""
+msgstr "Wijzigingen verwerken"
 
 #: linstaller/modules/partdisks/front/cli.py:279
 msgid "This table is going to be applied:"
-msgstr ""
+msgstr "Deze tabel zal worden toegepast:"
 
 #: linstaller/modules/partdisks/front/cli.py:286
 #, python-format
 msgid ""
 "%(warning)s: This will COMMIT ALL THE CHANGES YOU'VE DONE on the physical "
 "disks."
-msgstr ""
+msgstr "%(warning)s: Dit zal AL UW WIJZIGINGEN VERWERKEN op de fysieke schijven."
 
 #: linstaller/modules/partdisks/front/cli.py:286
 msgid "WARNING"
-msgstr ""
+msgstr "WAARSCHUWING"
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
-msgstr ""
+msgstr "Dit is de laatste keer dat u uw nieuwe partitietabel kunt controleren."
 
 #: linstaller/modules/partdisks/front/cli.py:288
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
-msgstr ""
+msgstr "Als u door wilt gaan kunt u DE OUDE TABEL NIET HERSTELLEN!"
 
 #: linstaller/modules/partdisks/front/cli.py:323
 #, python-format
 msgid "Creating new partition table on %s..."
-msgstr ""
+msgstr "Bezig met het creëren van de nieuwe partitietabel op %s.."
 
 #: linstaller/modules/partdisks/front/cli.py:328
 #: linstaller/modules/partdisks/front/cli.py:330
 #, python-format
 msgid "FAILED: new partition table in %s"
-msgstr ""
+msgstr "MISLUKT: nieuwe partitietabel op %s"
 
 #: linstaller/modules/partdisks/front/cli.py:351
 #: linstaller/modules/partdisks/front/cli.py:353
 #, python-format
 msgid "FAILED: formatting %s"
-msgstr ""
+msgstr "MISLUKT: formatteren van %s"
 
 #: linstaller/modules/partdisks/front/cli.py:379
 msgid "Edit Partition structure"
-msgstr ""
+msgstr "Partitiestructuur bewerken"
 
 #: linstaller/modules/partdisks/front/cli.py:389
 #: linstaller/modules/partdisks/front/cli.py:393
 #: linstaller/modules/partdisks/front/cli.py:530
 #: linstaller/modules/partdisks/front/cli.py:534
 msgid "You didn't entered a valid number."
-msgstr ""
+msgstr "U heeft geen geldig nummer opgegeven."
 
 #: linstaller/modules/partdisks/front/cli.py:403
 msgid "Editing disk/partition"
-msgstr ""
+msgstr "Bezig met het bewerken van de schijf/partitie"
 
 #: linstaller/modules/partdisks/front/cli.py:405
 msgid "You've selected:"
-msgstr ""
+msgstr "U heeft geselecteerd:"
 
 #: linstaller/modules/partdisks/front/cli.py:448
 #: linstaller/modules/partdisks/front/glade/module.glade.h:65
 msgid "Add partition"
-msgstr ""
+msgstr "Partitie toevoegen"
 
 #: linstaller/modules/partdisks/front/cli.py:451
 #: linstaller/modules/partdisks/front/cli.py:800
 msgid "Format partition"
-msgstr ""
+msgstr "Partitie formatteren"
 
 #: linstaller/modules/partdisks/front/cli.py:452
 #: linstaller/modules/partdisks/front/cli.py:831
 #: linstaller/modules/partdisks/front/glade/module.glade.h:9
 msgid "Delete partition"
-msgstr ""
+msgstr "Partitie verwijderen"
 
 #: linstaller/modules/partdisks/front/cli.py:453
 #: linstaller/modules/partdisks/front/cli.py:877
 msgid "Resize partition"
-msgstr ""
+msgstr "Partitie herschalen"
 
 #: linstaller/modules/partdisks/front/cli.py:454
 #: linstaller/modules/partdisks/front/cli.py:849
 msgid "Use as..."
-msgstr ""
+msgstr "Gebruiken als..."
 
 #: linstaller/modules/partdisks/front/cli.py:455
 #: linstaller/modules/partdisks/front/cli.py:470
 #: linstaller/modules/partdisks/front/cli.py:936
 msgid "Unmark changes"
-msgstr ""
+msgstr "Wijzigingen de-markeren"
 
 #: linstaller/modules/partdisks/front/cli.py:458
 #: linstaller/modules/partdisks/front/cli.py:471
@@ -1531,249 +1531,249 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:627
 #: linstaller/modules/partdisks/front/cli.py:1131
 msgid "<- Back"
-msgstr ""
+msgstr "<- Terug"
 
 #: linstaller/modules/partdisks/front/cli.py:469
 msgid "Delete all partitions on the disk"
-msgstr ""
+msgstr "Alle partities op de schijf verwijderen"
 
 #: linstaller/modules/partdisks/front/cli.py:481
 msgid "Create MBR partition table"
-msgstr ""
+msgstr "MBR-partitietabel creëren"
 
 #: linstaller/modules/partdisks/front/cli.py:482
 msgid "Create GPT partition table"
-msgstr ""
+msgstr "GPT-partitietabel creëren"
 
 #: linstaller/modules/partdisks/front/cli.py:494
 #: linstaller/modules/partdisks/front/cli.py:496
 #: linstaller/modules/partdisks/front/cli.py:962
 #: linstaller/modules/partdisks/front/cli.py:964
 msgid "You didn't entered a valid action."
-msgstr ""
+msgstr "U heeft geldige actie opgegeven."
 
 #: linstaller/modules/partdisks/front/cli.py:513
 #: linstaller/modules/partdisks/front/cli.py:539
 msgid "Automatic partitioner"
-msgstr ""
+msgstr "Automatische partitioneerder"
 
 #: linstaller/modules/partdisks/front/cli.py:525
 msgid "Available disks:"
-msgstr ""
+msgstr "Beschikbare schijven:"
 
 #: linstaller/modules/partdisks/front/cli.py:542
 msgid "Use the free space"
-msgstr ""
+msgstr "De vrije ruimte gebruiken"
 
 #: linstaller/modules/partdisks/front/cli.py:543
 msgid "Delete another system"
-msgstr ""
+msgstr "Een ander systeem verwijderen"
 
 #: linstaller/modules/partdisks/front/cli.py:544
 #: linstaller/modules/partdisks/front/cli.py:762
 #: linstaller/modules/partdisks/front/glade/module.glade.h:5
 msgid "Delete all partitions"
-msgstr ""
+msgstr "Alle partities verwijderen"
 
 #: linstaller/modules/partdisks/front/cli.py:545
 #: linstaller/modules/partdisks/front/glade/module.glade.h:66
 msgid "Back"
-msgstr ""
+msgstr "Terug"
 
 #: linstaller/modules/partdisks/front/cli.py:556
 #: linstaller/modules/partdisks/front/cli.py:558
 msgid "You haven't entered a valid action."
-msgstr ""
+msgstr "U heeft geen geldige actie opgegeven."
 
 #: linstaller/modules/partdisks/front/cli.py:570
 msgid "Too little free space"
-msgstr ""
+msgstr "Te weinig vrije ruimte"
 
 #: linstaller/modules/partdisks/front/cli.py:573
 msgid "Failed to add partition (AUTOMATIC)"
-msgstr ""
+msgstr "Het is niet gelukt om een partitie toe te voegen (AUTOMATISCH)"
 
 #: linstaller/modules/partdisks/front/cli.py:577
 #: linstaller/modules/partdisks/front/cli.py:607
 msgid "Automatic partitioner choices"
-msgstr ""
+msgstr "Automatische partitioneerder-keuzes"
 
 #: linstaller/modules/partdisks/front/cli.py:603
 msgid "No distribution to delete!"
-msgstr ""
+msgstr "Er is geen distributie om te verwijderen!"
 
 #: linstaller/modules/partdisks/front/cli.py:632
 msgid "Whatever will be the selection, this swap partition will be used:"
-msgstr ""
+msgstr "Wat uw keuze ook zal zijn, deze swap-partitie zal ervoor worden gebruikt:"
 
 #: linstaller/modules/partdisks/front/cli.py:637
 msgid "A swap partition, if all conditions are meet, will be created."
-msgstr ""
+msgstr "Een swap-partitie zal worden gecreëerd als aan alle voorwaarden wordt voldaan."
 
 #: linstaller/modules/partdisks/front/cli.py:641
 msgid "Please insert your value here"
-msgstr ""
+msgstr "Voer hier uw waarde i"
 
 #: linstaller/modules/partdisks/front/cli.py:645
 #: linstaller/modules/partdisks/front/cli.py:647
 msgid "You didn't entered a valid value."
-msgstr ""
+msgstr "U heeft geen geldige waarde ingevoerd."
 
 #: linstaller/modules/partdisks/front/cli.py:669
 msgid "Are you happy with this? Enter 'y' to write changes in memory"
-msgstr ""
+msgstr "Bent u hier blij mee? Voer 'y' in om de wijzigingen naar het geheugen te schrijven"
 
 #: linstaller/modules/partdisks/front/cli.py:696
 msgid "Successfully added partitions."
-msgstr ""
+msgstr "De partities zijn succesvol toegevoegd."
 
 #: linstaller/modules/partdisks/front/cli.py:701
 msgid "Add a partition"
-msgstr ""
+msgstr "Een partitie toevoegen"
 
 #: linstaller/modules/partdisks/front/cli.py:703
 #, python-format
 msgid "Current free space size: %s"
-msgstr ""
+msgstr "Huidige vrije ruimte: %s"
 
 #: linstaller/modules/partdisks/front/cli.py:704
 msgid ""
 "You can insert the percentage of the partition (e.g: 50%) or the full size "
 "of the new partition, in MB."
-msgstr ""
+msgstr "U kunt een percentage van de partitie invoeren (bijv.: 50%) of de volledige grootte van de nieuwe partitie in MB."
 
 #: linstaller/modules/partdisks/front/cli.py:706
 #: linstaller/modules/partdisks/front/cli.py:884
 msgid "Insert the value here [press ENTER to go back]"
-msgstr ""
+msgstr "Voer hier de waarde in [druk op ENTER om terug te gaan]"
 
 #: linstaller/modules/partdisks/front/cli.py:757
 msgid "Done. Now add a filesystem to the partition."
-msgstr ""
+msgstr "Afgerond. Voeg nu een bestandssysteem toe aan de partitie."
 
 #: linstaller/modules/partdisks/front/cli.py:772
 msgid "Changes marked succesfully. Now write the changes to memory."
-msgstr ""
+msgstr "De wijzigingen zijn succesvol gemarkeerd. Schrijf ze nu weg naar het geheugen."
 
 #: linstaller/modules/partdisks/front/cli.py:779
 #: linstaller/modules/partdisks/front/cli.py:786
 msgid "Changes marked succesfully. Please save changes."
-msgstr ""
+msgstr "De wijzigingen zijn succesvol gemarkeerd. Sla de wijzigingen op."
 
 #: linstaller/modules/partdisks/front/cli.py:804
 msgid "Available Filesystems:"
-msgstr ""
+msgstr "Beschikbare bestandssystemen:"
 
 #: linstaller/modules/partdisks/front/cli.py:809
 msgid "Insert the filesystem you want to use here"
-msgstr ""
+msgstr "Kies hier het bestandssysteem dat u wilt gebruiken"
 
 #: linstaller/modules/partdisks/front/cli.py:811
 #: linstaller/modules/partdisks/front/cli.py:858
 #, python-format
 msgid "[press ENTER for '%s']"
-msgstr ""
+msgstr "[druk op ENTER voor '%s']"
 
 #: linstaller/modules/partdisks/front/cli.py:820
 #, python-format
 msgid "%s is not a supported filesystem!"
-msgstr ""
+msgstr "%s is geen ondersteund bestandssysteem!"
 
 #: linstaller/modules/partdisks/front/cli.py:826
 #: linstaller/modules/partdisks/front/cli.py:872
 msgid "Changes marked succesfully."
-msgstr ""
+msgstr "De wijzigingen zijn succesvol gemarkeerd."
 
 #: linstaller/modules/partdisks/front/cli.py:833
 msgid "You can't delete freespace!"
-msgstr ""
+msgstr "U kunt de vrije ruimte niet verwijderen!"
 
 #: linstaller/modules/partdisks/front/cli.py:838
 msgid "The disk containing this partitions is already marked as deleted."
-msgstr ""
+msgstr "De schijf die deze partities bevat is al gemarkeerd als zijnde verwijderd."
 
 #: linstaller/modules/partdisks/front/cli.py:844
 #: linstaller/modules/partdisks/front/cli.py:930
 msgid "Changes marked succesfully. Now write the changes in memory."
-msgstr ""
+msgstr "De wijzigingen zijn succesvol gemarkeerd. Schrijf ze nu weg naar het geheugen."
 
 #: linstaller/modules/partdisks/front/cli.py:851
 msgid ""
 "You can't execute this action on freespace or on an extended partition!"
-msgstr ""
+msgstr "U kunt deze actie niet uitvoeren op vrije ruimte of een uitgebreide partitie!"
 
 #: linstaller/modules/partdisks/front/cli.py:853
 msgid "Here you can insert the mount point of this partition."
-msgstr ""
+msgstr "Hier kunt het aankoppelpunt van de partitie kiezen."
 
 #: linstaller/modules/partdisks/front/cli.py:854
 msgid "For example, if you want to mount as /home, insert '/home'."
-msgstr ""
+msgstr "Als u bijv. /home wilt aankoppelen, vul hier dan '/home' in."
 
 #: linstaller/modules/partdisks/front/cli.py:856
 msgid "Insert the mountpoint here"
-msgstr ""
+msgstr "Vul hier het aankoppelpunt i"
 
 #: linstaller/modules/partdisks/front/cli.py:868
 #, python-format
 msgid "%s is not a valid mountpoint!"
-msgstr ""
+msgstr "%s is geen geldig aankoppelpunt!"
 
 #: linstaller/modules/partdisks/front/cli.py:879
 msgid "You can't resize freespace or an extended partition!"
-msgstr ""
+msgstr "U kunt geen vrije ruimte of een uitgebreide partitie herschalen!"
 
 #: linstaller/modules/partdisks/front/cli.py:881
 #, python-format
 msgid "Current partition size: %s"
-msgstr ""
+msgstr "Huidige partitiegrootte: %s"
 
 #: linstaller/modules/partdisks/front/cli.py:882
 msgid ""
 "You can insert the percentage of the resize (e.g: 50%) or the full size for "
 "the resized partition, in MB."
-msgstr ""
+msgstr "U kunt een percentage van de partitie invoeren (bijv.: 50%) of de volledige grootte van de nieuwe partitie in MB."
 
 #: linstaller/modules/partdisks/front/cli.py:883
 msgid ""
 "In order to make change to the free space that the resize operation will "
 "make, you will need to write in memory the changes."
-msgstr ""
+msgstr "Om de wijzigingen aan de vrije ruimte toe te passen moet u de wijzigingen naar het geheugen schrijven."
 
 #: linstaller/modules/partdisks/front/cli.py:899
 #: linstaller/modules/partdisks/front/cli.py:903
 msgid "Partition is already at the given value!"
-msgstr ""
+msgstr "De partitie is al op de opgegeven waarde!"
 
 #: linstaller/modules/partdisks/front/cli.py:940
 msgid "You didn't have made changes!"
-msgstr ""
+msgstr "U heeft geen wijzigingen gedaan!"
 
 #: linstaller/modules/partdisks/front/cli.py:948
 msgid "Unmark all changes"
-msgstr ""
+msgstr "Alle wijzigingen de-markeren"
 
 #: linstaller/modules/partdisks/front/cli.py:951
 #, python-format
 msgid "Unmark '%(action)s' (value: %(value)s)"
-msgstr ""
+msgstr "'%(action)s' de-markeren (waarde: %(value)s)"
 
 #: linstaller/modules/partdisks/front/cli.py:978
 msgid "Items unmarked successfully."
-msgstr ""
+msgstr "De items zijn succesvol gede-markeerd."
 
 #: linstaller/modules/partdisks/front/cli.py:983
 #: linstaller/modules/partdisks/front/cli.py:1116
 msgid "Write to memory"
-msgstr ""
+msgstr "Naar geheugen schrijven"
 
 #: linstaller/modules/partdisks/front/cli.py:985
 msgid "Do you want to write to memory your changes?"
-msgstr ""
+msgstr "Wilt u de wijzigingen naar het geheugen schrijven?"
 
 #: linstaller/modules/partdisks/front/cli.py:986
 msgid "This will let you continue to manage the partitioning scheme."
-msgstr ""
+msgstr "Dit stelt u in staat om het huidige partitieschema te behren."
 
 #: linstaller/modules/partdisks/front/cli.py:987
 #, python-format
@@ -1781,391 +1781,391 @@ msgid ""
 "%(note)s: This will %(not)s write the changes to the disk! It only simulates"
 " it. You should write to memory every time you delete and resize partitions."
 " This will let you add new partitions on the freed space."
-msgstr ""
+msgstr "%(note)s: Dit zal %(not)s wijzigingen naar de schijf schrijven! Het zal het alleen simuleren. U zult naar het geheugen moeten schrijven elke keer dat u partities verwijdert en/of herschaalt. Dit zorgt ervoor dat u partities op de vrije ruimte kunt toevoegen."
 
 #: linstaller/modules/partdisks/front/cli.py:987
 msgid "NOTE"
-msgstr ""
+msgstr "OPMERKING"
 
 #: linstaller/modules/partdisks/front/cli.py:987
 msgid "not"
-msgstr ""
+msgstr "niet"
 
 #: linstaller/modules/partdisks/front/cli.py:988
 msgid ""
 "You can always restore original structure via the appropriate option into "
 "the main menu."
-msgstr ""
+msgstr "U kunt de originele structuur altijd herstellen via de gelijknamige optie in het hoofdmenu."
 
 #: linstaller/modules/partdisks/front/cli.py:991
 msgid "Do you want to write to memory the changes?"
-msgstr ""
+msgstr "Wilt u de wijzigingen naar het geheugen schrijven?"
 
 #: linstaller/modules/partdisks/front/cli.py:996
 #, python-format
 msgid "Something has failed: %s!"
-msgstr ""
+msgstr "Er is iets mislukt: %s!"
 
 #: linstaller/modules/partdisks/front/cli.py:998
 msgid "Ok! You can continue."
-msgstr ""
+msgstr "Oké! U kunt doorgaan."
 
 #: linstaller/modules/partdisks/front/cli.py:1121
 msgid "Reload original structure"
-msgstr ""
+msgstr "Originele structuur herstellen"
 
 #: linstaller/modules/partdisks/front/cli.py:1126
 msgid "Commit"
-msgstr ""
+msgstr "Verwerken"
 
 #: linstaller/modules/partdisks/front/cli.py:1135
 msgid "Enter the number of the partition(s)/device(s) you want to edit here"
-msgstr ""
+msgstr "Voer hier het aantal partities/schijven in dat u wilt bewerken"
 
 #: linstaller/modules/userhost/inst/glade/__init__.py:22
 msgid "Creating user..."
-msgstr ""
+msgstr "Bezig met het creëren van de gebruiker..."
 
 #: linstaller/modules/userhost/inst/glade/__init__.py:27
 msgid "Committing changes..."
-msgstr ""
+msgstr "Bezig met het verwerken van de wijzigingen..."
 
 #: linstaller/modules/userhost/inst/glade/__init__.py:33
 msgid "Setting hostname..."
-msgstr ""
+msgstr "Bezig met het instellen van de hostnaam..."
 
 #: linstaller/modules/userhost/inst/cli.py:19
 msgid "Creating user:"
-msgstr ""
+msgstr "Bezig met het creëren van de gebruiker:"
 
 #: linstaller/modules/userhost/front/gtk3.py:21
 #: linstaller/modules/userhost/front/glade/__init__.py:15
 #: linstaller/modules/userhost/front/cli.py:18
 msgid "Users & Hostname"
-msgstr ""
+msgstr "Gebruikers- en hostna(a)m(en)"
 
 #: linstaller/modules/userhost/front/gtk3.py:21
 #: linstaller/modules/userhost/front/glade/__init__.py:16
 msgid "Set users and hostname"
-msgstr ""
+msgstr "Gebruikers- en hostna(a)m(en) instellen"
 
 #: linstaller/modules/userhost/front/gtk3.py:28
 #: linstaller/modules/userhost/front/cli.py:22
 #: linstaller/modules/userhost/front/glade/module.glade.h:1
 msgid "New user's full name (e.g. John Doe)"
-msgstr ""
+msgstr "Volledige naam van nieuwe gebruiker (bijv. Jan Hendriks)"
 
 #: linstaller/modules/userhost/front/gtk3.py:29
 #: linstaller/modules/userhost/front/glade/module.glade.h:2
 msgid "New user's username (no spaces; e.g: john)"
-msgstr ""
+msgstr "Gebruikersnaam van nieuwe gebruiker (geen spaties; bijv. jan)"
 
 #: linstaller/modules/userhost/front/gtk3.py:36
 #: linstaller/modules/userhost/front/glade/module.glade.h:3
 msgid "New user's password"
-msgstr ""
+msgstr "Wachtwoord van nieuwe gebruiker"
 
 #: linstaller/modules/userhost/front/gtk3.py:43
 #: linstaller/modules/userhost/front/cli.py:39
 msgid "Do you want to enable root account?"
-msgstr ""
+msgstr "Wilt u het rootaccount inschakelen?"
 
 #: linstaller/modules/userhost/front/gtk3.py:44
 #: linstaller/modules/userhost/front/cli.py:43
 msgid "root's password"
-msgstr ""
+msgstr "root-wachtwoord"
 
 #: linstaller/modules/userhost/front/gtk3.py:50
 #: linstaller/modules/userhost/front/cli.py:57
 #: linstaller/modules/userhost/front/glade/module.glade.h:5
 msgid "Computer's name (e.g. johndesktop)"
-msgstr ""
+msgstr "Computernaam (bijv. janscomputer)"
 
 #: linstaller/modules/userhost/front/gtk3.py:121
 #, python-format
 msgid "You can't use %s in the username"
-msgstr ""
+msgstr "U mag %s niet gebruiken in de gebruikersnaam"
 
 #: linstaller/modules/userhost/front/gtk3.py:149
 #: linstaller/modules/userhost/front/cli.py:78
 #, python-format
 msgid "The password should be composed of at least %s charchters."
-msgstr ""
+msgstr "Het wachtwoord moet ten minste %s tekens bevatten."
 
 #: linstaller/modules/userhost/front/gtk3.py:151
 #: linstaller/modules/userhost/front/cli.py:84
 msgid "The passwords doesn't match! Please retry."
-msgstr ""
+msgstr "De wachtwoorden komen niet overeen! Probeer het opnieuw."
 
 #: linstaller/modules/userhost/front/gtk3.py:186
 #, python-format
 msgid "The root password should be composed of at least %s charchters."
-msgstr ""
+msgstr "Het root-wachtwoord moet ten minste %s lang zijn."
 
 #: linstaller/modules/userhost/front/gtk3.py:188
 msgid "The root passwords doesn't match! Please retry."
-msgstr ""
+msgstr "De root-wachtwoorden komen niet overeen! Probeer het opnieuw."
 
 #: linstaller/modules/userhost/front/gtk3.py:206
 #, python-format
 msgid "You can't use %s in the hostname"
-msgstr ""
+msgstr "U mag %s niet gebruiken in de hostnaam"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:27
 msgid "The user full name"
-msgstr ""
+msgstr "De volledige naam van de gebruiker"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:27
 msgid "The username"
-msgstr ""
+msgstr "De gebruikersnaam"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:27
 msgid "The user password"
-msgstr ""
+msgstr "Het gebruikerswachtwoord"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:27
 msgid "The computer name"
-msgstr ""
+msgstr "De computernaam"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:210
 #, python-format
 msgid "The username must not contain these characters: %s"
-msgstr ""
+msgstr "De gebruikersnaam mag niet de volgende tekens bevatten: %s"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:231
 #: linstaller/modules/userhost/front/glade/__init__.py:275
 #, python-format
 msgid "The password should be composed of at least %s characters."
-msgstr ""
+msgstr "Het wachtwoord moet ten minste %s tekens lang zijn."
 
 #: linstaller/modules/userhost/front/glade/__init__.py:248
 msgid "The user passwords doesn't match!"
-msgstr ""
+msgstr "De gebruikerswachtwoorden komen niet overeen!"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:292
 msgid "The root passwords doesn't match!"
-msgstr ""
+msgstr "De rootwachtwoorden komen niet overeen!"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:319
 #, python-format
 msgid "The hostname must not contain these characters: %s"
-msgstr ""
+msgstr "De hostnaam mag niet de volgende tekens bevatten: %s"
 
 #: linstaller/modules/userhost/front/glade/__init__.py:333
 msgid "The root password"
-msgstr ""
+msgstr "Het rootwachtwoord"
 
 #: linstaller/modules/userhost/front/cli.py:24
 #, python-format
 msgid "%s's username (no spaces; e.g: john)"
-msgstr ""
+msgstr "Gebruikersnaam van %s (geen spaties; bijv.: jan)"
 
 #: linstaller/modules/userhost/front/cli.py:31
 #, python-format
 msgid "%s's password"
-msgstr ""
+msgstr "Wachtwoord van %s"
 
 #: linstaller/modules/userhost/front/cli.py:70
 #, python-format
 msgid "You can't use these chars in the %s, please re-try: "
-msgstr ""
+msgstr "U mag deze tekens niet gebruiken in %s, probeer het opnieuw:"
 
 #: linstaller/modules/userhost/front/cli.py:80
 #: linstaller/frontends/gtk3.py:218
 msgid " (again)"
-msgstr ""
+msgstr "(opnieuw)"
 
 #: linstaller/modules/summary/front/glade/__init__.py:17
 #: linstaller/modules/summary/front/cli.py:17
 msgid "Summary"
-msgstr ""
+msgstr "Samenvatting"
 
 #: linstaller/modules/summary/front/glade/__init__.py:18
 msgid "Please review everything before continuing."
-msgstr ""
+msgstr "Controleer alles voordat u doorgaat."
 
 #: linstaller/modules/summary/front/glade/__init__.py:60
 #: linstaller/modules/summary/front/cli.py:29
 #, python-format
 msgid "%(distroname)s will be installed here."
-msgstr ""
+msgstr "%(distroname)s zal hier worden geïnstalleerd."
 
 #: linstaller/modules/summary/front/glade/__init__.py:64
 #: linstaller/modules/summary/front/cli.py:33
 #, python-format
 msgid " - %(part)s (%(filesystem)s, mounts on %(mountpoint)s)%(text)s"
-msgstr ""
+msgstr " - %(part)s (%(filesystem)s, koppelt aan op %(mountpoint)s)%(text)s"
 
 #: linstaller/modules/summary/front/glade/__init__.py:92
 #, python-format
 msgid "(model %s; variant %s)"
-msgstr ""
+msgstr "(model %s; variant %s)"
 
 #: linstaller/modules/summary/front/glade/__init__.py:103
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: linstaller/modules/summary/front/glade/__init__.py:105
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: linstaller/modules/summary/front/cli.py:20
 msgid "These partitions will be used:"
-msgstr ""
+msgstr "Deze partities zullen worden gebruikt:"
 
 #: linstaller/modules/summary/front/cli.py:44
 #, python-format
 msgid "The persistence partion will be of %s MB."
-msgstr ""
+msgstr "De persistente partitie zal %s MB groot zijn."
 
 #: linstaller/modules/summary/front/cli.py:50
 #, python-format
 msgid "The default locale will be %(locale)s."
-msgstr ""
+msgstr "De standaard taal zal %(locale)s zijn."
 
 #: linstaller/modules/summary/front/cli.py:54
 #, python-format
 msgid "The default keyboard layout will be %(layout)s."
-msgstr ""
+msgstr "De standaard toetsenbordlayout zal %(layout)s zijn."
 
 #: linstaller/modules/summary/front/cli.py:60
 #, python-format
 msgid "The main user will be %(userfullname)s (%(username)s)."
-msgstr ""
+msgstr "De hoofdgebruiker zal %(userfullname)s (%(username)s) zijn."
 
 #: linstaller/modules/summary/front/cli.py:63
 msgid "Root account is enabled."
-msgstr ""
+msgstr "Het root-account is ingeschakeld."
 
 #: linstaller/modules/summary/front/cli.py:64
 #, python-format
 msgid "The computer hostname will be %(hostname)s."
-msgstr ""
+msgstr "De computer-hostnaam zal %(hostname)s zijn."
 
 #: linstaller/modules/summary/front/cli.py:69
 #, python-format
 msgid "The machine will use this timezone: %(timezone)s."
-msgstr ""
+msgstr "De computer zal de volgende tijdzone gebruiken: %(timezone)s."
 
 #: linstaller/modules/summary/front/cli.py:75
 #, python-format
 msgid ""
 "The bootloader (%(bootloader)s) will be installed in %(bootloaderpath)s."
-msgstr ""
+msgstr "De opstartlader (%(bootloader)s) zal worden geïnstalleerd naar %(bootloaderpath)s."
 
 #: linstaller/modules/summary/front/cli.py:86
 msgid "Installing..."
-msgstr ""
+msgstr "Bezig met installeren..."
 
 #: linstaller/modules/welcome/front/gtk3.py:21
 #: linstaller/modules/welcome/front/glade/__init__.py:17
 #: linstaller/modules/welcome/front/cli.py:20
 msgid "Welcome!"
-msgstr ""
+msgstr "Welkom!"
 
 #: linstaller/modules/welcome/front/gtk3.py:23
 #: linstaller/modules/welcome/front/glade/__init__.py:20
 #: linstaller/modules/welcome/front/cli.py:22
 #, python-format
 msgid "Welcome to the %s installation wizard!"
-msgstr ""
+msgstr "Welkom bij de installatiewizard van %s!"
 
 #: linstaller/modules/welcome/front/gtk3.py:25
 #: linstaller/modules/welcome/front/cli.py:24
 msgid ""
 "This wizard will help you with the installation of the distribution into "
 "your Hard Disk or another removable media."
-msgstr ""
+msgstr "Deze wizard zal u begeleiden bij de installatie van de distributie naar uw harde schijf of verwijderbaar medium."
 
 #: linstaller/modules/welcome/front/gtk3.py:26
 #: linstaller/modules/welcome/front/cli.py:25
 msgid "Keep in mind that this installer it's still in testing phase."
-msgstr ""
+msgstr "Houdt wel in gedachten dat deze installatiewizard zich nog steeds in de testfase bevindt."
 
 #: linstaller/modules/welcome/front/gtk3.py:27
 #: linstaller/modules/welcome/front/cli.py:26
 msgid "Please reports any problem at http://bugs.launchpad.net/linstaller."
-msgstr ""
+msgstr "Rapporteer problemen op http://bugs.launchpad.net/linstaller."
 
 #: linstaller/modules/welcome/front/cli.py:30
 msgid "Do you want to begin installation?"
-msgstr ""
+msgstr "Wilt u de installatie starten?"
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:23
 msgid "Configuring kernel..."
-msgstr ""
+msgstr "Bezig met het configureren van de kernel..."
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:28
 msgid "Recompiling python modules..."
-msgstr ""
+msgstr "Bezig met het hercompileren van de Python-modules..."
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:39
 msgid "Configuring the final system..."
-msgstr ""
+msgstr "Bezig met het configureren van het doelsysteem..."
 
 #: linstaller/modules/ubuntu/inst/cli.py:20
 msgid "Configuring the final system:"
-msgstr ""
+msgstr "Bezig met het configureren van het doelsysteem:"
 
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:19
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:38
 msgid "Removing virtual machine specific packages..."
-msgstr ""
+msgstr "Bezig met het verwijderen van virtuele machine-specifieke pakketten..."
 
 #: linstaller/modules/virtualclean/inst/cli.py:20
 msgid "Removing virtual machine specific packages:"
-msgstr ""
+msgstr "Bezig met het verwijderen van virtuele machine-specifieke pakketten:"
 
 #: linstaller/frontends/gtk3.py:323 linstaller/frontends/gtk3.py:328
 msgid "You can't continue."
-msgstr ""
+msgstr "U kunt niet doorgaan."
 
 #: linstaller/frontends/gtk3.py:326
 #: linstaller/services/glade/base_ui.glade.h:5
 msgid "You can continue."
-msgstr ""
+msgstr "U kunt doorgaan."
 
 #: linstaller/frontends/gtk3.py:326
 msgid "Press the next button to continue."
-msgstr ""
+msgstr "Klik op de Volgende-knop om door te gaan."
 
 #: linstaller/frontends/gtk3.py:328
 msgid "Please set"
-msgstr ""
+msgstr "Stel in"
 
 #: linstaller/frontends/glade/__init__.py:51
 msgid "Installing"
-msgstr ""
+msgstr "Bezig met installeren"
 
 #: linstaller/frontends/glade/__init__.py:52
 msgid "You will not wait long, we promise."
-msgstr ""
+msgstr "We beloven dat u niet lang zal hoeven wachten."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some incomplete items (hover to see)."
-msgstr ""
+msgstr "Er zijn enkele onvoltooide items (beweeg uw muis erover om te zien welke)."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to complete the following items:"
-msgstr ""
+msgstr "U moet de volgende items voltooien:"
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some errors (hover to see)."
-msgstr ""
+msgstr "Er zijn enkele fouten (beweeg uw muis erover om te zien welke)."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to fix these errors before continuing:"
-msgstr ""
+msgstr "U moet deze fouten oplossen voordat u door kunt gaan:"
 
 #: linstaller/frontends/glade/__init__.py:244
 #: linstaller/modules/timezone/front/glade/module.glade.h:22
 #: linstaller/modules/language/front/glade/module.glade.h:22
 msgid "Please wait..."
-msgstr ""
+msgstr "Even geduld..."
 
 #: linstaller/frontends/cli.py:86
 msgid "You need to insert a number!"
-msgstr ""
+msgstr "U moet een nummer invoeren!"
 
 #: linstaller/services/glade/__init__.py:215
 #: linstaller/services/glade/__init__.py:398
@@ -2173,204 +2173,204 @@ msgstr ""
 #: linstaller/services/glade/__init__.py:474
 #, python-format
 msgid "%s Installer"
-msgstr ""
+msgstr "%s-installatiewizard"
 
 #: linstaller/services/glade/__init__.py:248
 #, python-format
 msgid "Module path %s does not exist! Skipping..."
-msgstr ""
+msgstr "Het modulepad %s bestaat niet. Bezig met overslaan..."
 
 #: linstaller/services/glade/__init__.py:623
 msgid "Reboot"
-msgstr ""
+msgstr "Herstarten"
 
 #: linstaller/services/glade/__init__.py:633
 msgid "Restart installer"
-msgstr ""
+msgstr "Installatiewizard herstarten"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:1
 msgid "<big><b>An error occurred.</b></big>"
-msgstr ""
+msgstr "<big><b>Er is een fout opgetreden.</b></big>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:2
 msgid "Manage Semplice features"
-msgstr ""
+msgstr "Semplice-mogelijkheden beheren"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:3
 #: linstaller/services/glade/base_ui.glade.h:3
 msgid "label"
-msgstr ""
+msgstr "label"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:4
 msgid "Enable"
-msgstr ""
+msgstr "Inschakelen"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:5
 msgid "<b>Features</b>"
-msgstr ""
+msgstr "<b>Mogelijkheden</b>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:6
 #: linstaller/services/glade/base_ui.glade.h:4
 msgid "<i>Please wait...</i>"
-msgstr ""
+msgstr "<i>Even geduld...</i>"
 
 #: linstaller/modules/bricks/front/glade/module.glade.h:7
 msgid "Customize features"
-msgstr ""
+msgstr "Mogelijkheden aanpassen"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:1
 #: linstaller/modules/partdisks/front/glade/module.glade.h:27
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: linstaller/modules/echo/partusb/front/glade/module.glade.h:2
 msgid "- or -"
-msgstr ""
+msgstr "- of -"
 
 #: linstaller/modules/end/front/glade/module.glade.h:1
 msgid "<big><b>Relax.</b></big>"
-msgstr ""
+msgstr "<big><b>Relax.</b></big>"
 
 #: linstaller/modules/end/front/glade/module.glade.h:2
 msgid "We are working for you."
-msgstr ""
+msgstr "We zijn voor u aan het werk."
 
 #: linstaller/modules/end/front/glade/module.glade.h:3
 #: linstaller/modules/partdisks/front/glade/module.glade.h:55
 msgid "page 1"
-msgstr ""
+msgstr "pagina 1"
 
 #: linstaller/modules/end/front/glade/module.glade.h:4
 msgid "<big><b>We've finished!</b></big>"
-msgstr ""
+msgstr "<big><b>We zijn klaar!</b></big>"
 
 #: linstaller/modules/end/front/glade/module.glade.h:5
 msgid "The installation wizard has just finished!"
-msgstr ""
+msgstr "De installatiewizard is klaar!"
 
 #: linstaller/modules/end/front/glade/module.glade.h:6
 #: linstaller/modules/partdisks/front/glade/module.glade.h:64
 msgid "page 2"
-msgstr ""
+msgstr "pagina 2"
 
 #: linstaller/modules/end/front/glade/module.glade.h:7
 #: linstaller/modules/partdisks/front/glade/module.glade.h:72
 msgid "page 3"
-msgstr ""
+msgstr "pagina 3"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:1
 #: linstaller/modules/language/front/glade/module.glade.h:1
 msgid "Changes applied."
-msgstr ""
+msgstr "De wijzigingen zijn toegepast."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:2
 #: linstaller/modules/language/front/glade/module.glade.h:2
 msgid "<big><b>Changes applied.</b></big>"
-msgstr ""
+msgstr "<big><b>De wijzigingen zijn toegepast.</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:3
 #: linstaller/modules/language/front/glade/module.glade.h:3
 msgid "Please save your data and reboot."
-msgstr ""
+msgstr "Sla uw gegevens op en herstart."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:4
 #: linstaller/modules/language/front/glade/module.glade.h:4
 msgid "An error occoured."
-msgstr ""
+msgstr "Er is een fout opgetreden."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:5
 #: linstaller/modules/language/front/glade/module.glade.h:5
 msgid "<big><b>An error occoured.</b></big>"
-msgstr ""
+msgstr "<big><b>Er is een fout opgetreden.</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:6
 #: linstaller/modules/language/front/glade/module.glade.h:6
 msgid "Please check the program log for details."
-msgstr ""
+msgstr "Zie het logbestand van het programma voor details."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:7
 #: linstaller/modules/language/front/glade/module.glade.h:7
 msgid "Internationalization & Localization"
-msgstr ""
+msgstr "Internationalisatie en lokalisatie"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:8
 #: linstaller/modules/language/front/glade/module.glade.h:8
 msgid "Display all available locales"
-msgstr ""
+msgstr "Alle beschikbare talen weergeven"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:9
 #: linstaller/modules/language/front/glade/module.glade.h:9
 msgid "<b>Locale</b>"
-msgstr ""
+msgstr "<b>Taal</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:10
 #: linstaller/modules/language/front/glade/module.glade.h:10
 msgid "Save space by installing only translations of the selected language"
-msgstr ""
+msgstr "Ruimte besparen door alleen de geselecteerde talen te installeren"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:11
 #: linstaller/modules/language/front/glade/module.glade.h:11
 msgid "<b>Tweaks</b>"
-msgstr ""
+msgstr "<b>Aanpassingen</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:12
 #: linstaller/modules/language/front/glade/module.glade.h:12
 msgid "Locale"
-msgstr ""
+msgstr "Taal"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:13
 #: linstaller/modules/language/front/glade/module.glade.h:13
 msgid "<b>Layout</b>"
-msgstr ""
+msgstr "<b>Indeling</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:14
 #: linstaller/modules/language/front/glade/module.glade.h:14
 msgid "<b>Variant</b>"
-msgstr ""
+msgstr "<b>Variant</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:15
 #: linstaller/modules/language/front/glade/module.glade.h:15
 msgid "<b>Model</b>"
-msgstr ""
+msgstr "<b>Model</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:16
 #: linstaller/modules/language/front/glade/module.glade.h:16
 msgid "Keyboard"
-msgstr ""
+msgstr "Toetsenbor"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:17
 #: linstaller/modules/language/front/glade/module.glade.h:17
 msgid ""
 "<i><b>TIP</b>: Type your city in the keyboard (in English) and we'll search "
 "it for you.</i>"
-msgstr ""
+msgstr "<i><b>TIP</b>: typ uw stad met het toetsenbord (in het Engels) wij zullen hem voor u zoeken.</i>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:18
 #: linstaller/modules/language/front/glade/module.glade.h:18
 msgid "<b>Timezone</b>"
-msgstr ""
+msgstr "<b>Tijdzone</b>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:19
 #: linstaller/modules/language/front/glade/module.glade.h:19
 msgid "Timezone"
-msgstr ""
+msgstr "Tijdzone"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:20
 #: linstaller/modules/language/front/glade/module.glade.h:20
 msgid ""
 "<big><b>Welcome to Semplice Live!</b></big>\n"
 "Please select your locale below."
-msgstr ""
+msgstr "<big><b>Welkom bij Semplice Live!</b></big>\nSelecteer hieronder uw taal."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:23
 #: linstaller/modules/language/front/glade/module.glade.h:23
 msgid "Do you want to purge already installed translations?"
-msgstr ""
+msgstr "Wilt u de reeds geïnstalleerde talen verwijderen?"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:24
 #: linstaller/modules/language/front/glade/module.glade.h:24
 msgid "<big><b>Do you want to purge already installed translations?</b></big>"
-msgstr ""
+msgstr "<big><b>Wilt u de reeds geïnstalleerde talen verwijderen?</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:25
 #: linstaller/modules/language/front/glade/module.glade.h:25
@@ -2385,12 +2385,12 @@ msgstr ""
 #: linstaller/modules/timezone/front/glade/module.glade.h:30
 #: linstaller/modules/language/front/glade/module.glade.h:30
 msgid "Some translations may not be installed!"
-msgstr ""
+msgstr "Enkele vertalingen worden mogelijk niet geïnstalleerd!"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:31
 #: linstaller/modules/language/front/glade/module.glade.h:31
 msgid "<big><b>Some translations may not be installed!</b></big>"
-msgstr ""
+msgstr "<big><b>Enkele vertalingen worden mogelijk niet geïnstalleerd!</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:32
 #: linstaller/modules/language/front/glade/module.glade.h:32
@@ -2401,51 +2401,51 @@ msgstr ""
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:1
 msgid "Yes, check for the fastest mirror."
-msgstr ""
+msgstr "Ja, controleer wat de snelste spiegelserver is."
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:2
 msgid "Enable deb-src entries"
-msgstr ""
+msgstr "deb-src-pakketbronnen inschakelen"
 
 #: linstaller/modules/bootloader/front/glade/module.glade.h:1
 msgid "Yes, install the bootloader into the Master Boot Record (MBR)."
-msgstr ""
+msgstr "Ja, installeer de opstartlader naar het Master Boot Record (MBR)."
 
 #: linstaller/modules/update/front/glade/module.glade.h:1
 msgid "Yes, check for installer updates"
-msgstr ""
+msgstr "Ja, controleer op updates van de installatiewizard"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:1
 msgid "Apply changes"
-msgstr ""
+msgstr "Wijzigingen toepassen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:2
 msgid "<big><b>Do you really want to apply the changes?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u de wijzigingen wilt toepassen?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:3
 msgid ""
 "You can't go back after pressing \"Yes\".\n"
 "<b>You have been warned.</b>"
-msgstr ""
+msgstr "U kunt niet meer terug nadat u op \"Ja\" hebt geklikt.\n<b>U bent gewaarschuwd.</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:6
 msgid ""
 "<big><b>Do you really want to delete everything on the drive?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u alles op de schijf wilt verwijderen?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:7
 msgid "Crypting support"
-msgstr ""
+msgstr "Vergrendelingsondersteuning"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:8
 msgid ""
 "<big><b>Do you really want to destroy everything on the drive?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u alles op de schijf wilt vernietigen</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:11
 msgid "Master Boot Record (MBR)"
-msgstr ""
+msgstr "Master Boot Record (MBR)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:12
 msgid ""
@@ -2455,13 +2455,13 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:13
 msgid "Edit partition"
-msgstr ""
+msgstr "Partitie bewerken"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:14
 msgid ""
 "<big><b>Do you really want to mount this partition during the installation "
 "phase?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u deze partitie wilt aankoppelen tijdens de installatiefase?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:15
 msgid ""
@@ -2476,55 +2476,55 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:22
 msgid "Add partition table"
-msgstr ""
+msgstr "Partitietabel toevoegen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:23
 msgid "<big><b>Do you really want to create a table on this disk?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u een tabel wilt creëren op deze schijf?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:24
 msgid "A table is needed to create partitions on this drive."
-msgstr ""
+msgstr "Een tabel is vereist om partities te creëren op deze schijf."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:25
 msgid "<b>Logical Volume</b>"
-msgstr ""
+msgstr "<b>Logisch volume</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:26
 msgid "Specify the size: "
-msgstr ""
+msgstr "Specificeer de grootte:"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:28
 msgid "Specify the size:"
-msgstr ""
+msgstr "Specificeer de grootte:"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:29
 msgid "<b>Size</b>"
-msgstr ""
+msgstr "<b>Grootte</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:30
 msgid "Format the partition"
-msgstr ""
+msgstr "De partitie formatteren"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:31
 msgid "Use as a LVM physical volume"
-msgstr ""
+msgstr "Gebruiken als een LVM fysiek volume"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:32
 msgid "Use as an encrypted LVM physical volume"
-msgstr ""
+msgstr "Gebruiken als een versleuteld LVM fysiek volume"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:33
 msgid "Fill the device with random data"
-msgstr ""
+msgstr "Het apparaat opvullen met willekeurige gegevens"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:34
 msgid "Use high quality random data (it will take a long time)"
-msgstr ""
+msgstr "Hoge kwaliteit willekeurige gegevens gebruiken (dit zal erg lang duren)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:35
 msgid "Do not format"
-msgstr ""
+msgstr "Niet formatteren"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:36
 msgid ""
@@ -2534,44 +2534,44 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:38
 msgid "<b>File System</b>"
-msgstr ""
+msgstr "<b>Bestandssyteem</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:39
 msgid "Mount during the installation phase"
-msgstr ""
+msgstr "Aankoppelen tijdens de installatiefase"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:40
 msgid "<b>Mountpoint</b>"
-msgstr ""
+msgstr "<b>Aankoppelpunt</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:41
 msgid "Remove partition"
-msgstr ""
+msgstr "Partitie verwijderen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:42
 msgid "Unlock volume"
-msgstr ""
+msgstr "Volume ontgrendelen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:43
 msgid "<big><b>Please insert the volume's password.</b></big>"
-msgstr ""
+msgstr "<big><b>Voer het wachtwoord van het volume in.</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:44
 msgid ""
 "In order to unlock this encrypted volume, you need to insert its password."
-msgstr ""
+msgstr "Om dit volume te ontgrendelen moet u het wachtwoord ervan invoeren."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:45
 msgid "Prova"
-msgstr ""
+msgstr "Prova"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:46
 msgid "Lollo"
-msgstr ""
+msgstr "Lollo"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:47
 msgid "<b>Volume Group</b>"
-msgstr ""
+msgstr "<b>Volumegroep</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:48
 msgid ""
@@ -2587,185 +2587,185 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:51
 msgid "<b>Physical Volumes</b>"
-msgstr ""
+msgstr "b>Fysieke volumes</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:52
 msgid "Manage LVM Virtual Groups"
-msgstr ""
+msgstr "LVM Virtuele Groepen beheren"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:53
 msgid "<big><b>Please wait.</b></big>"
-msgstr ""
+msgstr "<big><b>Even geduld.</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:54
 msgid ""
 "We are setting up things to offer an awesome partitioning experience ;)"
-msgstr ""
+msgstr "We zijn bezig met de dingen in te stellen die u een geweldige partitie-ervaring zullen bieden ;)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:56
 msgid "<big><b>Automatic partitioning</b></big>"
-msgstr ""
+msgstr "<big><b>Automatische partitionering</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:57
 msgid ""
 "Press this button to make the installer search the best\n"
 "option for your system."
-msgstr ""
+msgstr "Klik op deze knop om de installatiewizard te laten zoeken naar\nde beste optie voor uw systeem."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:59
 msgid "<big><b>Manual partitioning</b></big>"
-msgstr ""
+msgstr "<big><b>Handmatige partitionering</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:60
 msgid "The geek's paradise."
-msgstr ""
+msgstr "De droom van elke nerd."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:61
 msgid ""
 "<i>To use advanced features such as encryption and LVM, you must use the "
 "manual partitioning page.</i>"
-msgstr ""
+msgstr "<i>Om geavanceerde mogelijkheden zoals vergrendeling en LVM te kunnen gebruiken moet u de handmatige partitioneringsmethode gebruiken.</i>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:62
 msgid "<big><b>No solution found.</b></big>"
-msgstr ""
+msgstr "<big><b>Er is geen oplossing gevonden.</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:63
 msgid ""
 "Unfortunately, we didn't find solutions for this system. Please use the "
 "manual partitioner."
-msgstr ""
+msgstr "We hebben helaas geen oplossing gevonden voor dit systeem. Gebruik de handmatige partitioneerder."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:67
 msgid "Lock/Unlock volume"
-msgstr ""
+msgstr "Volume vergrendelen/ontgrendelen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:68
 msgid "Advanced options"
-msgstr ""
+msgstr "Geavanceerde opties"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:69
 msgid "Manage LVM volume groups"
-msgstr ""
+msgstr "LVM-volumegroepen beheren"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:70
 msgid "Refresh"
-msgstr ""
+msgstr "Herladen"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:71
 msgid "Apply"
-msgstr ""
+msgstr "Toepassen"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:4
 msgid "New user's password (confirm)"
-msgstr ""
+msgstr "Wachtwoord van nieuwe gebruiker (bevestiging)"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:6
 msgid "<b>Main account &amp; Hostname</b>"
-msgstr ""
+msgstr "<b>Hoofdaccount &amp; Hostnaam</b>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:7
 msgid ""
 "The switch below can be used to enable the root account.\n"
 "Administration privilegies will only be given to it: 'sudo' will be disabled.\n"
 "<i>It is recommended to keep this option <b>OFF</b>.</i>"
-msgstr ""
+msgstr "De schakelaar hieronder kan worden gebruikt om het root-account in te schakelen.\nIndien ingeschakeld zal 'sudo' worden uitgeschakeld en de administratieve rechten zullen dan alleen beschikbaar zijn voor root.\n<i>Het is aanbevolen deze optie <b>UITGESCHAKELD</b> te laten.</i>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:10
 msgid "Root account"
-msgstr ""
+msgstr "Root-account"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:11
 msgid "Root password"
-msgstr ""
+msgstr "Root-wachtwoord"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:12
 msgid "Root password (confirm)"
-msgstr ""
+msgstr "Root-wachtwoord (bevestiging)"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:13
 msgid "<b>Root password</b>"
-msgstr ""
+msgstr "<b>Root-wachtwoord</b>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:14
 msgid "<b>Root account</b>"
-msgstr ""
+msgstr "<b>Root-account</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:1
 msgid "<b>These partitions will be used:</b>"
-msgstr ""
+msgstr "<b>Deze partities zullen worden gebruikt:</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:2
 msgid "Locale:"
-msgstr ""
+msgstr "Taal:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:3
 msgid "Keyboard:"
-msgstr ""
+msgstr "Toetsenbord:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:4
 msgid "Timezone:"
-msgstr ""
+msgstr "Tijdzone:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:5
 msgid "<b>Internationalization &amp; Localization</b>"
-msgstr ""
+msgstr "<b>Internationalisatie &amp; Lokalisatie</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:6
 msgid "Name:"
-msgstr ""
+msgstr "Naam:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:7
 msgid "Username:"
-msgstr ""
+msgstr "Gebruikersnaam:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:8
 msgid "Root enabled:"
-msgstr ""
+msgstr "Root inschakeld:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:9
 msgid "Hostname:"
-msgstr ""
+msgstr "Hostnaam:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:10
 msgid "<b>Users &amp; hostname</b>"
-msgstr ""
+msgstr "<b>Gebruikers &amp; hostnaam</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:11
 msgid "Bootloader:"
-msgstr ""
+msgstr "Opstartlader:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:12
 msgid "Target:"
-msgstr ""
+msgstr "Doel:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:13
 msgid "<b>Bootloader</b>"
-msgstr ""
+msgstr "<b>Opstartlader</b>"
 
 #: linstaller/modules/welcome/front/glade/module.glade.h:1
 msgid "<big><b>Welcome.</b></big>"
-msgstr ""
+msgstr "<big><b>Welkom.</b></big>"
 
 #: linstaller/modules/welcome/front/glade/module.glade.h:2
 msgid "Press Forward to begin installation."
-msgstr ""
+msgstr "Klik op Volgende om de installatie te starten."
 
 #: linstaller/services/glade/base_ui.glade.h:1
 msgid "Exit?"
-msgstr ""
+msgstr "Afsluiten?"
 
 #: linstaller/services/glade/base_ui.glade.h:2
 msgid "<big><b>Do you really want to quit installation?</b></big>"
-msgstr ""
+msgstr "<big><b>Weet u zeker dat u de installatie wilt afsluiten?</b></big>"
 
 #: crash/ui.glade.h:1
 msgid ":-("
-msgstr ""
+msgstr ":-("
 
 #: crash/ui.glade.h:2
 msgid "<big><b>Drunk people should not write software.</b></big>"
-msgstr ""
+msgstr "<big><b>Dronken mensen zouden geen software moeten schrijven.</b></big>"
 
 #: crash/ui.glade.h:3
 msgid ""
@@ -2780,8 +2780,8 @@ msgstr ""
 
 #: crash/ui.glade.h:10
 msgid "Take me away"
-msgstr ""
+msgstr "Haal me hier vandaan"
 
 #: crash/ui.glade.h:11
 msgid "Pastebin it!"
-msgstr ""
+msgstr "Pastebin het!"

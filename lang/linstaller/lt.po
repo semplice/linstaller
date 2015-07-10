@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-04-21 14:15+0000\n"
+"PO-Revision-Date: 2015-07-08 22:02+0000\n"
 "Last-Translator: Moo\n"
-"Language-Team: Lithuanian (http://www.transifex.com/projects/p/linstaller/language/lt/)\n"
+"Language-Team: Lithuanian (http://www.transifex.com/p/linstaller/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: linstaller.py:260
 msgid "You have to pass at least an action!"
-msgstr ""
+msgstr "Turite perduoti bent veiksmą!"
 
 #: linstaller.py:264
 #, python-format
@@ -29,16 +29,16 @@ msgstr ""
 
 #: linstaller.py:266
 msgid "Recognized options:"
-msgstr ""
+msgstr "Atpažįstamos parinktys:"
 
 #: linstaller.py:267
 msgid " -c|--config\t\t- Selects the configuration file to read"
-msgstr ""
+msgstr " -c|--config\t\t- Pasirenka norimą skaityti konfigūracijos failą"
 
 #: linstaller.py:268
 msgid ""
 " -p|--configpath\t- Selects the directory to look for configuration files"
-msgstr ""
+msgstr " -p|--configpath\t- Pasirenka katalogą, kuriame bus ieškoma konfigūracijos failų"
 
 #: linstaller.py:269
 msgid " -t|--target\t\t- Selects the target directory (def: /linstaller/target)"
@@ -58,11 +58,11 @@ msgstr ""
 
 #: linstaller.py:273
 msgid " -r|--remove\t\t- Removes the specified modules from the modules list"
-msgstr ""
+msgstr " -r|--remove\t\t- Pašalina nurodytus modulius iš modulių sąrašo"
 
 #: linstaller.py:275
 msgid "Recognized actions:"
-msgstr ""
+msgstr "Atpažįstami veiksmai:"
 
 #: linstaller.py:276
 msgid " help\t\t\t- Displays this help message, then exits."
@@ -155,7 +155,7 @@ msgstr ""
 
 #: linstaller/core/libmodules/partdisks/library.py:75
 msgid "Swap"
-msgstr "Sukeitimų skaidinys"
+msgstr "Sukeitimų skaidinys (swap)"
 
 #: linstaller/core/libmodules/partdisks/library.py:76
 msgid "Root (/)"
@@ -199,7 +199,7 @@ msgstr "Tai gali šiek tiek užtrukti."
 
 #: linstaller/modules/bricks/inst/cli.py:39
 msgid "Configuring features:"
-msgstr ""
+msgstr "Konfigūruojamos ypatybės:"
 
 #: linstaller/modules/bricks/front/glade/__init__.py:18
 #: linstaller/modules/bricks/front/cli.py:20
@@ -208,7 +208,7 @@ msgstr "Ypatybių pasirinkimas"
 
 #: linstaller/modules/bricks/front/glade/__init__.py:19
 msgid "You can further customize those after the installation."
-msgstr ""
+msgstr "Po diegimo galite toliau tinkinti šias ypatybes."
 
 #: linstaller/modules/bricks/front/glade/__init__.py:127
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:67
@@ -254,7 +254,7 @@ msgstr "Kopijuojama sistema į diską..."
 #: linstaller/modules/echo/copy/inst/cli.py:18
 #: linstaller/modules/unsquash/inst/cli.py:22
 msgid "Copying system to disk:"
-msgstr ""
+msgstr "Kopijuojama sistema į diską:"
 
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:17
 #: linstaller/modules/echo/bootloader/inst/glade/__init__.py:26
@@ -266,7 +266,7 @@ msgstr "Įdiegiama paleidyklė..."
 #: linstaller/modules/echo/bootloader/inst/cli.py:16
 #: linstaller/modules/bootloader/inst/cli.py:27
 msgid "Installing bootloader:"
-msgstr ""
+msgstr "Įdiegiama paleidyklė:"
 
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:21
 #: linstaller/modules/echo/partusb/inst/glade/__init__.py:41
@@ -283,7 +283,7 @@ msgstr "Konfigūruojama failų sistema..."
 
 #: linstaller/modules/echo/partusb/inst/cli.py:18
 msgid "Creating persistent filesystem:"
-msgstr ""
+msgstr "Kuriama ilgalaikė failų sistema:"
 
 #: linstaller/modules/echo/partusb/front/glade/__init__.py:18
 #: linstaller/modules/echo/partusb/front/cli.py:19
@@ -310,18 +310,18 @@ msgstr ""
 msgid ""
 "Partition is a FAT partition, so there is a limit to a maximum of 4GiB per-"
 "file."
-msgstr ""
+msgstr "Skaidinys yra FAT skaidinys, taigi, yra maksimalus 4GiB apribojimas vienam failui."
 
 #: linstaller/modules/echo/partusb/front/cli.py:61
 #, python-format
 msgid "Usable freespace: %s MiB"
-msgstr ""
+msgstr "Tinkama naudoti laisva vieta: %s MiB"
 
 #: linstaller/modules/echo/partusb/front/cli.py:63
 msgid ""
 "Partition uses a FAT partition, so there is a limit to a maximum of 4GiB "
 "per-file."
-msgstr ""
+msgstr "Skaidinys naudoja FAT skaidinį, taigi, yra maksimalus 4GiB apribojimas vienam failui."
 
 #: linstaller/modules/echo/partusb/front/cli.py:64
 msgid ""
@@ -366,11 +366,11 @@ msgstr "Diegimas užbaigtas"
 
 #: linstaller/modules/end/front/glade/__init__.py:17
 msgid "Press Reboot to restart to the installed system."
-msgstr ""
+msgstr "Norėdami paleisti įdiegtą sistemą, spauskite Paleisti iš naujo."
 
 #: linstaller/modules/end/front/cli.py:15
 msgid "Enjoy"
-msgstr ""
+msgstr "Mėgaukitės"
 
 #: linstaller/modules/end/front/cli.py:17
 #, python-format
@@ -380,7 +380,7 @@ msgstr ""
 #: linstaller/modules/end/front/cli.py:18
 msgid ""
 "Please reboot and remove the install media to get the installed system."
-msgstr ""
+msgstr "Prašome paleisti iš naujo ir pašalinti diegimo laikmeną, kad įjungtumėte įdiegtą sistemą."
 
 #: linstaller/modules/end/front/cli.py:23
 msgid "Do you want to reboot now?"
@@ -393,7 +393,7 @@ msgstr "Nustatoma laiko juosta..."
 
 #: linstaller/modules/timezone/inst/cli.py:18
 msgid "Setting timezone:"
-msgstr ""
+msgstr "Nustatoma laiko juosta:"
 
 #: linstaller/modules/timezone/front/glade/__init__.py:18
 #: linstaller/modules/timezone/front/cli.py:18
@@ -458,7 +458,7 @@ msgstr "Neteisingas miestas!"
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:38
 #, python-format
 msgid "Searching for the best %s mirror..."
-msgstr ""
+msgstr "Ieškoma geriausios %s tinklavietės..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Mirrorselect crashed."
@@ -470,7 +470,7 @@ msgstr "Prašome vėliau patikrinti sources.list(.d)."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "Selecting the fastest mirrors..."
-msgstr ""
+msgstr "Pasirenkamos greičiausios tinklavietės..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:56
 msgid "The installer is checking for the fastest mirror for your zone."
@@ -478,7 +478,7 @@ msgstr ""
 
 #: linstaller/modules/mirrorselect/inst/cli.py:23
 msgid "Selecting mirrors:"
-msgstr ""
+msgstr "Pasirenkamos tinklavietės:"
 
 #: linstaller/modules/mirrorselect/inst/cli.py:46
 msgid "Mirrorselect crashed. Please check sources.list(.d) later."
@@ -487,7 +487,7 @@ msgstr ""
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:15
 #: linstaller/modules/mirrorselect/front/cli.py:18
 msgid "Mirror selection"
-msgstr ""
+msgstr "Tinklavietės pasirinkimas"
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:16
 msgid "Select the best mirror"
@@ -575,19 +575,19 @@ msgstr "Jeigu jūs nenorite diegti paleidyklės paleidimo įraše, ji bus įdieg
 msgid ""
 "If the root partition is a LVM Logical Volume, you are strongly encouraged "
 "to install the bootloader into the MBR."
-msgstr ""
+msgstr "Jei šaknies skaidinys yra LVM Loginis Tomas, tuomet jūs esate primygtinai raginami įdiegti paleidyklę į MBR."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:48
 msgid ""
 "Otherwise, the installer will automatically install the bootloader into the "
 "/boot partition, if supplied."
-msgstr ""
+msgstr "Kitu atveju, diegimo programa automatiškai įdiegs paleidyklę į /boot skaidinį, jeigu toks yra pateiktas."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:49
 msgid ""
 "If the /boot partition is a LVM Logical Volume too, the bootloader "
 "installation will be skipped."
-msgstr ""
+msgstr "Jei /boot skaidinys irgi yra LVM Loginis Tomas, tuomet paleidyklės diegimas bus praleistas."
 
 #: linstaller/modules/bootloader/front/glade/__init__.py:51
 msgid ""
@@ -616,7 +616,7 @@ msgstr "Ar norite įdiegti paleidyklę į paleidimo įrašą?"
 msgid ""
 "mountpoint %s exists and it isn't a directory. Please change the mountpoint "
 "path."
-msgstr ""
+msgstr "prijungimo taškas %s yra, tačiau tai nėra katalogas. Prašome pakeisti prijungimo taško kelią."
 
 #: linstaller/modules/update/front/gtk3.py:24
 #: linstaller/modules/update/front/glade/__init__.py:75
@@ -676,7 +676,7 @@ msgstr "Diegimo programos paketai buvo sėkmingai atnaujinti."
 #: linstaller/modules/update/front/gtk3.py:70
 #: linstaller/modules/update/front/cli.py:65
 msgid "Press ENTER to start the updated installer"
-msgstr ""
+msgstr "Spauskite ENTER, norėdami paleisti atnaujintą diegimo programą"
 
 #: linstaller/modules/update/front/glade/__init__.py:38
 msgid "It seems you are already up-to-date. Yay!"
@@ -697,7 +697,7 @@ msgstr ""
 
 #: linstaller/modules/update/front/glade/__init__.py:52
 msgid "Press forward to start the updated installer."
-msgstr ""
+msgstr "Spauskite Pirmyn, norėdami paleisti atnaujintą diegimo programą."
 
 #: linstaller/modules/update/front/glade/__init__.py:76
 msgid "Ensure you have the installer up-to-date."
@@ -716,7 +716,7 @@ msgstr ""
 
 #: linstaller/modules/update/front/cli.py:24
 msgid "Installer Updates"
-msgstr ""
+msgstr "Diegimo Programos Atnaujinimai"
 
 #: linstaller/modules/update/front/cli.py:29
 msgid "Would you like to check for installer updates?"
@@ -779,7 +779,7 @@ msgstr "Nustatoma kalba ir klaviatūra..."
 
 #: linstaller/modules/language/inst/cli.py:19
 msgid "Setting Language & Keyboard:"
-msgstr ""
+msgstr "Nustatoma Kalba ir Klaviatūra:"
 
 #: linstaller/modules/language/front/glade/__init__.py:21
 #: linstaller/modules/language/front/glade/__init__.py:546
@@ -833,7 +833,7 @@ msgstr "Prašome įvesti savo klaviatūros variantą (spauskite ENTER, norėdami
 #: linstaller/modules/partdisks/front/glade/__init__.py:61
 #, python-format
 msgid "Resizing %s..."
-msgstr ""
+msgstr "Keičiamas %s dydis..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:61
 #: linstaller/modules/partdisks/front/glade/__init__.py:189
@@ -846,7 +846,7 @@ msgstr "Tikėkimes, kad viskas praeis sklandžiai! :)"
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #, python-format
 msgid "Failed resizing %s."
-msgstr ""
+msgstr "Nepavyko pakeisti %s dydžio."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:70
 #: linstaller/modules/partdisks/front/glade/__init__.py:153
@@ -928,15 +928,15 @@ msgstr "Pakeitimai pritaikyti!"
 #: linstaller/modules/partdisks/front/glade/__init__.py:281
 #: linstaller/modules/partdisks/front/glade/__init__.py:489
 msgid "Press the Forward button to continue!"
-msgstr ""
+msgstr "Spauskite mygtuką Pirmyn, norėdami tęsti!"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:317
 msgid "Resizing LVM logical volume..."
-msgstr ""
+msgstr "Keičiamas LVM loginio tomo dydis..."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:326
 msgid "Failed resizing the LVM logical volume."
-msgstr ""
+msgstr "Nepavyko pakeisti LVM loginio tomo dydžio."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:503
 #: linstaller/modules/partdisks/front/glade/__init__.py:3193
@@ -961,7 +961,7 @@ msgstr "Rankinis skaidymas"
 #: linstaller/modules/partdisks/front/glade/__init__.py:2802
 #: linstaller/modules/partdisks/front/glade/__init__.py:2928
 msgid "Powerful tools for powerful pepole."
-msgstr ""
+msgstr "Galingi įrankiai pajėgiems žmonėms."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:672
 #, python-format
@@ -976,7 +976,7 @@ msgstr "Tai įdiegia distribuciją laisvoje disko vietoje."
 #: linstaller/modules/partdisks/front/glade/__init__.py:696
 #: linstaller/modules/partdisks/front/glade/__init__.py:713
 msgid "<b>Note:</b> an existing virtual memory (swap) partition will be used."
-msgstr ""
+msgstr "<b>Pastaba:</b> bus panaudotas esamas virtualiosios atminties (sukeitimų) skaidinys."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:681
 #: linstaller/modules/partdisks/front/glade/__init__.py:698
@@ -984,13 +984,13 @@ msgstr ""
 msgid ""
 "<b>Note:</b> due to the few space, it's not possible to create a virtual "
 "memory (swap) partition."
-msgstr ""
+msgstr "<b>Pastaba:</b> dėl vietos trūkumo, neįmanoma sukurti virtualiosios atminties (sukeitimų) skaidinio."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:683
 #: linstaller/modules/partdisks/front/glade/__init__.py:700
 #: linstaller/modules/partdisks/front/glade/__init__.py:717
 msgid "<b>Note:</b> a virtual memory (swap) partition will be created."
-msgstr ""
+msgstr "<b>Pastaba:</b> bus sukurtas virtualiosios atminties (sukeitimų) skaidinys."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:689
 #, python-format
@@ -1030,11 +1030,11 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:740
 msgid "As the Disk is currently empty, this partition will be created."
-msgstr ""
+msgstr "Kadangi šiuo metu Diskas yra tuščias, bus sukurtas šis skaidinys."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:742
 msgid "No data will be deleted."
-msgstr ""
+msgstr "Nebus ištrinta jokių duomenų."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:750
 #, python-format
@@ -1046,7 +1046,7 @@ msgstr "Inicijuoti %s"
 msgid ""
 "This initializes the drive (<b>%s</b>) for usage by creating a partition "
 "table."
-msgstr ""
+msgstr "Tai inicijuoja naudojimui diską (<b>%s</b>), sukuriant skaidinių lentelę."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:805
 #: linstaller/modules/partdisks/front/glade/__init__.py:2014
@@ -1088,7 +1088,7 @@ msgstr "Ar tikrai norite pašalinti %s?"
 #: linstaller/modules/partdisks/front/glade/__init__.py:1273
 #: linstaller/modules/partdisks/front/glade/__init__.py:1291
 msgid "You cannot <b>go back!</b>"
-msgstr ""
+msgstr "Jūs negalite <b>grįžti!</b>"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1276
 #: linstaller/modules/partdisks/front/glade/__init__.py:1294
@@ -1119,7 +1119,7 @@ msgstr "Negalima pridėti skaidinio."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1720
 msgid "You shouldn't get here."
-msgstr ""
+msgstr "Jūs neturėtumėte čia patekti."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1752
 #: linstaller/modules/partdisks/front/glade/__init__.py:1888
@@ -1132,7 +1132,7 @@ msgstr "Naudokite mygtuką Taikyti, norėdami juos išsaugoti."
 #: linstaller/modules/partdisks/front/glade/__init__.py:1893
 msgid ""
 "You need to apply your changes in order to use the new LVM physical volume."
-msgstr ""
+msgstr "Turite pritaikyti savo pakeitimus, norėdami naudoti naująjį LVM fizinį tomą."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:1758
 #: linstaller/modules/partdisks/front/glade/__init__.py:1894
@@ -1159,7 +1159,7 @@ msgstr "Nauja lentelė sukurta sėkmingai."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2017
 msgid "The new table has been created."
-msgstr ""
+msgstr "Nauja lentelė buvo sukurta."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2066
 msgid "Unable to remove the partition."
@@ -1205,16 +1205,16 @@ msgstr "Jūs įvedėte neteisingą slaptažodį."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2550
 msgid "LVM Volume Group"
-msgstr ""
+msgstr "LVM Tomų Grupė"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2583
 #: linstaller/modules/partdisks/front/glade/__init__.py:2703
 msgid "Informations"
-msgstr ""
+msgstr "Informacija"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2589
 msgid "LVM Physical Volume"
-msgstr ""
+msgstr "LVM Fizinis Tomas"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2593
 msgid "No partition table yet!"
@@ -1247,7 +1247,7 @@ msgstr "Dydis"
 #: linstaller/modules/partdisks/front/glade/__init__.py:2651
 #: linstaller/modules/partdisks/front/glade/__init__.py:2664
 msgid "LVM physical volume"
-msgstr ""
+msgstr "LVM fizinis tomas"
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2655
 msgid "Locked"
@@ -1289,7 +1289,7 @@ msgstr "Prašome įsitikinti, kad tomas nėra naudojamas kitos programos."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:2930
 msgid "Press the Apply button and then Forward to continue."
-msgstr ""
+msgstr "Norėdami tęsti spauskite mygtuką Taikyti, o tuomet mygtuką Pirmyn."
 
 #: linstaller/modules/partdisks/front/glade/__init__.py:3107
 msgid "Name"
@@ -1377,7 +1377,7 @@ msgstr "Nėra prieinamo sukeitimų skaidinio. Tęsiama be jo."
 
 #: linstaller/modules/partdisks/front/cli.py:176
 msgid "Select your swap partition (press ENTER to not use swap)"
-msgstr ""
+msgstr "Pasirinkite savo sukeitimų skaidinį (spauskite ENTER, kad nenaudoti sukeitimų skaidinio)"
 
 #: linstaller/modules/partdisks/front/cli.py:205
 #: linstaller/modules/partdisks/front/cli.py:290
@@ -1451,7 +1451,7 @@ msgstr "ĮSPĖJIMAS"
 
 #: linstaller/modules/partdisks/front/cli.py:287
 msgid "This is the last time that you can check your new partition table."
-msgstr ""
+msgstr "Tai yra paskutinis kartas, kuomet galite patikrinti savo naująją skaidinių lentelę."
 
 #: linstaller/modules/partdisks/front/cli.py:288
 msgid "If you continue, you CAN'T RESTORE THE OLD TABLE!"
@@ -1483,7 +1483,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:530
 #: linstaller/modules/partdisks/front/cli.py:534
 msgid "You didn't entered a valid number."
-msgstr ""
+msgstr "Jūs neįvedėte teisingo skaičiaus."
 
 #: linstaller/modules/partdisks/front/cli.py:403
 msgid "Editing disk/partition"
@@ -1491,12 +1491,12 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:405
 msgid "You've selected:"
-msgstr ""
+msgstr "Jūs pasirinkote:"
 
 #: linstaller/modules/partdisks/front/cli.py:448
 #: linstaller/modules/partdisks/front/glade/module.glade.h:65
 msgid "Add partition"
-msgstr ""
+msgstr "Pridėti skaidinį"
 
 #: linstaller/modules/partdisks/front/cli.py:451
 #: linstaller/modules/partdisks/front/cli.py:800
@@ -1550,7 +1550,7 @@ msgstr "Kurti GPT skaidinių lentelę"
 #: linstaller/modules/partdisks/front/cli.py:962
 #: linstaller/modules/partdisks/front/cli.py:964
 msgid "You didn't entered a valid action."
-msgstr ""
+msgstr "Jūs neįvedėte teisingo veiksmo."
 
 #: linstaller/modules/partdisks/front/cli.py:513
 #: linstaller/modules/partdisks/front/cli.py:539
@@ -1583,7 +1583,7 @@ msgstr "Atgal"
 #: linstaller/modules/partdisks/front/cli.py:556
 #: linstaller/modules/partdisks/front/cli.py:558
 msgid "You haven't entered a valid action."
-msgstr ""
+msgstr "Jūs nesate įvedę teisingo veiksmo."
 
 #: linstaller/modules/partdisks/front/cli.py:570
 msgid "Too little free space"
@@ -1700,7 +1700,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:851
 msgid ""
 "You can't execute this action on freespace or on an extended partition!"
-msgstr ""
+msgstr "Jūs negalite vykdyti šio veiksmo laisvai vietai ar išplėstajam skaidiniui!"
 
 #: linstaller/modules/partdisks/front/cli.py:853
 msgid "Here you can insert the mount point of this partition."
@@ -1708,7 +1708,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/cli.py:854
 msgid "For example, if you want to mount as /home, insert '/home'."
-msgstr ""
+msgstr "Pavyzdžiui, jei norite prijungti kaip /home, įveskite '/home'."
 
 #: linstaller/modules/partdisks/front/cli.py:856
 msgid "Insert the mountpoint here"
@@ -1717,11 +1717,11 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:868
 #, python-format
 msgid "%s is not a valid mountpoint!"
-msgstr ""
+msgstr "%s nėra teisingas prijungimo taškas!"
 
 #: linstaller/modules/partdisks/front/cli.py:879
 msgid "You can't resize freespace or an extended partition!"
-msgstr ""
+msgstr "Jūs negalite keisti laisvos vietos ar išplėstojo skaidinio dydį!"
 
 #: linstaller/modules/partdisks/front/cli.py:881
 #, python-format
@@ -1836,7 +1836,7 @@ msgstr "Nustatomas kompiuterio vardas..."
 
 #: linstaller/modules/userhost/inst/cli.py:19
 msgid "Creating user:"
-msgstr ""
+msgstr "Kuriamas naudotojas:"
 
 #: linstaller/modules/userhost/front/gtk3.py:21
 #: linstaller/modules/userhost/front/glade/__init__.py:15
@@ -2097,7 +2097,7 @@ msgstr "Konfigūruojamas branduolys..."
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:28
 msgid "Recompiling python modules..."
-msgstr ""
+msgstr "Iš naujo kompiliuojami python moduliai..."
 
 #: linstaller/modules/ubuntu/inst/glade/__init__.py:39
 msgid "Configuring the final system..."
@@ -2105,7 +2105,7 @@ msgstr "Konfigūruojama galutinė sistema..."
 
 #: linstaller/modules/ubuntu/inst/cli.py:20
 msgid "Configuring the final system:"
-msgstr ""
+msgstr "Konfigūruojama galutinė sistema:"
 
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:19
 #: linstaller/modules/virtualclean/inst/glade/__init__.py:38
@@ -2127,7 +2127,7 @@ msgstr "Galite tęsti."
 
 #: linstaller/frontends/gtk3.py:326
 msgid "Press the next button to continue."
-msgstr ""
+msgstr "Norėdami tęsti, spauskite mygtuką kitas."
 
 #: linstaller/frontends/gtk3.py:328
 msgid "Please set"
@@ -2147,7 +2147,7 @@ msgstr "Yra neužpildytų elementų (užveskite pelę, norėdami juos pamatyti).
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to complete the following items:"
-msgstr ""
+msgstr "Jums reikia užbaigti šiuos elementus:"
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some errors (hover to see)."
@@ -2178,7 +2178,7 @@ msgstr "%s Diegimo Programa"
 #: linstaller/services/glade/__init__.py:248
 #, python-format
 msgid "Module path %s does not exist! Skipping..."
-msgstr ""
+msgstr "Modulio kelio %s nėra! Praleidžiama..."
 
 #: linstaller/services/glade/__init__.py:623
 msgid "Reboot"
@@ -2343,7 +2343,7 @@ msgstr "Klaviatūra"
 msgid ""
 "<i><b>TIP</b>: Type your city in the keyboard (in English) and we'll search "
 "it for you.</i>"
-msgstr "<i><b>PATARIMAS</b>: Įveskite klaviatūroje savo miesto pavadinimą (Anglų kalba) ir mes atliksime jums jo paiešką.</i>"
+msgstr "<i><b>PATARIMAS</b>: Įveskite klaviatūroje savo miesto pavadinimą (Anglų kalba) ir mes jums atliksime jo paiešką.</i>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:18
 #: linstaller/modules/language/front/glade/module.glade.h:18
@@ -2380,17 +2380,17 @@ msgid ""
 "Keep in mind that this may be dangerous.\n"
 "\n"
 "If you wish to begin excluding translations only from now on, you can safely press \"<b>No</b>\"."
-msgstr ""
+msgstr "Ši ypatybė neįtakos jau įdiegtų paketų vertimų, nebent jie bus atnaujinti.\nGalbūt, jūs norite ištrinti jau įdiegtus vertimus. Tai galite padaryti nuspausdami \"<b>Taip</b>\".\nTurėkite omenyje, jog tai gali būti pavojinga.\n\nJei tik nuo šiol norite pradėti šalinti vertimus, tuomet galite saugiai spausti \"<b>Ne</b>\"."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:30
 #: linstaller/modules/language/front/glade/module.glade.h:30
 msgid "Some translations may not be installed!"
-msgstr ""
+msgstr "Kai kurie vertimai gali būti neįdiegti!"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:31
 #: linstaller/modules/language/front/glade/module.glade.h:31
 msgid "<big><b>Some translations may not be installed!</b></big>"
-msgstr ""
+msgstr "<big><b>Kai kurie vertimai gali būti neįdiegti!</b></big>"
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:32
 #: linstaller/modules/language/front/glade/module.glade.h:32
@@ -2432,7 +2432,7 @@ msgstr "Nuspaudę \"Taip\", jūs nebegalėsite grįžti.\n<b>Jūs buvote įspėt
 #: linstaller/modules/partdisks/front/glade/module.glade.h:6
 msgid ""
 "<big><b>Do you really want to delete everything on the drive?</b></big>"
-msgstr ""
+msgstr "<big><b>Ar tikrai norite ištrinti viską, kas yra diske?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:7
 msgid "Crypting support"
@@ -2441,7 +2441,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/glade/module.glade.h:8
 msgid ""
 "<big><b>Do you really want to destroy everything on the drive?</b></big>"
-msgstr ""
+msgstr "<big><b>Ar tikrai norite sunaikinti viską, kas yra diske?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:11
 msgid "Master Boot Record (MBR)"
@@ -2461,7 +2461,7 @@ msgstr "Keisti skaidinį"
 msgid ""
 "<big><b>Do you really want to mount this partition during the installation "
 "phase?</b></big>"
-msgstr ""
+msgstr "<big><b>Ar tikrai diegimo etapo metu norite prijungti šį skaidinį?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:15
 msgid ""
@@ -2472,7 +2472,7 @@ msgid ""
 "Keep in mind that some files may be overwritten.\n"
 "\n"
 "If you are unsure, press No."
-msgstr ""
+msgstr "Jei skaidinys nėra tuščias, diegimo etape jis yra neliečiamas.\nTai gali sukelti problemų skaidiniuose, tokiuose kaip /home, kuriuose diegimo programos įsikišimas yra būtinas.\n\nJei norite, kad diegimo programa šiame netuščiame skaidinyje sukurtų failus, spauskite Taip.\nTurėkite omeny, kad kai kurie failai gali būti perrašyti.\n\nJei nesate tikri, spauskite Ne."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:22
 msgid "Add partition table"
@@ -2484,11 +2484,11 @@ msgstr "<big><b>Ar tikrai norite sukurti lentelę šiame diske?</b></big>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:24
 msgid "A table is needed to create partitions on this drive."
-msgstr ""
+msgstr "Norint šiame diske kurti skaidinius, reikalinga lentelė."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:25
 msgid "<b>Logical Volume</b>"
-msgstr ""
+msgstr "<b>Loginis Tomas</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:26
 msgid "Specify the size: "
@@ -2508,19 +2508,19 @@ msgstr "Formatuoti skaidinį"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:31
 msgid "Use as a LVM physical volume"
-msgstr ""
+msgstr "Naudoti kaip LVM fizinį tomą"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:32
 msgid "Use as an encrypted LVM physical volume"
-msgstr ""
+msgstr "Naudoti kaip užšifruotą LVM fizinį tomą"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:33
 msgid "Fill the device with random data"
-msgstr ""
+msgstr "Užpildyti įrenginį atsitiktiniais duomenimis"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:34
 msgid "Use high quality random data (it will take a long time)"
-msgstr ""
+msgstr "Naudoti aukštos kokybės atsitiktinius duomenis (tai ilgai užtruks)"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:35
 msgid "Do not format"
@@ -2538,7 +2538,7 @@ msgstr "<b>Failų Sistema</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:39
 msgid "Mount during the installation phase"
-msgstr ""
+msgstr "Prijungti diegimo etapo metu"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:40
 msgid "<b>Mountpoint</b>"
@@ -2563,11 +2563,11 @@ msgstr "Norėdami atrakinti užšifruotą tomą, turite įvesti jo slaptažodį.
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:45
 msgid "Prova"
-msgstr ""
+msgstr "Prova"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:46
 msgid "Lollo"
-msgstr ""
+msgstr "Lollo"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:47
 msgid "<b>Volume Group</b>"
@@ -2587,7 +2587,7 @@ msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:51
 msgid "<b>Physical Volumes</b>"
-msgstr ""
+msgstr "<b>Fiziniai Tomai</b>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:52
 msgid "Manage LVM Virtual Groups"
@@ -2624,7 +2624,7 @@ msgstr "Žinovo rojus."
 msgid ""
 "<i>To use advanced features such as encryption and LVM, you must use the "
 "manual partitioning page.</i>"
-msgstr ""
+msgstr "<i>Norėdami naudoti išplėstines ypatybes, tokias kaip šifravimas ir LVM, privalote naudoti rankinio skaidymo puslapį.</i>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:62
 msgid "<big><b>No solution found.</b></big>"
@@ -2658,7 +2658,7 @@ msgstr "Taikyti"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:4
 msgid "New user's password (confirm)"
-msgstr ""
+msgstr "Naujo naudotojo slaptažodis (patvirtinkite)"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:6
 msgid "<b>Main account &amp; Hostname</b>"
@@ -2669,27 +2669,27 @@ msgid ""
 "The switch below can be used to enable the root account.\n"
 "Administration privilegies will only be given to it: 'sudo' will be disabled.\n"
 "<i>It is recommended to keep this option <b>OFF</b>.</i>"
-msgstr ""
+msgstr "Žemiau esantis jungiklis gali būti naudojamas šaknies paskyrai įjungti.\nAdministratoriaus teisės bus suteiktos tik jai: 'sudo' bus išjungta.\n<i>Šią parinktį yra rekomenduojama palikti <b>IŠJUNGTĄ</b>.</i>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:10
 msgid "Root account"
-msgstr ""
+msgstr "Šaknies paskyra"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:11
 msgid "Root password"
-msgstr ""
+msgstr "Šaknies slaptažodis"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:12
 msgid "Root password (confirm)"
-msgstr ""
+msgstr "Šaknies slaptažodis (patvirtinkite)"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:13
 msgid "<b>Root password</b>"
-msgstr ""
+msgstr "<b>Šaknies slaptažodis</b>"
 
 #: linstaller/modules/userhost/front/glade/module.glade.h:14
 msgid "<b>Root account</b>"
-msgstr ""
+msgstr "<b>Šaknies paskyra</b>"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:1
 msgid "<b>These partitions will be used:</b>"
@@ -2721,7 +2721,7 @@ msgstr "Naudotojo vardas:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:8
 msgid "Root enabled:"
-msgstr ""
+msgstr "Šaknis įjungta:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:9
 msgid "Hostname:"
@@ -2737,7 +2737,7 @@ msgstr "Paleidyklė:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:12
 msgid "Target:"
-msgstr ""
+msgstr "Paskirtis:"
 
 #: linstaller/modules/summary/front/glade/module.glade.h:13
 msgid "<b>Bootloader</b>"

@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-04-06 11:12+0000\n"
+"PO-Revision-Date: 2015-05-05 16:35+0000\n"
 "Last-Translator: Puskas-Kolozsvari Frederic <pkfric@yahoo.com>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/linstaller/language/hu/)\n"
+"Language-Team: Hungarian (http://www.transifex.com/p/linstaller/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1658,7 +1658,7 @@ msgstr ""
 #: linstaller/modules/partdisks/front/cli.py:779
 #: linstaller/modules/partdisks/front/cli.py:786
 msgid "Changes marked succesfully. Please save changes."
-msgstr ""
+msgstr "A változtatások sikeresen ki lettek jelölve. Kérjük mentse a változtatásokat."
 
 #: linstaller/modules/partdisks/front/cli.py:804
 msgid "Available Filesystems:"
@@ -1682,7 +1682,7 @@ msgstr "%s nem támogatott fájlrendszer!"
 #: linstaller/modules/partdisks/front/cli.py:826
 #: linstaller/modules/partdisks/front/cli.py:872
 msgid "Changes marked succesfully."
-msgstr ""
+msgstr "A változtatások sikeresen ki lettek jelölve."
 
 #: linstaller/modules/partdisks/front/cli.py:833
 msgid "You can't delete freespace!"
