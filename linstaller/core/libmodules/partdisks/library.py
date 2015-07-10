@@ -770,6 +770,22 @@ def check_distributions(obj=False):
 	""" Checks all partitions in Device/Partition object to discover other distributions.
 	If obj is not specified, returns a list of *all* distributions on *all* disks. """
 	
+	# Mount every unmounted partition otherwise os-prober won't detect anything
+	mounted = []
+	for disk in (disks.values() if not obj else [obj]):
+		partitions = disk_partitions(disk)
+		for partition in partitions:
+			print(partition.path, is_mounted(partition.path))
+			if "-" in partition.path or is_mounted(partition.path):
+				# Already mounted or freespace
+				continue
+			
+			try:
+				mount_partition(parted_part=partition)
+				mounted.append(partition)
+			except:
+				pass
+	
 	# Start os-prober
 	clss = m.execute("LANG=C os-prober", custom_log=m.subprocess.PIPE)
 	# Start
@@ -780,6 +796,10 @@ def check_distributions(obj=False):
 	
 	# output...
 	output = clss.process.communicate()[0].split("\n")
+	
+	# Unmount previously mounted partitions
+	for partition in mounted:
+		umount(parted_part=partition)
 	
 	distribs = {}
 		
