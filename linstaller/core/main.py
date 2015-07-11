@@ -5,7 +5,7 @@
 # This is a module of linstaller, should not be executed as a standalone application.
 
 ####
-VERSION = "7.0.2"
+VERSION = "7.0.3"
 ####
 
 import os, sys, traceback
