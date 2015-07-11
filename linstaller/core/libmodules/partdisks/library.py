@@ -775,7 +775,6 @@ def check_distributions(obj=False):
 	for disk in (disks.values() if not obj else [obj]):
 		partitions = disk_partitions(disk)
 		for partition in partitions:
-			print(partition.path, is_mounted(partition.path))
 			if "-" in partition.path or is_mounted(partition.path):
 				# Already mounted or freespace
 				continue
