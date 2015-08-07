@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-04-27 20:07+0000\n"
+"PO-Revision-Date: 2015-08-06 16:57+0000\n"
 "Last-Translator: seacat <seacat.linux@gmail.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/p/linstaller/language/es/)\n"
+"Language-Team: Spanish (http://www.transifex.com/semplice/linstaller/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +25,7 @@ msgstr "¡Ud tiene que pasar al menos una acción!"
 #: linstaller.py:264
 #, python-format
 msgid "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
-msgstr "SINTAXIS: %s <options> [ACTION] <:seed:option:value>"
+msgstr "SYNTAX: %s <options> [ACTION] <:seed:option:value>"
 
 #: linstaller.py:266
 msgid "Recognized options:"
@@ -462,7 +462,7 @@ msgstr "Buscando el mejor %s servidor espejo..."
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Mirrorselect crashed."
-msgstr ""
+msgstr "Falló la selección de servidor espejo"
 
 #: linstaller/modules/mirrorselect/inst/glade/__init__.py:42
 msgid "Please check sources.list(.d) later."
@@ -482,7 +482,7 @@ msgstr "Seleccionar servidores espejo:"
 
 #: linstaller/modules/mirrorselect/inst/cli.py:46
 msgid "Mirrorselect crashed. Please check sources.list(.d) later."
-msgstr ""
+msgstr "Falló la selección de servidor espejo. Por favor, compruebe sources.list(.d) más tarde."
 
 #: linstaller/modules/mirrorselect/front/glade/__init__.py:15
 #: linstaller/modules/mirrorselect/front/cli.py:18
@@ -1466,13 +1466,13 @@ msgstr "Creando una nueva tabla de particiones en %s..."
 #: linstaller/modules/partdisks/front/cli.py:330
 #, python-format
 msgid "FAILED: new partition table in %s"
-msgstr ""
+msgstr "FALLÓ: nueva tabla de particiones en %s"
 
 #: linstaller/modules/partdisks/front/cli.py:351
 #: linstaller/modules/partdisks/front/cli.py:353
 #, python-format
 msgid "FAILED: formatting %s"
-msgstr ""
+msgstr "FALLÓ: formatear %s"
 
 #: linstaller/modules/partdisks/front/cli.py:379
 msgid "Edit Partition structure"
@@ -1958,12 +1958,12 @@ msgstr "Contraseña de root"
 #: linstaller/modules/userhost/front/cli.py:24
 #, python-format
 msgid "%s's username (no spaces; e.g: john)"
-msgstr ""
+msgstr "Nombre de usuario de %s (sin espacios; por ejemplo: Juan)"
 
 #: linstaller/modules/userhost/front/cli.py:31
 #, python-format
 msgid "%s's password"
-msgstr ""
+msgstr "Contraseña de %s"
 
 #: linstaller/modules/userhost/front/cli.py:70
 #, python-format
@@ -2131,7 +2131,7 @@ msgstr "Presione el botón Siguiente para continuar."
 
 #: linstaller/frontends/gtk3.py:328
 msgid "Please set"
-msgstr ""
+msgstr "Por favor, configurar"
 
 #: linstaller/frontends/glade/__init__.py:51
 msgid "Installing"
@@ -2143,7 +2143,7 @@ msgstr "Ud no va a esperar mucho tiempo, se lo prometemos."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some incomplete items (hover to see)."
-msgstr ""
+msgstr "Hay algunos ítems incompletos (para ver, pasar por encima)."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to complete the following items:"
@@ -2151,11 +2151,11 @@ msgstr "Ud tiene que completar los siguientes ítems:"
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "There are some errors (hover to see)."
-msgstr ""
+msgstr "Hay algunos errores (para ver, pasar por encima)."
 
 #: linstaller/frontends/glade/__init__.py:95
 msgid "You need to fix these errors before continuing:"
-msgstr ""
+msgstr "Ud necesita reparar estos errores antes de continuar:"
 
 #: linstaller/frontends/glade/__init__.py:244
 #: linstaller/modules/timezone/front/glade/module.glade.h:22
@@ -2530,7 +2530,7 @@ msgstr "No formatear"
 msgid ""
 "Please note that by formatting/making/encrypting a LVM physical volume you will destroy all data contained there.\n"
 "Ensure that the physical volume is unlinked from any volume group before attempting to remove or format it."
-msgstr ""
+msgstr "Por favor advierta que para formatear/hacer/encriptar un volumen físico LVM, Ud destruirá todos los datos allí contenidos.\nAsegúrese que el volumen físico está desvinculado de cualquier grupo de volúmenes antes de intentar quitarlo o formatearlo."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:38
 msgid "<b>File System</b>"
@@ -2563,7 +2563,7 @@ msgstr "Para desbloquear este volumen encriptado, Ud tiene que ingresar su contr
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:45
 msgid "Prova"
-msgstr "Prueba"
+msgstr ""
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:46
 msgid "Lollo"
@@ -2577,13 +2577,13 @@ msgstr "<b>Grupo volumen</b>"
 msgid ""
 "You can make a partition a Physical Volume by selecting the \"<b>Use as a "
 "LVM Physical Volume</b>\" radio button in the <i>Edit partition</i> window."
-msgstr ""
+msgstr "Ud puede hacer que una partición sea un Volumen Físico al seleccionar el botón de radio \"<b>Usar como un Volumen Físico LVM</b>\" en la ventana <i>Editar partición</i>."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:49
 msgid ""
 "A grayed out volume has some data on it and thus can't be removed.\n"
 "You can move the contents of the physical volume to another using the <i>pvmove</i> command."
-msgstr ""
+msgstr "El volumen grisado tiene algunos datos, por lo que no se lo puede eliminar.\nUd puede mover el contenido de un volumen físico a otro usando el comando <i>pvmove</i>."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:51
 msgid "<b>Physical Volumes</b>"
@@ -2624,7 +2624,7 @@ msgstr "El paraíso del geek."
 msgid ""
 "<i>To use advanced features such as encryption and LVM, you must use the "
 "manual partitioning page.</i>"
-msgstr ""
+msgstr "<i>Para usar funcionalidades avanzadas como encriptación y LVM, Ud tiene que usar la página de particionado manual.</i>"
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:62
 msgid "<big><b>No solution found.</b></big>"
