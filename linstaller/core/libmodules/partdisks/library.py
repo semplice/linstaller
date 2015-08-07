@@ -773,6 +773,9 @@ def check_distributions(obj=False):
 	# Mount every unmounted partition otherwise os-prober won't detect anything
 	mounted = []
 	for disk in (disks.values() if not obj else [obj]):
+		if disk == "notable":
+			continue
+		
 		partitions = disk_partitions(disk)
 		for partition in partitions:
 			if "-" in partition.path or is_mounted(partition.path):
