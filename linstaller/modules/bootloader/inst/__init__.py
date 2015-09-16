@@ -12,7 +12,7 @@ from linstaller.core.main import warn,info,verbose
 from linstaller.core.libmodules.partdisks.library import check_distributions
 
 import os, sys, fileinput
-import commands
+import subprocess
 
 ## Why are we using the "manual" install method instead of debconf?
 ## First, we want to keep some sort of compatibility with non-Debian
@@ -70,7 +70,7 @@ class Install(module.Install):
 			# So we are relying on dpkg-architecture (if Debian system), or fallbacking
 			# to amd64 if not a Debian system
 			if os.path.exists("/usr/bin/dpkg-architecture"):
-				arch = commands.getoutput("/usr/bin/dpkg-architecture -qDEB_BUILD_ARCH")
+				arch = subprocess.check_output(["/usr/bin/dpkg-architecture", "-qDEB_BUILD_ARCH"]).strip()
 			else:
 				arch = "amd64"
 			
