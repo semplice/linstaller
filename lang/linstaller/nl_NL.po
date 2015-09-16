@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Heimen Stoffels <vistausss@outlook.com>, 2015
+# Peter Passchier <solusos@passchier.net>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: linstaller\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-23 16:38+0100\n"
-"PO-Revision-Date: 2015-06-01 11:22+0000\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/p/linstaller/language/nl_NL/)\n"
+"PO-Revision-Date: 2015-09-06 04:59+0000\n"
+"Last-Translator: Peter Passchier <solusos@passchier.net>\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/semplice/linstaller/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2380,7 +2381,7 @@ msgid ""
 "Keep in mind that this may be dangerous.\n"
 "\n"
 "If you wish to begin excluding translations only from now on, you can safely press \"<b>No</b>\"."
-msgstr ""
+msgstr "De vertalingen voor de pakketten die al geïnstalleerd zijn blijven ongewijzigd, tenzij ze worden opgewaardeerd.\nAls u al geïnstalleerde vertalingen wilt verwijderen, dan kan dat door op \"<b>Ja</b>\" te klikken.\nDenk eraan dat dit problemen kan opleveren.\n\nAls u ongewenste vertalingen alleen van nu af aan wilt uitsluiten, kunt u veilig op \"<b>Nee</b>\" klikken."
 
 #: linstaller/modules/timezone/front/glade/module.glade.h:30
 #: linstaller/modules/language/front/glade/module.glade.h:30
@@ -2397,7 +2398,7 @@ msgstr "<big><b>Enkele vertalingen worden mogelijk niet geïnstalleerd!</b></big
 msgid ""
 "As the save space feature was previously activated, some translations may not be installed.\n"
 "Newly installed or upgraded packages will ship the new translations in place."
-msgstr ""
+msgstr "Omdat de ruimtebesparende optie geactiveerd is, is het mogelijk dat sommige vertalingen niet geïnstalleerd worden.\nNieuw geïnstalleerde of opgewaarde pakketten worden vergezeld door de nieuwe vertalingen."
 
 #: linstaller/modules/mirrorselect/front/glade/module.glade.h:1
 msgid "Yes, check for the fastest mirror."
@@ -2451,7 +2452,7 @@ msgstr "Master Boot Record (MBR)"
 msgid ""
 "This will touch only the affected drives and not everything in the Apply "
 "queue."
-msgstr ""
+msgstr "Dit beïnvloedt alleen de betreffende opslag en niet alles in de Toepassen wachtrij."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:13
 msgid "Edit partition"
@@ -2472,7 +2473,7 @@ msgid ""
 "Keep in mind that some files may be overwritten.\n"
 "\n"
 "If you are unsure, press No."
-msgstr ""
+msgstr "Als de partitie niet leeg is, blijft hij onaangeroerd in de installatie-fase.\nDit kan problemen opleveren op partities waar de het installatie-programma wat mee moet doen, zoals /home.\n\nAls u wilt dat het installatie-prgramma bestanden aanmaakt in deze niet-lege partitie, klik Ja.\nBedenk dat sommige bestanden wellicht overschreven worden.\n\nAls u niet zeker bent, klik dan Nee."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:22
 msgid "Add partition table"
@@ -2530,7 +2531,7 @@ msgstr "Niet formatteren"
 msgid ""
 "Please note that by formatting/making/encrypting a LVM physical volume you will destroy all data contained there.\n"
 "Ensure that the physical volume is unlinked from any volume group before attempting to remove or format it."
-msgstr ""
+msgstr "Bedenk dat bij het formatteren/aanmaken/versleutelen van een fysiek LVM volume alle gegevens die daarop staan worden vernietigd.\nVerzeker u ervan dat het fysieke volume geen geactiveerde volumegroepen omvat voordat u het probeert te verwijderen of te formatteren."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:38
 msgid "<b>File System</b>"
@@ -2577,13 +2578,13 @@ msgstr "<b>Volumegroep</b>"
 msgid ""
 "You can make a partition a Physical Volume by selecting the \"<b>Use as a "
 "LVM Physical Volume</b>\" radio button in the <i>Edit partition</i> window."
-msgstr ""
+msgstr "U kunt een partitie als fysiek volume aanwijzen door \"<b>Gebruik als LVM fysiek volume</b>\" te kiezen in het <i>Wijzig partitie</i> venster."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:49
 msgid ""
 "A grayed out volume has some data on it and thus can't be removed.\n"
 "You can move the contents of the physical volume to another using the <i>pvmove</i> command."
-msgstr ""
+msgstr "Een volume dat grijs is bevat gegevens en kan daarom niet verwijderd worden.\nU kunt de inhoud van een fysiek volume naar een ander fysiek volume verplaatsen met het <i>pvmove</i> commando."
 
 #: linstaller/modules/partdisks/front/glade/module.glade.h:51
 msgid "<b>Physical Volumes</b>"
@@ -2776,7 +2777,7 @@ msgid ""
 "Use the \"<i>Pastebin it!</i>\" button to post it to a public pastebin. A working Internet connection is required.\n"
 "\n"
 "You can use the \"<i>Semplice on IRC</i>\" item into the Help menu to get help."
-msgstr ""
+msgstr "Helaas, dit is het geval:\nHet spijt ons te moeten zeggen dat het installatie-programma gecrasht is.\n\nEr is een logboek-bestand dat u kunt bekijken om te zien wat er mis ging, het bevind zich in <b>/var/log/linstaller/linstaller_latest.log</b>.\nGebruik de \"<i>Pastebin het!</i>\" knop om het op een openbare pastebin te zetten. Dit vereist een werkende verbinding met het internet.\n\nU kunt ook in het Help menu \"<i>Semplice op IRC</i>\" selecteren voor ondersteuning."
 
 #: crash/ui.glade.h:10
 msgid "Take me away"
