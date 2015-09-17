@@ -472,6 +472,15 @@ def format_partition_for_real(obj, fs):
 	
 	_opt = "%s %s" % (obj.path, _opt)
 	
+	# In some cases, a freshly committed Disk object will temporairly
+	# make the partitions unavailable.
+	# Running partprobe resolves this, but will slow down the process
+	# a bit.
+	try:
+		m.sexec("partprobe")
+	except:
+		pass
+	
 	# BEGIN FORMATTING!!!!111111!!!!!!!!!!!!!1111111111111111
 	mkfs = m.execute("%s %s" % (_app, _opt))
 	mkfs.start() # START!!!111111111!!!!!!!!!!!!!!!111111111111111
