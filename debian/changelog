@@ -1,3 +1,9 @@
+linstaller (7.0.6-1) unstable; urgency=medium
+
+  * [partdisks] library: Run partprobe before calling mkfs.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 18 Sep 2015 00:44:05 +0200
+
 linstaller (7.0.5-1) unstable; urgency=medium
 
   * [bootloader] Do not parse stderr when checking for the UEFI target architecture.
