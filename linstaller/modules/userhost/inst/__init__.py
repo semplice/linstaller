@@ -42,7 +42,12 @@ class Install(module.Install):
 			db.set("passwd/root-login", "false")
 			
 			# Groups
-			db.set("passwd/user-default-groups", self.modules_settings["userhost.inst"]["user_default_groups"])
+			db.set("passwd/user-default-groups",
+				self.modules_settings["userhost.inst"]["user_default_groups"]
+				+ " %s" % self.modules_settings["userhost.inst"]["user_additional_groups"]
+				if "user_additional_groups" in self.modules_settings["userhost.inst"]
+				else ""
+			)
 
 		# Make sure we make the user
 		db.set("passwd/make-user", "true")
@@ -118,4 +123,6 @@ class Module(module.Module):
 			"fuse",
 			"lpadmin"
 		]))
+		
+		self.cache("user_additional_groups")
 
