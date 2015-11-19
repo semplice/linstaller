@@ -58,7 +58,7 @@ Description: Modular GNU/Linux distribution installer -- gtk3 frontend
  
 Package: linstaller-modules-base
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, bricks, python-keeptalking, python-libbricks, python-t9n (>= 6.0.2), python-parted, python-apt,
+Depends: ${misc:Depends}, ${python:Depends}, debconf, keeptalking, python-keeptalking, python-t9n (>= 6.0.2), python-parted, python-apt,
  squashfs-tools,
  user-setup,
  imvirt,
@@ -75,6 +75,18 @@ Description: Modular GNU/Linux distribution installer -- base modules
  .
  This package contains the base modules needed to install a Semplice
  System.
+
+Package: linstaller-modules-bricks
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, bricks, python-libbricks
+Description: Modular GNU/Linux distribution installer -- bricks module
+ linstaller is a modular and preseedable GNU/Linux distribution
+ installer, written in python.
+ .
+ It is Semplice Linux-oriented, but thanks to its configuration
+ system, can be adapted to many Live distributions.
+ .
+ This package contains the bricks module.
 
 Package: linstaller-modules-ubuntu
 Architecture: all
