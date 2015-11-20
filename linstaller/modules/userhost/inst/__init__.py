@@ -43,9 +43,9 @@ class Install(module.Install):
 			
 			# Groups
 			db.set("passwd/user-default-groups",
-				self.modules_settings["userhost.inst"]["user_default_groups"]
-				+ " %s" % self.modules_settings["userhost.inst"]["user_additional_groups"]
-				if "user_additional_groups" in self.modules_settings["userhost.inst"]
+				self.moduleclass.settings["user_default_groups"]
+				+ " %s" % self.moduleclass.settings["user_additional_groups"]
+				if "user_additional_groups" in self.moduleclass.settings
 				else ""
 			)
 
