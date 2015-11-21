@@ -166,13 +166,31 @@ class Install(module.Install):
 				# WARNING: Ugly-ness excess in this for
 				if line[0] != "#":
 					splitted = line.split("=")
-					if splitted[0] == "GRUB_CMDLINE_LINUX_DEFAULT" and swap:
-						sys.stdout.write("GRUB_CMDLINE_LINUX_DEFAULT=\"quiet resume=%s\"\n" % swap)
-						# FIXME: The above line overwrites the entire CMDLINE_DEFAULT. Also, 'swap' is used.
-						# We should decide if use it or its UUID.
-					elif splitted[0] == "GRUB_CMDLINE_LINUX" and custom_init:
-						sys.stdout.write("GRUB_CMDLINE_LINUX=\"init=%s\"\n" % custom_init)
-						# FIXME: The above line overwrites the entire CMDLINE_LINUX.
+					if splitted[0] == "GRUB_CMDLINE_LINUX_DEFAULT":
+						to_append = []
+						if self.moduleclass.settings["grub_cmdline_linux_default"]:
+							to_append.append(self.moduleclass.settings["grub_cmdline_linux_default"])
+						if swap:
+							to_append.append("resume=%s" % swap)
+						
+						if to_append:
+							sys.stdout.write("GRUB_CMDLINE_LINUX_DEFAULT=\"%s\"\n" % " ".join(to_append))
+							# FIXME: The above line overwrites the entire CMDLINE_DEFAULT. Also, 'swap' is used.
+							# We should decide if use it or its UUID.
+						else:
+							sys.stdout.write(line)
+					elif splitted[0] == "GRUB_CMDLINE_LINUX":
+						to_append = []
+						if self.moduleclass.settings["grub_cmdline_linux"]:
+							to_append.append(self.moduleclass.settings["grub_cmdline_linux"])
+						if custom_init:
+							to_append.append("init=%s" % custom_init)
+						
+						if to_append:
+							sys.stdout.write("GRUB_CMDLINE_LINUX=\"%s\"\n" % " ".join(to_append))
+							# FIXME: The above line overwrites the entire CMDLINE_LINUX.
+						else:
+							sys.stdout.write(line)
 					elif splitted[0] == "GRUB_TIMEOUT" and should_hide_menu:
 						sys.stdout.write("# As there aren't other systems installed, the menu is disabled by default.\n")
 						sys.stdout.write("# Hold SHIFT during boot to open it.\n")
@@ -236,3 +254,11 @@ class Module(module.Module):
 		self._pkgs_install = {"grub":self.install.grub_pkgs_install}
 		self._install = {"grub":self.install.grub_install}
 		self._update = {"grub":self.install.grub_update}
+
+	def seedpre(self):
+		"""
+		Caches settings.
+		"""
+		
+		self.cache("grub_cmdline_linux_default")
+		self.cache("grub_cmdline_linux")
