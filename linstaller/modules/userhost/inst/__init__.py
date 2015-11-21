@@ -45,7 +45,7 @@ class Install(module.Install):
 			db.set("passwd/user-default-groups",
 				self.moduleclass.settings["user_default_groups"]
 				+ " %s" % self.moduleclass.settings["user_additional_groups"]
-				if "user_additional_groups" in self.moduleclass.settings
+				if self.moduleclass.settings["user_additional_groups"]
 				else ""
 			)
 
