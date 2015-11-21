@@ -10,6 +10,8 @@ import subprocess
 
 import locale, t9n.library
 
+import os
+
 locale.setlocale(locale.LC_ALL, '')
 locale.bindtextdomain("linstaller", "/usr/share/locale")
 _ = t9n.library.translation_init("linstaller")
@@ -94,6 +96,12 @@ class Window:
 		self.crashpaste.connect("clicked", self.do_paste)
 		self.dialogclose.connect("clicked", self.hide_dialog)
 		self.errorclose.connect("clicked", self.hide_error)
+		
+		if os.path.exists("/etc/semplice-live-mode"):
+			# Semplice, we can cheer up! :)
+			self.crashwindow.set_markup(
+				_("<big><b>Drunk people should not write software.</b></big>")
+			)
 		
 		self.crashwindow.show()
 
