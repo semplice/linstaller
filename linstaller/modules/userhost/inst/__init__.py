@@ -42,7 +42,12 @@ class Install(module.Install):
 			db.set("passwd/root-login", "false")
 			
 			# Groups
-			db.set("passwd/user-default-groups", "audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor dialout fax tape fuse lpadmin")
+			db.set("passwd/user-default-groups",
+				self.moduleclass.settings["user_default_groups"]
+				+ " %s" % self.moduleclass.settings["user_additional_groups"]
+				if self.moduleclass.settings["user_additional_groups"]
+				else ""
+			)
 
 		# Make sure we make the user
 		db.set("passwd/make-user", "true")
@@ -95,4 +100,29 @@ class Module(module.Module):
 		self.install = Install(self)
 		
 		module.Module.start(self)
+	
+	def seedpre(self):
+		"""
+		Cache settings.
+		"""
+		
+		self.cache("user_default_groups", " ".join([
+			"audio",
+			"cdrom",
+			"dip",
+			"floppy",
+			"video",
+			"plugdev",
+			"netdev",
+			"powerdev",
+			"scanner",
+			"bluetooth",
+			"dialout",
+			"fax",
+			"tape",
+			"fuse",
+			"lpadmin"
+		]))
+		
+		self.cache("user_additional_groups")
 
