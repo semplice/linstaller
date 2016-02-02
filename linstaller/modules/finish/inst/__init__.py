@@ -7,6 +7,8 @@
 import linstaller.core.module as module
 import linstaller.core.main as m
 
+import os
+
 class Install(module.Install):
 
 	def update_initramfs(self):
@@ -17,6 +19,15 @@ class Install(module.Install):
 		m.verbose("Updating the initramfs...")
 		m.sexec("update-initramfs -u -k all")
 
+	def create_ssl_certs(self):
+		"""
+		Creates the missing SSL certs.
+		"""
+		
+		if os.path.exists("/var/lib/dpkg/info/ssl-cert.list"):
+			# FIXME: saner check?
+			m.verbose("Creating SSL certs...")
+			m.sexec("make-ssl-cert generate-default-snakeoil --force-overwrite")
 
 class Module(module.Module):
 	def _associate_(self):
@@ -34,6 +45,8 @@ class Module(module.Module):
 		try:
 			# Update initramfs
 			self.install.update_initramfs()
+			# Create missing certs
+			self.install.create_ssl_certs()
 		finally:
 			# Exit
 			self.install.close()
