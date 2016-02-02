@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.19.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="crash">
     <property name="width_request">400</property>
     <property name="can_focus">False</property>
@@ -13,15 +14,12 @@
     <property name="type_hint">dialog</property>
     <property name="urgency_hint">True</property>
     <property name="message_type">other</property>
-    <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;Drunk people should not write software.&lt;/b&gt;&lt;/big&gt;</property>
+    <property name="text" translatable="yes">&lt;big&gt;&lt;b&gt;An error occurred.&lt;/b&gt;&lt;/big&gt;</property>
     <property name="use_markup">True</property>
-    <property name="secondary_text" translatable="yes">Unfortunately, this is our case.
-We are sorry to tell you that the installer for some reason crashed.
+    <property name="secondary_text" translatable="yes">We are sorry to tell you that the installer for some reason crashed.
 
 There is a log file that you may want to read to see what is wrong, Its path is &lt;b&gt;/var/log/linstaller/linstaller_latest.log&lt;/b&gt;.
-Use the "&lt;i&gt;Pastebin it!&lt;/i&gt;" button to post it to a public pastebin. A working Internet connection is required.
-
-You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to get help.</property>
+Use the "&lt;i&gt;Pastebin it!&lt;/i&gt;" button to post it to a public pastebin. A working Internet connection is required.</property>
     <property name="secondary_use_markup">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
@@ -39,7 +37,6 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -54,7 +51,6 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -100,7 +96,6 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -147,7 +142,6 @@ You can use the "&lt;i&gt;Semplice on IRC&lt;/i&gt;" item into the Help menu to 
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
