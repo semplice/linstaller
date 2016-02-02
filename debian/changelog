@@ -1,3 +1,18 @@
+linstaller (7.0.7-1~ummagumma0) unstable; urgency=medium
+
+  * [userhost] Get user-defaults-groups from preseed
+  * [userhost] Check additional user groups from the preseed.
+  * [packaging] Remove bricks from the -base module set.
+  * [userhost] Get seeds from self.moduleclass.settings
+  * [linstaller] More distribution-agnostic .desktop file
+  * [finish] Create missing snakeoil SSL certs
+  * [crash] Use a more serious primary text when not on Semplice
+  * [bootloader] Expose GRUB_CMDLINE_LINUX_DEFAULT and GRUB_CMDLINE_LINUX to preseeds
+  * [config] semplice-base: re-introduce the 'quiet' cmdline_linux_default that was implied before b867d7a
+  * [userhost] Properly check user_additional_groups
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 02 Feb 2016 17:59:55 +0100
+
 linstaller (7.0.6-1) unstable; urgency=medium
 
   * [partdisks] library: Run partprobe before calling mkfs.
