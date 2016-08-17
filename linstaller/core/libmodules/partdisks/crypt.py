@@ -9,6 +9,8 @@
 
 import os, commands
 
+import subprocess
+
 import linstaller.core.main as m
 import linstaller.core.libmodules.partdisks.library as lib
 
@@ -62,14 +64,38 @@ class LUKSdrive:
 		except m.CmdError:
 			pass
 		
-		# Ugly as hell
-		m.sexec("echo '%(password)s' | cryptsetup luksFormat --cipher %(cipher)s --key-size %(keysize)s %(device)s" % {"password":password, "device":self.string_device, "cipher":cipher, "keysize":keysize})
+		process = subprocess.Popen(
+			[
+				"cryptsetup",
+				"luksFormat",
+				"--cipher",
+				cipher,
+				"--key-size",
+				str(keysize),
+				self.string_device
+			],
+			stdin=subprocess.PIPE
+		)
+		process.communicate(password)
+
+		process.wait()
 
 	def open(self, password):
 		""" Opens the device. """
 		
-		# Ugly as hell
-		m.sexec("echo '%(password)s' | cryptsetup luksOpen %(device)s %(name)s" % {"password":password, "device":self.string_device, "name":self.crypt_name})
+		process = subprocess.Popen(
+			[
+				"cryptsetup",
+				"luksOpen",
+				self.string_device,
+				self.crypt_name
+			],
+			stdin=subprocess.PIPE
+		)
+		process.communicate(password)
+
+		process.wait()
+
 	
 	def close(self):
 		""" Closes the device. """
