@@ -16,6 +16,11 @@ import linstaller.core.libmodules.partdisks.lvm as lvm
 
 ZRAM_LIMIT = 4096 # If user's ram <= this value, zram will be configured.
 
+FILESYSTEMS = {
+	"fat16" : "vfat",
+	"fat32" : "vfat",
+}
+
 class Install(module.Install):
 	def generate(self):
 		""" Generates /etc/fstab. """
@@ -59,7 +64,8 @@ proc   /proc   proc   defaults   0   0
 				mountpoint = value["changes"]["useas"]
 				if not value["obj"].fileSystem: continue # Skip if fileSystem is None.
 				filesystem = value["obj"].fileSystem.type
-				if filesystem in ("fat32","fat16"): filesystem = "vfat"
+				if filesystem in FILESYSTEMS:
+					filesystem = FILESYSTEMS[filesystem]
 				if mountpoint == "/":
 					# root partition.
 					opts = "relatime,errors=remount-ro"
