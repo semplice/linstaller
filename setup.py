@@ -51,6 +51,7 @@ data_files = [
 	("/etc/linstaller", ["config/semplice", "config/semplice.glade", "config/semplice-base", "config/semplice-nolive", "config/semplice-nolive.glade", "config/ubuntu", "config/ubuntu-nolive", "config/semplice-persistent", "config/semplice-persistent-nolive", "config/semplice-raspberrypi", "config/semplice-fullscreen", "config/semplice-fullscreen.glade"]),
 	("/usr/share/applications", ["linstaller.desktop"]),
 	("/usr/share/xsessions", ["session/linstaller.desktop"]),
+	("/usr/share/linstaller/data", ["data/semplice.icns"]),
 ]
 data_files += data
 
