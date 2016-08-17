@@ -19,6 +19,7 @@ ZRAM_LIMIT = 4096 # If user's ram <= this value, zram will be configured.
 FILESYSTEMS = {
 	"fat16" : "vfat",
 	"fat32" : "vfat",
+	"hfs+" : "hfsplus",
 }
 
 class Install(module.Install):
